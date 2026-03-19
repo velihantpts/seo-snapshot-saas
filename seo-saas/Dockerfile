@@ -1,14 +1,13 @@
 # Multi-stage Docker build for Next.js standalone
-# Optimized for Coolify / Hetzner deployment
-
 FROM node:20-alpine AS base
+RUN apk add --no-cache openssl
 
 # --- Dependencies ---
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
 COPY prisma ./prisma/
-RUN npm ci --omit=dev && npx prisma generate
+RUN npm ci && npx prisma generate
 
 # --- Build ---
 FROM base AS builder
@@ -26,13 +25,13 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy standalone output
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
-# SQLite data directory
 RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
 ENV DATABASE_URL="file:/app/data/prod.db"
 
