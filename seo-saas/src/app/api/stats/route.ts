@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
+export const dynamic = 'force-dynamic';
+
 // Public stats for social proof
 export async function GET() {
   const totalAnalyses = await prisma.analysis.count();
