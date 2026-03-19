@@ -14,7 +14,9 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-RUN npx prisma generate && npm run build
+# Create empty SQLite database during build
+ENV DATABASE_URL="file:/app/build.db"
+RUN npx prisma generate && npx prisma db push && npm run build
 
 # --- Production ---
 FROM base AS runner
@@ -29,10 +31,11 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/build.db /app/seed.db
+
+# Copy prisma engine for runtime
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
-COPY --from=builder /app/node_modules/prisma ./node_modules/prisma
-COPY --from=builder /app/node_modules/.bin/prisma ./node_modules/.bin/prisma
 
 RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
 ENV DATABASE_URL="file:/app/data/prod.db"
@@ -42,4 +45,5 @@ EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-CMD ["sh", "-c", "./node_modules/.bin/prisma db push && node server.js"]
+# Copy seed DB if prod.db doesn't exist, then start
+CMD ["sh", "-c", "if [ ! -f /app/data/prod.db ]; then cp /app/seed.db /app/data/prod.db; fi && node server.js"]
