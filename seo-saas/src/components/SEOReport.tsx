@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { ScoreRing } from './ScoreRing';
 import { ScrollProgress } from './ScrollProgress';
+import Link from 'next/link';
 import { IssueDonut, ScoreRadar, CategoryBars, BenchmarkBadge, MiniProgress, SecurityGrade, TechStackBadges } from './Charts';
 import { FixSnippet, generateFixCode } from './FixSnippet';
 import { ActionSummary } from './ActionSummary';
@@ -124,8 +125,8 @@ const TABS: { key: TabKey; label: string; icon: any }[] = [
 ];
 
 // ===== Main Component =====
-export function SEOReport({ result, showActions = true, isPublic = false }: {
-  result: any; showActions?: boolean; isPublic?: boolean;
+export function SEOReport({ result, showActions = true, isPublic = false, isPro = false }: {
+  result: any; showActions?: boolean; isPublic?: boolean; isPro?: boolean;
 }) {
   const [activeTab, setActiveTab] = useState<TabKey>('overview');
   const [copied, setCopied] = useState(false);
@@ -210,15 +211,23 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
           <button onClick={handleCopy} className="btn-ghost flex items-center gap-1.5 !px-3 !py-1.5 text-sm">
             {copied ? <><CheckCircle className="w-3.5 h-3.5 text-emerald-400" /> Copied</> : <><Copy className="w-3.5 h-3.5 text-white/50" /> Copy</>}
           </button>
-          <button onClick={handleDownload} className="btn-ghost flex items-center gap-1.5 !px-3 !py-1.5 text-sm">
-            <Download className="w-3.5 h-3.5 text-white/50" /> JSON
-          </button>
-          <button onClick={handleCSV} className="btn-ghost flex items-center gap-1.5 !px-3 !py-1.5 text-sm">
-            <Download className="w-3.5 h-3.5 text-white/50" /> CSV
-          </button>
-          <button onClick={() => window.print()} className="btn-primary flex items-center gap-1.5 !px-3 !py-1.5 text-sm">
-            <FileText className="w-3.5 h-3.5" /> PDF
-          </button>
+          {isPro ? (
+            <>
+              <button onClick={handleDownload} className="btn-ghost flex items-center gap-1.5 !px-3 !py-1.5 text-sm">
+                <Download className="w-3.5 h-3.5 text-white/50" /> JSON
+              </button>
+              <button onClick={handleCSV} className="btn-ghost flex items-center gap-1.5 !px-3 !py-1.5 text-sm">
+                <Download className="w-3.5 h-3.5 text-white/50" /> CSV
+              </button>
+              <button onClick={() => window.print()} className="btn-primary flex items-center gap-1.5 !px-3 !py-1.5 text-sm">
+                <FileText className="w-3.5 h-3.5" /> PDF
+              </button>
+            </>
+          ) : (
+            <Link href="/pricing" className="btn-ghost flex items-center gap-1.5 !px-3 !py-1.5 text-sm text-accent-400">
+              <Download className="w-3.5 h-3.5" /> Export <span className="text-[10px] bg-accent-500/15 px-1.5 py-0.5 rounded-full ml-1">PRO</span>
+            </Link>
+          )}
           <button onClick={handleShare} className="btn-ghost flex items-center gap-1.5 !px-3 !py-1.5 text-sm">
             <Share2 className="w-3.5 h-3.5 text-white/50" /> Share
           </button>
@@ -467,7 +476,30 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
               ))}
             </div>
             <div className="space-y-3">
-              {filteredIssues.map((issue: any, i: number) => (
+              {filteredIssues.map((issue: any, i: number) => {
+                const FREE_ISSUE_LIMIT = 5;
+                const FREE_SNIPPET_LIMIT = 2;
+                const isLocked = !isPro && i >= FREE_ISSUE_LIMIT;
+                const snippetLocked = !isPro && i >= FREE_SNIPPET_LIMIT;
+
+                if (isLocked && i === FREE_ISSUE_LIMIT) {
+                  return (
+                    <div key="upgrade-cta">
+                      <ProGate feature={`remaining ${filteredIssues.length - FREE_ISSUE_LIMIT} issues with fix recommendations`} isPro={isPro}>
+                        <div className="space-y-3">
+                          {filteredIssues.slice(FREE_ISSUE_LIMIT, FREE_ISSUE_LIMIT + 3).map((lockedIssue: any, j: number) => (
+                            <div key={j} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
+                              <p className="text-sm text-white/60">{lockedIssue.problem}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </ProGate>
+                    </div>
+                  );
+                }
+                if (isLocked) return null;
+
+                return (
                 <div key={i} className={`rounded-xl border p-4 transition-all duration-150 ${
                   issue.severity === 'critical'
                     ? 'border-red-500/15 bg-red-500/[0.04] hover:border-red-500/25'
@@ -492,11 +524,13 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
                           <span>{issue.fix}</span>
                         </div>
                       )}
-                      {(() => { const code = generateFixCode(issue, d); return code ? <FixSnippet code={code} /> : null; })()}
+                      {!snippetLocked && (() => { const code = generateFixCode(issue, d); return code ? <FixSnippet code={code} /> : null; })()}
+                      {snippetLocked && (() => { const code = generateFixCode(issue, d); return code ? <ProGate feature="code fix" isPro={isPro}><FixSnippet code={code} /></ProGate> : null; })()}
                     </div>
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           </>
         )}
@@ -548,6 +582,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
           </Section>
           </ProGate>
 
+          <ProGate feature="performance analysis" isPro={isPro}>
           <Section title="Performance" icon={Zap}
             badge={`${d.performance?.responseTime || d.fetchTime}ms`}
             badgeColor={(d.performance?.responseTime || d.fetchTime) < 1000 ? 'green' : 'yellow'}>
@@ -561,6 +596,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
               <Row label="Inline JS size" value={`${d.performance?.inlineScriptSize || 0} KB`} status={d.performance?.inlineScriptSize > 50 ? 'warn' : undefined} />
             </div>
           </Section>
+          </ProGate>
 
           <Section title="Mobile" icon={Smartphone}
             badge={`${d.mobile?.score || 0}/100`}
@@ -668,6 +704,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
             </Section>
           )}
 
+          <ProGate feature="content quality, images & links analysis" isPro={isPro}>
           <Section title="Content Quality" icon={FileText}
             badge={d.contentQuality?.readabilityGrade}
             badgeColor={d.contentQuality?.readabilityScore >= 60 ? 'green' : 'yellow'}>
@@ -709,6 +746,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
               )}
             </div>
           </Section>
+          </ProGate>
         </div>
       </div>
 

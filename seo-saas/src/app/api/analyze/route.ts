@@ -29,7 +29,7 @@ export async function POST(req: Request) {
   const isPro = plan === 'pro_monthly' || plan === 'pro_lifetime' || plan === 'pro';
 
   // Rate limiting: IP-based for all users, stricter for free
-  const dailyLimit = isPro ? 100 : 50; // TODO: revert to 3 for production
+  const dailyLimit = isPro ? 100 : 5;
   const rateLimitKey = userId ? `user:${userId}` : `ip:${clientIP}`;
   const rateResult = checkRateLimit(rateLimitKey, dailyLimit);
 
