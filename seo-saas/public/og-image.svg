@@ -1,0 +1,23 @@
+<svg width="1200" height="630" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0e1a"/>
+      <stop offset="100%" stop-color="#111827"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#818cf8"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <circle cx="950" cy="315" r="120" fill="none" stroke="url(#accent)" stroke-width="8" opacity="0.3"/>
+  <circle cx="950" cy="315" r="120" fill="none" stroke="#6366f1" stroke-width="8" stroke-dasharray="603 754" stroke-linecap="round" transform="rotate(-90 950 315)"/>
+  <text x="950" y="305" text-anchor="middle" fill="white" font-family="system-ui" font-size="56" font-weight="700">85</text>
+  <text x="950" y="340" text-anchor="middle" fill="rgba(255,255,255,0.4)" font-family="system-ui" font-size="16" font-weight="500">SCORE</text>
+  <rect x="80" y="250" width="56" height="56" rx="16" fill="url(#accent)"/>
+  <text x="108" y="288" text-anchor="middle" fill="white" font-family="system-ui" font-size="28" font-weight="700">S</text>
+  <text x="156" y="285" fill="white" font-family="system-ui" font-size="32" font-weight="600">SEO Snapshot</text>
+  <text x="80" y="340" fill="white" font-family="system-ui" font-size="48" font-weight="700">Analyze any page's</text>
+  <text x="80" y="400" fill="#818cf8" font-family="system-ui" font-size="48" font-weight="700">SEO instantly</text>
+  <text x="80" y="460" fill="rgba(255,255,255,0.4)" font-family="system-ui" font-size="20">100 checks · Fix recommendations · Free</text>
+</svg>

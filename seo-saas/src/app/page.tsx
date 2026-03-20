@@ -289,6 +289,8 @@ export default function Home() {
           <span>&copy; 2026 SEO Snapshot</span>
           <div className="flex gap-4">
             <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
+            <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>
+            <Link href="/docs" className="hover:text-white/50 transition-colors duration-150">API</Link>
             <Link href="/terms" className="hover:text-white/50 transition-colors duration-150">Terms</Link>
             <Link href="/privacy" className="hover:text-white/50 transition-colors duration-150">Privacy</Link>
             <a href="mailto:support@seosnapshot.dev" className="hover:text-white/50 transition-colors duration-150">Contact</a>

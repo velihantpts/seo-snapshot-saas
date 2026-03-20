@@ -773,6 +773,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
             </div>
           </Section>
 
+          <ProGate feature="structured data validation" isPro={isPro}>
           <Section title="Structured Data" icon={Code}
             badge={d.schemas?.length > 0 ? `${d.schemas.length} found` : 'None'}
             badgeColor={d.schemas?.length > 0 ? 'green' : 'yellow'}>
@@ -787,6 +788,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
               )) : <p className="text-sm text-white/40 py-2">No JSON-LD structured data found.</p>}
             </div>
           </Section>
+          </ProGate>
         </div>
       </div>
 

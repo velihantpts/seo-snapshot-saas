@@ -27,9 +27,11 @@ export function Navbar() {
         </Link>
         <div className="flex items-center gap-3 sm:gap-4">
           <Link href="/pricing" className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150">Pricing</Link>
+          <Link href="/docs" className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150 hidden sm:inline">API</Link>
           {session ? (
             <>
               <Link href="/dashboard" className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150 hidden sm:inline">Dashboard</Link>
+              <Link href="/monitor" className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150 hidden md:inline">Monitor</Link>
               <UserMenu />
             </>
           ) : (

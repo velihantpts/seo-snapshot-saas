@@ -19,6 +19,17 @@ export default async function Dashboard() {
   const isPro = user.plan === 'pro_monthly' || user.plan === 'pro_lifetime' || user.plan === 'pro';
   const planLabel = user.plan === 'pro_lifetime' ? 'Lifetime' : user.plan === 'pro_monthly' ? 'Pro' : user.plan === 'pro' ? 'Pro' : 'Free';
 
+  // Fetch crawl jobs
+  let crawlJobs: any[] = [];
+  try {
+    crawlJobs = await prisma.crawlJob.findMany({
+      where: { userId: user.id },
+      orderBy: { createdAt: 'desc' },
+      take: 10,
+      select: { id: true, domain: true, status: true, totalUrls: true, avgScore: true, createdAt: true },
+    });
+  } catch {}
+
   // Dashboard stats
   const totalAnalyses = analyses.length;
   const avgScore = totalAnalyses > 0 ? Math.round(analyses.reduce((s, a) => s + a.score, 0) / totalAnalyses) : 0;
@@ -36,7 +47,10 @@ export default async function Dashboard() {
             <h1 className="text-xl sm:text-2xl font-medium tracking-tight">Dashboard</h1>
             <p className="text-white/30 text-sm mt-1">Your SEO analysis history</p>
           </div>
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${isPro ? 'bg-accent-500/10 text-accent-400' : 'bg-white/[0.06] text-white/40'}`}>
+              {planLabel}
+            </span>
             {!isPro && (
               <Link href="/pricing" className="btn-ghost !py-2 text-sm text-accent-400">Upgrade</Link>
             )}
@@ -100,6 +114,27 @@ export default async function Dashboard() {
                 </div>
               );
             })}
+          </div>
+        )}
+
+        {/* Crawl Jobs */}
+        {crawlJobs.length > 0 && (
+          <div className="mt-10">
+            <h2 className="text-lg font-medium tracking-tight mb-4">Site Crawls</h2>
+            <div className="space-y-2">
+              {crawlJobs.map((job: any) => (
+                <Link key={job.id} href={`/crawl/${job.id}`}
+                  className="flex items-center gap-4 p-4 glass-card rounded-xl group hover:border-white/[0.1] transition">
+                  <div className="w-10 h-10 rounded-xl bg-accent-500/10 flex items-center justify-center text-accent-400 font-mono text-sm">
+                    {job.avgScore ? Math.round(job.avgScore) : '—'}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-white/80 group-hover:text-accent-400 transition truncate">{job.domain}</p>
+                    <p className="text-xs text-white/25 mt-0.5">{job.totalUrls} pages · {job.status} · {formatDistanceToNow(new Date(job.createdAt), { addSuffix: true })}</p>
+                  </div>
+                </Link>
+              ))}
+            </div>
           </div>
         )}
       </div>
