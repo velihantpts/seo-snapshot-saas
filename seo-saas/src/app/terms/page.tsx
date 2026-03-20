@@ -1,19 +1,10 @@
-import Link from 'next/link';
-import { Metadata } from 'next';
-
-export const metadata: Metadata = { title: 'Terms of Service' };
+'use client';
+import { Navbar } from '@/components/Navbar';
 
 export default function Terms() {
   return (
     <div className="min-h-screen bg-surface">
-      <nav className="border-b border-white/[0.06]">
-        <div className="max-w-3xl mx-auto px-6 h-14 flex items-center">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center text-white font-bold text-xs">S</div>
-            <span className="font-semibold tracking-tight">SEO <span className="text-accent-400">Snapshot</span></span>
-          </Link>
-        </div>
-      </nav>
+      <Navbar />
       <div className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-2xl font-medium tracking-tight mb-8">Terms of Service</h1>
         <div className="prose-sm text-white/50 space-y-4 leading-relaxed">

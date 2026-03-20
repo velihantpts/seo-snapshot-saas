@@ -574,6 +574,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
             </div>
           </Section>
 
+          <ProGate feature="accessibility audit" isPro={isPublic || false}>
           <Section title="Accessibility" icon={Search}
             badge={`${d.accessibility?.score || 0}/100`}
             badgeColor={d.accessibility?.score >= 80 ? 'green' : d.accessibility?.score >= 50 ? 'yellow' : 'red'}>
@@ -585,6 +586,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
               )) : <p className="text-sm text-emerald-400 py-2">✓ No accessibility issues found</p>}
             </div>
           </Section>
+          </ProGate>
 
           {/* Hreflang */}
           {d.hreflang?.tags?.length > 0 && (
