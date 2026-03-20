@@ -152,18 +152,25 @@ export function ScoreTrend({ data }: { data: { date: string; score: number }[] }
         <path d={areaD} fill="url(#trendGrad)" />
         {/* Line */}
         <path d={pathD} fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        {/* Points — smaller */}
+        {/* Points */}
         {points.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={2.5} fill="#6366f1" stroke="#0a0a0f" strokeWidth="1.5" />
+          <circle key={i} cx={p.x} cy={p.y} r={2} fill="#6366f1" stroke="#0a0a0f" strokeWidth="1" />
         ))}
-        {/* Labels — only show every other to avoid overlap */}
-        {chartData.map((d, i) => (
-          i % Math.ceil(chartData.length / 5) === 0 || i === chartData.length - 1 ? (
-            <text key={i} x={points[i].x} y={h - 2} textAnchor="middle" className="fill-white/25 text-[7px]">
-              {d.date}
+        {/* Y-axis labels */}
+        {[0, 50, 100].map(v => (
+          <text key={`y${v}`} x={pad - 2} y={pad + chartH - (v / 100) * chartH + 3} textAnchor="end" className="fill-white/20 text-[6px]">
+            {v}
+          </text>
+        ))}
+        {/* X-axis labels — max 4 labels to avoid overlap */}
+        {chartData.map((d, i) => {
+          const showEvery = Math.max(1, Math.ceil(chartData.length / 4));
+          return (i % showEvery === 0 || i === chartData.length - 1) ? (
+            <text key={i} x={points[i].x} y={h - 2} textAnchor="middle" className="fill-white/20 text-[6px]">
+              {d.date.slice(5)}
             </text>
           ) : null
-        ))}
+        })}
       </svg>
     </div>
   );

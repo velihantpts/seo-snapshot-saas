@@ -37,7 +37,7 @@ export default function Pricing() {
     },
     {
       name: 'Pro', price: '$9.99', period: '/mo', description: 'For professionals',
-      cta: 'Subscribe', style: 'btn-primary', priceType: 'monthly', popular: true,
+      cta: 'Unlock All Issues', style: 'btn-primary', priceType: 'monthly', popular: true,
       features: [
         { text: 'Unlimited analyses', ok: true }, { text: 'Everything in Free', ok: true },
         { text: 'Core Web Vitals (FCP, LCP, CLS)', ok: true }, { text: 'Security & accessibility audit', ok: true },
@@ -46,7 +46,7 @@ export default function Pricing() {
       ],
     },
     {
-      name: 'Lifetime', price: '$49.99', period: '', description: 'One-time. Forever.',
+      name: 'Lifetime', price: '$19.99', period: '', description: 'One-time. Forever.',
       cta: 'Buy Lifetime', style: 'lifetime', priceType: 'lifetime',
       features: [
         { text: 'Everything in Pro', ok: true }, { text: 'No recurring fees', ok: true },
@@ -64,6 +64,7 @@ export default function Pricing() {
         <div className="text-center mb-14 sm:mb-16">
           <h1 className="heading-section mb-4 opacity-0 animate-fade-in-up">Simple, transparent pricing</h1>
           <p className="text-white/40 text-base opacity-0 animate-fade-in-up-delay-1">Start free. Upgrade when you need more power.</p>
+          <p className="text-white/20 text-xs mt-3 opacity-0 animate-fade-in-up-delay-2">Trusted by developers, freelancers & agencies worldwide</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-5 opacity-0 animate-fade-in-up-delay-2">
