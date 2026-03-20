@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { Search, Zap, Shield, Smartphone, BarChart3, FileText, ArrowRight, Globe, Code, Eye } from 'lucide-react';
@@ -16,8 +16,13 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [crawling, setCrawling] = useState(false);
   const [error, setError] = useState('');
+  const [stats, setStats] = useState<{ totalAnalyses: number; avgScore: number } | null>(null);
   const { data: session } = useSession();
   const router = useRouter();
+
+  useEffect(() => {
+    fetch('/api/stats').then(r => r.json()).then(setStats).catch(() => {});
+  }, []);
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -173,7 +178,7 @@ export default function Home() {
           <div className="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             {[
               { value: '60+', label: 'SEO Checks' },
-              { value: '< 10s', label: 'Analysis Time' },
+              { value: stats ? `${stats.totalAnalyses.toLocaleString()}` : '< 10s', label: stats ? 'Sites Analyzed' : 'Analysis Time' },
               { value: '100%', label: 'Server-Side' },
               { value: 'Free', label: 'No Signup' },
             ].map(stat => (

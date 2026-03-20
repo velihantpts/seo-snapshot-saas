@@ -535,6 +535,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
             </div>
           </Section>
 
+          <ProGate feature="security header audit" isPro={isPublic || false}>
           <Section title="Security Headers" icon={Shield}
             badge={`${d.security?.score || 0}/100`}
             badgeColor={d.security?.score >= 80 ? 'green' : d.security?.score >= 50 ? 'yellow' : 'red'}>
@@ -545,6 +546,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
               )}
             </div>
           </Section>
+          </ProGate>
 
           <Section title="Performance" icon={Zap}
             badge={`${d.performance?.responseTime || d.fetchTime}ms`}
