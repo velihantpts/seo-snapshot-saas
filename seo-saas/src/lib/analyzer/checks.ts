@@ -1,0 +1,265 @@
+import type * as cheerio from 'cheerio';
+import { Issue, GENERIC_ANCHORS, STOP_WORDS, estimatePixelWidth } from './types';
+
+export function runChecks(html: string, $: cheerio.CheerioAPI, response: Response, targetUrl: string, issues: Issue[]) {
+  const parsedUrl = new URL(targetUrl);
+
+  // ===== META =====
+  const title = $('title').first().text().trim();
+  const titleLen = title.length;
+  const descEl = $('meta[name="description"]').attr('content') || $('meta[property="description"]').attr('content') || '';
+  const descLen = descEl.length;
+  const canonical = $('link[rel="canonical"]').attr('href') || '';
+  const robotsMeta = $('meta[name="robots"]').attr('content') || '';
+  const lang = $('html').attr('lang') || '';
+  const charsetMeta = $('meta[charset]').attr('charset') || '';
+  const viewportMeta = $('meta[name="viewport"]').attr('content') || '';
+
+  if (titleLen === 0) issues.push({ severity: 'critical', problem: 'Title tag is missing', fix: 'Add a <title> tag with your primary keyword, 50-60 characters.', category: 'Meta' });
+  else if (titleLen < 30) issues.push({ severity: 'warning', problem: `Title too short (${titleLen} chars)`, fix: `Your title "${title}" needs more detail. Add keywords to reach 50-60 chars.` });
+  else if (titleLen > 60) issues.push({ severity: 'warning', problem: `Title may truncate in SERP (${titleLen} chars)`, fix: `Google shows ~60 chars. Move important keywords to the front.` });
+  if (descLen === 0) issues.push({ severity: 'critical', problem: 'Meta description is missing', fix: 'Add <meta name="description" content="...">. Write a compelling 150-160 char summary.' });
+  else if (descLen < 120) issues.push({ severity: 'warning', problem: `Meta description short (${descLen} chars)`, fix: `Add a call-to-action and more keywords. Aim for 150-160 chars.` });
+  else if (descLen > 160) issues.push({ severity: 'warning', problem: `Meta description may truncate (${descLen} chars)`, fix: `Google cuts at ~160 chars. Trim and put key info first.` });
+
+  // ===== HEADINGS =====
+  const headings: Record<string, { count: number; texts: string[] }> = {};
+  for (let i = 1; i <= 6; i++) {
+    const els = $(`h${i}`);
+    headings[`h${i}`] = { count: els.length, texts: els.slice(0, 5).map((_, el) => $(el).text().trim().substring(0, 100)).get() };
+  }
+  if (headings.h1.count === 0) issues.push({ severity: 'critical', problem: 'No H1 tag found', fix: 'Add exactly one <h1> tag with your primary keyword.' });
+  else if (headings.h1.count > 1) issues.push({ severity: 'warning', problem: `Multiple H1 tags (${headings.h1.count})`, fix: `Keep only one H1: "${headings.h1.texts[0]}". Change others to <h2>.` });
+
+  // ===== IMAGES =====
+  const imgs = $('img');
+  const missingAlt = imgs.filter((_, el) => { const a = $(el).attr('alt'); return a === undefined || a.trim() === ''; }).length;
+  const withoutDims = imgs.filter((_, el) => !$(el).attr('width') && !$(el).attr('height')).length;
+  if (missingAlt > 0) issues.push({ severity: 'warning', problem: `${missingAlt}/${imgs.length} images missing alt text`, fix: 'Add descriptive alt attributes to images.' });
+  let notLazy = 0, noWebP = 0;
+  imgs.each((_, el) => {
+    const src = $(el).attr('src') || '';
+    if (!$(el).attr('loading') && src && !src.startsWith('data:')) notLazy++;
+    if (src && /\.(jpg|jpeg|png|gif|bmp)(\?|$)/i.test(src)) noWebP++;
+  });
+  if (notLazy > 3) issues.push({ severity: 'warning', problem: `${notLazy} images without lazy loading`, fix: 'Add loading="lazy" to below-the-fold images.' });
+  if (noWebP > 3) issues.push({ severity: 'warning', problem: `${noWebP} images not using modern formats (WebP/AVIF)`, fix: 'Convert images to WebP or AVIF. This can reduce size by 30-50%.' });
+
+  // ===== LINKS =====
+  const allLinks = $('a[href]');
+  let internal = 0, external = 0, nofollow = 0, emptyAnchor = 0, genericAnchor = 0;
+  const uniqueInt = new Set<string>();
+  const uniqueExt = new Set<string>();
+  const linkUrls: string[] = [];
+  allLinks.each((_, el) => {
+    const href = $(el).attr('href') || '';
+    try {
+      const u = new URL(href, targetUrl);
+      if (u.hostname === parsedUrl.hostname) { internal++; uniqueInt.add(u.pathname); }
+      else if (u.protocol.startsWith('http')) { external++; uniqueExt.add(u.hostname); if (linkUrls.length < 5) linkUrls.push(u.toString()); }
+    } catch {}
+    if ($(el).attr('rel')?.includes('nofollow')) nofollow++;
+    const text = $(el).text().trim().toLowerCase();
+    if (!text && !$(el).find('img').length) emptyAnchor++;
+    else if (GENERIC_ANCHORS.has(text)) genericAnchor++;
+  });
+
+  // ===== CONTENT =====
+  let contentEl = $('main').length > 0 ? $('main') : $('article').length > 0 ? $('article') : null;
+  if (!contentEl) {
+    const bodyClone = $('body').clone();
+    bodyClone.find('nav, header, footer, aside, script, style, noscript, .sidebar, .menu, .navigation').remove();
+    contentEl = bodyClone;
+  }
+  const bodyText = contentEl.text().replace(/\s+/g, ' ').trim();
+  const words = bodyText.split(/\s+/).filter(w => w.length > 0);
+  const wordCount = words.length;
+  const wordFreq: Record<string, number> = {};
+  words.forEach(w => {
+    const lower = w.toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (lower.length > 2 && !STOP_WORDS.has(lower)) wordFreq[lower] = (wordFreq[lower] || 0) + 1;
+  });
+  const bigramFreq: Record<string, number> = {};
+  for (let i = 0; i < words.length - 1; i++) {
+    const a = words[i].toLowerCase().replace(/[^a-z0-9]/g, '');
+    const b = words[i + 1].toLowerCase().replace(/[^a-z0-9]/g, '');
+    if (a.length > 2 && b.length > 2 && !STOP_WORDS.has(a) && !STOP_WORDS.has(b)) {
+      bigramFreq[`${a} ${b}`] = (bigramFreq[`${a} ${b}`] || 0) + 1;
+    }
+  }
+  const topUnigrams = Object.entries(wordFreq).sort((a, b) => b[1] - a[1]).slice(0, 10).map(([word, count]) => ({ word, count, density: ((count / wordCount) * 100).toFixed(2) }));
+  const topBigrams = Object.entries(bigramFreq).sort((a, b) => b[1] - a[1]).slice(0, 5).filter(([_, c]) => c >= 2).map(([word, count]) => ({ word, count, density: ((count / wordCount) * 100).toFixed(2) }));
+  const topKeywords = [...topUnigrams, ...topBigrams].sort((a, b) => b.count - a.count).slice(0, 15);
+  if (wordCount < 300) issues.push({ severity: 'warning', problem: `Thin content: only ${wordCount} words`, fix: `Pages under 300 words struggle to rank. Need ${300 - wordCount}+ more words.` });
+
+  // ===== SOCIAL =====
+  const og: Record<string, string> = {};
+  ['title', 'description', 'image', 'url', 'type', 'site_name'].forEach(key => { og[key] = $(`meta[property="og:${key}"]`).attr('content') || ''; });
+  const missingOG = Object.entries(og).filter(([k, v]) => !v && ['title', 'description', 'image', 'url'].includes(k)).map(([k]) => `og:${k}`);
+  if (missingOG.length > 0) issues.push({ severity: 'warning', problem: `Missing OG tags: ${missingOG.join(', ')}`, fix: `Add missing OG tags for better social sharing.` });
+  const tw: Record<string, string> = {};
+  ['card', 'title', 'description', 'image', 'site'].forEach(key => { tw[key] = $(`meta[name="twitter:${key}"]`).attr('content') || ''; });
+
+  // ===== SCHEMAS =====
+  const schemas: { type: string; valid: boolean; issues: string[] }[] = [];
+  $('script[type="application/ld+json"]').each((_, el) => {
+    try {
+      const data = JSON.parse($(el).html() || '');
+      const type = data['@type'] || (Array.isArray(data['@graph']) ? 'Graph' : 'Unknown');
+      const si: string[] = [];
+      if (!data['@context']) si.push('Missing @context');
+      if (type === 'Article' && !data.headline) si.push('Missing headline');
+      if (type === 'Product' && !data.offers) si.push('Missing offers');
+      schemas.push({ type, valid: si.length === 0, issues: si });
+    } catch { schemas.push({ type: 'Invalid', valid: false, issues: ['Invalid JSON syntax'] }); }
+  });
+  if (schemas.length === 0) issues.push({ severity: 'warning', problem: 'No structured data (JSON-LD)', fix: 'Add JSON-LD schema for rich snippets.' });
+
+  // ===== PERFORMANCE =====
+  const scripts = $('script[src]');
+  const deferScripts = $('script[defer]').length;
+  const asyncScripts = $('script[async]').length;
+  const inlineScripts = $('script:not([src])').length;
+  const stylesheets = $('link[rel="stylesheet"]').length;
+  const renderBlocking = scripts.filter((_, el) => !$(el).attr('async') && !$(el).attr('defer')).length;
+  const renderBlockingList: string[] = [];
+  scripts.each((_, el) => { if (!$(el).attr('async') && !$(el).attr('defer')) { const s = $(el).attr('src') || ''; if (s) renderBlockingList.push(s.length > 80 ? '...' + s.slice(-77) : s); } });
+  if (renderBlocking > 3) issues.push({ severity: 'warning', problem: `${renderBlocking} render-blocking scripts`, fix: 'Add async or defer to non-critical scripts.' });
+  let inlineScriptSize = 0;
+  $('script:not([src])').each((_, el) => { inlineScriptSize += ($(el).html() || '').length; });
+  const inlineScriptKB = Math.round(inlineScriptSize / 1024);
+  if (inlineScriptKB > 50) issues.push({ severity: 'warning', problem: `${inlineScriptKB} KB of inline JavaScript`, fix: 'Move large inline scripts to external files.' });
+
+  // ===== MOBILE =====
+  const mobIssues: string[] = [];
+  if (!viewportMeta) mobIssues.push('Missing viewport meta tag');
+  const vpLower = viewportMeta.toLowerCase();
+  const scalable = !vpLower.includes('user-scalable=no') && !vpLower.includes('maximum-scale=1');
+  if (!scalable) mobIssues.push('Pinch-to-zoom disabled');
+  let mobScore = 100;
+  if (!viewportMeta) mobScore -= 30;
+  if (!scalable) mobScore -= 15;
+  mobIssues.forEach(i => issues.push({ severity: 'warning', problem: i, fix: i.includes('viewport') ? 'Add <meta name="viewport" content="width=device-width, initial-scale=1">.' : 'Remove user-scalable=no to allow zoom.' }));
+
+  // ===== ACCESSIBILITY =====
+  const a11yIssues: string[] = [];
+  let noLabel = 0;
+  $('input:not([type="hidden"]):not([type="submit"]):not([type="button"]), select, textarea').each((_, el) => {
+    const id = $(el).attr('id');
+    if (!id || !$(`label[for="${id}"]`).length) { if (!$(el).attr('aria-label') && !$(el).closest('label').length) noLabel++; }
+  });
+  if (noLabel > 0) a11yIssues.push(`${noLabel} form inputs without labels`);
+  if (missingAlt > 0) a11yIssues.push(`${missingAlt} images without alt text`);
+  if (!lang) a11yIssues.push('Missing lang attribute on <html>');
+  let headingOrder: number[] = [];
+  $('h1,h2,h3,h4,h5,h6').each((_, el) => { headingOrder.push(parseInt(el.tagName[1])); });
+  let skippedH = 0;
+  for (let i = 1; i < headingOrder.length; i++) { if (headingOrder[i] - headingOrder[i - 1] > 1) skippedH++; }
+  if (skippedH > 0) a11yIssues.push(`${skippedH} skipped heading levels`);
+  let a11yScore = 100 - (noLabel * 5) - (missingAlt * 2) - (skippedH * 5) - (lang ? 0 : 10);
+  a11yScore = Math.max(0, a11yScore);
+
+  // ===== CONTENT QUALITY =====
+  const paragraphs = $('p').map((_, el) => $(el).text().trim()).get().filter(t => t.length > 20);
+  const allSentences: string[] = [];
+  paragraphs.forEach(text => { text.split(/[.!?]+/).filter(s => s.trim().length > 5).forEach(s => allSentences.push(s.trim())); });
+  let avgSentLen = 0, longSent = 0, readScore = 0, readGrade = 'N/A';
+  const isEnglish = !lang || lang.toLowerCase().startsWith('en');
+  if (allSentences.length > 0 && isEnglish) {
+    const sentLens = allSentences.map(s => s.split(/\s+/).length);
+    avgSentLen = Math.round(sentLens.reduce((a, b) => a + b, 0) / sentLens.length);
+    longSent = sentLens.filter(l => l > 25).length;
+    const totalW = allSentences.join(' ').split(/\s+/).filter(w => w.length > 0);
+    const syllCount = totalW.reduce((c, word) => {
+      let s = word.toLowerCase().replace(/[^a-z]/g, '');
+      if (s.length <= 3) return c + 1;
+      s = s.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '').replace(/^y/, '');
+      const m = s.match(/[aeiouy]{1,2}/g);
+      return c + (m ? m.length : 1);
+    }, 0);
+    const flesch = 206.835 - (1.015 * (totalW.length / allSentences.length)) - (84.6 * (syllCount / totalW.length));
+    readScore = Math.max(0, Math.min(100, Math.round(flesch)));
+    readGrade = flesch >= 80 ? 'Very easy' : flesch >= 60 ? 'Standard' : flesch >= 40 ? 'Difficult' : 'Very difficult';
+  } else if (!isEnglish && allSentences.length > 0) {
+    const sentLens = allSentences.map(s => s.split(/\s+/).length);
+    avgSentLen = Math.round(sentLens.reduce((a, b) => a + b, 0) / sentLens.length);
+    longSent = sentLens.filter(l => l > 25).length;
+    readGrade = 'N/A (non-English)';
+  }
+
+  // ===== PIXEL WIDTH + MISC =====
+  const titlePixelWidth = estimatePixelWidth(title);
+  const descPixelWidth = estimatePixelWidth(descEl);
+  if (titlePixelWidth > 580) issues.push({ severity: 'warning', problem: `Title too wide for SERP (${titlePixelWidth}px, max ~580px)`, fix: 'Shorten title or move keywords to the front.', category: 'Meta' });
+  if (descPixelWidth > 920) issues.push({ severity: 'warning', problem: `Description too wide for SERP (${descPixelWidth}px)`, fix: 'Put important info first.', category: 'Meta' });
+
+  const topKw = topKeywords[0]?.word || '';
+  const kwInTitle = topKw ? title.toLowerCase().includes(topKw) : true;
+  const kwInH1 = topKw ? (headings.h1.texts[0] || '').toLowerCase().includes(topKw) : true;
+  if (topKw && !kwInTitle) issues.push({ severity: 'warning', problem: `Top keyword "${topKw}" not found in title`, fix: `Include "${topKw}" in the title tag.`, category: 'Content' });
+  if (topKw && !kwInH1 && headings.h1.count > 0) issues.push({ severity: 'warning', problem: `Top keyword "${topKw}" not found in H1`, fix: `Include "${topKw}" in your H1.`, category: 'Content' });
+
+  const hasFavicon = $('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]').length > 0;
+  if (!hasFavicon) issues.push({ severity: 'warning', problem: 'No favicon found', fix: 'Add <link rel="icon" href="/favicon.ico">.', category: 'Meta' });
+  const hasDoctype = html.trimStart().toLowerCase().startsWith('<!doctype');
+  if (!hasDoctype) issues.push({ severity: 'warning', problem: 'Missing DOCTYPE declaration', fix: 'Add <!DOCTYPE html> at the start.', category: 'Technical' });
+  const urlPath = parsedUrl.pathname;
+  if (urlPath.length > 115) issues.push({ severity: 'warning', problem: `URL path is very long (${urlPath.length} chars)`, fix: 'Keep URL paths under 100 characters.', category: 'Technical' });
+  if (/[A-Z]/.test(urlPath)) issues.push({ severity: 'warning', problem: 'URL contains uppercase letters', fix: 'Use lowercase URLs to avoid duplicate content.', category: 'Technical' });
+  if (/[_]/.test(urlPath) && urlPath !== '/') issues.push({ severity: 'warning', problem: 'URL uses underscores instead of hyphens', fix: 'Use hyphens (-) instead of underscores (_).', category: 'Technical' });
+  const textToHtmlRatio = html.length > 0 ? Math.round((bodyText.length / html.length) * 100) : 0;
+  if (textToHtmlRatio < 10) issues.push({ severity: 'warning', problem: `Low text-to-HTML ratio (${textToHtmlRatio}%)`, fix: 'Aim for 25-70% ratio. Remove unused CSS/JS.', category: 'Content' });
+
+  let badFontDisplay = 0;
+  const fontFaceMatches = html.match(/@font-face\s*\{[^}]*\}/gi) || [];
+  fontFaceMatches.forEach(ff => { if (!ff.includes('font-display')) badFontDisplay++; });
+  if (badFontDisplay > 0) issues.push({ severity: 'warning', problem: `${badFontDisplay} @font-face without font-display`, fix: 'Add font-display: swap to @font-face rules.', category: 'Performance' });
+
+  if (!canonical) issues.push({ severity: 'warning', problem: 'No canonical URL', fix: `Add <link rel="canonical" href="${targetUrl}">.` });
+  if (!lang) issues.push({ severity: 'warning', problem: 'Missing language attribute', fix: 'Add lang="en" to <html> tag.' });
+  const isHttps = parsedUrl.protocol === 'https:';
+  if (!isHttps) issues.push({ severity: 'critical', problem: 'Not using HTTPS', fix: 'Get an SSL certificate and redirect HTTP to HTTPS.' });
+  if (!viewportMeta) issues.push({ severity: 'critical', problem: 'Missing viewport meta tag', fix: 'Add <meta name="viewport" content="width=device-width, initial-scale=1">.' });
+
+  // Canonical deep analysis
+  const canonicalSelfRef = canonical ? (new URL(canonical, targetUrl).toString() === targetUrl) : false;
+  const canonicalHttpsMismatch = canonical ? (canonical.startsWith('http://') && isHttps) || (canonical.startsWith('https://') && !isHttps) : false;
+  const canonicalOgMismatch = canonical && og.url ? (new URL(canonical, targetUrl).toString() !== new URL(og.url, targetUrl).toString()) : false;
+  if (canonicalHttpsMismatch) issues.push({ severity: 'critical', problem: 'Canonical URL protocol mismatch', fix: 'Update canonical to match HTTP/HTTPS.' });
+  if (canonicalOgMismatch) issues.push({ severity: 'warning', problem: 'Canonical and og:url mismatch', fix: 'Make canonical and og:url point to the same URL.' });
+
+  const isNoindex = robotsMeta.toLowerCase().includes('noindex') || !!response.headers.get('x-robots-tag')?.toLowerCase().includes('noindex');
+  if (isNoindex) issues.push({ severity: 'critical', problem: 'Page is marked as noindex — will NOT appear in Google', fix: 'Remove noindex if you want this page indexed.' });
+
+  // Duplicate meta
+  if ($('title').length > 1) issues.push({ severity: 'warning', problem: `Multiple <title> tags found (${$('title').length})`, fix: 'Keep only one <title> tag.', category: 'Meta' });
+  if ($('meta[name="description"]').length > 1) issues.push({ severity: 'warning', problem: `Multiple meta descriptions found`, fix: 'Keep only one <meta name="description">.', category: 'Meta' });
+
+  // Hreflang
+  const hreflangTags: { lang: string; url: string }[] = [];
+  $('link[rel="alternate"][hreflang]').each((_, el) => {
+    const l = $(el).attr('hreflang') || ''; const h = $(el).attr('href') || '';
+    if (l && h) hreflangTags.push({ lang: l, url: h });
+  });
+  const linkHeader = response.headers.get('link') || '';
+  if (linkHeader) {
+    const m = linkHeader.match(/<([^>]+)>;\s*rel="alternate";\s*hreflang="([^"]+)"/gi) || [];
+    m.forEach(match => { const u = match.match(/<([^>]+)>/); const l = match.match(/hreflang="([^"]+)"/); if (u && l) hreflangTags.push({ lang: l[1], url: u[1] }); });
+  }
+  const hasXDefault = hreflangTags.some(h => h.lang === 'x-default');
+  const hreflangIssues: string[] = [];
+  if (hreflangTags.length > 0 && !hasXDefault) { hreflangIssues.push('Missing x-default'); issues.push({ severity: 'warning', problem: 'Missing x-default hreflang', fix: 'Add hreflang x-default as fallback.' }); }
+
+  return {
+    meta: { title: { text: title, length: titleLen, status: titleLen >= 30 && titleLen <= 60 ? 'good' : titleLen > 0 ? 'warning' : 'missing' }, description: { text: descEl, length: descLen, status: descLen >= 120 && descLen <= 160 ? 'good' : descLen > 0 ? 'warning' : 'missing' }, titlePixelWidth, descPixelWidth, canonical, canonicalAnalysis: { selfReferencing: canonicalSelfRef, httpsMismatch: canonicalHttpsMismatch, ogUrlMismatch: canonicalOgMismatch }, robots: robotsMeta, lang, charset: charsetMeta, viewport: viewportMeta, isNoindex, hasFavicon, hasDoctype, textToHtmlRatio },
+    headings, images: { total: imgs.length, missingAlt, withoutDimensions: withoutDims, largeCount: 0, notLazy, noWebP },
+    links: { total: allLinks.length, internal, external, nofollow, broken: [], brokenLinks: [] as string[], uniqueInternal: uniqueInt.size, uniqueExternal: uniqueExt.size, emptyAnchor, genericAnchor },
+    wordCount, topKeywords, og, twitter: tw, schemas,
+    hreflang: { tags: hreflangTags, hasXDefault, issues: hreflangIssues },
+    performance: { responseTime: 0, htmlSize: Math.round(html.length / 1024), totalScripts: scripts.length, totalStylesheets: stylesheets, deferScripts, asyncScripts, inlineScripts, inlineScriptSize: inlineScriptKB, renderBlocking, renderBlockingList },
+    mobile: { viewport: !!viewportMeta, scalable, score: mobScore, issues: mobIssues },
+    accessibility: { score: a11yScore, issues: a11yIssues },
+    contentQuality: { readabilityScore: readScore, readabilityGrade: readGrade, avgSentenceLength: avgSentLen, totalSentences: allSentences.length, longSentences: longSent },
+    linkUrls, kwInTitle, kwInH1, isHttps, noLabel, missingAlt, skippedH, readScore, badFontDisplay, titlePixelWidth, urlPath, textToHtmlRatio, inlineScriptKB, noSriCount: 0, titleLen, descLen, titleTags: $('title').length, descTags: $('meta[name="description"]').length,
+  };
+}
