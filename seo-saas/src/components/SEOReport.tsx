@@ -232,7 +232,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
           <h1 className="text-lg sm:text-xl font-medium tracking-tight mb-1.5 break-all text-white/90">{d.url}</h1>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/40">
             <span>Status <span className="text-white/60 font-mono">{d.statusCode}</span></span>
-            <span>Response <span className="text-white/60 font-mono">{d.fetchTime}ms</span></span>
+            <span>TTFB <span className="text-white/60 font-mono">{d.fetchTime}ms</span></span>
             <span>Size <span className="text-white/60 font-mono">{d.performance?.htmlSize} KB</span></span>
             <span>Words <span className="text-white/60 font-mono">{d.wordCount}</span></span>
           </div>
@@ -552,7 +552,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
             badge={`${d.performance?.responseTime || d.fetchTime}ms`}
             badgeColor={(d.performance?.responseTime || d.fetchTime) < 1000 ? 'green' : 'yellow'}>
             <div className="pt-2">
-              <Row label="Response time" value={`${d.performance?.responseTime || d.fetchTime}ms`}
+              <Row label="TTFB (server)" value={`${d.performance?.responseTime || d.fetchTime}ms`}
                 status={(d.performance?.responseTime || d.fetchTime) < 1000 ? 'good' : 'warn'} />
               <Row label="HTML size" value={`${d.performance?.htmlSize} KB`} />
               <Row label="Scripts" value={`${d.performance?.totalScripts} (${d.performance?.deferScripts} defer, ${d.performance?.asyncScripts} async)`} />
@@ -660,7 +660,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
             <Section title="Top Keywords" icon={Search} badge={`${d.topKeywords.length}`} badgeColor="default">
               <div className="pt-2">
                 {d.topKeywords.slice(0, 10).map((kw: any, i: number) => (
-                  <Row key={i} label={`${i + 1}. ${kw.word}`} value={`${kw.count}x (${kw.density}%)`} />
+                  <Row key={i} label={`${i + 1}. ${kw.word}`} value={`${kw.count}x`} />
                 ))}
               </div>
             </Section>

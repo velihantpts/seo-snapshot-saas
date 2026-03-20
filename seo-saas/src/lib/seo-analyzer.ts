@@ -509,11 +509,22 @@ export async function analyzeURL(targetUrl: string): Promise<SEOResult> {
 
   // ===== HREFLANG VALIDATION =====
   const hreflangTags: { lang: string; url: string }[] = [];
+  // Check HTML <link> tags
   $('link[rel="alternate"][hreflang]').each((_, el) => {
     const lang = $(el).attr('hreflang') || '';
     const href = $(el).attr('href') || '';
     if (lang && href) hreflangTags.push({ lang, url: href });
   });
+  // Check HTTP Link header (some sites use this instead of HTML tags)
+  const linkHeader = response.headers.get('link') || '';
+  if (linkHeader) {
+    const hreflangMatches = linkHeader.match(/<([^>]+)>;\s*rel="alternate";\s*hreflang="([^"]+)"/gi) || [];
+    hreflangMatches.forEach(m => {
+      const urlMatch = m.match(/<([^>]+)>/);
+      const langMatch = m.match(/hreflang="([^"]+)"/);
+      if (urlMatch && langMatch) hreflangTags.push({ lang: langMatch[1], url: urlMatch[1] });
+    });
+  }
   const hasXDefault = hreflangTags.some(h => h.lang === 'x-default');
   const hreflangIssues: string[] = [];
   if (hreflangTags.length > 0 && !hasXDefault) {
@@ -674,17 +685,17 @@ export async function analyzeURL(targetUrl: string): Promise<SEOResult> {
   perfScore += notLazy <= 2 ? 3 : notLazy <= 5 ? 1 : 0;
   perfScore += inlineScriptKB < 30 ? 3 : inlineScriptKB < 80 ? 1 : 0;
 
-  // Security: 15pt
+  // Security: 15pt (HTTPS+HSTS most important, CSP nice-to-have)
   let secCalcScore = 0;
-  secCalcScore += isHttps ? 3 : 0;
-  secCalcScore += (hstsHeader && parseInt(hstsHeader.match(/max-age=(\d+)/)?.[1] || '0') >= 31536000) ? 2 : hstsHeader ? 1 : 0;
-  secCalcScore += cspHeader && !cspHeader.includes('unsafe-inline') ? 3 : cspHeader ? 1 : 0;
+  secCalcScore += isHttps ? 5 : 0;  // HTTPS is critical
+  secCalcScore += (hstsHeader && parseInt(hstsHeader.match(/max-age=(\d+)/)?.[1] || '0') >= 31536000) ? 3 : hstsHeader ? 1 : 0;  // HSTS important
+  secCalcScore += cspHeader && !cspHeader.includes('unsafe-inline') ? 2 : cspHeader ? 1 : 0;  // CSP nice-to-have
   secCalcScore += headers['x-frame-options'] ? 1 : 0;
   secCalcScore += headers['x-content-type-options'] ? 1 : 0;
   secCalcScore += headers['referrer-policy'] ? 1 : 0;
-  secCalcScore += mixedContentCount === 0 ? 2 : 0;
-  secCalcScore += noSriCount === 0 ? 1 : 0;
-  secCalcScore += (!setCookieHeader || (setCookieHeader.toLowerCase().includes('httponly') && setCookieHeader.toLowerCase().includes('secure'))) ? 1 : 0;
+  secCalcScore += mixedContentCount === 0 ? 1 : 0;
+  secCalcScore += noSriCount === 0 ? 0.5 : 0;
+  secCalcScore += (!setCookieHeader || (setCookieHeader.toLowerCase().includes('httponly') && setCookieHeader.toLowerCase().includes('secure'))) ? 0.5 : 0;
 
   // Content Quality: 10pt
   let contentScore = 0;
@@ -707,11 +718,20 @@ export async function analyzeURL(targetUrl: string): Promise<SEOResult> {
   a11yCalcScore += altRatio >= 0.9 ? 2 : altRatio >= 0.5 ? 1 : 0;
   a11yCalcScore += skippedH === 0 ? 1 : 0;
 
-  // Penalty: broken links, noindex
+  // Penalty: broken links, noindex, plus minor penalties for uncounted issues
   let penalty = 0;
   penalty += brokenLinks.length * 2;
   penalty += isNoindex ? 10 : 0;
   penalty += mixedContentCount > 0 ? 3 : 0;
+  // Minor penalties for issues not in category scores
+  if (badFontDisplay > 0) penalty += 1;
+  if (urlPath.length > 115) penalty += 0.5;
+  if (/[A-Z]/.test(urlPath)) penalty += 0.5;
+  if (textToHtmlRatio < 10) penalty += 1;
+  if (titleTags.length > 1) penalty += 1;
+  if (descTags.length > 1) penalty += 1;
+  if (titlePixelWidth > 580) penalty += 0.5;
+  if (noSriCount > 0) penalty += 0.5;
 
   const rawScore = metaScore + techScore + perfScore + secCalcScore + contentScore + socialScore + a11yCalcScore - penalty;
   const finalScore = Math.max(0, Math.min(100, Math.round(rawScore)));
