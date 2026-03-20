@@ -82,9 +82,41 @@ export function runSecurityChecks($: cheerio.CheerioAPI, html: string, response:
   if (mixedContentCount === 0) gradePoints += 10;
   const grade = gradePoints >= 95 ? 'A+' : gradePoints >= 85 ? 'A' : gradePoints >= 70 ? 'B' : gradePoints >= 55 ? 'C' : gradePoints >= 40 ? 'D' : 'F';
 
+  // ===== SERVER DETECTION =====
+  const serverHeader = response.headers.get('server') || '';
+  const poweredBy = response.headers.get('x-powered-by') || '';
+  if (poweredBy) {
+    issues.push({ severity: 'warning', problem: `X-Powered-By header exposes: "${poweredBy}"`, fix: 'Remove X-Powered-By header — it reveals server technology to attackers.', category: 'Security' });
+  }
+
+  // ===== RESPONSE COMPRESSION =====
+  const encoding = response.headers.get('content-encoding') || '';
+  if (!encoding) {
+    issues.push({ severity: 'warning', problem: 'Response not compressed (no gzip/brotli)', fix: 'Enable gzip or brotli compression on your server. This can reduce transfer size by 60-80%.', category: 'Performance' });
+  }
+
+  // ===== CACHE-CONTROL =====
+  const cacheControl = response.headers.get('cache-control') || '';
+  if (!cacheControl) {
+    issues.push({ severity: 'warning', problem: 'No Cache-Control header', fix: 'Add Cache-Control header for static assets: "public, max-age=31536000, immutable" for CSS/JS/images.', category: 'Performance' });
+  } else if (cacheControl.includes('no-store') || cacheControl.includes('no-cache')) {
+    // OK for HTML pages
+  } else {
+    const maxAgeMatch = cacheControl.match(/max-age=(\d+)/);
+    if (maxAgeMatch && parseInt(maxAgeMatch[1]) < 60) {
+      issues.push({ severity: 'warning', problem: `Very short cache duration (max-age=${maxAgeMatch[1]})`, fix: 'Consider longer cache for static content.', category: 'Performance' });
+    }
+  }
+
+  // ===== PERMISSIONS-POLICY =====
+  if (!headers['permissions-policy']) {
+    issues.push({ severity: 'warning', problem: 'Missing Permissions-Policy header', fix: 'Add Permissions-Policy to control browser features: camera, microphone, geolocation.', category: 'Security' });
+  }
+
   return {
     security: { https: isHttps, headers, mixedContent: mixedContentCount, score: secScore, grade, issues: secIssues },
     brokenLinks, noSriCount, hstsHeader, cspHeader, setCookieHeader, mixedContentCount,
+    serverHeader, encoding, cacheControl,
   };
 }
 

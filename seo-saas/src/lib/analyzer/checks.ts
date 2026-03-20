@@ -250,6 +250,123 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   const hreflangIssues: string[] = [];
   if (hreflangTags.length > 0 && !hasXDefault) { hreflangIssues.push('Missing x-default'); issues.push({ severity: 'warning', problem: 'Missing x-default hreflang', fix: 'Add hreflang x-default as fallback.' }); }
 
+  // ===== STRUCTURED DATA DEEP VALIDATION =====
+  schemas.forEach(s => {
+    if (s.type === 'Article') {
+      if (!s.issues.includes('Missing headline')) { /* already checked */ }
+      // Check for recommended Article fields
+    }
+    if (s.type === 'Product' && s.valid) {
+      // Additional product checks would go here
+    }
+    if (s.type === 'FAQ') {
+      // FAQ schema found — good for rich results
+    }
+  });
+  // Check for FAQ page without FAQ schema
+  if ($('*[itemscope][itemtype*="FAQPage"]').length > 0 && !schemas.some(s => s.type === 'FAQPage')) {
+    issues.push({ severity: 'warning', problem: 'FAQ content detected but no FAQPage schema', fix: 'Add FAQPage JSON-LD schema to qualify for FAQ rich results in Google.', category: 'Social' });
+  }
+
+  // ===== CHARSET VALIDATION =====
+  if (!charsetMeta && !html.toLowerCase().includes('charset=utf-8') && !html.toLowerCase().includes('charset="utf-8"')) {
+    issues.push({ severity: 'warning', problem: 'No charset declaration found', fix: 'Add <meta charset="UTF-8"> as the first element in <head>.', category: 'Technical' });
+  } else if (charsetMeta && charsetMeta.toLowerCase() !== 'utf-8') {
+    issues.push({ severity: 'warning', problem: `Non-UTF-8 charset: ${charsetMeta}`, fix: 'Use UTF-8 encoding: <meta charset="UTF-8">.', category: 'Technical' });
+  }
+
+  // ===== LANG VALUE VALIDATION =====
+  const validLangs = ['en','es','fr','de','it','pt','nl','ru','ja','ko','zh','ar','hi','tr','pl','sv','da','fi','no','cs','hu','ro','bg','uk','el','he','th','vi','id','ms','tl'];
+  if (lang && !validLangs.some(l => lang.toLowerCase().startsWith(l))) {
+    issues.push({ severity: 'warning', problem: `Unusual lang attribute: "${lang}"`, fix: 'Use a valid ISO 639-1 language code like "en", "tr", "de".', category: 'Technical' });
+  }
+
+  // ===== META ROBOTS NOFOLLOW =====
+  if (robotsMeta.toLowerCase().includes('nofollow')) {
+    issues.push({ severity: 'warning', problem: 'Page has meta robots nofollow — links won\'t pass authority', fix: 'Remove nofollow from <meta name="robots"> if you want links to pass PageRank.', category: 'Technical' });
+  }
+
+  // ===== EMPTY HEADINGS =====
+  let emptyHeadings = 0;
+  $('h1,h2,h3,h4,h5,h6').each((_, el) => { if (!$(el).text().trim()) emptyHeadings++; });
+  if (emptyHeadings > 0) issues.push({ severity: 'warning', problem: `${emptyHeadings} empty heading tag(s)`, fix: 'Remove empty heading tags or add content to them.', category: 'Content' });
+
+  // ===== DUPLICATE H2 CONTENT =====
+  const h2Texts = $('h2').map((_, el) => $(el).text().trim().toLowerCase()).get();
+  const h2Dupes = h2Texts.filter((t, i) => t && h2Texts.indexOf(t) !== i);
+  if (h2Dupes.length > 0) issues.push({ severity: 'warning', problem: `${h2Dupes.length} duplicate H2 heading(s)`, fix: 'Make each H2 unique to help search engines understand page structure.', category: 'Content' });
+
+  // ===== DEPRECATED HTML TAGS =====
+  const deprecatedTags = ['center', 'font', 'marquee', 'blink', 'strike', 'big', 'tt'];
+  const foundDeprecated: string[] = [];
+  deprecatedTags.forEach(tag => { if ($(tag).length > 0) foundDeprecated.push(`<${tag}> (${$(tag).length})`); });
+  if (foundDeprecated.length > 0) issues.push({ severity: 'warning', problem: `Deprecated HTML tags: ${foundDeprecated.join(', ')}`, fix: 'Replace deprecated tags with CSS. <center> → text-align:center, <font> → CSS font properties.', category: 'Technical' });
+
+  // ===== IFRAME DETECTION =====
+  const iframeCount = $('iframe').length;
+  if (iframeCount > 3) issues.push({ severity: 'warning', problem: `${iframeCount} iframes detected — may slow page load`, fix: 'Reduce iframe usage. Use lazy loading for iframes: <iframe loading="lazy">.', category: 'Performance' });
+
+  // ===== EMAIL EXPOSURE =====
+  const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+  const bodyHtml = $('body').html() || '';
+  const exposedEmails = (bodyHtml.match(emailRegex) || []).filter(e => !e.includes('schema.org') && !e.includes('example.com'));
+  if (exposedEmails.length > 0) issues.push({ severity: 'warning', problem: `${exposedEmails.length} email address(es) exposed in HTML`, fix: 'Use contact forms instead of plaintext emails to prevent spam harvesting.', category: 'Security' });
+
+  // ===== SOCIAL MEDIA LINKS =====
+  const socialDomains = ['facebook.com', 'twitter.com', 'x.com', 'instagram.com', 'linkedin.com', 'youtube.com', 'tiktok.com', 'github.com'];
+  const foundSocial: string[] = [];
+  allLinks.each((_, el) => {
+    const href = $(el).attr('href') || '';
+    socialDomains.forEach(d => { if (href.includes(d) && !foundSocial.includes(d)) foundSocial.push(d); });
+  });
+
+  // ===== DNS PREFETCH / PRECONNECT =====
+  const hasPrefetch = $('link[rel="dns-prefetch"], link[rel="preconnect"]').length > 0;
+  const externalDomains = $('script[src], link[href]').map((_, el) => {
+    const src = $(el).attr('src') || $(el).attr('href') || '';
+    try { const u = new URL(src); return u.hostname !== parsedUrl.hostname ? u.hostname : null; } catch { return null; }
+  }).get().filter(Boolean);
+  if (externalDomains.length > 3 && !hasPrefetch) {
+    issues.push({ severity: 'warning', problem: `${externalDomains.length} external domains loaded without dns-prefetch`, fix: 'Add <link rel="preconnect" href="https://cdn.example.com"> for external domains to speed up connections.', category: 'Performance' });
+  }
+
+  // ===== TWITTER CARD VALIDATION =====
+  if (tw.card && !['summary', 'summary_large_image', 'app', 'player'].includes(tw.card)) {
+    issues.push({ severity: 'warning', problem: `Invalid Twitter card type: "${tw.card}"`, fix: 'Use a valid type: summary, summary_large_image, app, or player.', category: 'Social' });
+  }
+  if (!tw.card && og.title) {
+    issues.push({ severity: 'warning', problem: 'OG tags present but no Twitter Card', fix: 'Add <meta name="twitter:card" content="summary_large_image"> to show rich previews on Twitter/X.', category: 'Social' });
+  }
+
+  // ===== PRINT STYLESHEET =====
+  const hasPrintCSS = $('link[media="print"]').length > 0 || html.includes('@media print');
+
+  // ===== PAGE SIZE WARNING =====
+  const htmlSizeKB = Math.round(html.length / 1024);
+  if (htmlSizeKB > 500) {
+    issues.push({ severity: 'warning', problem: `Large HTML document (${htmlSizeKB} KB)`, fix: 'HTML over 500KB is heavy. Optimize by removing unused code, inlining less CSS/JS.', category: 'Performance' });
+  }
+
+  // ===== TAB/FORM AUTOCOMPLETE =====
+  const passwordInputs = $('input[type="password"]').length;
+  const noAutocomplete = $('input[type="password"]:not([autocomplete])').length;
+  if (noAutocomplete > 0) {
+    issues.push({ severity: 'warning', problem: 'Password input without autocomplete attribute', fix: 'Add autocomplete="current-password" or autocomplete="new-password" for better UX and security.', category: 'Technical' });
+  }
+
+  // ===== HEADING BEFORE CONTENT =====
+  const firstH1Index = html.indexOf('<h1');
+  const firstPIndex = html.indexOf('<p');
+  if (firstPIndex > 0 && firstH1Index > firstPIndex) {
+    issues.push({ severity: 'warning', problem: 'Content appears before H1 heading', fix: 'Place your H1 before the main content paragraphs for better SEO structure.', category: 'Content' });
+  }
+
+  // ===== MULTIPLE CANONICAL TAGS =====
+  const canonicalTags = $('link[rel="canonical"]').length;
+  if (canonicalTags > 1) {
+    issues.push({ severity: 'warning', problem: `Multiple canonical tags found (${canonicalTags})`, fix: 'Keep only one <link rel="canonical">. Multiple canonicals confuse search engines.', category: 'Meta' });
+  }
+
   return {
     meta: { title: { text: title, length: titleLen, status: titleLen >= 30 && titleLen <= 60 ? 'good' : titleLen > 0 ? 'warning' : 'missing' }, description: { text: descEl, length: descLen, status: descLen >= 120 && descLen <= 160 ? 'good' : descLen > 0 ? 'warning' : 'missing' }, titlePixelWidth, descPixelWidth, canonical, canonicalAnalysis: { selfReferencing: canonicalSelfRef, httpsMismatch: canonicalHttpsMismatch, ogUrlMismatch: canonicalOgMismatch }, robots: robotsMeta, lang, charset: charsetMeta, viewport: viewportMeta, isNoindex, hasFavicon, hasDoctype, textToHtmlRatio },
     headings, images: { total: imgs.length, missingAlt, withoutDimensions: withoutDims, largeCount: 0, notLazy, noWebP },
