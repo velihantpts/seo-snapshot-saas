@@ -8,6 +8,8 @@ import { ActionSummary } from './ActionSummary';
 import { ProGate } from './ProGate';
 import { ErrorBoundary } from './ErrorBoundary';
 import { SerpPreview } from './SerpPreview';
+import { useToast } from './Toast';
+import { ScoreTrend } from './Charts';
 import {
   AlertTriangle, XCircle, ChevronDown, ChevronUp, Lightbulb, Copy, CheckCircle,
   Download, Share2, FileText, BarChart3, Search, Link2, Image, Hash, Globe,
@@ -128,21 +130,44 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
   const [activeTab, setActiveTab] = useState<TabKey>('overview');
   const [copied, setCopied] = useState(false);
   const [severityFilter, setSeverityFilter] = useState<'all' | 'critical' | 'warning'>('all');
+  const [categoryFilter, setCategoryFilter] = useState<string>('all');
+  const [history, setHistory] = useState<{ date: string; score: number }[]>([]);
+  const { toast } = useToast();
 
   const d = result;
   const issues = d.issues || [];
   const criticalCount = issues.filter((i: any) => i.severity === 'critical').length;
   const warningCount = issues.filter((i: any) => i.severity === 'warning').length;
-  const filteredIssues = severityFilter === 'all' ? issues : issues.filter((i: any) => i.severity === severityFilter);
+
+  // Category + severity combined filter
+  let filteredIssues = severityFilter === 'all' ? issues : issues.filter((i: any) => i.severity === severityFilter);
+  if (categoryFilter !== 'all') filteredIssues = filteredIssues.filter((i: any) => (i.category || 'Other') === categoryFilter);
+
+  // Unique categories for filter
+  const categorySet: Record<string, boolean> = {};
+  issues.forEach((i: any) => { categorySet[i.category || 'Other'] = true; });
+  const categories = ['all'].concat(Object.keys(categorySet));
+
+  // Fetch score history
+  useEffect(() => {
+    if (d.url) {
+      fetch(`/api/analyze/history?url=${encodeURIComponent(d.url)}`)
+        .then(r => r.json())
+        .then(data => { if (data.history) setHistory(data.history); })
+        .catch(() => {});
+    }
+  }, [d.url]);
 
   const handleCopy = () => {
     const summary = `SEO Report: ${d.url}\nScore: ${d.score}/100\nIssues: ${issues.length} (${criticalCount} critical)\n\n${issues.map((i: any) => `[${i.severity.toUpperCase()}] ${i.problem}\n  Fix: ${i.fix}`).join('\n\n')}`;
     navigator.clipboard.writeText(summary);
     setCopied(true);
+    toast('Report copied to clipboard');
     setTimeout(() => setCopied(false), 2000);
   };
 
   const handleDownload = () => {
+    toast('JSON report downloaded');
     const blob = new Blob([JSON.stringify(d, null, 2)], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -151,6 +176,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
   };
 
   const handleCSV = () => {
+    toast('CSV report downloaded');
     const rows = [['Severity', 'Category', 'Problem', 'Fix', 'Impact']];
     issues.forEach((i: any) => rows.push([i.severity, i.category || '', i.problem, i.fix, i.impact || '']));
     const csv = rows.map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
@@ -372,6 +398,13 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
           <StatCard label="Issues" value={issues.length} color={issues.length === 0 ? 'text-emerald-400' : 'text-amber-400'} />
         </div>
 
+        {/* Score History Trend */}
+        {history.length >= 2 && (
+          <div className="glass-card rounded-xl p-5 mb-8 opacity-0 animate-fade-in-up-delay-3">
+            <ScoreTrend data={history} />
+          </div>
+        )}
+
         {/* Quick Wins */}
         {quickWins.length > 0 && (
           <div className="opacity-0 animate-fade-in-up-delay-3">
@@ -403,7 +436,8 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
           </div>
         ) : (
           <>
-            <div className="flex gap-2 mb-5 print:hidden">
+            {/* Severity filter */}
+            <div className="flex gap-2 mb-3 print:hidden">
               {(['all', 'critical', 'warning'] as const).map(filter => (
                 <button
                   key={filter}
@@ -414,6 +448,21 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
                       : 'text-white/40 hover:text-white/60 hover:bg-white/[0.03]'}`}
                 >
                   {filter === 'all' ? `All (${issues.length})` : filter === 'critical' ? `Critical (${criticalCount})` : `Warning (${warningCount})`}
+                </button>
+              ))}
+            </div>
+            {/* Category filter */}
+            <div className="flex gap-1.5 mb-5 print:hidden overflow-x-auto scrollbar-thin pb-1">
+              {categories.map(cat => (
+                <button
+                  key={cat}
+                  onClick={() => setCategoryFilter(cat)}
+                  className={`px-2.5 py-1 rounded-md text-[10px] font-medium transition-all duration-150 whitespace-nowrap
+                    ${categoryFilter === cat
+                      ? 'bg-accent-500/15 text-accent-400 border border-accent-500/20'
+                      : 'text-white/30 hover:text-white/50 hover:bg-white/[0.03]'}`}
+                >
+                  {cat === 'all' ? 'All Categories' : cat}
                 </button>
               ))}
             </div>
