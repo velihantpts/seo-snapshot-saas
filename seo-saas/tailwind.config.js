@@ -6,7 +6,7 @@ module.exports = {
       colors: {
         // Premium dark palette — near-black with opacity-based hierarchy
         surface: {
-          DEFAULT: '#09090b',
+          DEFAULT: '#0a0a0f',
           raised: '#111113',
           overlay: '#18181b',
         },
@@ -56,7 +56,7 @@ module.exports = {
           '100%': { opacity: '1' },
         },
         fadeInUp: {
-          '0%': { opacity: '0', transform: 'translateY(16px)' },
+          '0%': { opacity: '0', transform: 'translateY(6px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         scaleIn: {

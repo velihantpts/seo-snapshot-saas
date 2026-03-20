@@ -106,7 +106,7 @@ export default function Home() {
 
           {/* URL Input with typing placeholder */}
           <form onSubmit={handleAnalyze} className="max-w-2xl mx-auto opacity-0 animate-fade-in-up-delay-2" role="search" aria-label="SEO Analysis">
-            <div className="flex flex-col sm:flex-row gap-2 p-2 rounded-2xl bg-white/[0.04] border border-white/[0.08] focus-within:border-accent-500/30 focus-within:shadow-glow transition-all duration-200">
+            <div className="flex flex-col sm:flex-row gap-2 p-2 rounded-2xl bg-white/[0.03] border border-white/[0.05] input-glow transition-all duration-200">
               <div className="flex-1 flex items-center gap-3 px-4 relative">
                 <Search className="w-5 h-5 text-white/30 flex-shrink-0" />
                 <div className="flex-1 relative">
