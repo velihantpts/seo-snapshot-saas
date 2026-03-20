@@ -9,7 +9,7 @@ import { GlowCard } from '@/components/GlowCard';
 import { TypeWriter } from '@/components/TypeWriter';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { AnalysisLoader } from '@/components/AnalysisLoader';
-import { Navbar } from '@/components/Navbar';
+
 
 export default function Home() {
   const [url, setUrl] = useState('');
@@ -84,8 +84,6 @@ export default function Home() {
       <Aurora />
       <div className="fixed inset-0 bg-grid opacity-40 pointer-events-none" />
 
-      {/* Scroll-reactive navbar */}
-      <Navbar />
 
       {/* Hero */}
       <section className="relative z-10 pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-20 px-4 sm:px-6">

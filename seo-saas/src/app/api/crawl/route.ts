@@ -29,14 +29,14 @@ export async function POST(req: Request) {
   const parsedUrl = validation.url;
   const domain = parsedUrl.hostname;
 
-  // Check daily crawl limit (3 per day)
+  // Check daily crawl limit (5 per day)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const todayCrawls = await prisma.crawlJob.count({
     where: { userId, createdAt: { gte: today } },
   });
-  if (todayCrawls >= 3) {
-    return NextResponse.json({ error: 'Daily crawl limit reached (3/day). Try again tomorrow.' }, { status: 429 });
+  if (todayCrawls >= 5) {
+    return NextResponse.json({ error: 'Daily crawl limit reached (5/day). Try again tomorrow.' }, { status: 429 });
   }
 
   // Fetch sitemap.xml to get URL list

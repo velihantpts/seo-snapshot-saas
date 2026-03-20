@@ -1,10 +1,9 @@
 'use client';
-import { Navbar } from '@/components/Navbar';
+
 
 export default function Privacy() {
   return (
     <div className="min-h-screen bg-surface">
-      <Navbar />
       <div className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-2xl font-medium tracking-tight mb-8">Privacy Policy</h1>
         <div className="prose-sm text-white/50 space-y-4 leading-relaxed">

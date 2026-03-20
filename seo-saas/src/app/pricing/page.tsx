@@ -3,7 +3,7 @@ import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { Check, X } from 'lucide-react';
 import { useState } from 'react';
-import { Navbar } from '@/components/Navbar';
+
 
 export default function Pricing() {
   const { data: session } = useSession();
@@ -59,7 +59,6 @@ export default function Pricing() {
   return (
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-30 pointer-events-none" />
-      <Navbar />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <div className="text-center mb-14 sm:mb-16">

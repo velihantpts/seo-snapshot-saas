@@ -42,14 +42,8 @@ export default function PublicReportPage() {
   return (
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
-      <div className="relative z-50 border-b border-white/[0.06] print:hidden">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center text-white font-bold text-xs shadow-glow-sm">S</div>
-            <span className="font-semibold text-sm tracking-tight">SEO <span className="text-accent-400">Snapshot</span></span>
-          </Link>
-          <Link href="/" className="btn-primary !py-2 text-sm">Analyze your site</Link>
-        </div>
+      <div className="relative z-40 max-w-5xl mx-auto px-4 sm:px-6 pt-4 flex items-center justify-end print:hidden">
+        <Link href="/" className="btn-primary !py-2 text-sm">Analyze your site</Link>
       </div>
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <SEOReport result={result} isPublic={true} />

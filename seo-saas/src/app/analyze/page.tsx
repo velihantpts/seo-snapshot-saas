@@ -34,13 +34,6 @@ export default function AnalyzePage() {
   return (
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
-      <div className="relative z-50 border-b border-white/[0.06] print:hidden">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 text-white/40 hover:text-white/70 transition-colors duration-150 text-sm">
-            <ArrowLeft className="w-4 h-4" /> New analysis
-          </Link>
-        </div>
-      </div>
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <SEOReport result={result} />
       </div>

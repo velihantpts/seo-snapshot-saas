@@ -36,7 +36,7 @@ export async function POST(req: Request) {
   if (!rateResult.allowed) {
     logger.rateLimit(clientIP, '/api/analyze');
     return NextResponse.json(
-      { error: isPro ? 'Daily limit reached. Please try again tomorrow.' : 'Daily limit reached (3/day). Upgrade to Pro for unlimited analyses.' },
+      { error: isPro ? 'Daily limit reached. Please try again tomorrow.' : 'Daily limit reached (5/day). Upgrade to Pro for unlimited analyses.' },
       { status: 429, headers: { 'Retry-After': String(rateResult.retryAfter || 3600) } }
     );
   }

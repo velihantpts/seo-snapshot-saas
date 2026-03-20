@@ -29,20 +29,6 @@ export default async function Dashboard() {
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
 
-      <nav className="relative z-50 border-b border-white/[0.06]">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center text-white font-bold text-xs shadow-glow-sm">S</div>
-            <span className="font-semibold tracking-tight">SEO <span className="text-accent-400">Snapshot</span></span>
-          </Link>
-          <div className="flex items-center gap-3">
-            <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${isPro ? 'bg-accent-500/10 text-accent-400' : 'bg-white/[0.06] text-white/40'}`}>
-              {planLabel}
-            </span>
-            <span className="text-sm text-white/30 hidden sm:inline">{session.user?.email}</span>
-          </div>
-        </div>
-      </nav>
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 py-8">
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-6">

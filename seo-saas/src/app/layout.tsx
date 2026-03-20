@@ -2,6 +2,7 @@ import './globals.css';
 import { Metadata, Viewport } from 'next';
 import AuthProvider from '@/components/AuthProvider';
 import { ToastProvider } from '@/components/Toast';
+import { Navbar } from '@/components/Navbar';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://seosnapshot.dev'),
@@ -19,13 +20,13 @@ export const metadata: Metadata = {
     url: 'https://seosnapshot.dev',
     siteName: 'SEO Snapshot',
     title: 'SEO Snapshot — Free SEO Analyzer',
-    description: 'Analyze any webpage\'s SEO in seconds. 20+ checks with actionable fix recommendations.',
+    description: 'Analyze any webpage\'s SEO in seconds. 100 checks with actionable fix recommendations.',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'SEO Snapshot' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'SEO Snapshot — Free SEO Analyzer',
-    description: 'Analyze any webpage\'s SEO in seconds. 20+ checks with actionable fix recommendations.',
+    description: 'Analyze any webpage\'s SEO in seconds. 100 checks with actionable fix recommendations.',
     images: ['/og-image.png'],
   },
   manifest: '/manifest.json',
@@ -48,9 +49,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main-content" className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:z-[100] focus:px-4 focus:py-2 focus:bg-brand-600 focus:text-white focus:rounded-lg">
           Skip to main content
         </a>
-        <main id="main-content">
-          <AuthProvider><ToastProvider>{children}</ToastProvider></AuthProvider>
-        </main>
+        <AuthProvider>
+          <ToastProvider>
+            <Navbar />
+            <main id="main-content">{children}</main>
+          </ToastProvider>
+        </AuthProvider>
       </body>
     </html>
   );

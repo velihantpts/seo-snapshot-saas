@@ -138,13 +138,11 @@ export default function CrawlPage() {
       <ScrollProgress />
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
 
-      <nav className="relative z-50 border-b border-white/[0.06]">
-        <div className="max-w-5xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
-          <Link href="/dashboard" className="flex items-center gap-2 text-white/40 hover:text-white/70 transition text-sm">
-            <ArrowLeft className="w-4 h-4" /> Dashboard
-          </Link>
-        </div>
-      </nav>
+      <div className="relative z-40 max-w-5xl mx-auto px-4 sm:px-6 pt-4 print:hidden">
+        <Link href="/dashboard" className="flex items-center gap-2 text-white/40 hover:text-white/70 transition text-sm">
+          <ArrowLeft className="w-4 h-4" /> Dashboard
+        </Link>
+      </div>
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-8">
         {/* Header */}
