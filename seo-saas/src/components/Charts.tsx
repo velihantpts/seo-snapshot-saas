@@ -107,17 +107,26 @@ export function ScoreRadar({ scores }: { scores: { label: string; value: number 
 
 // ===== Score Trend Line Chart =====
 export function ScoreTrend({ data }: { data: { date: string; score: number }[] }) {
-  if (data.length < 2) return null;
+  // Deduplicate: keep last entry per date
+  const dedupMap = new Map<string, number>();
+  data.forEach(d => dedupMap.set(d.date, d.score));
+  const deduped = Array.from(dedupMap.entries()).map(([date, score]) => ({ date, score }));
+
+  // Need at least 2 unique dates
+  if (deduped.length < 2) return null;
+
+  // Limit to last 10
+  const chartData = deduped.slice(-10);
 
   const maxScore = 100;
   const w = 300;
-  const h = 100;
-  const pad = 8;
+  const h = 120;
+  const pad = 12;
   const chartW = w - pad * 2;
-  const chartH = h - pad * 2;
+  const chartH = h - pad * 2 - 15; // room for labels
 
-  const points = data.map((d, i) => ({
-    x: pad + (i / (data.length - 1)) * chartW,
+  const points = chartData.map((d, i) => ({
+    x: pad + (i / (chartData.length - 1)) * chartW,
     y: pad + chartH - (d.score / maxScore) * chartH,
   }));
 
@@ -143,15 +152,17 @@ export function ScoreTrend({ data }: { data: { date: string; score: number }[] }
         <path d={areaD} fill="url(#trendGrad)" />
         {/* Line */}
         <path d={pathD} fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        {/* Points */}
+        {/* Points — smaller */}
         {points.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={3} fill="#6366f1" stroke="#09090b" strokeWidth="2" />
+          <circle key={i} cx={p.x} cy={p.y} r={2.5} fill="#6366f1" stroke="#0a0a0f" strokeWidth="1.5" />
         ))}
-        {/* Labels */}
-        {data.map((d, i) => (
-          <text key={i} x={points[i].x} y={h - 1} textAnchor="middle" className="fill-white/30 text-[7px]">
-            {d.date}
-          </text>
+        {/* Labels — only show every other to avoid overlap */}
+        {chartData.map((d, i) => (
+          i % Math.ceil(chartData.length / 5) === 0 || i === chartData.length - 1 ? (
+            <text key={i} x={points[i].x} y={h - 2} textAnchor="middle" className="fill-white/25 text-[7px]">
+              {d.date}
+            </text>
+          ) : null
         ))}
       </svg>
     </div>

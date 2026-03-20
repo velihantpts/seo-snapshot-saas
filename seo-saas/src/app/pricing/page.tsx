@@ -29,7 +29,7 @@ export default function Pricing() {
       name: 'Free', price: '$0', period: '', description: 'Try it out',
       cta: 'Get started', style: 'btn-ghost', href: '/',
       features: [
-        { text: '3 analyses per day', ok: true }, { text: 'SEO score & issues', ok: true },
+        { text: '5 analyses per day', ok: true }, { text: 'SEO score & issues', ok: true },
         { text: 'Meta tag analysis', ok: true }, { text: 'Open Graph & schema', ok: true },
         { text: 'JSON export', ok: true }, { text: 'Core Web Vitals', ok: false },
         { text: 'PDF reports', ok: false }, { text: 'Scheduled monitoring', ok: false },

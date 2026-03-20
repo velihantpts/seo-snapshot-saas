@@ -166,7 +166,7 @@ export default function Home() {
 
           {!loading && (
             <p className="text-white/25 text-xs mt-5 opacity-0 animate-fade-in-up-delay-3">
-              Free: 3 analyses/day · No signup required · Pro: unlimited
+              Free: 5 analyses/day · No signup required · Pro: unlimited
             </p>
           )}
         </div>
@@ -178,7 +178,7 @@ export default function Home() {
           <div className="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             {[
               { value: '100', label: 'SEO Checks' },
-              { value: stats ? `${stats.totalAnalyses.toLocaleString()}` : '< 10s', label: stats ? 'Sites Analyzed' : 'Analysis Time' },
+              { value: stats && stats.totalAnalyses > 50 ? `${stats.totalAnalyses.toLocaleString()}` : '< 10s', label: stats && stats.totalAnalyses > 50 ? 'Sites Analyzed' : 'Analysis Time' },
               { value: '100%', label: 'Server-Side' },
               { value: 'Free', label: 'No Signup' },
             ].map(stat => (
