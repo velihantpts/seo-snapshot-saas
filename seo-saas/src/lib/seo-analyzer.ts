@@ -59,6 +59,8 @@ export async function analyzeURL(targetUrl: string) {
     badFontDisplay: checkResult.badFontDisplay, urlPath: checkResult.urlPath,
     textToHtmlRatio: checkResult.textToHtmlRatio, titlePixelWidth: checkResult.titlePixelWidth,
     titleTags: checkResult.titleTags, descTags: checkResult.descTags,
+    hasCompression: !!(secResult.encoding), hasCacheControl: !!(secResult.cacheControl),
+    noopenerMissing: 0,
   }, issues);
 
   logger.debug('analysis.complete', { url: targetUrl, score: scoring.score, issues: issues.length });

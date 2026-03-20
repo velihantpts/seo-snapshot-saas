@@ -12,6 +12,7 @@ interface ScoringInput {
   isNoindex: boolean; brokenLinksCount: number;
   badFontDisplay: number; urlPath: string; textToHtmlRatio: number;
   titlePixelWidth: number; titleTags: number; descTags: number;
+  hasCompression: boolean; hasCacheControl: boolean; noopenerMissing: number;
 }
 
 export function calculateScore(input: ScoringInput, issues: Issue[]) {
@@ -37,7 +38,8 @@ export function calculateScore(input: ScoringInput, issues: Issue[]) {
   perfScore += input.fetchTime < 1000 ? 5 : input.fetchTime < 2000 ? 3 : input.fetchTime < 3000 ? 1 : 0;
   perfScore += input.renderBlocking <= 2 ? 4 : input.renderBlocking <= 5 ? 2 : 0;
   perfScore += input.notLazy <= 2 ? 3 : input.notLazy <= 5 ? 1 : 0;
-  perfScore += input.inlineScriptKB < 30 ? 3 : input.inlineScriptKB < 80 ? 1 : 0;
+  perfScore += input.inlineScriptKB < 30 ? 2 : input.inlineScriptKB < 80 ? 1 : 0;
+  perfScore += input.hasCompression ? 1 : 0;
 
   // Security: 15pt
   let secCalcScore = 0;
@@ -83,6 +85,8 @@ export function calculateScore(input: ScoringInput, issues: Issue[]) {
   if (input.descTags > 1) penalty += 1;
   if (input.titlePixelWidth > 580) penalty += 0.5;
   if (input.noSriCount > 0) penalty += 0.5;
+  if (input.noopenerMissing > 0) penalty += 0.5;
+  if (!input.hasCompression) penalty += 1;
 
   const rawScore = metaScore + techScore + perfScore + secCalcScore + contentScore + socialScore + a11yCalcScore - penalty;
   const finalScore = Math.max(0, Math.min(100, Math.round(rawScore)));

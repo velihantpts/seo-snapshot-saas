@@ -367,6 +367,123 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
     issues.push({ severity: 'warning', problem: `Multiple canonical tags found (${canonicalTags})`, fix: 'Keep only one <link rel="canonical">. Multiple canonicals confuse search engines.', category: 'Meta' });
   }
 
+  // ===== REL=NOOPENER ON EXTERNAL LINKS =====
+  let noopenerMissing = 0;
+  $('a[target="_blank"]').each((_, el) => {
+    const rel = $(el).attr('rel') || '';
+    if (!rel.includes('noopener') && !rel.includes('noreferrer')) noopenerMissing++;
+  });
+  if (noopenerMissing > 0) issues.push({ severity: 'warning', problem: `${noopenerMissing} external link(s) with target="_blank" missing rel="noopener"`, fix: 'Add rel="noopener noreferrer" to all target="_blank" links to prevent security vulnerability.', category: 'Security' });
+
+  // ===== META REFRESH REDIRECT =====
+  const metaRefresh = $('meta[http-equiv="refresh"]').attr('content') || '';
+  if (metaRefresh) issues.push({ severity: 'warning', problem: 'Meta refresh redirect detected', fix: 'Use server-side 301 redirect instead of <meta http-equiv="refresh">. Meta refresh hurts SEO and UX.', category: 'Technical' });
+
+  // ===== SELF-LINKING ANCHORS =====
+  let selfLinks = 0;
+  allLinks.each((_, el) => {
+    const href = $(el).attr('href') || '';
+    try { if (new URL(href, targetUrl).toString() === targetUrl) selfLinks++; } catch {}
+  });
+  if (selfLinks > 3) issues.push({ severity: 'warning', problem: `${selfLinks} self-referencing links on page`, fix: 'Reduce self-linking. Too many links to the same page waste crawl budget.', category: 'Content' });
+
+  // ===== PARAGRAPH LENGTH =====
+  let longParagraphs = 0;
+  $('p').each((_, el) => { if ($(el).text().trim().split(/\s+/).length > 200) longParagraphs++; });
+  if (longParagraphs > 0) issues.push({ severity: 'warning', problem: `${longParagraphs} very long paragraph(s) (200+ words)`, fix: 'Break long paragraphs into shorter ones (3-5 sentences). Use subheadings, lists, and images for scannability.', category: 'Content' });
+
+  // ===== LIST USAGE =====
+  const hasLists = $('ul, ol').length > 0;
+  if (wordCount > 500 && !hasLists) issues.push({ severity: 'warning', problem: 'No lists (ul/ol) found in long content', fix: 'Use bullet or numbered lists to improve readability and qualify for featured snippets.', category: 'Content' });
+
+  // ===== CONTENT UNIQUENESS =====
+  const uniqueWords = Object.keys(wordFreq).length;
+  const uniqueRatio = wordCount > 0 ? Math.round((uniqueWords / wordCount) * 100) : 0;
+  if (wordCount > 100 && uniqueRatio < 20) issues.push({ severity: 'warning', problem: `Low content uniqueness (${uniqueRatio}% unique words)`, fix: 'Your content is repetitive. Use more varied vocabulary and expand on subtopics.', category: 'Content' });
+
+  // ===== TABLE ACCESSIBILITY =====
+  const tables = $('table');
+  if (tables.length > 0) {
+    let badTables = 0;
+    tables.each((_, el) => { if (!$(el).find('th').length && !$(el).find('[scope]').length) badTables++; });
+    if (badTables > 0) issues.push({ severity: 'warning', problem: `${badTables} table(s) without header cells (th)`, fix: 'Add <th> elements with scope="col" or scope="row" for screen reader accessibility.', category: 'Content' });
+  }
+
+  // ===== SKIP NAV LINK =====
+  const hasSkipNav = $('a[href="#main-content"], a[href="#content"], a[href="#main"], .skip-nav, .skip-link, [class*="skip"]').length > 0;
+  if (!hasSkipNav) issues.push({ severity: 'warning', problem: 'No skip navigation link found', fix: 'Add <a href="#main-content" class="sr-only">Skip to content</a> as first element in body for keyboard users.', category: 'Content' });
+
+  // ===== ARIA LANDMARKS =====
+  const hasMainRole = $('main, [role="main"]').length > 0;
+  const hasNavRole = $('nav, [role="navigation"]').length > 0;
+  if (!hasMainRole) issues.push({ severity: 'warning', problem: 'No <main> landmark element', fix: 'Wrap main content in <main> tag for screen readers and SEO.', category: 'Content' });
+  if (!hasNavRole) issues.push({ severity: 'warning', problem: 'No <nav> landmark element', fix: 'Wrap navigation in <nav> tag for accessibility.', category: 'Content' });
+
+  // ===== ANCHOR TEXT LENGTH =====
+  let shortAnchors = 0, longAnchors = 0;
+  allLinks.each((_, el) => {
+    const text = $(el).text().trim();
+    if (text.length === 1) shortAnchors++;
+    if (text.length > 100) longAnchors++;
+  });
+  if (shortAnchors > 3) issues.push({ severity: 'warning', problem: `${shortAnchors} links with very short anchor text (1 char)`, fix: 'Use descriptive anchor text for better SEO. Avoid single-character link text.', category: 'Content' });
+
+  // ===== HEADING KEYWORD RELEVANCE =====
+  if (topKw) {
+    const h2WithKw = h2Texts.filter(t => t.includes(topKw)).length;
+    const h3Texts = $('h3').map((_, el) => $(el).text().trim().toLowerCase()).get();
+    const h3WithKw = h3Texts.filter(t => t.includes(topKw)).length;
+    if (headings.h2.count > 2 && h2WithKw === 0 && h3WithKw === 0) {
+      issues.push({ severity: 'warning', problem: `Top keyword "${topKw}" not found in any H2/H3`, fix: `Include "${topKw}" naturally in at least one subheading for better topic relevance.`, category: 'Content' });
+    }
+  }
+
+  // ===== VIDEO WITHOUT TRANSCRIPT =====
+  const videos = $('video');
+  if (videos.length > 0) {
+    let noTrack = 0;
+    videos.each((_, el) => { if (!$(el).find('track').length) noTrack++; });
+    if (noTrack > 0) issues.push({ severity: 'warning', problem: `${noTrack} video(s) without captions/subtitles`, fix: 'Add <track kind="captions" src="captions.vtt"> for accessibility and SEO.', category: 'Content' });
+  }
+
+  // ===== FORM METHOD CHECK =====
+  $('form').each((_, el) => {
+    const method = ($(el).attr('method') || 'get').toLowerCase();
+    const hasPassword = $(el).find('input[type="password"]').length > 0;
+    if (method === 'get' && hasPassword) {
+      issues.push({ severity: 'critical', problem: 'Login form uses GET method — passwords exposed in URL', fix: 'Change form method to POST: <form method="POST">.', category: 'Security' });
+    }
+  });
+
+  // ===== OVERSIZED IMAGE DIMENSIONS =====
+  let oversizedImages = 0;
+  imgs.each((_, el) => {
+    const w = parseInt($(el).attr('width') || '0');
+    const h = parseInt($(el).attr('height') || '0');
+    if (w > 2000 || h > 2000) oversizedImages++;
+  });
+  if (oversizedImages > 0) issues.push({ severity: 'warning', problem: `${oversizedImages} image(s) with very large dimensions (2000px+)`, fix: 'Resize images to their display size. Serve responsive images with srcset.', category: 'Performance' });
+
+  // ===== PRELOAD KEY RESOURCES =====
+  const hasPreload = $('link[rel="preload"]').length > 0;
+  if (!hasPreload && imgs.length > 0) {
+    issues.push({ severity: 'warning', problem: 'No resource preloading detected', fix: 'Preload your LCP image: <link rel="preload" as="image" href="hero.jpg">. This improves Largest Contentful Paint.', category: 'Performance' });
+  }
+
+  // ===== LINK TITLE ATTRIBUTE =====
+  let linksWithoutTitle = 0;
+  $('a[href]:not([title]):not([aria-label])').each((_, el) => {
+    const text = $(el).text().trim();
+    if (!text && !$(el).find('img[alt]').length) linksWithoutTitle++;
+  });
+  if (linksWithoutTitle > 5) issues.push({ severity: 'warning', problem: `${linksWithoutTitle} links without accessible text or title`, fix: 'Add title or aria-label to image-only links for screen readers.', category: 'Content' });
+
+  // ===== OPEN GRAPH COMPLETENESS SCORE =====
+  const ogCompleteness = Object.values(og).filter(Boolean).length;
+  if (ogCompleteness > 0 && ogCompleteness < 4) {
+    issues.push({ severity: 'warning', problem: `Incomplete OG tags (${ogCompleteness}/6)`, fix: 'Add all recommended OG tags: og:title, og:description, og:image, og:url, og:type, og:site_name.', category: 'Social' });
+  }
+
   return {
     meta: { title: { text: title, length: titleLen, status: titleLen >= 30 && titleLen <= 60 ? 'good' : titleLen > 0 ? 'warning' : 'missing' }, description: { text: descEl, length: descLen, status: descLen >= 120 && descLen <= 160 ? 'good' : descLen > 0 ? 'warning' : 'missing' }, titlePixelWidth, descPixelWidth, canonical, canonicalAnalysis: { selfReferencing: canonicalSelfRef, httpsMismatch: canonicalHttpsMismatch, ogUrlMismatch: canonicalOgMismatch }, robots: robotsMeta, lang, charset: charsetMeta, viewport: viewportMeta, isNoindex, hasFavicon, hasDoctype, textToHtmlRatio },
     headings, images: { total: imgs.length, missingAlt, withoutDimensions: withoutDims, largeCount: 0, notLazy, noWebP },
