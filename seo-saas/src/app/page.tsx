@@ -86,7 +86,7 @@ export default function Home() {
       <section className="relative z-10 pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-white/60 text-xs font-medium mb-8 opacity-0 animate-fade-in">
-            <Zap className="w-3 h-3 text-accent-400" /> 20+ SEO checks in seconds
+            <Zap className="w-3 h-3 text-accent-400" /> 60+ SEO checks in seconds
           </div>
 
           <h1 className="heading-display mb-6 opacity-0 animate-fade-in-up">
@@ -106,7 +106,7 @@ export default function Home() {
                 <Search className="w-5 h-5 text-white/30 flex-shrink-0" />
                 <div className="flex-1 relative">
                   <input
-                    type="url"
+                    type="text"
                     value={url}
                     onChange={e => setUrl(e.target.value)}
                     placeholder=""
@@ -172,7 +172,7 @@ export default function Home() {
         <section className="relative z-10 py-12 px-4 sm:px-6">
           <div className="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             {[
-              { value: '20+', label: 'SEO Checks' },
+              { value: '60+', label: 'SEO Checks' },
               { value: '< 10s', label: 'Analysis Time' },
               { value: '100%', label: 'Server-Side' },
               { value: 'Free', label: 'No Signup' },
@@ -242,7 +242,7 @@ export default function Home() {
         <ScrollReveal className="max-w-5xl mx-auto">
           <h2 className="heading-section text-center mb-4">Everything you need to audit SEO</h2>
           <p className="text-white/40 text-center mb-14 sm:mb-16 max-w-md mx-auto text-sm leading-relaxed">
-            20+ checks covering every aspect of on-page SEO. Get specific code fixes, not just warnings.
+            60+ checks covering every aspect of on-page SEO. Get specific code fixes, not just warnings.
           </p>
         </ScrollReveal>
 

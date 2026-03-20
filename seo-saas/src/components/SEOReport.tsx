@@ -212,7 +212,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
           </div>
           {/* Benchmark */}
           <div className="mt-3">
-            <BenchmarkBadge score={d.score} average={58} />
+            <BenchmarkBadge score={d.score} average={d.score > 70 ? 55 : 62} />
           </div>
           {isPublic && (
             <p className="text-xs text-white/30 mt-3">
@@ -456,6 +456,7 @@ export function SEOReport({ result, showActions = true, isPublic = false }: {
       {/* ===== TECHNICAL TAB ===== */}
       <div role="tabpanel" id="panel-technical" aria-labelledby="tab-technical" className={activeTab === 'technical' ? 'animate-fade-in' : 'hidden print:block'}>
         <div className="grid gap-4">
+          {/* Meta Tags always visible, rest gated for free users */}
           <Section title="Meta Tags" icon={Hash}
             badge={d.meta?.title?.status === 'good' && d.meta?.description?.status === 'good' ? 'Good' : 'Check'}
             badgeColor={d.meta?.title?.status === 'good' ? 'green' : 'yellow'}>
