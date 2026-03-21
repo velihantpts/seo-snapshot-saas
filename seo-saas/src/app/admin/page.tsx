@@ -111,10 +111,10 @@ ${r.techStack?.length ? `Tech: ${r.techStack.map(t => t.name).join(', ')}\n` : '
 **Top issues found:**
 ${topIssues}
 ${r.issues.length > 3 ? `...and ${r.issues.length - 3} more\n` : ''}
-Full report: http://204.168.173.85/report/${r.id}
+Full report: https://seosnapshot.dev/report/${r.id}
 
 ---
-Tool: http://204.168.173.85 (free, no signup needed)`;
+Tool: https://seosnapshot.dev (free, no signup needed)`;
   };
 
   const handleCopy = (text: string, key: string) => {
@@ -157,8 +157,8 @@ Tool: http://204.168.173.85 (free, no signup needed)`;
             const domain = (() => { try { return new URL(r.url).hostname; } catch { return r.url; } })();
             const scoreColor = r.score >= 80 ? 'text-emerald-400' : r.score >= 60 ? 'text-amber-400' : 'text-red-400';
             const redditPost = getRedditPost(r);
-            const cardUrl = `http://204.168.173.85/card/${r.id}`;
-            const reportUrl = `http://204.168.173.85/report/${r.id}`;
+            const cardUrl = `https://seosnapshot.dev/card/${r.id}`;
+            const reportUrl = `https://seosnapshot.dev/report/${r.id}`;
 
             return (
               <div key={r.id} className="glass-card rounded-xl p-5">
