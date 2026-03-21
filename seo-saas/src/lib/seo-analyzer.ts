@@ -3,6 +3,7 @@ import { runChecks } from './analyzer/checks';
 import { runSecurityChecks, checkBrokenLinks, checkOgImage } from './analyzer/security';
 import { calculateScore } from './analyzer/scoring';
 import { detectTechStack } from './analyzer/tech-stack';
+import { getCrUXData } from './pagespeed';
 import { logger } from './logger';
 import type { Issue } from './analyzer/types';
 
@@ -22,10 +23,11 @@ export async function analyzeURL(targetUrl: string) {
   // 3. Run security checks
   const secResult = runSecurityChecks(fetchResult.$, fetchResult.html, fetchResult.response, checkResult.isHttps, issues);
 
-  // 4. Broken links + OG image validation (parallel)
-  const [brokenLinks] = await Promise.all([
+  // 4. Broken links + OG image + CrUX (parallel)
+  const [brokenLinks, , cruxData] = await Promise.all([
     checkBrokenLinks(checkResult.linkUrls, issues),
     checkOgImage(checkResult.og.image, issues),
+    getCrUXData(targetUrl),
   ]);
 
   // 5. Tech stack detection
@@ -92,6 +94,7 @@ export async function analyzeURL(targetUrl: string) {
     robots: { ...fetchResult.robots, urlBlocked: urlBlockedByRobots },
     sitemap: fetchResult.sitemap,
     pageSpeed: fetchResult.pageSpeed,
+    crux: cruxData,
     issues,
   };
 }

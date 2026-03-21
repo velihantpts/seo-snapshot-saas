@@ -398,6 +398,23 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
           </div>
         )}
 
+        {/* CrUX Real User Data */}
+        {d.crux?.available && (
+          <div className="mb-8 opacity-0 animate-fade-in-up-delay-2">
+            <Section title="Real User Metrics (CrUX)" icon={Zap} defaultOpen={true}
+              badge="Field Data" badgeColor="green">
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-3">
+                {d.crux.lcp && <StatCard label="LCP (real)" value={`${Math.round(d.crux.lcp.p75)}ms`} color={d.crux.lcp.rating === 'good' ? 'text-emerald-400' : 'text-amber-400'} />}
+                {d.crux.cls && <StatCard label="CLS (real)" value={(d.crux.cls.p75 / 100).toFixed(3)} color={d.crux.cls.rating === 'good' ? 'text-emerald-400' : 'text-amber-400'} />}
+                {d.crux.inp && <StatCard label="INP (real)" value={`${Math.round(d.crux.inp.p75)}ms`} color={d.crux.inp.rating === 'good' ? 'text-emerald-400' : 'text-amber-400'} />}
+                {d.crux.ttfb && <StatCard label="TTFB (real)" value={`${Math.round(d.crux.ttfb.p75)}ms`} color={d.crux.ttfb.rating === 'good' ? 'text-emerald-400' : 'text-amber-400'} />}
+                {d.crux.fid && <StatCard label="FID (real)" value={`${Math.round(d.crux.fid.p75)}ms`} color={d.crux.fid.rating === 'good' ? 'text-emerald-400' : 'text-amber-400'} />}
+              </div>
+              <p className="text-[10px] text-white/25 mt-3">75th percentile from real Chrome users (last 28 days)</p>
+            </Section>
+          </div>
+        )}
+
         {/* Summary bento grid */}
         <div className="grid grid-cols-3 sm:grid-cols-6 gap-3 mb-8 opacity-0 animate-fade-in-up-delay-2">
           <StatCard label="Words" value={d.wordCount} />
@@ -412,6 +429,35 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
         {history.length >= 2 && (
           <div className="glass-card rounded-xl p-5 mb-8 opacity-0 animate-fade-in-up-delay-3">
             <ScoreTrend data={history} />
+          </div>
+        )}
+
+        {/* AI Content Suggestions — generated from page data, no API needed */}
+        {d.topKeywords?.length > 0 && d.wordCount > 0 && (
+          <div className="glass-card rounded-xl p-5 mb-8 opacity-0 animate-fade-in-up-delay-3">
+            <h4 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-3 flex items-center gap-2">
+              <Bot className="w-3.5 h-3.5 text-accent-400" /> Content Suggestions
+            </h4>
+            <div className="space-y-2 text-sm text-white/50">
+              {d.wordCount < 800 && (
+                <p>Your page has <span className="text-white/70 font-mono">{d.wordCount}</span> words. For competitive topics, aim for <span className="text-emerald-400">800-1500 words</span>. Consider adding sections about: {d.topKeywords.slice(0, 3).map((k: any) => `"${k.word}"`).join(', ')}.</p>
+              )}
+              {d.headings?.h2?.count < 3 && d.wordCount > 300 && (
+                <p>Only <span className="text-white/70 font-mono">{d.headings.h2?.count || 0}</span> H2 headings. Add more subheadings to improve scannability. Suggested: {d.topKeywords.slice(0, 3).map((k: any) => `"What is ${k.word}?"`).join(', ')}.</p>
+              )}
+              {!d.schemas?.length && (
+                <p>No structured data found. Adding <span className="text-accent-300">FAQ schema</span> with questions about {d.topKeywords[0]?.word || 'your topic'} can earn rich snippets in Google.</p>
+              )}
+              {d.images?.total > 0 && d.images.missingAlt > d.images.total * 0.3 && (
+                <p><span className="text-amber-400">{Math.round((d.images.missingAlt / d.images.total) * 100)}%</span> of images lack alt text. Use keyword-rich descriptions: <span className="text-white/60">"{d.topKeywords[0]?.word || 'topic'} - [describe the image]"</span>.</p>
+              )}
+              {d.links?.internal < 5 && (
+                <p>Only <span className="text-white/70 font-mono">{d.links.internal}</span> internal links. Add links to related pages to distribute PageRank and keep users engaged.</p>
+              )}
+              {d.contentQuality?.readabilityScore < 50 && (
+                <p>Readability score is <span className="text-amber-400">{d.contentQuality.readabilityScore}/100</span>. Simplify sentences, use shorter paragraphs, and add bullet lists.</p>
+              )}
+            </div>
           </div>
         )}
 

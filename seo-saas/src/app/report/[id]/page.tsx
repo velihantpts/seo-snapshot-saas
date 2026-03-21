@@ -1,11 +1,14 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
 import { SEOReport } from '@/components/SEOReport';
 
 export default function PublicReportPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
+  const brandName = searchParams.get('brand') || '';
+  const brandColor = searchParams.get('color') || '';
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
@@ -42,6 +45,18 @@ export default function PublicReportPage() {
   return (
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
+      {/* White-label header */}
+      {brandName && (
+        <div className="relative z-40 max-w-5xl mx-auto px-4 sm:px-6 pt-6 print:hidden">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-8 h-8 rounded-lg flex items-center justify-center text-white font-bold text-sm" style={{ background: brandColor || '#6366f1' }}>
+              {brandName.charAt(0).toUpperCase()}
+            </div>
+            <span className="font-semibold text-sm text-white/80">{brandName}</span>
+            <span className="text-xs text-white/25 ml-2">SEO Report</span>
+          </div>
+        </div>
+      )}
       <div className="relative z-40 max-w-5xl mx-auto px-4 sm:px-6 pt-4 flex items-center justify-end print:hidden">
         <Link href="/" className="btn-primary !py-2 text-sm">Analyze your site</Link>
       </div>

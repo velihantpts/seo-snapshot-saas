@@ -72,8 +72,8 @@ export async function POST(req: Request) {
     urls = [parsedUrl.toString()];
   }
 
-  // Cap at 25 URLs for Pro
-  const maxUrls = 25;
+  // Cap at 100 URLs for Pro
+  const maxUrls = 100;
   urls = urls.slice(0, maxUrls);
 
   // Filter to same domain only

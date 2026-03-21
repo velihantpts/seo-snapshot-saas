@@ -51,6 +51,7 @@ export interface SEOResult {
   robots: { exists: boolean; disallowCount: number; hasSitemapRef: boolean; userAgents: string[]; urlBlocked: boolean; };
   sitemap: { exists: boolean; urls: string[]; };
   pageSpeed: PageSpeedResult | null;
+  crux: { lcp: any; fid: any; cls: any; inp: any; ttfb: any; available: boolean } | null;
   issues: Issue[];
 }
 

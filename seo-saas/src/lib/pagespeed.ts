@@ -15,6 +15,53 @@ const EMPTY_RESULT: PageSpeedResult = {
   performanceScore: 0, fcp: 0, lcp: 0, cls: 0, tbt: 0, si: 0, tti: 0, available: false,
 };
 
+// CrUX API — free, no key needed, returns real user data
+export interface CrUXData {
+  lcp: { p75: number; rating: string } | null;
+  fid: { p75: number; rating: string } | null;
+  cls: { p75: number; rating: string } | null;
+  inp: { p75: number; rating: string } | null;
+  ttfb: { p75: number; rating: string } | null;
+  available: boolean;
+}
+
+export async function getCrUXData(url: string): Promise<CrUXData> {
+  const empty: CrUXData = { lcp: null, fid: null, cls: null, inp: null, ttfb: null, available: false };
+  try {
+    const origin = new URL(url).origin;
+    const apiKey = process.env.PAGESPEED_API_KEY || process.env.CRUX_API_KEY;
+    if (!apiKey) return empty;
+
+    const res = await fetch(`https://chromeuxreport.googleapis.com/v1/records:queryRecord?key=${apiKey}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ origin }),
+      signal: AbortSignal.timeout(10000),
+    });
+    if (!res.ok) return empty;
+    const data = await res.json();
+    const metrics = data.record?.metrics;
+    if (!metrics) return empty;
+
+    const extract = (key: string) => {
+      const m = metrics[key];
+      if (!m) return null;
+      const p75 = m.percentiles?.p75 || 0;
+      const good = m.histogram?.[0]?.density || 0;
+      return { p75, rating: good > 0.75 ? 'good' : good > 0.5 ? 'needs-improvement' : 'poor' };
+    };
+
+    return {
+      lcp: extract('largest_contentful_paint'),
+      fid: extract('first_input_delay'),
+      cls: extract('cumulative_layout_shift'),
+      inp: extract('interaction_to_next_paint'),
+      ttfb: extract('experimental_time_to_first_byte'),
+      available: true,
+    };
+  } catch { return empty; }
+}
+
 export async function getPageSpeedData(url: string): Promise<PageSpeedResult> {
   const apiKey = process.env.PAGESPEED_API_KEY;
 
