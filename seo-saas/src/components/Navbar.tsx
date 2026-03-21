@@ -23,15 +23,15 @@ export function Navbar() {
   useEffect(() => { setMobileOpen(false); }, []);
 
   const navLinks = [
-    { href: '/compare', label: t('nav.compare'), hideOnMobile: false },
-    { href: '/pricing', label: t('nav.pricing'), hideOnMobile: false },
-    { href: '/docs', label: t('nav.api'), hideOnMobile: false },
-    { href: '/blog', label: t('nav.blog'), hideOnMobile: false },
+    { href: '/pricing', label: t('nav.pricing'), desktop: true },
+    { href: '/compare', label: t('nav.compare'), desktop: 'lg' as const },
+    { href: '/docs', label: t('nav.api'), desktop: 'lg' as const },
+    { href: '/blog', label: t('nav.blog'), desktop: false },
   ];
 
   const authLinks = session ? [
-    { href: '/dashboard', label: t('nav.dashboard') },
-    { href: '/monitor', label: t('nav.monitor') },
+    { href: '/dashboard', label: t('nav.dashboard'), desktop: true },
+    { href: '/monitor', label: t('nav.monitor'), desktop: false },
   ] : [];
 
   const currentFlag = LOCALES.find(l => l.code === locale)?.flag || '🇬🇧';
@@ -51,14 +51,9 @@ export function Navbar() {
           </Link>
 
           {/* Desktop nav */}
-          <div className="hidden sm:flex items-center gap-3 md:gap-4">
-            {navLinks.map(link => (
-              <Link key={link.href} href={link.href} className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150">
-                {link.label}
-              </Link>
-            ))}
-            {authLinks.map(link => (
-              <Link key={link.href} href={link.href} className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150 hidden md:inline">
+          <div className="hidden sm:flex items-center gap-2 md:gap-3">
+            {[...navLinks, ...authLinks].filter(l => l.desktop).map(link => (
+              <Link key={link.href} href={link.href} className={`text-[13px] text-white/50 hover:text-white/80 transition-colors duration-150 ${link.desktop === 'lg' ? 'hidden lg:inline' : ''}`}>
                 {link.label}
               </Link>
             ))}
