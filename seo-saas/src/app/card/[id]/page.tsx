@@ -1,10 +1,32 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useParams } from 'next/navigation';
+import { Download } from 'lucide-react';
 
 export default function ReportCard() {
   const params = useParams();
   const [d, setD] = useState<any>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    if (!cardRef.current) return;
+    setDownloading(true);
+    try {
+      const html2canvas = (await import('html2canvas')).default;
+      const canvas = await html2canvas(cardRef.current, {
+        backgroundColor: '#0a0e1a',
+        scale: 2,
+        useCORS: true,
+      });
+      const link = document.createElement('a');
+      const domain = (() => { try { return new URL(d.url).hostname; } catch { return 'site'; } })();
+      link.download = `seo-report-${domain}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    } catch (e) { console.error(e); }
+    setDownloading(false);
+  };
 
   useEffect(() => {
     fetch(`/api/analyze/${params.id}?public=true`)
@@ -26,8 +48,18 @@ export default function ReportCard() {
 
   return (
     <div className="min-h-screen bg-[#0a0e1a] flex items-center justify-center p-4">
+      {/* Download button */}
+      <div className="mb-4 flex gap-3">
+        <button onClick={handleDownload} disabled={downloading}
+          className="btn-primary !py-2 text-sm flex items-center gap-2 disabled:opacity-50">
+          {downloading ? <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" /> : <Download className="w-4 h-4" />}
+          Download PNG
+        </button>
+        <a href={`/report/${params.id}`} className="btn-ghost !py-2 text-sm">Full Report</a>
+      </div>
+
       {/* The card — optimized for screenshots (16:9 aspect ratio) */}
-      <div id="report-card" className="w-[720px] bg-gradient-to-br from-[#0f1320] to-[#0a0e1a] rounded-2xl border border-white/[0.08] overflow-hidden shadow-2xl">
+      <div ref={cardRef} id="report-card" className="w-[720px] bg-gradient-to-br from-[#0f1320] to-[#0a0e1a] rounded-2xl border border-white/[0.08] overflow-hidden shadow-2xl">
 
         {/* Header */}
         <div className="px-8 pt-7 pb-5 flex items-center justify-between border-b border-white/[0.06]">
