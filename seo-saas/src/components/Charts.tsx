@@ -107,31 +107,43 @@ export function ScoreRadar({ scores }: { scores: { label: string; value: number 
 
 // ===== Score Trend Line Chart =====
 export function ScoreTrend({ data }: { data: { date: string; score: number }[] }) {
-  // Deduplicate: keep last entry per date
   const dedupMap = new Map<string, number>();
   data.forEach(d => dedupMap.set(d.date, d.score));
   const deduped = Array.from(dedupMap.entries()).map(([date, score]) => ({ date, score }));
 
-  // Need at least 2 unique dates
   if (deduped.length < 2) return null;
 
-  // Limit to last 10
-  const chartData = deduped.slice(-10);
+  const allSame = deduped.every(d => d.score === deduped[0].score);
+  if (allSame) {
+    return (
+      <div>
+        <h4 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-2">Score History</h4>
+        <div className="flex items-center justify-between py-3">
+          <span className="text-sm text-white/50">{deduped.length} analyses &middot; Consistent score</span>
+          <span className="text-2xl font-semibold text-accent-400 font-mono">{deduped[0].score}</span>
+        </div>
+      </div>
+    );
+  }
 
-  const maxScore = 100;
-  const w = 300;
-  const h = 120;
-  const pad = 12;
-  const chartW = w - pad * 2;
-  const chartH = h - pad * 2 - 15; // room for labels
+  const chartData = deduped.slice(-8);
+  const scores = chartData.map(d => d.score);
+  const minS = Math.max(0, Math.min(...scores) - 10);
+  const maxS = Math.min(100, Math.max(...scores) + 10);
+  const range = maxS - minS || 1;
 
-  const points = chartData.map((d, i) => ({
-    x: pad + (i / (chartData.length - 1)) * chartW,
-    y: pad + chartH - (d.score / maxScore) * chartH,
+  const w = 300, h = 100;
+  const pL = 24, pR = 8, pT = 10, pB = 16;
+  const cW = w - pL - pR, cH = h - pT - pB;
+
+  const pts = chartData.map((d, i) => ({
+    x: pL + (chartData.length > 1 ? (i / (chartData.length - 1)) * cW : cW / 2),
+    y: pT + cH - ((d.score - minS) / range) * cH,
   }));
 
-  const pathD = points.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
-  const areaD = `${pathD} L ${points[points.length - 1].x} ${h - pad} L ${points[0].x} ${h - pad} Z`;
+  const pathD = pts.map((p, i) => `${i === 0 ? 'M' : 'L'} ${p.x} ${p.y}`).join(' ');
+  const areaD = `${pathD} L ${pts[pts.length - 1].x} ${pT + cH} L ${pts[0].x} ${pT + cH} Z`;
+  const yLabels = [minS, Math.round((minS + maxS) / 2), maxS];
 
   return (
     <div>
@@ -139,37 +151,29 @@ export function ScoreTrend({ data }: { data: { date: string; score: number }[] }
       <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-auto">
         <defs>
           <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="rgba(99,102,241,0.3)" />
+            <stop offset="0%" stopColor="rgba(99,102,241,0.12)" />
             <stop offset="100%" stopColor="rgba(99,102,241,0)" />
           </linearGradient>
         </defs>
-        {/* Grid lines */}
-        {[0, 25, 50, 75, 100].map(v => (
-          <line key={v} x1={pad} x2={w - pad} y1={pad + chartH - (v / 100) * chartH} y2={pad + chartH - (v / 100) * chartH}
-            stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
-        ))}
-        {/* Area */}
+        {yLabels.map(v => {
+          const y = pT + cH - ((v - minS) / range) * cH;
+          return <line key={v} x1={pL} x2={w - pR} y1={y} y2={y} stroke="rgba(255,255,255,0.04)" strokeWidth="0.5" />;
+        })}
         <path d={areaD} fill="url(#trendGrad)" />
-        {/* Line */}
-        <path d={pathD} fill="none" stroke="#6366f1" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-        {/* Points */}
-        {points.map((p, i) => (
-          <circle key={i} cx={p.x} cy={p.y} r={2} fill="#6366f1" stroke="#0a0a0f" strokeWidth="1" />
+        <path d={pathD} fill="none" stroke="#6366f1" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+        {pts.map((p, i) => (
+          <g key={i}>
+            <circle cx={p.x} cy={p.y} r={2.5} fill="#0a0e1a" stroke="#6366f1" strokeWidth="1.5" />
+            <text x={p.x} y={p.y - 5} textAnchor="middle" className="fill-white/50 text-[5px] font-mono">{chartData[i].score}</text>
+          </g>
         ))}
-        {/* Y-axis labels */}
-        {[0, 50, 100].map(v => (
-          <text key={`y${v}`} x={pad - 2} y={pad + chartH - (v / 100) * chartH + 3} textAnchor="end" className="fill-white/20 text-[6px]">
-            {v}
-          </text>
-        ))}
-        {/* X-axis labels — max 4 labels to avoid overlap */}
+        {yLabels.map(v => {
+          const y = pT + cH - ((v - minS) / range) * cH;
+          return <text key={`y${v}`} x={pL - 3} y={y + 3} textAnchor="end" className="fill-white/25 text-[5px] font-mono">{v}</text>;
+        })}
         {chartData.map((d, i) => {
-          const showEvery = Math.max(1, Math.ceil(chartData.length / 4));
-          return (i % showEvery === 0 || i === chartData.length - 1) ? (
-            <text key={i} x={points[i].x} y={h - 2} textAnchor="middle" className="fill-white/20 text-[6px]">
-              {d.date.slice(5)}
-            </text>
-          ) : null
+          const show = chartData.length <= 4 || i === 0 || i === chartData.length - 1;
+          return show ? <text key={i} x={pts[i].x} y={h - 2} textAnchor="middle" className="fill-white/25 text-[5px]">{d.date.slice(5)}</text> : null;
         })}
       </svg>
     </div>
