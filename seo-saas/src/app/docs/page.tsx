@@ -1,12 +1,14 @@
 'use client';
+import { useLocale } from '@/lib/i18n';
 
 export default function ApiDocs() {
+  const { t } = useLocale();
   return (
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <h1 className="text-2xl font-medium tracking-tight mb-2">API Documentation</h1>
-        <p className="text-white/40 text-sm mb-10">Integrate SEO Snapshot into your workflow with our REST API.</p>
+        <h1 className="text-2xl font-medium tracking-tight mb-2">{t('docs.title')}</h1>
+        <p className="text-white/40 text-sm mb-10">{t('docs.desc')}</p>
 
         {/* Endpoint */}
         <div className="glass-card rounded-xl p-5 mb-6">

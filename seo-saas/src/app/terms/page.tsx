@@ -1,11 +1,13 @@
 'use client';
+import { useLocale } from '@/lib/i18n';
 
 
 export default function Terms() {
+  const { t } = useLocale();
   return (
     <div className="min-h-screen bg-surface">
       <div className="max-w-3xl mx-auto px-6 py-12">
-        <h1 className="text-2xl font-medium tracking-tight mb-8">Terms of Service</h1>
+        <h1 className="text-2xl font-medium tracking-tight mb-8">{t('terms.title')}</h1>
         <div className="prose-sm text-white/50 space-y-4 leading-relaxed">
           <p>Last updated: March 2026</p>
           <h2 className="text-white/80 font-medium text-base mt-6">1. Service</h2>

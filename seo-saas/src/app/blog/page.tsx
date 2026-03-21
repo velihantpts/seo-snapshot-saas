@@ -1,7 +1,9 @@
 'use client';
 import Link from 'next/link';
+import { useLocale } from '@/lib/i18n';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
 
+  const { t } = useLocale();
 const posts = [
   {
     slug: 'how-to-fix-missing-meta-description',
@@ -34,8 +36,8 @@ export default function Blog() {
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <h1 className="text-2xl font-medium tracking-tight mb-2">SEO Blog</h1>
-        <p className="text-white/40 text-sm mb-10">Practical guides to improve your website's SEO. No fluff.</p>
+        <h1 className="text-2xl font-medium tracking-tight mb-2">{t('blog.title')}</h1>
+        <p className="text-white/40 text-sm mb-10">{t('blog.desc')}</p>
 
         <div className="space-y-6">
           {posts.map(post => (

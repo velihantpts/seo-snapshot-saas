@@ -3,6 +3,7 @@ import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useLocale } from '@/lib/i18n';
 
 export default function Login() {
   const [mode, setMode] = useState<'login' | 'register'>('login');
@@ -12,6 +13,7 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { t } = useLocale();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -60,17 +62,17 @@ export default function Login() {
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center text-white font-bold shadow-glow-sm">S</div>
           </Link>
           <h1 className="text-2xl font-medium tracking-tight mb-2">
-            {mode === 'login' ? 'Sign in to SEO Snapshot' : 'Create your account'}
+            {mode === 'login' ? t('login.title') : t('login.title.register')}
           </h1>
           <p className="text-white/40 text-sm">
-            {mode === 'login' ? 'Save your analyses and unlock Pro features' : 'Start analyzing for free — no credit card needed'}
+            {mode === 'login' ? t('login.desc') : t('login.desc.register')}
           </p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4 opacity-0 animate-fade-in-up-delay-1">
           {mode === 'register' && (
             <div>
-              <label htmlFor="name" className="block text-xs text-white/40 mb-1.5 ml-1">Name</label>
+              <label htmlFor="name" className="block text-xs text-white/40 mb-1.5 ml-1">{t('login.name')}</label>
               <input
                 id="name"
                 type="text"
@@ -83,7 +85,7 @@ export default function Login() {
           )}
 
           <div>
-            <label htmlFor="email" className="block text-xs text-white/40 mb-1.5 ml-1">Email</label>
+            <label htmlFor="email" className="block text-xs text-white/40 mb-1.5 ml-1">{t('login.email')}</label>
             <input
               id="email"
               type="email"
@@ -96,7 +98,7 @@ export default function Login() {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-xs text-white/40 mb-1.5 ml-1">Password</label>
+            <label htmlFor="password" className="block text-xs text-white/40 mb-1.5 ml-1">{t('login.password')}</label>
             <input
               id="password"
               type="password"

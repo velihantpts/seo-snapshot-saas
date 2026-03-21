@@ -112,6 +112,37 @@ const translations: Record<Locale, Record<string, string>> = {
     // Early adopter
     'early.badge': 'Early Adopter Pricing — These prices will increase. Lock in your rate now.',
 
+    // Login
+    'login.title': 'Sign in to SEO Snapshot', 'login.title.register': 'Create your account',
+    'login.desc': 'Save your analyses and unlock Pro features', 'login.desc.register': 'Start analyzing for free — no credit card needed',
+    'login.name': 'Name', 'login.email': 'Email', 'login.password': 'Password',
+    'login.submit': 'Sign in', 'login.submit.register': 'Create account', 'login.wait': 'Please wait...',
+    'login.noAccount': "Don't have an account?", 'login.signupFree': 'Sign up free',
+    'login.hasAccount': 'Already have an account?', 'login.signinLink': 'Sign in',
+    'login.agree': 'By signing up, you agree to our', 'login.and': 'and',
+
+    // Dashboard
+    'dash.title': 'Dashboard', 'dash.desc': 'Your SEO analysis history',
+    'dash.upgrade': 'Upgrade', 'dash.new': '+ New Analysis',
+    'dash.analyses': 'Analyses', 'dash.avg': 'Avg Score', 'dash.best': 'Best Score', 'dash.sites': 'Unique Sites',
+    'dash.empty': 'No analyses yet', 'dash.first': 'Run your first SEO analysis →',
+    'dash.crawls': 'Site Crawls', 'dash.issues': 'issues', 'dash.pages': 'pages',
+
+    // 404
+    '404.title': 'Page not found', '404.desc': "The page you're looking for doesn't exist.", '404.home': 'Go home',
+
+    // Blog
+    'blog.title': 'SEO Blog', 'blog.desc': 'Practical guides to improve your website\'s SEO. No fluff.',
+    'blog.readmore': 'Read more', 'blog.back': 'Back to blog', 'blog.cta': 'Check your site\'s SEO score for free',
+    'blog.analyze': 'Analyze your site',
+
+    // Docs
+    'docs.title': 'API Documentation', 'docs.desc': 'Integrate SEO Snapshot into your workflow with our REST API.',
+    'docs.ratelimits': 'Rate Limits', 'docs.response': 'Response Fields', 'docs.auth': 'Authentication',
+
+    // Terms & Privacy
+    'terms.title': 'Terms of Service', 'privacy.title': 'Privacy Policy',
+
     // Footer
     'footer.copy': '© 2026 SEO Snapshot',
   },
@@ -174,6 +205,23 @@ const translations: Record<Locale, Record<string, string>> = {
     'pricing.lifetime.desc': 'Tek seferlik. Sonsuza kadar.',
     'pricing.lifetime.cta': 'Ömür Boyu Satın Al',
 
+    'login.title': 'Giri\u015f yap', 'login.title.register': 'Hesap olu\u015ftur',
+    'login.desc': 'Analizlerinizi kaydedin', 'login.desc.register': '\u00dccretsiz ba\u015flay\u0131n',
+    'login.name': '\u0130sim', 'login.email': 'E-posta', 'login.password': '\u015eifre',
+    'login.submit': 'Giri\u015f yap', 'login.submit.register': 'Hesap olu\u015ftur', 'login.wait': 'L\u00fctfen bekleyin...',
+    'login.noAccount': 'Hesab\u0131n\u0131z yok mu?', 'login.signupFree': '\u00dccretsiz kaydol',
+    'login.hasAccount': 'Zaten hesab\u0131n\u0131z var m\u0131?', 'login.signinLink': 'Giri\u015f yap',
+    'login.agree': 'Kaydolarak kabul edersiniz:', 'login.and': 've',
+    'dash.title': 'Panel', 'dash.desc': 'SEO analiz ge\u00e7mi\u015finiz',
+    'dash.upgrade': 'Y\u00fckselt', 'dash.new': '+ Yeni Analiz',
+    'dash.analyses': 'Analizler', 'dash.avg': 'Ort. Puan', 'dash.best': 'En \u0130yi', 'dash.sites': 'Benzersiz Site',
+    'dash.empty': 'Hen\u00fcz analiz yok', 'dash.first': '\u0130lk SEO analizinizi \u00e7al\u0131\u015ft\u0131r\u0131n',
+    'dash.crawls': 'Site Taramalar\u0131', 'dash.issues': 'sorun', 'dash.pages': 'sayfa',
+    '404.title': 'Sayfa bulunamad\u0131', '404.desc': 'Arad\u0131\u011f\u0131n\u0131z sayfa mevcut de\u011fil.', '404.home': 'Ana sayfaya d\u00f6n',
+    'blog.title': 'SEO Blog', 'blog.desc': 'SEO rehberleri.', 'blog.readmore': 'Devam\u0131n\u0131 oku',
+    'blog.back': 'Bloga d\u00f6n', 'blog.cta': 'SEO puan\u0131n\u0131z\u0131 kontrol edin', 'blog.analyze': 'Sitenizi analiz edin',
+    'docs.title': 'API Dok\u00fcmantasyonu', 'docs.desc': 'REST API entegrasyonu.',
+    'terms.title': 'Kullan\u0131m \u015eartlar\u0131', 'privacy.title': 'Gizlilik Politikas\u0131',
     'footer.copy': '© 2026 SEO Snapshot',
   },
 
@@ -235,6 +283,23 @@ const translations: Record<Locale, Record<string, string>> = {
     'pricing.lifetime.desc': 'Einmalig. Für immer.',
     'pricing.lifetime.cta': 'Lifetime kaufen',
 
+    'login.title': 'Anmelden', 'login.title.register': 'Konto erstellen',
+    'login.desc': 'Analysen speichern', 'login.desc.register': 'Kostenlos starten',
+    'login.name': 'Name', 'login.email': 'E-Mail', 'login.password': 'Passwort',
+    'login.submit': 'Anmelden', 'login.submit.register': 'Erstellen', 'login.wait': 'Bitte warten...',
+    'login.noAccount': 'Kein Konto?', 'login.signupFree': 'Registrieren',
+    'login.hasAccount': 'Bereits ein Konto?', 'login.signinLink': 'Anmelden',
+    'login.agree': 'Mit der Registrierung akzeptieren Sie', 'login.and': 'und',
+    'dash.title': 'Dashboard', 'dash.desc': 'SEO-Analyseverlauf',
+    'dash.upgrade': 'Upgraden', 'dash.new': '+ Neue Analyse',
+    'dash.analyses': 'Analysen', 'dash.avg': 'Durchschn.', 'dash.best': 'Bester', 'dash.sites': 'Einzigartige',
+    'dash.empty': 'Noch keine Analysen', 'dash.first': 'Erste Analyse starten',
+    'dash.crawls': 'Site-Crawls', 'dash.issues': 'Probleme', 'dash.pages': 'Seiten',
+    '404.title': 'Seite nicht gefunden', '404.desc': 'Diese Seite existiert nicht.', '404.home': 'Startseite',
+    'blog.title': 'SEO-Blog', 'blog.desc': 'SEO-Anleitungen.', 'blog.readmore': 'Weiterlesen',
+    'blog.back': 'Zur\u00fcck', 'blog.cta': 'SEO-Score pr\u00fcfen', 'blog.analyze': 'Analysieren',
+    'docs.title': 'API-Dokumentation', 'docs.desc': 'REST API Integration.',
+    'terms.title': 'Nutzungsbedingungen', 'privacy.title': 'Datenschutz',
     'footer.copy': '© 2026 SEO Snapshot',
   },
 
@@ -296,6 +361,23 @@ const translations: Record<Locale, Record<string, string>> = {
     'pricing.lifetime.desc': 'Pago único. Para siempre.',
     'pricing.lifetime.cta': 'Comprar de por vida',
 
+    'login.title': 'Iniciar sesi\u00f3n', 'login.title.register': 'Crear cuenta',
+    'login.desc': 'Guarda tus an\u00e1lisis', 'login.desc.register': 'Empieza gratis',
+    'login.name': 'Nombre', 'login.email': 'Correo', 'login.password': 'Contrase\u00f1a',
+    'login.submit': 'Entrar', 'login.submit.register': 'Crear', 'login.wait': 'Espere...',
+    'login.noAccount': 'Sin cuenta?', 'login.signupFree': 'Reg\u00edstrate',
+    'login.hasAccount': 'Ya tienes cuenta?', 'login.signinLink': 'Entrar',
+    'login.agree': 'Al registrarte aceptas', 'login.and': 'y',
+    'dash.title': 'Panel', 'dash.desc': 'Historial SEO',
+    'dash.upgrade': 'Mejorar', 'dash.new': '+ Nuevo',
+    'dash.analyses': 'An\u00e1lisis', 'dash.avg': 'Prom.', 'dash.best': 'Mejor', 'dash.sites': 'Sitios',
+    'dash.empty': 'Sin an\u00e1lisis', 'dash.first': 'Primer an\u00e1lisis SEO',
+    'dash.crawls': 'Rastreos', 'dash.issues': 'problemas', 'dash.pages': 'p\u00e1ginas',
+    '404.title': 'P\u00e1gina no encontrada', '404.desc': 'No existe.', '404.home': 'Inicio',
+    'blog.title': 'Blog SEO', 'blog.desc': 'Gu\u00edas SEO.', 'blog.readmore': 'Leer m\u00e1s',
+    'blog.back': 'Volver', 'blog.cta': 'Verifica tu SEO', 'blog.analyze': 'Analizar',
+    'docs.title': 'Documentaci\u00f3n API', 'docs.desc': 'API REST.',
+    'terms.title': 'T\u00e9rminos', 'privacy.title': 'Privacidad',
     'footer.copy': '© 2026 SEO Snapshot',
   },
 
@@ -357,6 +439,23 @@ const translations: Record<Locale, Record<string, string>> = {
     'pricing.lifetime.desc': 'Paiement unique. Pour toujours.',
     'pricing.lifetime.cta': 'Acheter à vie',
 
+    'login.title': 'Connexion', 'login.title.register': 'Cr\u00e9er un compte',
+    'login.desc': 'Sauvegardez vos analyses', 'login.desc.register': 'Commencez gratuitement',
+    'login.name': 'Nom', 'login.email': 'E-mail', 'login.password': 'Mot de passe',
+    'login.submit': 'Se connecter', 'login.submit.register': 'Cr\u00e9er', 'login.wait': 'Patientez...',
+    'login.noAccount': 'Pas de compte ?', 'login.signupFree': 'Inscription',
+    'login.hasAccount': 'D\u00e9j\u00e0 un compte ?', 'login.signinLink': 'Connexion',
+    'login.agree': 'En vous inscrivant, vous acceptez', 'login.and': 'et',
+    'dash.title': 'Tableau de bord', 'dash.desc': 'Historique SEO',
+    'dash.upgrade': 'Am\u00e9liorer', 'dash.new': '+ Nouvelle Analyse',
+    'dash.analyses': 'Analyses', 'dash.avg': 'Moy.', 'dash.best': 'Meilleur', 'dash.sites': 'Sites',
+    'dash.empty': 'Pas encore', 'dash.first': 'Premi\u00e8re analyse SEO',
+    'dash.crawls': 'Crawls', 'dash.issues': 'probl\u00e8mes', 'dash.pages': 'pages',
+    '404.title': 'Page non trouv\u00e9e', '404.desc': 'Cette page n\'existe pas.', '404.home': 'Accueil',
+    'blog.title': 'Blog SEO', 'blog.desc': 'Guides SEO.', 'blog.readmore': 'Lire la suite',
+    'blog.back': 'Retour', 'blog.cta': 'V\u00e9rifiez votre SEO', 'blog.analyze': 'Analyser',
+    'docs.title': 'Documentation API', 'docs.desc': 'API REST.',
+    'terms.title': 'Conditions', 'privacy.title': 'Confidentialit\u00e9',
     'footer.copy': '© 2026 SEO Snapshot',
   },
 };
