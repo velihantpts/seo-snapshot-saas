@@ -3,7 +3,6 @@ import Link from 'next/link';
 import { useLocale } from '@/lib/i18n';
 import { Calendar, Clock, ArrowRight } from 'lucide-react';
 
-  const { t } = useLocale();
 const posts = [
   {
     slug: 'how-to-fix-missing-meta-description',
@@ -29,9 +28,90 @@ const posts = [
     readTime: '7 min',
     category: 'Guide',
   },
+  {
+    slug: 'how-to-improve-core-web-vitals',
+    title: 'How to Improve Core Web Vitals: LCP, FID, CLS Explained',
+    excerpt: 'Core Web Vitals directly impact Google rankings. Learn what LCP, FID/INP, and CLS measure, what good scores look like, and how to fix each one.',
+    date: '2026-03-17',
+    readTime: '8 min',
+    category: 'Guide',
+  },
+  {
+    slug: 'security-headers-for-seo',
+    title: 'Security Headers Every Website Needs (HSTS, CSP, X-Frame)',
+    excerpt: 'Security headers protect your site and improve trust signals. Learn which headers to add, how to configure them for Nginx, Apache, Next.js, and Vercel.',
+    date: '2026-03-16',
+    readTime: '6 min',
+    category: 'Guide',
+  },
+  {
+    slug: 'open-graph-meta-tags-guide',
+    title: 'Open Graph Meta Tags: The Complete Guide for Social Sharing',
+    excerpt: 'Control how your pages look when shared on Facebook, Twitter, LinkedIn. Learn all OG tags, ideal image sizes, and common mistakes to avoid.',
+    date: '2026-03-15',
+    readTime: '5 min',
+    category: 'Guide',
+  },
+  {
+    slug: 'fix-render-blocking-resources',
+    title: 'How to Fix Render-Blocking Resources (CSS & JavaScript)',
+    excerpt: 'Render-blocking resources slow down your page load. Learn to defer scripts, async-load CSS, and use resource hints for faster pages.',
+    date: '2026-03-14',
+    readTime: '6 min',
+    category: 'Fixes',
+  },
+  {
+    slug: 'robots-txt-guide',
+    title: 'robots.txt Guide: Control How Search Engines Crawl Your Site',
+    excerpt: 'A properly configured robots.txt saves crawl budget and prevents indexing of private pages. Templates for WordPress, Next.js, and static sites.',
+    date: '2026-03-13',
+    readTime: '5 min',
+    category: 'Guide',
+  },
+  {
+    slug: 'image-seo-optimization',
+    title: 'Image SEO: Alt Text, Lazy Loading, WebP — The Complete Checklist',
+    excerpt: 'Images can hurt or help your SEO. Learn to write good alt text, implement lazy loading, serve WebP/AVIF, and set proper dimensions.',
+    date: '2026-03-12',
+    readTime: '7 min',
+    category: 'Guide',
+  },
+  {
+    slug: 'canonical-url-explained',
+    title: 'Canonical URLs Explained: Prevent Duplicate Content Issues',
+    excerpt: 'Duplicate content confuses search engines. Learn what canonical URLs are, when to use them, and common mistakes that hurt your rankings.',
+    date: '2026-03-11',
+    readTime: '4 min',
+    category: 'Fixes',
+  },
+  {
+    slug: 'website-accessibility-seo-checklist',
+    title: 'Web Accessibility & SEO: 15 Checks That Improve Both',
+    excerpt: 'Accessibility and SEO overlap more than you think. Alt text, heading hierarchy, form labels, ARIA landmarks — fixes that help everyone.',
+    date: '2026-03-10',
+    readTime: '8 min',
+    category: 'Guide',
+  },
+  {
+    slug: 'sitemap-xml-guide',
+    title: 'XML Sitemap Guide: How to Create and Submit to Google',
+    excerpt: 'Sitemaps tell search engines which pages to crawl. Learn to generate sitemaps, submit to Google Search Console, and common pitfalls.',
+    date: '2026-03-09',
+    readTime: '5 min',
+    category: 'Guide',
+  },
+  {
+    slug: 'heading-hierarchy-seo',
+    title: 'H1-H6 Heading Hierarchy: Why It Matters for SEO',
+    excerpt: 'Proper heading structure helps Google understand your content. Learn the rules: one H1, logical nesting, keyword placement, and common mistakes.',
+    date: '2026-03-08',
+    readTime: '4 min',
+    category: 'Fixes',
+  },
 ];
 
 export default function Blog() {
+  const { t } = useLocale();
   return (
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
