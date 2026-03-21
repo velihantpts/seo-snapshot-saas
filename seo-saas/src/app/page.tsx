@@ -168,6 +168,44 @@ export default function Home() {
               Free: 5 analyses/day · No signup required · Pro: unlimited
             </p>
           )}
+
+          {/* Why Different — inline with hero */}
+          {!loading && (
+            <div className="mt-16 max-w-2xl mx-auto opacity-0 animate-fade-in-up-delay-3">
+              <div className="grid grid-cols-2 gap-3 text-left">
+                {/* Others */}
+                <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4">
+                  <div className="text-[10px] text-white/25 uppercase tracking-wider mb-3">Other tools say</div>
+                  <div className="space-y-2">
+                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> "Add a meta description"</p>
+                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> "Improve security headers"</p>
+                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> "Add structured data"</p>
+                  </div>
+                </div>
+                {/* Us */}
+                <div className="rounded-xl bg-accent-500/[0.04] border border-accent-500/10 p-4">
+                  <div className="text-[10px] text-accent-400 uppercase tracking-wider mb-3">We give you</div>
+                  <div className="space-y-2">
+                    <p className="text-xs text-white/60 flex gap-2"><span className="text-emerald-400">✓</span> Copy-paste <code className="text-accent-300/70 text-[10px]">&lt;meta&gt;</code> tag</p>
+                    <p className="text-xs text-white/60 flex gap-2"><span className="text-emerald-400">✓</span> nginx / next.config.js code</p>
+                    <p className="text-xs text-white/60 flex gap-2"><span className="text-emerald-400">✓</span> Complete JSON-LD schema</p>
+                  </div>
+                </div>
+              </div>
+              {/* Unique badges */}
+              <div className="flex justify-center gap-4 mt-4">
+                <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+                  <span className="text-amber-400 font-bold text-xs">A+→F</span> Security Grade
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+                  <span className="text-emerald-400 font-bold text-xs">+15</span> Impact Score
+                </div>
+                <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+                  <span className="text-accent-400 font-bold text-xs">56</span> Fix Snippets
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -265,95 +303,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Why Different */}
-      <ScrollReveal>
-      <section className="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
-        <div className="divider max-w-6xl mx-auto mb-20" />
-        <div className="max-w-5xl mx-auto">
-          <h2 className="heading-section text-center mb-4">Not just another SEO checker</h2>
-          <p className="text-white/40 text-center mb-14 max-w-lg mx-auto text-sm leading-relaxed">
-            Other tools tell you what's wrong. We give you the exact code to fix it.
-          </p>
-
-          {/* Comparison */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-16">
-            {/* Others */}
-            <div className="glass-card rounded-xl p-6">
-              <div className="text-xs font-medium text-white/30 uppercase tracking-wider mb-4">Other SEO Tools</div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-2 text-sm text-white/40">
-                  <span className="text-red-400 mt-0.5">✗</span>
-                  <span>"Meta description is missing"</span>
-                </div>
-                <div className="flex items-start gap-2 text-sm text-white/40">
-                  <span className="text-red-400 mt-0.5">✗</span>
-                  <span>"Add structured data"</span>
-                </div>
-                <div className="flex items-start gap-2 text-sm text-white/40">
-                  <span className="text-red-400 mt-0.5">✗</span>
-                  <span>"Improve security headers"</span>
-                </div>
-                <div className="mt-4 p-3 rounded-lg bg-white/[0.02] text-xs text-white/25 italic">
-                  Generic advice. You still need to Google how to fix it.
-                </div>
-              </div>
-            </div>
-
-            {/* Us */}
-            <div className="glass-card rounded-xl p-6 glow-border">
-              <div className="text-xs font-medium text-accent-400 uppercase tracking-wider mb-4">SEO Snapshot</div>
-              <div className="space-y-3">
-                <div className="flex items-start gap-2 text-sm text-white/70">
-                  <span className="text-emerald-400 mt-0.5">✓</span>
-                  <span>Copy-paste <code className="text-accent-300 bg-accent-500/10 px-1 rounded text-xs">&lt;meta&gt;</code> tag generated from your content</span>
-                </div>
-                <div className="flex items-start gap-2 text-sm text-white/70">
-                  <span className="text-emerald-400 mt-0.5">✓</span>
-                  <span>Complete JSON-LD schema with your site's data filled in</span>
-                </div>
-                <div className="flex items-start gap-2 text-sm text-white/70">
-                  <span className="text-emerald-400 mt-0.5">✓</span>
-                  <span>Platform-specific config: <code className="text-accent-300 bg-accent-500/10 px-1 rounded text-xs">next.config.js</code>, nginx, .htaccess</span>
-                </div>
-                <div className="mt-4 p-3 rounded-lg bg-accent-500/[0.06] border border-accent-500/10">
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <div className="w-3 h-3 rounded bg-accent-500/20 flex items-center justify-center text-[6px] text-accent-400">{'</>'}</div>
-                    <span className="text-[10px] text-white/30">Example fix</span>
-                  </div>
-                  <pre className="text-[11px] font-mono text-accent-300/70 leading-relaxed">{`<meta name="description" content=
-  "Your auto-generated description
-   from page keywords and H1">`}</pre>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Unique features row */}
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div className="glass-card rounded-xl p-5 text-center">
-              <div className="text-3xl font-bold text-accent-400 mb-1">A+→F</div>
-              <div className="text-xs text-white/40">Security Grade</div>
-              <p className="text-[11px] text-white/25 mt-2">Visual letter grade for security headers — no other SEO tool does this.</p>
-            </div>
-            <div className="glass-card rounded-xl p-5 text-center">
-              <div className="flex items-center justify-center gap-1 mb-1">
-                <span className="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 text-xs font-mono">NX</span>
-                <span className="px-2 py-0.5 rounded bg-green-500/10 text-green-400 text-xs font-mono">WP</span>
-                <span className="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 text-xs font-mono">CF</span>
-              </div>
-              <div className="text-xs text-white/40">Tech Detection</div>
-              <p className="text-[11px] text-white/25 mt-2">Detects your stack and gives platform-specific fix instructions.</p>
-            </div>
-            <div className="glass-card rounded-xl p-5 text-center">
-              <div className="text-3xl font-bold text-emerald-400 mb-1">+15</div>
-              <div className="text-xs text-white/40">Impact Score</div>
-              <p className="text-[11px] text-white/25 mt-2">Each issue shows how many points you gain by fixing it. Prioritize what matters.</p>
-            </div>
-          </div>
-        </div>
-      </section>
-      </ScrollReveal>
-
       {/* CTA */}
       <section className="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
         <div className="divider max-w-6xl mx-auto mb-20" />
@@ -376,7 +325,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.06] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
-          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.103.0</span></span>
+          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.104.0</span></span>
           <div className="flex gap-4">
             <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
             <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>
