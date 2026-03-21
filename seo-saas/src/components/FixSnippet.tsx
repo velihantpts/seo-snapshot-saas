@@ -3,17 +3,19 @@ import { useState } from 'react';
 import { Copy, CheckCircle, Code } from 'lucide-react';
 
 function highlightSyntax(code: string): string {
-  return code
+  // First escape HTML entities
+  let escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return escaped
     // Comments (<!-- -->, //, #)
-    .replace(/(<!--[\s\S]*?-->|\/\/.*$|#.*$)/gm, '<span style="color:rgba(255,255,255,0.25)">$1</span>')
+    .replace(/(&lt;!--[\s\S]*?--&gt;|\/\/.*$|#.*$)/gm, '<span style="color:rgba(255,255,255,0.3)">$1</span>')
     // HTML tags
-    .replace(/(&lt;\/?\w+|<\/?\w+)/g, '<span style="color:#818cf8">$1</span>')
-    // Attributes (key="value")
-    .replace(/(\s\w+)(=)("[^"]*"|'[^']*')/g, '<span style="color:#34d399">$1</span>$2<span style="color:#fbbf24">$3</span>')
-    // Strings not in attributes
-    .replace(/(content|value|src|href)(=)("[^"]*")/g, '<span style="color:#34d399">$1</span>$2<span style="color:#fbbf24">$3</span>')
-    // Why: explanations
-    .replace(/(Why:.*$)/gm, '<span style="color:rgba(255,255,255,0.35);font-style:italic">$1</span>');
+    .replace(/(&lt;\/?[\w-]+)/g, '<span style="color:#818cf8">$1</span>')
+    // Closing >
+    .replace(/(\/?&gt;)/g, '<span style="color:#818cf8">$1</span>')
+    // Attributes key="value"
+    .replace(/ ([\w-]+)(=)(&quot;|")/g, ' <span style="color:#34d399">$1</span>$2<span style="color:#fbbf24">$3</span>')
+    // Why/Tip lines
+    .replace(/(Why:.*$|Tip:.*$)/gm, '<span style="color:rgba(255,255,255,0.35);font-style:italic">$1</span>');
 }
 
 export function FixSnippet({ code, language = 'html' }: { code: string; language?: string }) {

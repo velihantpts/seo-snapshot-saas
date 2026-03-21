@@ -570,7 +570,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
             </div>
           </Section>
 
-          <ProGate feature="security header audit" isPro={isPublic || false}>
+          <ProGate feature="security, performance & accessibility audit" isPro={isPro}>
           <Section title="Security Headers" icon={Shield}
             badge={`${d.security?.score || 0}/100`}
             badgeColor={d.security?.score >= 80 ? 'green' : d.security?.score >= 50 ? 'yellow' : 'red'}>
@@ -581,9 +581,8 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
               )}
             </div>
           </Section>
-          </ProGate>
 
-          <ProGate feature="performance analysis" isPro={isPro}>
+
           <Section title="Performance" icon={Zap}
             badge={`${d.performance?.responseTime || d.fetchTime}ms`}
             badgeColor={(d.performance?.responseTime || d.fetchTime) < 1000 ? 'green' : 'yellow'}>
@@ -597,7 +596,6 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
               <Row label="Inline JS size" value={`${d.performance?.inlineScriptSize || 0} KB`} status={d.performance?.inlineScriptSize > 50 ? 'warn' : undefined} />
             </div>
           </Section>
-          </ProGate>
 
           <Section title="Mobile" icon={Smartphone}
             badge={`${d.mobile?.score || 0}/100`}
@@ -611,7 +609,6 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
             </div>
           </Section>
 
-          <ProGate feature="accessibility audit" isPro={isPublic || false}>
           <Section title="Accessibility" icon={Search}
             badge={`${d.accessibility?.score || 0}/100`}
             badgeColor={d.accessibility?.score >= 80 ? 'green' : d.accessibility?.score >= 50 ? 'yellow' : 'red'}>
