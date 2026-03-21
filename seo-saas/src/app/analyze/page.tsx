@@ -1,11 +1,15 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import { SEOReport } from '@/components/SEOReport';
 
 export default function AnalyzePage() {
+  const { data: session } = useSession();
+  const userPlan = (session?.user as any)?.plan || 'free';
+  const isPro = userPlan === 'pro_monthly' || userPlan === 'pro_lifetime' || userPlan === 'pro';
   const [result, setResult] = useState<any>(null);
   const router = useRouter();
 
@@ -35,7 +39,7 @@ export default function AnalyzePage() {
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
-        <SEOReport result={result} />
+        <SEOReport result={result} isPro={isPro} />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { ArrowLeft, RotateCw } from 'lucide-react';
 import { SEOReport } from '@/components/SEOReport';
@@ -9,6 +10,9 @@ import { AnalysisSkeleton } from '@/components/Skeleton';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export default function AnalyzeByIdPage() {
+  const { data: session } = useSession();
+  const userPlan = (session?.user as any)?.plan || 'free';
+  const isPro = userPlan === 'pro_monthly' || userPlan === 'pro_lifetime' || userPlan === 'pro';
   const params = useParams();
   const router = useRouter();
   const [result, setResult] = useState<any>(null);
@@ -82,7 +86,7 @@ export default function AnalyzeByIdPage() {
       </div>
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-6 sm:py-8">
         <ErrorBoundary>
-          <SEOReport result={result} />
+          <SEOReport result={result} isPro={isPro} />
         </ErrorBoundary>
       </div>
     </div>
