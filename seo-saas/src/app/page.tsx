@@ -287,7 +287,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.06] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
-          <span>&copy; 2026 SEO Snapshot</span>
+          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.101.1</span></span>
           <div className="flex gap-4">
             <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
             <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>
