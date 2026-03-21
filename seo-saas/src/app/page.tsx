@@ -9,6 +9,7 @@ import { GlowCard } from '@/components/GlowCard';
 import { TypeWriter } from '@/components/TypeWriter';
 import { ScrollReveal } from '@/components/ScrollReveal';
 import { AnalysisLoader } from '@/components/AnalysisLoader';
+import { useLocale } from '@/lib/i18n';
 
 
 export default function Home() {
@@ -19,6 +20,7 @@ export default function Home() {
   const [stats, setStats] = useState<{ totalAnalyses: number; avgScore: number } | null>(null);
   const { data: session } = useSession();
   const router = useRouter();
+  const { t } = useLocale();
 
   useEffect(() => {
     fetch('/api/stats').then(r => r.json()).then(setStats).catch(() => {});
@@ -89,18 +91,16 @@ export default function Home() {
       <section className="relative z-10 pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-white/60 text-xs font-medium mb-8 opacity-0 animate-fade-in">
-            <Zap className="w-3 h-3 text-accent-400" /> 100 SEO checks in seconds
+            <Zap className="w-3 h-3 text-accent-400" /> {t('hero.badge')}
           </div>
 
           <h1 className="heading-display mb-6 opacity-0 animate-fade-in-up">
-            Analyze any page&#39;s<br />
-            <span className="gradient-text">SEO instantly</span>
+            {t('hero.title1')}<br />
+            <span className="gradient-text">{t('hero.title2')}</span>
           </h1>
 
           <p className="text-base sm:text-lg text-white/50 max-w-xl mx-auto mb-10 sm:mb-12 leading-relaxed opacity-0 animate-fade-in-up-delay-1">
-            Get a complete SEO audit with actionable fix recommendations.
-            Meta tags, Core Web Vitals, security, accessibility, and more.
-            Check your title tags, meta descriptions, headings, images, links, structured data, security headers, mobile-friendliness, and 100 more on-page SEO factors — all in under 10 seconds, completely free.
+            {t('hero.desc')}
           </p>
 
           {/* URL Input with typing placeholder */}
@@ -136,7 +136,7 @@ export default function Home() {
                       Analyzing...
                     </>
                   ) : (
-                    <>Analyze <ArrowRight className="w-4 h-4" /></>
+                    <>{t('hero.analyze')} <ArrowRight className="w-4 h-4" /></>
                   )}
                 </button>
                 <button
@@ -151,7 +151,7 @@ export default function Home() {
                   ) : (
                     <>
                       <Globe className="w-4 h-4" />
-                      <span className="hidden sm:inline">Crawl Site</span>
+                      <span className="hidden sm:inline">{t('hero.crawl')}</span>
                       <span className="text-[9px] bg-accent-500/15 px-1.5 py-0.5 rounded-full hidden sm:inline">PRO</span>
                     </>
                   )}
@@ -166,7 +166,7 @@ export default function Home() {
 
           {!loading && (
             <p className="text-white/25 text-xs mt-5 opacity-0 animate-fade-in-up-delay-3">
-              Free: 5 analyses/day · No signup required · Pro: unlimited
+              {t('hero.free')}
             </p>
           )}
 
@@ -176,7 +176,7 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-3 text-left">
                 {/* Others */}
                 <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4">
-                  <div className="text-[10px] text-white/25 uppercase tracking-wider mb-3">Other tools say</div>
+                  <div className="text-[10px] text-white/25 uppercase tracking-wider mb-3">{t('diff.others')}</div>
                   <div className="space-y-2">
                     <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> "Add a meta description"</p>
                     <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> "Improve security headers"</p>
@@ -185,7 +185,7 @@ export default function Home() {
                 </div>
                 {/* Us */}
                 <div className="rounded-xl bg-accent-500/[0.04] border border-accent-500/10 p-4">
-                  <div className="text-[10px] text-accent-400 uppercase tracking-wider mb-3">We give you</div>
+                  <div className="text-[10px] text-accent-400 uppercase tracking-wider mb-3">{t('diff.wegive')}</div>
                   <div className="space-y-2">
                     <p className="text-xs text-white/60 flex gap-2"><span className="text-emerald-400">✓</span> Copy-paste <code className="text-accent-300/70 text-[10px]">&lt;meta&gt;</code> tag</p>
                     <p className="text-xs text-white/60 flex gap-2"><span className="text-emerald-400">✓</span> nginx / next.config.js code</p>
@@ -196,13 +196,13 @@ export default function Home() {
               {/* Unique badges */}
               <div className="flex justify-center gap-4 mt-4">
                 <div className="flex items-center gap-1.5 text-[10px] text-white/30">
-                  <span className="text-amber-400 font-bold text-xs">A+→F</span> Security Grade
+                  <span className="text-amber-400 font-bold text-xs">A+→F</span> {t('diff.secgrade')}
                 </div>
                 <div className="flex items-center gap-1.5 text-[10px] text-white/30">
-                  <span className="text-emerald-400 font-bold text-xs">+15</span> Impact Score
+                  <span className="text-emerald-400 font-bold text-xs">+15</span> {t('diff.impact')}
                 </div>
                 <div className="flex items-center gap-1.5 text-[10px] text-white/30">
-                  <span className="text-accent-400 font-bold text-xs">56</span> Fix Snippets
+                  <span className="text-accent-400 font-bold text-xs">56</span> {t('diff.snippets')}
                 </div>
               </div>
             </div>
@@ -283,9 +283,9 @@ export default function Home() {
       <section className="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
         <div className="divider max-w-6xl mx-auto mb-20" />
         <ScrollReveal className="max-w-5xl mx-auto">
-          <h2 className="heading-section text-center mb-4">Everything you need to audit SEO</h2>
+          <h2 className="heading-section text-center mb-4">{t('features.title')}</h2>
           <p className="text-white/40 text-center mb-14 sm:mb-16 max-w-md mx-auto text-sm leading-relaxed">
-            100 checks covering every aspect of on-page SEO. Get specific code fixes, not just warnings.
+            {t('features.desc')}
           </p>
         </ScrollReveal>
 
@@ -308,18 +308,18 @@ export default function Home() {
       <section className="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
         <div className="divider max-w-6xl mx-auto mb-20" />
         <ScrollReveal className="max-w-xl mx-auto text-center">
-          <h2 className="heading-section mb-4">Ready to fix your SEO?</h2>
-          <p className="text-white/40 mb-6 text-sm">Start free. Upgrade when you need unlimited analyses and full reports.</p>
+          <h2 className="heading-section mb-4">{t('cta.title')}</h2>
+          <p className="text-white/40 mb-6 text-sm">{t('cta.desc')}</p>
           <p className="text-white/25 mb-10 text-xs leading-relaxed max-w-md mx-auto">
             SEO Snapshot analyzes your website against 100 on-page SEO checks including meta tags, headings, images, links, structured data, security headers, Core Web Vitals, mobile-friendliness, accessibility compliance, and content quality. Get specific code fixes you can copy and paste — not just generic warnings. Used by developers, freelancers, and agencies worldwide.
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/pricing" className="btn-primary text-center min-h-[44px] flex items-center justify-center">
-              View Pricing
+              {t('cta.pricing')}
             </Link>
             {!session && (
               <button onClick={() => signIn()} className="btn-ghost min-h-[44px]">
-                Sign in free
+                {t('cta.signin')}
               </button>
             )}
           </div>
@@ -329,7 +329,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.06] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
-          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.109.0</span></span>
+          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.110.0</span></span>
           <div className="flex gap-4">
             <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
             <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>
