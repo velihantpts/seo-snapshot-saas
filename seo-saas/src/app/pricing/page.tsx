@@ -64,7 +64,7 @@ export default function Pricing() {
         <div className="text-center mb-14 sm:mb-16">
           <h1 className="heading-section mb-4 opacity-0 animate-fade-in-up">Simple, transparent pricing</h1>
           <p className="text-white/40 text-base opacity-0 animate-fade-in-up-delay-1">Start free. Upgrade when you need more power.</p>
-          <p className="text-white/20 text-xs mt-3 opacity-0 animate-fade-in-up-delay-2">Trusted by developers, freelancers & agencies worldwide</p>
+          <p className="text-white/35 text-xs mt-3 opacity-0 animate-fade-in-up-delay-2">Trusted by developers, freelancers & agencies worldwide</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-5 opacity-0 animate-fade-in-up-delay-2">
@@ -91,7 +91,7 @@ export default function Pricing() {
               )}
               <ul className="space-y-3">
                 {plan.features.map(f => (
-                  <li key={f.text} className={`flex items-start gap-2.5 text-sm ${f.ok ? 'text-white/60' : 'text-white/20'}`}>
+                  <li key={f.text} className={`flex items-start gap-2.5 text-sm ${f.ok ? 'text-white/60' : 'text-white/35'}`}>
                     {f.ok ? <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.popular ? 'text-accent-400' : plan.name === 'Lifetime' ? 'text-amber-400' : 'text-white/30'}`} />
                       : <X className="w-4 h-4 mt-0.5 flex-shrink-0 text-white/10" />}
                     {f.text}
@@ -115,7 +115,7 @@ export default function Pricing() {
               <details key={faq.q} className="group glass-card rounded-xl">
                 <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-white/70 hover:text-white/90 transition-colors duration-150 list-none flex items-center justify-between">
                   {faq.q}
-                  <svg className="w-4 h-4 text-white/20 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4 text-white/35 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>

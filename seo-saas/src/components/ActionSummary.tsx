@@ -1,9 +1,10 @@
 'use client';
 import { Zap, ArrowUp } from 'lucide-react';
+import type { SEOResult, Issue } from '@/lib/analyzer/types';
 
-export function ActionSummary({ result }: { result: any }) {
+export function ActionSummary({ result }: { result: SEOResult }) {
   const issues = result.issues || [];
-  const criticals = issues.filter((i: any) => i.severity === 'critical');
+  const criticals = issues.filter((i: Issue) => i.severity === 'critical');
   const topFixes = issues.slice(0, 3);
   const potential = result.potentialScore || result.score;
   const gain = potential - result.score;
@@ -48,7 +49,7 @@ export function ActionSummary({ result }: { result: any }) {
       {topFixes.length > 0 && (
         <div className="space-y-2 pl-[52px]">
           <p className="text-[10px] uppercase tracking-wider text-white/30 font-medium">Top priorities</p>
-          {topFixes.map((fix: any, i: number) => (
+          {topFixes.map((fix: Issue, i: number) => (
             <div key={i} className="flex items-center gap-2 text-sm">
               <span className={`w-5 h-5 rounded-md flex items-center justify-center text-[10px] font-bold ${
                 fix.severity === 'critical' ? 'bg-red-500/15 text-red-400' : 'bg-amber-500/15 text-amber-400'

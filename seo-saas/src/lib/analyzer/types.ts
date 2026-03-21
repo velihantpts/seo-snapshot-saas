@@ -26,7 +26,9 @@ export interface SEOResult {
   statusCode: number;
   redirectChain: { url: string; status: number }[];
   meta: {
-    title: any; description: any; titlePixelWidth: number; descPixelWidth: number;
+    title: { text: string; length: number; status: string } | null;
+    description: { text: string; length: number; status: string } | null;
+    titlePixelWidth: number; descPixelWidth: number;
     canonical: string; canonicalAnalysis: { selfReferencing: boolean; httpsMismatch: boolean; ogUrlMismatch: boolean };
     robots: string; lang: string; charset: string; viewport: string; isNoindex: boolean;
     hasFavicon: boolean; hasDoctype: boolean; textToHtmlRatio: number;
@@ -48,7 +50,7 @@ export interface SEOResult {
   contentQuality: { readabilityScore: number; readabilityGrade: string; avgSentenceLength: number; totalSentences: number; longSentences: number; };
   robots: { exists: boolean; disallowCount: number; hasSitemapRef: boolean; userAgents: string[]; urlBlocked: boolean; };
   sitemap: { exists: boolean; urls: string[]; };
-  pageSpeed: PageSpeedResult;
+  pageSpeed: PageSpeedResult | null;
   issues: Issue[];
 }
 

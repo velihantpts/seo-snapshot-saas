@@ -77,7 +77,7 @@ export default function Login() {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="Your name"
-                className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/20 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
+                className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/35 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
               />
             </div>
           )}
@@ -90,7 +90,7 @@ export default function Login() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="name@example.com"
-              className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/20 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
+              className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/35 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
               required
             />
           </div>
@@ -103,7 +103,7 @@ export default function Login() {
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder={mode === 'register' ? 'At least 6 characters' : 'Your password'}
-              className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/20 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
+              className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/35 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
               required
               minLength={6}
             />

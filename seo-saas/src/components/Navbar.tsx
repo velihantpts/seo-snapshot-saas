@@ -26,8 +26,9 @@ export function Navbar() {
           <span className="font-semibold text-[15px] tracking-tight">SEO <span className="text-accent-400">Snapshot</span></span>
         </Link>
         <div className="flex items-center gap-3 sm:gap-4">
+          <Link href="/compare" className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150 hidden sm:inline">Compare</Link>
           <Link href="/pricing" className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150">Pricing</Link>
-          <Link href="/docs" className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150 hidden sm:inline">API</Link>
+          <Link href="/docs" className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150 hidden md:inline">API</Link>
           {session ? (
             <>
               <Link href="/dashboard" className="text-sm text-white/50 hover:text-white/80 transition-colors duration-150 hidden sm:inline">Dashboard</Link>

@@ -278,3 +278,18 @@ body {
 @media (pointer: coarse) {
   button, a, [role="tab"], summary { min-height: 44px; }
 }
+
+/* ===== Mobile responsive fixes ===== */
+@media (max-width: 640px) {
+  .heading-section { font-size: 1.5rem; }
+  .glass-card { padding: 0.875rem; }
+  [role="tablist"] { gap: 0.25rem; }
+  [role="tab"] { padding: 0.5rem 0.75rem; font-size: 0.75rem; }
+  .stat-card { padding: 0.75rem; }
+  .btn-primary, .btn-ghost { font-size: 0.8125rem; }
+}
+
+/* ===== Reduce motion for accessibility ===== */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+}

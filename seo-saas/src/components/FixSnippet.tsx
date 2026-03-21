@@ -30,7 +30,7 @@ export function FixSnippet({ code, language = 'html' }: { code: string; language
 }
 
 // ===== Smart Fix Code Generator =====
-export function generateFixCode(issue: any, result: any): string | null {
+export function generateFixCode(issue: { problem: string; fix: string; severity: string; category?: string }, result: Record<string, any>): string | null {
   const problem = issue.problem?.toLowerCase() || '';
   const title = result.meta?.title?.text || '';
   const desc = result.meta?.description?.text || '';
@@ -38,8 +38,8 @@ export function generateFixCode(issue: any, result: any): string | null {
   const h1 = result.headings?.h1?.texts?.[0] || '';
   const domain = (() => { try { return new URL(url).hostname; } catch { return 'yoursite.com'; } })();
   const techStack = result.techStack || [];
-  const isWordPress = techStack.some((t: any) => t.name === 'WordPress');
-  const isNextJs = techStack.some((t: any) => t.name === 'Next.js');
+  const isWordPress = techStack.some((t: { name: string }) => t.name === 'WordPress');
+  const isNextJs = techStack.some((t: { name: string }) => t.name === 'Next.js');
 
   // ===== META FIXES =====
   if (problem.includes('title') && problem.includes('missing')) {
@@ -59,7 +59,7 @@ export function generateFixCode(issue: any, result: any): string | null {
 
   if (problem.includes('meta description') && problem.includes('missing')) {
     // Generate from page content
-    const bodyWords = result.topKeywords?.slice(0, 3).map((k: any) => k.word).join(', ') || 'your topic';
+    const bodyWords = result.topKeywords?.slice(0, 3).map((k: { word: string }) => k.word).join(', ') || 'your topic';
     const suggested = h1 ? `${h1}. Learn about ${bodyWords}. Get started today.` : `Explore ${bodyWords} on ${domain}. Comprehensive resources and guides.`;
     return `<meta name="description" content="${suggested.slice(0, 155)}">`;
   }

@@ -151,6 +151,7 @@ export default function Home() {
                     <>
                       <Globe className="w-4 h-4" />
                       <span className="hidden sm:inline">Crawl Site</span>
+                      <span className="text-[9px] bg-accent-500/15 px-1.5 py-0.5 rounded-full hidden sm:inline">PRO</span>
                     </>
                   )}
                 </button>
@@ -198,7 +199,7 @@ export default function Home() {
                 <div className="w-3 h-3 rounded-full bg-red-500/60" />
                 <div className="w-3 h-3 rounded-full bg-amber-500/60" />
                 <div className="w-3 h-3 rounded-full bg-emerald-500/60" />
-                <span className="text-xs text-white/20 ml-2 font-mono">seosnapshot.dev/analyze</span>
+                <span className="text-xs text-white/35 ml-2 font-mono">seosnapshot.dev/analyze</span>
               </div>
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-5">
                 <div className="relative w-20 h-20 flex-shrink-0">
@@ -232,7 +233,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t border-white/[0.04] text-center">
-                <span className="text-xs text-white/20">Try it yourself — enter any URL above</span>
+                <span className="text-xs text-white/35">Try it yourself — enter any URL above</span>
               </div>
             </div>
           </div>

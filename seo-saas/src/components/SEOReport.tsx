@@ -3,6 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 import { ScoreRing } from './ScoreRing';
 import { ScrollProgress } from './ScrollProgress';
 import Link from 'next/link';
+import type { SEOResult, Issue } from '@/lib/analyzer/types';
 import { IssueDonut, ScoreRadar, CategoryBars, BenchmarkBadge, MiniProgress, SecurityGrade, TechStackBadges } from './Charts';
 import { FixSnippet, generateFixCode } from './FixSnippet';
 import { ActionSummary } from './ActionSummary';
@@ -126,7 +127,7 @@ const TABS: { key: TabKey; label: string; icon: any }[] = [
 
 // ===== Main Component =====
 export function SEOReport({ result, showActions = true, isPublic = false, isPro = false }: {
-  result: any; showActions?: boolean; isPublic?: boolean; isPro?: boolean;
+  result: SEOResult; showActions?: boolean; isPublic?: boolean; isPro?: boolean;
 }) {
   const [activeTab, setActiveTab] = useState<TabKey>('overview');
   const [copied, setCopied] = useState(false);
@@ -137,12 +138,12 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
 
   const d = result;
   const issues = d.issues || [];
-  const criticalCount = issues.filter((i: any) => i.severity === 'critical').length;
-  const warningCount = issues.filter((i: any) => i.severity === 'warning').length;
+  const criticalCount = issues.filter((i: Issue) => i.severity === 'critical').length;
+  const warningCount = issues.filter((i: Issue) => i.severity === 'warning').length;
 
   // Category + severity combined filter
-  let filteredIssues = severityFilter === 'all' ? issues : issues.filter((i: any) => i.severity === severityFilter);
-  if (categoryFilter !== 'all') filteredIssues = filteredIssues.filter((i: any) => (i.category || 'Other') === categoryFilter);
+  let filteredIssues = severityFilter === 'all' ? issues : issues.filter((i: Issue) => i.severity === severityFilter);
+  if (categoryFilter !== 'all') filteredIssues = filteredIssues.filter((i: Issue) => (i.category || 'Other') === categoryFilter);
 
   // Unique categories for filter
   const categorySet: Record<string, boolean> = {};
@@ -160,7 +161,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
   }, [d.url]);
 
   const handleCopy = () => {
-    const summary = `SEO Report: ${d.url}\nScore: ${d.score}/100\nIssues: ${issues.length} (${criticalCount} critical)\n\n${issues.map((i: any) => `[${i.severity.toUpperCase()}] ${i.problem}\n  Fix: ${i.fix}`).join('\n\n')}`;
+    const summary = `SEO Report: ${d.url}\nScore: ${d.score}/100\nIssues: ${issues.length} (${criticalCount} critical)\n\n${issues.map((i: Issue) => `[${i.severity.toUpperCase()}] ${i.problem}\n  Fix: ${i.fix}`).join('\n\n')}`;
     navigator.clipboard.writeText(summary);
     setCopied(true);
     toast('Report copied to clipboard');
@@ -198,7 +199,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
     }
   };
 
-  const quickWins = [...issues].sort((a: any, b: any) => {
+  const quickWins = [...issues].sort((a: Issue, b: Issue) => {
     if (a.severity === 'warning' && b.severity === 'critical') return -1;
     return 0;
   }).slice(0, 3);
@@ -421,7 +422,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
               <Lightbulb className="w-4 h-4 text-accent-400" /> Quick Wins
             </h3>
             <div className="space-y-3">
-              {quickWins.map((issue: any, i: number) => (
+              {quickWins.map((issue: Issue, i: number) => (
                 <div key={i} className="glass-card rounded-xl p-4">
                   <p className="text-sm font-medium text-white/90 mb-2">{issue.problem}</p>
                   <div className="flex items-start gap-2 text-xs text-white/50 leading-relaxed bg-white/[0.03] rounded-lg p-3">
@@ -476,7 +477,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
               ))}
             </div>
             <div className="space-y-3">
-              {filteredIssues.map((issue: any, i: number) => {
+              {filteredIssues.map((issue: Issue, i: number) => {
                 const FREE_ISSUE_LIMIT = 5;
                 const FREE_SNIPPET_LIMIT = 2;
                 const isLocked = !isPro && i >= FREE_ISSUE_LIMIT;
@@ -487,7 +488,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
                     <div key="upgrade-cta">
                       <ProGate feature={`remaining ${filteredIssues.length - FREE_ISSUE_LIMIT} issues with fix recommendations`} isPro={isPro}>
                         <div className="space-y-3">
-                          {filteredIssues.slice(FREE_ISSUE_LIMIT, FREE_ISSUE_LIMIT + 3).map((lockedIssue: any, j: number) => (
+                          {filteredIssues.slice(FREE_ISSUE_LIMIT, FREE_ISSUE_LIMIT + 3).map((lockedIssue: Issue, j: number) => (
                             <div key={j} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-4">
                               <p className="text-sm text-white/60">{lockedIssue.problem}</p>
                             </div>
