@@ -55,6 +55,7 @@ export async function POST(req: Request) {
           score: result.score,
           data: JSON.stringify(result),
           issues: JSON.stringify(result.issues),
+          public: true,
         },
       });
       analysisId = analysis.id;
