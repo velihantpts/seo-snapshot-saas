@@ -24,8 +24,8 @@ export async function POST(req: Request) {
 
   // Auth & plan check
   const session = await getServerSession(authOptions);
-  const userId = (session?.user as any)?.id;
-  const plan = (session?.user as any)?.plan || 'free';
+  const userId = session?.user?.id;
+  const plan = session?.user?.plan || 'free';
   const isPro = plan === 'pro_monthly' || plan === 'pro_lifetime' || plan === 'pro';
 
   // Rate limiting: IP-based for all users, stricter for free

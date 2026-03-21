@@ -9,7 +9,7 @@ export default async function Dashboard() {
   const session = await getServerSession(authOptions);
   if (!session) redirect('/login');
 
-  const user = session.user as any;
+  const user = session.user;
   const analyses = await prisma.analysis.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: 'desc' },
@@ -28,7 +28,7 @@ export default async function Dashboard() {
       take: 10,
       select: { id: true, domain: true, status: true, totalUrls: true, avgScore: true, createdAt: true },
     });
-  } catch {}
+  } catch (e) { if (typeof console !== "undefined") console.error(e); }
 
   // Dashboard stats
   const totalAnalyses = analyses.length;

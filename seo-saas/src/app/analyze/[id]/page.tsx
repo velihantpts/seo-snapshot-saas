@@ -11,7 +11,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 export default function AnalyzeByIdPage() {
   const { data: session } = useSession();
-  const userPlan = (session?.user as any)?.plan || 'free';
+  const userPlan = session?.user?.plan || 'free';
   const isPro = userPlan === 'pro_monthly' || userPlan === 'pro_lifetime' || userPlan === 'pro';
   const params = useParams();
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function AnalyzeByIdPage() {
       });
       const data = await res.json();
       if (res.ok && data.id) router.push(`/analyze/${data.id}`);
-    } catch {}
+    } catch (e) { if (typeof console !== "undefined") console.error(e); }
     setReanalyzing(false);
   };
 

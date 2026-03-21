@@ -19,7 +19,7 @@ export function UserMenu() {
 
   if (!session) return null;
 
-  const plan = (session.user as any)?.plan || 'free';
+  const plan = session.user?.plan || 'free';
   const isPro = plan !== 'free';
   const initial = session.user?.name?.[0] || session.user?.email?.[0] || 'U';
 

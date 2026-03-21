@@ -8,7 +8,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 
-  const userId = (session.user as any).id;
+  const userId = session.user.id;
   const crawlJob = await prisma.crawlJob.findUnique({
     where: { id: params.id },
     include: {

@@ -7,7 +7,7 @@ export async function DELETE(_req: Request, { params }: { params: { id: string }
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 
-  const userId = (session.user as any).id;
+  const userId = session.user.id;
   const analysis = await prisma.analysis.findUnique({ where: { id: params.id } });
 
   if (!analysis || analysis.userId !== userId) {

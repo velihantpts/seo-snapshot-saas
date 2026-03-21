@@ -42,7 +42,7 @@ export default function MonitorPage() {
         setMonitors(prev => [data, ...prev]);
         setNewUrl('');
       }
-    } catch {}
+    } catch (e) { if (typeof console !== "undefined") console.error(e); }
     setLoading(false);
   };
 

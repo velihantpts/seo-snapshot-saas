@@ -24,7 +24,7 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
   // Private access — user must own the analysis
   const session = await getServerSession(authOptions);
-  const userId = (session?.user as any)?.id;
+  const userId = session?.user?.id;
 
   if (analysis.userId && analysis.userId !== userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 403 });
@@ -38,7 +38,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 
-  const userId = (session.user as any).id;
+  const userId = session.user.id;
   const analysis = await prisma.analysis.findUnique({ where: { id: params.id } });
 
   if (!analysis || analysis.userId !== userId) {

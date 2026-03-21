@@ -10,8 +10,8 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Sign in required for site crawl' }, { status: 401 });
 
-  const userId = (session.user as any).id;
-  const plan = (session.user as any).plan || 'free';
+  const userId = session.user.id;
+  const plan = session.user.plan || 'free';
   const isPro = plan === 'pro_monthly' || plan === 'pro_lifetime' || plan === 'pro';
 
   if (!isPro) {
@@ -59,13 +59,13 @@ export async function POST(req: Request) {
             const child$ = cheerio.load(childXml, { xmlMode: true });
             child$('url > loc').each((_, el) => { urls.push(child$(el).text().trim()); });
           }
-        } catch {}
+        } catch (e) { if (typeof console !== "undefined") console.error(e); }
       } else {
         // Regular sitemap
         $('url > loc').each((_, el) => { urls.push($(el).text().trim()); });
       }
     }
-  } catch {}
+  } catch (e) { if (typeof console !== "undefined") console.error(e); }
 
   // If no sitemap, use the homepage as the only URL
   if (urls.length === 0) {
@@ -112,7 +112,7 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 
-  const userId = (session.user as any).id;
+  const userId = session.user.id;
   const crawlJobs = await prisma.crawlJob.findMany({
     where: { userId },
     orderBy: { createdAt: 'desc' },

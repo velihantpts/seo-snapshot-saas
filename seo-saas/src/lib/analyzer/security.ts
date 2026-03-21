@@ -132,7 +132,7 @@ export async function checkBrokenLinks(linkUrls: string[], issues: Issue[]): Pro
         if (r.status >= 400 && r.status !== 403 && r.status !== 429) {
           brokenLinks.push(`${r.status}: ${u.length > 60 ? u.slice(0, 57) + '...' : u}`);
         }
-      } catch {}
+      } catch (e) { if (typeof console !== "undefined") console.error(e); }
     })
   );
   if (brokenLinks.length > 0) {

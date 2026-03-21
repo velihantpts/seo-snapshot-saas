@@ -14,7 +14,7 @@ export function SerpPreview({ title, description, url }: {
     const u = new URL(url);
     displayUrl = `${u.hostname}${u.pathname === '/' ? '' : u.pathname}`;
     if (displayUrl.length > 60) displayUrl = displayUrl.slice(0, 57) + '...';
-  } catch {}
+  } catch (e) { if (typeof console !== "undefined") console.error(e); }
 
   return (
     <div className="glass-card rounded-xl p-5">

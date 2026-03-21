@@ -8,7 +8,7 @@ import { SEOReport } from '@/components/SEOReport';
 
 export default function AnalyzePage() {
   const { data: session } = useSession();
-  const userPlan = (session?.user as any)?.plan || 'free';
+  const userPlan = session?.user?.plan || 'free';
   const isPro = userPlan === 'pro_monthly' || userPlan === 'pro_lifetime' || userPlan === 'pro';
   const [result, setResult] = useState<any>(null);
   const router = useRouter();

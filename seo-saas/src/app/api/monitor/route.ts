@@ -9,8 +9,8 @@ export async function GET() {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 
-  const userId = (session.user as any).id;
-  const plan = (session.user as any).plan || 'free';
+  const userId = session.user.id;
+  const plan = session.user.plan || 'free';
 
   if (plan === 'free') {
     return NextResponse.json({ error: 'Upgrade to Pro for scheduled monitoring' }, { status: 403 });
@@ -29,8 +29,8 @@ export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 
-  const userId = (session.user as any).id;
-  const plan = (session.user as any).plan || 'free';
+  const userId = session.user.id;
+  const plan = session.user.plan || 'free';
 
   if (plan === 'free') {
     return NextResponse.json({ error: 'Upgrade to Pro for scheduled monitoring' }, { status: 403 });
@@ -63,7 +63,7 @@ export async function DELETE(req: Request) {
   const session = await getServerSession(authOptions);
   if (!session) return NextResponse.json({ error: 'Not authenticated' }, { status: 401 });
 
-  const userId = (session.user as any).id;
+  const userId = session.user.id;
   const { id } = await req.json();
 
   const monitor = await prisma.scheduledMonitor.findUnique({ where: { id } });

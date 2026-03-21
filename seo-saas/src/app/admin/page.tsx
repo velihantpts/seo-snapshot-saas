@@ -30,8 +30,9 @@ function copyToClipboard(text: string): boolean {
   return true;
 }
 
-const ADMIN_EMAIL = 'velihantpts@gmail.com';
-const ADMIN_PASS = 'adminvelihan123';
+// Admin credentials from env — never hardcode secrets in source
+const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || '';
+const ADMIN_PASS = process.env.NEXT_PUBLIC_ADMIN_PASS || '';
 
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
@@ -94,7 +95,7 @@ export default function AdminPage() {
         setResults(prev => [data, ...prev]);
         setUrl('');
       }
-    } catch {}
+    } catch (e) { if (typeof console !== "undefined") console.error(e); }
     setLoading(false);
   };
 

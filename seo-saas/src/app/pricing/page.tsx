@@ -22,7 +22,7 @@ export default function Pricing() {
       const res = await fetch('/api/stripe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ priceType }) });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
-    } catch {}
+    } catch (e) { if (typeof console !== "undefined") console.error(e); }
     setLoading(null);
   };
 

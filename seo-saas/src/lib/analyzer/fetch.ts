@@ -90,7 +90,7 @@ async function fetchRobots(origin: string) {
         userAgents: Array.from(new Set((txt.match(/user-agent:\s*.+/gi) || []).map((l: string) => l.split(':')[1].trim()))).slice(0, 5) as string[],
       };
     }
-  } catch {}
+  } catch (e) { if (typeof console !== "undefined") console.error(e); }
   return { exists: false, disallowCount: 0, hasSitemapRef: false, userAgents: [] as string[] };
 }
 
@@ -109,6 +109,6 @@ async function fetchSitemap(origin: string, $: cheerio.CheerioAPI) {
         urls = urls.slice(0, 50);
       }
     }
-  } catch {}
+  } catch (e) { if (typeof console !== "undefined") console.error(e); }
   return { exists, urls };
 }

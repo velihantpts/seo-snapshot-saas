@@ -9,7 +9,7 @@ export async function POST(req: Request) {
 
   const { priceType } = await req.json();
   const priceId = priceType === 'lifetime' ? process.env.STRIPE_PRICE_LIFETIME! : process.env.STRIPE_PRICE_MONTHLY!;
-  const userId = (session.user as any).id;
+  const userId = session.user.id;
 
   try {
     const checkout = await createCheckoutSession(userId, session.user.email, priceId);

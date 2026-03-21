@@ -57,7 +57,7 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
       const u = new URL(href, targetUrl);
       if (u.hostname === parsedUrl.hostname) { internal++; uniqueInt.add(u.pathname); }
       else if (u.protocol.startsWith('http')) { external++; uniqueExt.add(u.hostname); if (linkUrls.length < 5) linkUrls.push(u.toString()); }
-    } catch {}
+    } catch (e) { if (typeof console !== "undefined") console.error(e); }
     if ($(el).attr('rel')?.includes('nofollow')) nofollow++;
     const text = $(el).text().trim().toLowerCase();
     if (!text && !$(el).find('img').length) emptyAnchor++;
@@ -383,7 +383,7 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   let selfLinks = 0;
   allLinks.each((_, el) => {
     const href = $(el).attr('href') || '';
-    try { if (new URL(href, targetUrl).toString() === targetUrl) selfLinks++; } catch {}
+    try { if (new URL(href, targetUrl).toString() === targetUrl) selfLinks++; } catch (e) { if (typeof console !== "undefined") console.error(e); }
   });
   if (selfLinks > 3) issues.push({ severity: 'warning', problem: `${selfLinks} self-referencing links on page`, fix: 'Reduce self-linking. Too many links to the same page waste crawl budget.', category: 'Content' });
 
