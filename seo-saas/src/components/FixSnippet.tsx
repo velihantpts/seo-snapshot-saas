@@ -3,19 +3,26 @@ import { useState } from 'react';
 import { Copy, CheckCircle, Code } from 'lucide-react';
 
 function highlightSyntax(code: string): string {
-  // First escape HTML entities
-  let escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return escaped
-    // Comments (<!-- -->, //, #)
-    .replace(/(&lt;!--[\s\S]*?--&gt;|\/\/.*$|#.*$)/gm, '<span style="color:rgba(255,255,255,0.3)">$1</span>')
-    // HTML tags
-    .replace(/(&lt;\/?[\w-]+)/g, '<span style="color:#818cf8">$1</span>')
-    // Closing >
-    .replace(/(\/?&gt;)/g, '<span style="color:#818cf8">$1</span>')
-    // Attributes key="value"
-    .replace(/ ([\w-]+)(=)(&quot;|")/g, ' <span style="color:#34d399">$1</span>$2<span style="color:#fbbf24">$3</span>')
-    // Why/Tip lines
-    .replace(/(Why:.*$|Tip:.*$)/gm, '<span style="color:rgba(255,255,255,0.35);font-style:italic">$1</span>');
+  // Escape HTML, then color each line based on content
+  const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  return escaped.split('\n').map(line => {
+    // Comment lines
+    if (line.trimStart().startsWith('&lt;!--') || line.trimStart().startsWith('//') || line.trimStart().startsWith('<!--'))
+      return `<span class="text-white/25">${line}</span>`;
+    // Why/Tip explanation lines
+    if (line.trimStart().startsWith('Why:') || line.trimStart().startsWith('Tip:'))
+      return `<span class="text-white/30 italic">${line}</span>`;
+    // Config comment lines (# ...)
+    if (line.trimStart().startsWith('#') && !line.includes('{'))
+      return `<span class="text-white/25">${line}</span>`;
+    // HTML tag lines
+    if (line.includes('&lt;'))
+      return line
+        .replace(/(&lt;\/?[\w-]+)/g, '<span class="text-indigo-400">$1</span>')
+        .replace(/(&gt;)/g, '<span class="text-indigo-400">$1</span>');
+    // Default — accent color
+    return `<span class="text-accent-300/70">${line}</span>`;
+  }).join('\n');
 }
 
 export function FixSnippet({ code, language = 'html' }: { code: string; language?: string }) {
