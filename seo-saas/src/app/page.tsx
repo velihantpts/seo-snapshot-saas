@@ -216,10 +216,10 @@ export default function Home() {
         <section className="relative z-10 py-12 px-4 sm:px-6">
           <div className="max-w-3xl mx-auto grid grid-cols-2 sm:grid-cols-4 gap-6 text-center">
             {[
-              { value: '100', label: 'SEO Checks' },
-              { value: stats && stats.totalAnalyses > 50 ? `${stats.totalAnalyses.toLocaleString()}` : '< 10s', label: stats && stats.totalAnalyses > 50 ? 'Sites Analyzed' : 'Analysis Time' },
-              { value: '100%', label: 'Server-Side' },
-              { value: 'Free', label: 'No Signup' },
+              { value: '100', label: t('stats.checks') },
+              { value: stats && stats.totalAnalyses > 50 ? `${stats.totalAnalyses.toLocaleString()}` : '< 10s', label: stats && stats.totalAnalyses > 50 ? t('stats.analyzed') : t('stats.time') },
+              { value: '100%', label: t('stats.serverside') },
+              { value: 'Free', label: t('stats.nosignup') },
             ].map(stat => (
               <div key={stat.label}>
                 <div className="text-2xl sm:text-3xl font-semibold tracking-tight text-white/90">{stat.value}</div>
@@ -312,7 +312,7 @@ export default function Home() {
           <h2 className="heading-section mb-4">{t('cta.title')}</h2>
           <p className="text-white/40 mb-6 text-sm">{t('cta.desc')}</p>
           <p className="text-white/25 mb-10 text-xs leading-relaxed max-w-md mx-auto">
-            SEO Snapshot analyzes your website against 100 on-page SEO checks including meta tags, headings, images, links, structured data, security headers, Core Web Vitals, mobile-friendliness, accessibility compliance, and content quality. Get specific code fixes you can copy and paste — not just generic warnings. Used by developers, freelancers, and agencies worldwide.
+            {t('cta.longdesc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/pricing" className="btn-primary text-center min-h-[44px] flex items-center justify-center">
@@ -330,7 +330,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.06] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
-          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.112.0</span></span>
+          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.113.0</span></span>
           <div className="flex gap-4">
             <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
             <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>

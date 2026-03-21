@@ -3,11 +3,13 @@ import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { Check, X } from 'lucide-react';
 import { useState } from 'react';
+import { useLocale } from '@/lib/i18n';
 
 
 export default function Pricing() {
   const { data: session } = useSession();
   const [loading, setLoading] = useState<string | null>(null);
+  const { t } = useLocale();
 
   const handleCheckout = async (priceType: string) => {
     if (!session) { signIn(); return; }
@@ -26,8 +28,8 @@ export default function Pricing() {
 
   const plans = [
     {
-      name: 'Free', price: '$0', period: '', description: 'Try it out',
-      cta: 'Get started', style: 'btn-ghost', href: '/',
+      name: t('pricing.free'), price: '$0', period: '', description: t('pricing.free.desc'),
+      cta: t('pricing.free.cta'), style: 'btn-ghost', href: '/',
       features: [
         { text: '5 analyses per day', ok: true }, { text: 'SEO score & issues', ok: true },
         { text: 'Meta tag analysis', ok: true }, { text: 'Open Graph & schema', ok: true },
@@ -36,8 +38,8 @@ export default function Pricing() {
       ],
     },
     {
-      name: 'Pro', price: '$9.99', period: '/mo', description: 'For professionals',
-      cta: 'Unlock All Issues', style: 'btn-primary', priceType: 'monthly', popular: true,
+      name: t('pricing.pro'), price: '$9.99', period: '/mo', description: t('pricing.pro.desc'),
+      cta: t('pricing.pro.cta'), style: 'btn-primary', priceType: 'monthly', popular: true,
       features: [
         { text: 'Unlimited analyses', ok: true }, { text: 'Everything in Free', ok: true },
         { text: 'Core Web Vitals (FCP, LCP, CLS)', ok: true }, { text: 'Security & accessibility audit', ok: true },
@@ -46,8 +48,8 @@ export default function Pricing() {
       ],
     },
     {
-      name: 'Lifetime', price: '$19.99', period: '', description: 'One-time. Forever.',
-      cta: 'Buy Lifetime', style: 'lifetime', priceType: 'lifetime',
+      name: t('pricing.lifetime'), price: '$19.99', period: '', description: t('pricing.lifetime.desc'),
+      cta: t('pricing.lifetime.cta'), style: 'lifetime', priceType: 'lifetime',
       features: [
         { text: 'Everything in Pro', ok: true }, { text: 'No recurring fees', ok: true },
         { text: 'All future features', ok: true }, { text: 'Daily monitoring', ok: true },
@@ -62,9 +64,9 @@ export default function Pricing() {
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <div className="text-center mb-14 sm:mb-16">
-          <h1 className="heading-section mb-4 opacity-0 animate-fade-in-up">Simple, transparent pricing</h1>
-          <p className="text-white/40 text-base opacity-0 animate-fade-in-up-delay-1">Start free. Upgrade when you need more power.</p>
-          <p className="text-white/35 text-xs mt-3 opacity-0 animate-fade-in-up-delay-2">Trusted by developers, freelancers & agencies worldwide</p>
+          <h1 className="heading-section mb-4 opacity-0 animate-fade-in-up">{t('pricing.title')}</h1>
+          <p className="text-white/40 text-base opacity-0 animate-fade-in-up-delay-1">{t('pricing.desc')}</p>
+          <p className="text-white/35 text-xs mt-3 opacity-0 animate-fade-in-up-delay-2">{t('pricing.trust')}</p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-5 opacity-0 animate-fade-in-up-delay-2">
