@@ -88,11 +88,11 @@ export default function Home() {
       {/* Hero */}
       <section className="relative z-10 pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-white/60 text-xs font-medium mb-8 opacity-0 animate-fade-in">
-            <Zap className="w-3 h-3 text-accent-400" /> 100 SEO checks in seconds
-          </div>
-
           <h1 className="heading-display mb-6 opacity-0 animate-fade-in-up">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-white/60 text-xs font-medium mb-6 font-normal">
+              <Zap className="w-3 h-3 text-accent-400" /> 100 SEO checks in seconds
+            </span>
+            <br />
             Analyze any page&#39;s<br />
             <span className="gradient-text">SEO instantly</span>
           </h1>
@@ -100,6 +100,7 @@ export default function Home() {
           <p className="text-base sm:text-lg text-white/50 max-w-xl mx-auto mb-10 sm:mb-12 leading-relaxed opacity-0 animate-fade-in-up-delay-1">
             Get a complete SEO audit with actionable fix recommendations.
             Meta tags, Core Web Vitals, security, accessibility, and more.
+            Check your title tags, meta descriptions, headings, images, links, structured data, security headers, mobile-friendliness, and 100 more on-page SEO factors — all in under 10 seconds, completely free.
           </p>
 
           {/* URL Input with typing placeholder */}
@@ -308,7 +309,10 @@ export default function Home() {
         <div className="divider max-w-6xl mx-auto mb-20" />
         <ScrollReveal className="max-w-xl mx-auto text-center">
           <h2 className="heading-section mb-4">Ready to fix your SEO?</h2>
-          <p className="text-white/40 mb-10 text-sm">Start free. Upgrade when you need unlimited analyses and full reports.</p>
+          <p className="text-white/40 mb-6 text-sm">Start free. Upgrade when you need unlimited analyses and full reports.</p>
+          <p className="text-white/25 mb-10 text-xs leading-relaxed max-w-md mx-auto">
+            SEO Snapshot analyzes your website against 100 on-page SEO checks including meta tags, headings, images, links, structured data, security headers, Core Web Vitals, mobile-friendliness, accessibility compliance, and content quality. Get specific code fixes you can copy and paste — not just generic warnings. Used by developers, freelancers, and agencies worldwide.
+          </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link href="/pricing" className="btn-primary text-center min-h-[44px] flex items-center justify-center">
               View Pricing
@@ -325,7 +329,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.06] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
-          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.106.0</span></span>
+          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.107.0</span></span>
           <div className="flex gap-4">
             <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
             <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>
