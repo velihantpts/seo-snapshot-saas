@@ -38,7 +38,7 @@ export default function Pricing() {
       ],
     },
     {
-      name: t('pricing.pro'), price: '$9.99', period: '/mo', description: t('pricing.pro.desc'),
+      name: t('pricing.pro'), price: '$4.99', period: '/mo', description: t('pricing.pro.desc'),
       cta: t('pricing.pro.cta'), style: 'btn-primary', priceType: 'monthly', popular: true,
       features: [
         { text: 'Unlimited analyses', ok: true }, { text: 'Everything in Free', ok: true },
@@ -48,7 +48,7 @@ export default function Pricing() {
       ],
     },
     {
-      name: t('pricing.lifetime'), price: '$19.99', period: '', description: t('pricing.lifetime.desc'),
+      name: t('pricing.lifetime'), price: '$29.99', period: '', description: t('pricing.lifetime.desc'),
       cta: t('pricing.lifetime.cta'), style: 'lifetime', priceType: 'lifetime',
       features: [
         { text: 'Everything in Pro', ok: true }, { text: 'No recurring fees', ok: true },
@@ -67,6 +67,10 @@ export default function Pricing() {
           <h1 className="heading-section mb-4 opacity-0 animate-fade-in-up">{t('pricing.title')}</h1>
           <p className="text-white/40 text-base opacity-0 animate-fade-in-up-delay-1">{t('pricing.desc')}</p>
           <p className="text-white/35 text-xs mt-3 opacity-0 animate-fade-in-up-delay-2">{t('pricing.trust')}</p>
+          <div className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 opacity-0 animate-fade-in-up-delay-2">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+            <span className="text-emerald-400 text-xs font-medium">Early Adopter Pricing — These prices will increase. Lock in your rate now.</span>
+          </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-5 opacity-0 animate-fade-in-up-delay-2">
