@@ -69,15 +69,15 @@ export default function Home() {
   };
 
   const features = [
-    { icon: BarChart3, title: 'SEO Score', desc: 'Title, meta, headings, OG tags, schema — scored 0-100 with actionable fix recommendations.' },
-    { icon: Zap, title: 'Core Web Vitals', desc: 'FCP, LCP, CLS, TBT via Google PageSpeed Insights API. Real data, not estimates.' },
-    { icon: Shield, title: 'Security', desc: 'HSTS, CSP, X-Frame-Options — real HTTP headers from server response.' },
-    { icon: Smartphone, title: 'Mobile', desc: 'Viewport, zoom, touch targets — scored with specific fixes for mobile issues.' },
-    { icon: Eye, title: 'Accessibility', desc: 'Form labels, heading hierarchy, alt text, lang — WCAG compliance checks.' },
-    { icon: FileText, title: 'PDF Reports', desc: 'Export branded PDF reports. Share public report links with clients or team.' },
-    { icon: Globe, title: 'Social & OG', desc: 'Open Graph, Twitter Card, JSON-LD structured data validation.' },
-    { icon: Code, title: 'Technical', desc: 'Robots.txt, sitemap.xml, canonical, render-blocking resources.' },
-    { icon: BarChart3, title: 'Monitoring', desc: 'Schedule weekly SEO checks. Get notified when your score drops.' },
+    { icon: BarChart3, title: t('feat.seo'), desc: t('feat.seo.d') },
+    { icon: Zap, title: t('feat.cwv'), desc: t('feat.cwv.d') },
+    { icon: Shield, title: t('feat.sec'), desc: t('feat.sec.d') },
+    { icon: Smartphone, title: t('feat.mob'), desc: t('feat.mob.d') },
+    { icon: Eye, title: t('feat.a11y'), desc: t('feat.a11y.d') },
+    { icon: FileText, title: t('feat.pdf'), desc: t('feat.pdf.d') },
+    { icon: Globe, title: t('feat.social'), desc: t('feat.social.d') },
+    { icon: Code, title: t('feat.tech'), desc: t('feat.tech.d') },
+    { icon: BarChart3, title: t('feat.mon'), desc: t('feat.mon.d') },
   ];
 
   return (
@@ -330,7 +330,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.06] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
-          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.116.0</span></span>
+          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.117.0</span></span>
           <div className="flex gap-4">
             <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
             <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>

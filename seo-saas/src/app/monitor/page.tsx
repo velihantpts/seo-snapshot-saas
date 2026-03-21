@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect } from 'react';
 import { useSession } from 'next-auth/react';
+import { useLocale } from '@/lib/i18n';
 import Link from 'next/link';
 import { Bell, Plus, Trash2, Globe } from 'lucide-react';
 
@@ -15,6 +16,7 @@ interface Monitor {
 
 export default function MonitorPage() {
   const { data: session } = useSession();
+  const { t } = useLocale();
   const [monitors, setMonitors] = useState<Monitor[]>([]);
   const [newUrl, setNewUrl] = useState('');
   const [loading, setLoading] = useState(false);
@@ -65,8 +67,8 @@ export default function MonitorPage() {
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <div className="flex items-center justify-between mb-8">
           <div>
-            <h1 className="text-xl font-medium tracking-tight">Monitoring</h1>
-            <p className="text-white/40 text-sm mt-1">Get notified when your SEO score changes.</p>
+            <h1 className="text-xl font-medium tracking-tight">{t('monitor.title')}</h1>
+            <p className="text-white/40 text-sm mt-1">{t('monitor.desc')}</p>
           </div>
         </div>
 
@@ -76,7 +78,7 @@ export default function MonitorPage() {
             type="text"
             value={newUrl}
             onChange={e => setNewUrl(e.target.value)}
-            placeholder="Enter URL to monitor..."
+            placeholder={t("monitor.placeholder")}
             className="flex-1 bg-transparent text-sm text-white placeholder:text-white/20 outline-none"
             onKeyDown={e => e.key === 'Enter' && addMonitor()}
           />
@@ -89,7 +91,7 @@ export default function MonitorPage() {
         {monitors.length === 0 ? (
           <div className="text-center py-16">
             <Bell className="w-10 h-10 text-white/10 mx-auto mb-3" />
-            <p className="text-white/30 text-sm">No monitors yet. Add a URL above to start tracking.</p>
+            <p className="text-white/30 text-sm">{t('monitor.empty')}</p>
           </div>
         ) : (
           <div className="space-y-3">
@@ -113,7 +115,7 @@ export default function MonitorPage() {
         )}
 
         <p className="text-center text-white/15 text-xs mt-12">
-          Pro feature · Monitors run automatically on your schedule
+          {t('monitor.footer')}
         </p>
       </div>
     </div>

@@ -74,6 +74,44 @@ const translations: Record<Locale, Record<string, string>> = {
     'pricing.lifetime.desc': 'One-time. Forever.',
     'pricing.lifetime.cta': 'Buy Lifetime',
 
+    // Features
+    'feat.seo': 'SEO Score', 'feat.seo.d': 'Title, meta, headings, OG tags, schema — scored 0-100 with actionable fix recommendations.',
+    'feat.cwv': 'Core Web Vitals', 'feat.cwv.d': 'FCP, LCP, CLS, TBT via Google PageSpeed Insights API. Real data, not estimates.',
+    'feat.sec': 'Security', 'feat.sec.d': 'HSTS, CSP, X-Frame-Options — real HTTP headers from server response.',
+    'feat.mob': 'Mobile', 'feat.mob.d': 'Viewport, zoom, touch targets — scored with specific fixes for mobile issues.',
+    'feat.a11y': 'Accessibility', 'feat.a11y.d': 'Form labels, heading hierarchy, alt text, lang — WCAG compliance checks.',
+    'feat.pdf': 'PDF Reports', 'feat.pdf.d': 'Export branded PDF reports. Share public report links with clients or team.',
+    'feat.social': 'Social & OG', 'feat.social.d': 'Open Graph, Twitter Card, JSON-LD structured data validation.',
+    'feat.tech': 'Technical', 'feat.tech.d': 'Robots.txt, sitemap.xml, canonical, render-blocking resources.',
+    'feat.mon': 'Monitoring', 'feat.mon.d': 'Schedule weekly SEO checks. Get notified when your score drops.',
+
+    // Compare
+    'compare.title': 'Compare Two URLs', 'compare.desc': 'Side-by-side SEO comparison. See who wins.', 'compare.btn': 'Compare',
+
+    // Monitor
+    'monitor.title': 'Monitoring', 'monitor.desc': 'Get notified when your SEO score changes.',
+    'monitor.placeholder': 'Enter URL to monitor...', 'monitor.add': 'Add',
+    'monitor.empty': 'No monitors yet. Add a URL above to start tracking.',
+    'monitor.footer': 'Pro feature · Monitors run automatically on your schedule',
+
+    // UserMenu
+    'menu.dashboard': 'Dashboard', 'menu.billing': 'Billing', 'menu.signout': 'Sign out',
+
+    // Pricing features
+    'pf.5day': '5 analyses per day', 'pf.score': 'SEO score & issues', 'pf.meta': 'Meta tag analysis',
+    'pf.og': 'Open Graph & schema', 'pf.json': 'JSON export', 'pf.cwv': 'Core Web Vitals',
+    'pf.pdf': 'PDF reports', 'pf.monitor': 'Scheduled monitoring',
+    'pf.unlimited': 'Unlimited analyses', 'pf.everything': 'Everything in Free',
+    'pf.cwvfull': 'Core Web Vitals (FCP, LCP, CLS)', 'pf.secaudit': 'Security & accessibility audit',
+    'pf.pdfexport': 'PDF report export', 'pf.share': 'Shareable public reports',
+    'pf.weekly': 'Weekly monitoring', 'pf.priority': 'Priority support',
+    'pf.everythingpro': 'Everything in Pro', 'pf.norecurring': 'No recurring fees',
+    'pf.allfuture': 'All future features', 'pf.daily': 'Daily monitoring',
+    'pf.api': 'API access (coming soon)', 'pf.early': 'Early access',
+
+    // Early adopter
+    'early.badge': 'Early Adopter Pricing — These prices will increase. Lock in your rate now.',
+
     // Footer
     'footer.copy': '© 2026 SEO Snapshot',
   },

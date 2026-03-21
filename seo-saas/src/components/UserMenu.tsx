@@ -1,5 +1,6 @@
 'use client';
 import { useState, useRef, useEffect } from 'react';
+import { useLocale } from '@/lib/i18n';
 import { useSession, signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { User, LogOut, CreditCard, Settings } from 'lucide-react';
@@ -19,6 +20,7 @@ export function UserMenu() {
 
   if (!session) return null;
 
+  const { t } = useLocale();
   const plan = session.user?.plan || 'free';
   const isPro = plan !== 'free';
   const initial = session.user?.name?.[0] || session.user?.email?.[0] || 'U';
@@ -46,11 +48,11 @@ export function UserMenu() {
           <div className="py-1">
             <Link href="/dashboard" onClick={() => setOpen(false)}
               className="flex items-center gap-2.5 px-4 py-2 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors duration-150">
-              <User className="w-4 h-4" /> Dashboard
+              <User className="w-4 h-4" /> {t('menu.dashboard')}
             </Link>
             <Link href="/pricing" onClick={() => setOpen(false)}
               className="flex items-center gap-2.5 px-4 py-2 text-sm text-white/60 hover:text-white hover:bg-white/[0.04] transition-colors duration-150">
-              <CreditCard className="w-4 h-4" /> {isPro ? 'Billing' : 'Upgrade'}
+              <CreditCard className="w-4 h-4" /> {t('menu.billing')}
             </Link>
           </div>
           <div className="border-t border-white/[0.04] pt-1">
@@ -58,7 +60,7 @@ export function UserMenu() {
               onClick={() => signOut({ callbackUrl: '/' })}
               className="flex items-center gap-2.5 px-4 py-2 text-sm text-red-400/70 hover:text-red-400 hover:bg-white/[0.04] transition-colors duration-150 w-full"
             >
-              <LogOut className="w-4 h-4" /> Sign out
+              <LogOut className="w-4 h-4" /> {t('menu.signout')}
             </button>
           </div>
         </div>

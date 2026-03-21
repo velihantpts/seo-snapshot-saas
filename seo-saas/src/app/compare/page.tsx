@@ -1,4 +1,6 @@
 'use client';
+'use client';
+import { useLocale } from '@/lib/i18n';
 import { useState } from 'react';
 import { ArrowLeftRight, Loader2, Search } from 'lucide-react';
 import { ScoreRing } from '@/components/ScoreRing';
@@ -17,6 +19,7 @@ interface CompareResult {
 }
 
 export default function ComparePage() {
+  const { t } = useLocale();
   const [url1, setUrl1] = useState('');
   const [url2, setUrl2] = useState('');
   const [result1, setResult1] = useState<CompareResult | null>(null);
@@ -58,8 +61,8 @@ export default function ComparePage() {
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <div className="text-center mb-10">
-          <h1 className="text-2xl font-medium tracking-tight mb-2">Compare Two URLs</h1>
-          <p className="text-white/40 text-sm">Side-by-side SEO comparison. See who wins.</p>
+          <h1 className="text-2xl font-medium tracking-tight mb-2">{t('compare.title')}</h1>
+          <p className="text-white/40 text-sm">{t('compare.desc')}</p>
         </div>
 
         {/* Input */}
@@ -74,7 +77,7 @@ export default function ComparePage() {
         </div>
 
         <button onClick={analyze} disabled={loading} className="btn-primary w-full py-3 text-sm mb-8 disabled:opacity-50">
-          {loading ? <><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Analyzing both sites...</> : <><Search className="w-4 h-4 inline mr-2" /> Compare</>}
+          {loading ? <><Loader2 className="w-4 h-4 animate-spin inline mr-2" /> Analyzing both sites...</> : <><Search className="w-4 h-4 inline mr-2" /> {t('compare.btn')}</>}
         </button>
 
         {error && <p className="text-red-400 text-sm text-center mb-6">{error}</p>}

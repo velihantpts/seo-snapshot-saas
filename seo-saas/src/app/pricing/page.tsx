@@ -31,29 +31,29 @@ export default function Pricing() {
       name: t('pricing.free'), price: '$0', period: '', description: t('pricing.free.desc'),
       cta: t('pricing.free.cta'), style: 'btn-ghost', href: '/',
       features: [
-        { text: '5 analyses per day', ok: true }, { text: 'SEO score & issues', ok: true },
-        { text: 'Meta tag analysis', ok: true }, { text: 'Open Graph & schema', ok: true },
-        { text: 'JSON export', ok: true }, { text: 'Core Web Vitals', ok: false },
-        { text: 'PDF reports', ok: false }, { text: 'Scheduled monitoring', ok: false },
+        { text: t('pf.5day'), ok: true }, { text: t('pf.score'), ok: true },
+        { text: t('pf.meta'), ok: true }, { text: t('pf.og'), ok: true },
+        { text: t('pf.json'), ok: true }, { text: t('pf.cwv'), ok: false },
+        { text: t('pf.pdf'), ok: false }, { text: t('pf.monitor'), ok: false },
       ],
     },
     {
       name: t('pricing.pro'), price: '$4.99', period: '/mo', description: t('pricing.pro.desc'),
       cta: t('pricing.pro.cta'), style: 'btn-primary', priceType: 'monthly', popular: true,
       features: [
-        { text: 'Unlimited analyses', ok: true }, { text: 'Everything in Free', ok: true },
-        { text: 'Core Web Vitals (FCP, LCP, CLS)', ok: true }, { text: 'Security & accessibility audit', ok: true },
-        { text: 'PDF report export', ok: true }, { text: 'Shareable public reports', ok: true },
-        { text: 'Weekly monitoring', ok: true }, { text: 'Priority support', ok: true },
+        { text: t('pf.unlimited'), ok: true }, { text: t('pf.everything'), ok: true },
+        { text: t('pf.cwvfull'), ok: true }, { text: t('pf.secaudit'), ok: true },
+        { text: t('pf.pdfexport'), ok: true }, { text: t('pf.share'), ok: true },
+        { text: t('pf.weekly'), ok: true }, { text: t('pf.priority'), ok: true },
       ],
     },
     {
       name: t('pricing.lifetime'), price: '$29.99', period: '', description: t('pricing.lifetime.desc'),
       cta: t('pricing.lifetime.cta'), style: 'lifetime', priceType: 'lifetime',
       features: [
-        { text: 'Everything in Pro', ok: true }, { text: 'No recurring fees', ok: true },
-        { text: 'All future features', ok: true }, { text: 'Daily monitoring', ok: true },
-        { text: 'API access (coming soon)', ok: true }, { text: 'Early access', ok: true },
+        { text: t('pf.everythingpro'), ok: true }, { text: t('pf.norecurring'), ok: true },
+        { text: t('pf.allfuture'), ok: true }, { text: t('pf.daily'), ok: true },
+        { text: t('pf.api'), ok: true }, { text: t('pf.early'), ok: true },
       ],
     },
   ];
@@ -69,7 +69,7 @@ export default function Pricing() {
           <p className="text-white/35 text-xs mt-3 opacity-0 animate-fade-in-up-delay-2">{t('pricing.trust')}</p>
           <div className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 opacity-0 animate-fade-in-up-delay-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-            <span className="text-emerald-400 text-xs font-medium">Early Adopter Pricing — These prices will increase. Lock in your rate now.</span>
+            <span className="text-emerald-400 text-xs font-medium">{t('early.badge')}</span>
           </div>
         </div>
 
