@@ -90,13 +90,14 @@ export default function Home() {
       {/* Hero */}
       <section className="relative z-10 pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-white/60 text-xs font-medium mb-8 opacity-0 animate-fade-in">
-            <Zap className="w-3 h-3 text-accent-400" /> {t('hero.badge')}
-          </div>
-
-          <h1 className="heading-display mb-6 opacity-0 animate-fade-in-up">
-            {t('hero.title1')}<br />
-            <span className="gradient-text">{t('hero.title2')}</span>
+          <h1 className="mb-6 opacity-0 animate-fade-in-up">
+            <span className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/[0.04] border border-white/[0.08] text-white/60 text-xs font-medium !font-normal !tracking-normal mb-8 mx-auto" style={{ fontSize: '0.75rem', fontWeight: 400, display: 'table', lineHeight: '1.5' }}>
+              <Zap className="w-3 h-3 text-accent-400" /> {t('hero.badge')}
+            </span>
+            <span className="heading-display block mt-6">
+              {t('hero.title1')}<br />
+              <span className="gradient-text">{t('hero.title2')}</span>
+            </span>
           </h1>
 
           <p className="text-base sm:text-lg text-white/50 max-w-xl mx-auto mb-10 sm:mb-12 leading-relaxed opacity-0 animate-fade-in-up-delay-1">
@@ -329,7 +330,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.06] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
-          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.110.0</span></span>
+          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.111.0</span></span>
           <div className="flex gap-4">
             <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
             <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>
