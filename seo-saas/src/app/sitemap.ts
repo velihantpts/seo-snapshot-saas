@@ -24,6 +24,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'how-to-improve-lighthouse-score',
     'meta-description-length-2026',
     'website-security-check-guide',
+    'technical-seo-audit-complete-guide',
+    'how-to-add-structured-data-json-ld',
+    'hreflang-tags-complete-guide',
+    'fix-render-blocking-resources-nextjs',
+    'open-graph-image-size-2026',
+    'seo-score-checker-free',
+    'content-depth-seo-guide',
+    'website-speed-optimization-guide',
+    'keyword-cannibalization-fix',
   ];
 
   return [

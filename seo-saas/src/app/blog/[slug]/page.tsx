@@ -1160,6 +1160,995 @@ A: HTTPS is a confirmed Google ranking factor. Other headers improve trust but a
 **Q: How do I add security headers on Cloudflare?**
 A: Cloudflare → Rules → Transform Rules → Modify Response Header. Add each header as a static value.`,
   },
+  'technical-seo-audit-complete-guide': {
+    title: 'Technical SEO Audit: The Complete 2026 Guide',
+    content: `## What Is a Technical SEO Audit?
+
+A technical SEO audit examines the infrastructure of your website — how search engines crawl, index, and render your pages. Unlike content SEO (keywords, topics), technical SEO ensures Google can actually access and understand your site.
+
+## Why Technical SEO Matters
+
+Google crawls billions of pages daily. If your site has technical issues, Google may:
+- **Skip your pages** entirely (crawl budget waste)
+- **Index the wrong version** (duplicate content)
+- **Rank you lower** due to poor performance
+- **Deindex pages** accidentally (noindex, robots.txt block)
+
+## The 10-Step Technical SEO Audit
+
+### Step 1: Crawlability
+
+Can Google access all important pages?
+
+**Check:**
+- robots.txt exists and allows important pages
+- No accidental noindex tags
+- Sitemap.xml lists all important URLs
+- No orphan pages (pages with no internal links)
+
+**Tool:** [SEO Snapshot](/) checks robots.txt, sitemap, noindex, and sitemap-robots conflicts automatically.
+
+### Step 2: Indexability
+
+Is Google actually indexing your pages?
+
+**Check:**
+- Search \`site:yourdomain.com\` in Google
+- Google Search Console → Index Coverage
+- No canonical pointing to wrong URL
+- No duplicate title/description tags
+
+### Step 3: Site Architecture
+
+How deep are your pages?
+
+**Best practice:** Every important page should be reachable within 3 clicks from the homepage.
+
+\`\`\`
+Homepage (depth 0)
+├── /products (depth 1)
+│   ├── /products/shoes (depth 2)
+│   │   └── /products/shoes/nike-air (depth 3) ← maximum
+\`\`\`
+
+### Step 4: Page Speed
+
+Core Web Vitals are confirmed ranking factors:
+
+| Metric | Good | Needs Work | Poor |
+|--------|------|------------|------|
+| LCP | < 2.5s | 2.5-4s | > 4s |
+| INP | < 200ms | 200-500ms | > 500ms |
+| CLS | < 0.1 | 0.1-0.25 | > 0.25 |
+
+**Quick wins:**
+1. Enable gzip/brotli compression
+2. Add Cache-Control headers
+3. Lazy load images
+4. Defer non-critical JavaScript
+
+### Step 5: Mobile Friendliness
+
+Google uses mobile-first indexing — your mobile version is what gets ranked.
+
+**Check:**
+- Viewport meta tag present
+- No horizontal scrolling
+- Tap targets at least 48x48px
+- Text readable without zooming
+
+### Step 6: HTTPS & Security
+
+HTTPS is a confirmed ranking factor.
+
+**Check:**
+- All pages load over HTTPS
+- No mixed content (HTTP resources on HTTPS pages)
+- HSTS header configured
+- Security grade A or higher
+
+[SEO Snapshot](/) gives you a security grade from A+ to F with exact fix code for every missing header.
+
+### Step 7: Structured Data
+
+Schema markup enables rich results in Google.
+
+**Check:**
+- JSON-LD structured data present
+- Valid schema (no errors)
+- Appropriate type (Article, Product, FAQ, etc.)
+- Required fields filled
+
+### Step 8: Internal Linking
+
+Internal links distribute ranking power across your site.
+
+**Check:**
+- No broken internal links
+- No orphan pages
+- Descriptive anchor text (not "click here")
+- Important pages get more internal links
+
+### Step 9: Redirects
+
+**Check:**
+- No redirect chains (A→B→C, should be A→C)
+- No redirect loops
+- 301 for permanent changes (not 302)
+- Old URLs redirect to new ones
+
+### Step 10: International SEO
+
+If you serve multiple languages:
+
+**Check:**
+- Hreflang tags present
+- x-default fallback defined
+- Self-referencing hreflang
+- Valid language codes
+
+## Automated Audit
+
+Run all these checks in seconds with [SEO Snapshot](/) — 123 automated checks with copy-paste fix code for every issue found.
+
+## FAQ
+
+**Q: How often should I do a technical SEO audit?**
+A: Monthly for active sites. After every major update or redesign.
+
+**Q: What's the most common technical SEO issue?**
+A: Missing or duplicate meta descriptions, followed by missing alt text and slow page speed.
+
+**Q: Can I do a technical SEO audit myself?**
+A: Yes. Use free tools like SEO Snapshot, Google Search Console, and Lighthouse. For enterprise sites, consider Screaming Frog or Semrush.`,
+  },
+  'how-to-add-structured-data-json-ld': {
+    title: 'How to Add JSON-LD Structured Data (With Copy-Paste Examples)',
+    content: `## What Is JSON-LD?
+
+JSON-LD (JavaScript Object Notation for Linked Data) is Google's preferred format for structured data. It tells search engines what your page is about in a machine-readable way.
+
+## Why Add Structured Data?
+
+Pages with structured data can show **rich results** in Google:
+- ⭐ Star ratings
+- 📋 FAQ accordions
+- 🍳 Recipe cards
+- 📅 Event dates
+- 💰 Product prices
+- 🔍 Sitelinks search box
+
+Rich results get 20-30% higher click-through rates.
+
+## Copy-Paste Templates
+
+### WebPage (Any Page)
+
+\`\`\`
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "Your Page Title",
+  "description": "Your page description",
+  "url": "https://yoursite.com/page"
+}
+</script>
+\`\`\`
+
+### Article (Blog Post)
+
+\`\`\`
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Your Article Title",
+  "description": "Article summary",
+  "author": {
+    "@type": "Person",
+    "name": "Author Name"
+  },
+  "datePublished": "2026-03-22",
+  "dateModified": "2026-03-22",
+  "publisher": {
+    "@type": "Organization",
+    "name": "Your Site Name"
+  }
+}
+</script>
+\`\`\`
+
+### FAQ Page
+
+\`\`\`
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is SEO?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SEO (Search Engine Optimization) is the practice of improving your website to increase visibility in search results."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How long does SEO take?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "SEO typically takes 3-6 months to see significant results, depending on competition and effort."
+      }
+    }
+  ]
+}
+</script>
+\`\`\`
+
+### Product
+
+\`\`\`
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Product Name",
+  "description": "Product description",
+  "offers": {
+    "@type": "Offer",
+    "price": "29.99",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+\`\`\`
+
+### Organization
+
+\`\`\`
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Your Company",
+  "url": "https://yoursite.com",
+  "logo": "https://yoursite.com/logo.png",
+  "sameAs": [
+    "https://twitter.com/yourhandle",
+    "https://linkedin.com/company/yourcompany"
+  ]
+}
+</script>
+\`\`\`
+
+## Where to Add JSON-LD
+
+Add the \`<script>\` tag in your HTML \`<head>\` or at the end of \`<body>\`. Google reads it regardless of position.
+
+**In Next.js:**
+\`\`\`
+// app/layout.tsx
+<script type="application/ld+json"
+  dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+/>
+\`\`\`
+
+**In WordPress:**
+Use Yoast SEO or Rank Math plugin — they auto-generate schema.
+
+## Validation
+
+- [Google Rich Results Test](https://search.google.com/test/rich-results)
+- [Schema.org Validator](https://validator.schema.org/)
+- [SEO Snapshot](/) — validates JSON-LD and checks required fields
+
+## FAQ
+
+**Q: Does structured data improve rankings?**
+A: Not directly. But rich results increase CTR, which indirectly helps rankings.
+
+**Q: Can I have multiple JSON-LD scripts on one page?**
+A: Yes. Google recommends one script per entity but supports multiple.
+
+**Q: What happens if my schema has errors?**
+A: Google ignores invalid schema. It won't hurt rankings but you miss rich result opportunities.`,
+  },
+  'hreflang-tags-complete-guide': {
+    title: 'Hreflang Tags: Complete Guide for Multi-Language Sites',
+    content: `## What Are Hreflang Tags?
+
+Hreflang tags tell Google which language and regional version of a page to show to users. Without them, Google might show the English version to a French user, or the US version to a UK user.
+
+## When You Need Hreflang
+
+You need hreflang if:
+- Your site has pages in **multiple languages** (e.g., English + Spanish)
+- You have **regional variations** of the same language (e.g., en-US vs en-GB)
+- You have a **default version** for users whose language isn't specifically targeted
+
+## Basic Syntax
+
+\`\`\`
+<link rel="alternate" hreflang="en" href="https://example.com/page">
+<link rel="alternate" hreflang="es" href="https://example.com/es/page">
+<link rel="alternate" hreflang="fr" href="https://example.com/fr/page">
+<link rel="alternate" hreflang="x-default" href="https://example.com/page">
+\`\`\`
+
+## The 5 Rules of Hreflang
+
+### Rule 1: Always Include x-default
+
+x-default is the fallback for users whose language isn't specifically targeted:
+
+\`\`\`
+<link rel="alternate" hreflang="x-default" href="https://example.com/">
+\`\`\`
+
+### Rule 2: Self-Reference
+
+Every page must include a hreflang pointing to itself:
+
+\`\`\`
+<!-- On the English page: -->
+<link rel="alternate" hreflang="en" href="https://example.com/page">
+\`\`\`
+
+### Rule 3: Reciprocal Links
+
+If page A links to page B, page B must link back to A:
+
+\`\`\`
+<!-- On English page: -->
+<link rel="alternate" hreflang="es" href="https://example.com/es/page">
+
+<!-- On Spanish page: -->
+<link rel="alternate" hreflang="en" href="https://example.com/page">
+\`\`\`
+
+### Rule 4: Valid Language Codes
+
+Use ISO 639-1 codes:
+- ✅ en, es, fr, de, tr, ja, zh
+- ✅ en-US, en-GB, pt-BR, zh-TW
+- ❌ english, eng, en_US
+
+### Rule 5: Absolute URLs
+
+Always use full URLs, not relative:
+- ✅ https://example.com/page
+- ❌ /page
+
+## Implementation Methods
+
+### Method 1: HTML Head (Recommended)
+\`\`\`
+<head>
+  <link rel="alternate" hreflang="en" href="https://example.com/">
+  <link rel="alternate" hreflang="tr" href="https://example.com/tr/">
+  <link rel="alternate" hreflang="x-default" href="https://example.com/">
+</head>
+\`\`\`
+
+### Method 2: HTTP Header
+\`\`\`
+Link: <https://example.com/>; rel="alternate"; hreflang="en",
+      <https://example.com/tr/>; rel="alternate"; hreflang="tr"
+\`\`\`
+
+### Method 3: Sitemap
+\`\`\`
+<url>
+  <loc>https://example.com/</loc>
+  <xhtml:link rel="alternate" hreflang="en" href="https://example.com/"/>
+  <xhtml:link rel="alternate" hreflang="tr" href="https://example.com/tr/"/>
+</url>
+\`\`\`
+
+## Common Mistakes
+
+1. **Missing x-default** — Google doesn't know which is the fallback
+2. **Missing self-reference** — breaks the reciprocal chain
+3. **Invalid language codes** — "english" instead of "en"
+4. **Relative URLs** — must be absolute
+5. **One-way links** — both pages must reference each other
+
+## Checking Your Hreflang
+
+[SEO Snapshot](/) automatically checks:
+- x-default presence
+- Self-referencing hreflang
+- Valid ISO 639-1 language codes
+- Hreflang tag count and languages
+
+## FAQ
+
+**Q: Does hreflang affect rankings?**
+A: It doesn't boost rankings but ensures the right page shows to the right user, improving CTR and reducing bounce rate.
+
+**Q: Can I use hreflang with a single-language site?**
+A: Generally not needed. But if you target specific regions (en-US vs en-GB), it helps.
+
+**Q: What if I only have 2 languages?**
+A: You still need hreflang. Include both languages + x-default on every page.`,
+  },
+  'fix-render-blocking-resources-nextjs': {
+    title: 'How to Fix Render-Blocking Resources in Next.js',
+    content: `## What Are Render-Blocking Resources?
+
+Render-blocking resources are CSS and JavaScript files that prevent the browser from displaying the page until they're fully loaded. They're one of the most common Lighthouse warnings.
+
+## How Next.js Handles This
+
+Next.js automatically optimizes most resources:
+- **Code splitting** — only loads JS needed for the current page
+- **Automatic CSS chunking** — splits CSS per page
+- **Script component** — controls loading priority
+
+But you can still have issues with:
+- Third-party scripts (analytics, chat widgets)
+- Custom fonts without font-display
+- Large CSS libraries loaded globally
+
+## Fix 1: Use Next.js Script Component
+
+\`\`\`
+import Script from 'next/script';
+
+// BAD — blocks rendering
+<script src="https://analytics.example.com/script.js"></script>
+
+// GOOD — loads after page is interactive
+<Script
+  src="https://analytics.example.com/script.js"
+  strategy="afterInteractive"
+/>
+
+// GOOD — loads when browser is idle
+<Script
+  src="https://chat-widget.example.com/widget.js"
+  strategy="lazyOnload"
+/>
+\`\`\`
+
+### Script Strategies:
+- **beforeInteractive** — loads before hydration (rarely needed)
+- **afterInteractive** — loads immediately after hydration (default)
+- **lazyOnload** — loads during idle time (best for non-critical)
+
+## Fix 2: Optimize Fonts
+
+\`\`\`
+// next.config.js
+module.exports = {
+  optimizeFonts: true, // default in Next.js 13+
+};
+
+// Use next/font (auto-optimizes, no layout shift)
+import { Inter } from 'next/font/google';
+const inter = Inter({ subsets: ['latin'] });
+\`\`\`
+
+## Fix 3: Dynamic Imports
+
+\`\`\`
+import dynamic from 'next/dynamic';
+
+// Heavy component loaded only when needed
+const HeavyChart = dynamic(() => import('./Chart'), {
+  loading: () => <div>Loading chart...</div>,
+  ssr: false, // skip server-side render
+});
+\`\`\`
+
+## Fix 4: CSS Optimization
+
+\`\`\`
+// Move component-specific CSS to CSS Modules
+// styles.module.css
+.card { ... }
+
+// Component
+import styles from './styles.module.css';
+<div className={styles.card}>...</div>
+\`\`\`
+
+## Fix 5: Preconnect to External Domains
+
+\`\`\`
+// app/layout.tsx
+<head>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+</head>
+\`\`\`
+
+## Measuring Impact
+
+Use [SEO Snapshot](/) to check:
+- Total render-blocking scripts count
+- Inline JavaScript size
+- Font-display usage
+- Preconnect/DNS-prefetch hints
+
+## FAQ
+
+**Q: Does Next.js automatically fix render-blocking?**
+A: Mostly yes, for your own code. Third-party scripts need manual optimization.
+
+**Q: What about CSS-in-JS libraries?**
+A: Tailwind CSS, CSS Modules, and styled-components are all fine with Next.js. Avoid importing large CSS files globally.`,
+  },
+  'open-graph-image-size-2026': {
+    title: 'Open Graph Image Size and Best Practices 2026',
+    content: `## Recommended OG Image Size
+
+**1200 x 630 pixels** — this is the standard that works across all platforms.
+
+## Size Requirements by Platform
+
+| Platform | Recommended | Minimum | Aspect Ratio |
+|----------|------------|---------|-------------|
+| Facebook | 1200x630 | 600x315 | 1.91:1 |
+| Twitter | 1200x628 | 600x314 | ~1.91:1 |
+| LinkedIn | 1200x627 | 200x200 | 1.91:1 |
+| WhatsApp | 1200x630 | 300x200 | 1.91:1 |
+| Slack | 1200x630 | 250x250 | 1.91:1 |
+| Discord | 1200x630 | Varies | 1.91:1 |
+
+## The Essential OG Tags
+
+\`\`\`
+<meta property="og:title" content="Your Page Title">
+<meta property="og:description" content="A compelling description under 200 chars">
+<meta property="og:image" content="https://yoursite.com/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://yoursite.com/page">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Your Site Name">
+\`\`\`
+
+## Best Practices
+
+### Do:
+- Use 1200x630px PNG or JPG
+- Keep file size under 300KB (compress with Squoosh)
+- Include your brand name/logo
+- Use high contrast text (readable at small sizes)
+- Test with Facebook Sharing Debugger
+
+### Don't:
+- Use text-heavy images (gets cut off on mobile)
+- Rely on OG image alone (always have og:title too)
+- Use SVG (not supported by most platforms)
+- Forget og:image:width and og:image:height
+- Use HTTP URLs (must be HTTPS)
+
+## OG Image in Next.js
+
+\`\`\`
+// app/layout.tsx
+export const metadata = {
+  openGraph: {
+    images: [{
+      url: '/og-image.png',
+      width: 1200,
+      height: 630,
+      alt: 'Your Site Description',
+    }],
+  },
+};
+\`\`\`
+
+## Dynamic OG Images
+
+Generate OG images per page using @vercel/og:
+
+\`\`\`
+// app/api/og/route.tsx
+import { ImageResponse } from '@vercel/og';
+
+export async function GET(request) {
+  return new ImageResponse(
+    <div style={{ fontSize: 48, background: '#000', color: '#fff', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      Your Dynamic Title
+    </div>,
+    { width: 1200, height: 630 }
+  );
+}
+\`\`\`
+
+## Checking Your OG Tags
+
+[SEO Snapshot](/) checks:
+- All 6 OG tags present
+- og:image URL reachable (HEAD request)
+- og:image completeness score
+
+## FAQ
+
+**Q: Does og:image affect SEO?**
+A: Not directly. But good OG images increase click-through from social media, which drives traffic.
+
+**Q: Can I use a different image for Twitter?**
+A: Yes. Add twitter:image separately. If not set, Twitter falls back to og:image.
+
+**Q: What format should I use?**
+A: PNG for graphics/text, JPG for photos. Keep under 300KB.`,
+  },
+  'seo-score-checker-free': {
+    title: 'Free SEO Score Checker: Analyze Any Website in Seconds',
+    content: `## What Is an SEO Score?
+
+An SEO score is a number from 0-100 that represents how well-optimized your website is for search engines. It's calculated by running automated checks against SEO best practices.
+
+## What We Check (123 Checks)
+
+[SEO Snapshot](/) runs **123 individual checks** across 7 categories:
+
+### Meta Tags (25% of score)
+- Title tag present, length, pixel width
+- Meta description present, length, pixel width
+- Canonical URL and deep analysis
+- Viewport, lang, charset, favicon, DOCTYPE
+
+### Content Quality (18% of score)
+- Word count and readability
+- Keyword placement (title, H1, URL, description)
+- E-E-A-T signals (author, about page, privacy, contact)
+- Heading diversity and content depth
+
+### Technical SEO (17% of score)
+- HTTPS enforcement
+- Robots.txt and sitemap.xml
+- Redirect chain and loop detection
+- URL structure analysis
+- Hreflang validation
+
+### Performance (15% of score)
+- Response time (TTFB)
+- Compression (gzip/brotli)
+- Render-blocking resources
+- Lazy loading and image optimization
+- Cache-Control headers
+- Page weight and request count
+
+### Security (10% of score)
+- HTTPS (confirmed ranking factor)
+- 7 security headers (HSTS, CSP, etc.)
+- Cookie security flags
+- Mixed content detection
+- Security grade A+ to F
+
+### Social & Schema (8% of score)
+- Open Graph tags (6 tags checked)
+- Twitter Card tags
+- JSON-LD structured data validation
+
+### Accessibility (7% of score)
+- Form labels on inputs
+- Alt text on images
+- Heading hierarchy
+- Language attribute
+
+## Score Ranges
+
+| Range | Rating | Meaning |
+|-------|--------|---------|
+| 90-100 | Excellent | Top-tier optimization |
+| 70-89 | Good | Solid foundation, minor improvements needed |
+| 50-69 | Needs Work | Significant issues hurting rankings |
+| 0-49 | Poor | Major problems, likely not ranking |
+
+## What Makes Us Different
+
+Unlike other free SEO checkers:
+
+1. **Copy-paste fix code** — not just warnings, actual HTML/config to implement
+2. **Security grade A+ to F** — no other SEO tool does this
+3. **E-E-A-T signal detection** — checks author info, about page, trust signals
+4. **Tech stack detection** — WordPress, Next.js, Shopify specific advice
+5. **Impact scores** — know which fix gives you the most points
+
+## How to Use
+
+1. Go to [seosnapshot.dev](/)
+2. Enter any URL
+3. Wait 5-15 seconds
+4. Review your score and issues
+5. Copy fix code for each issue
+6. Implement and re-analyze
+
+No signup required. 5 free analyses per day.
+
+## FAQ
+
+**Q: How accurate is the SEO score?**
+A: Our score measures on-page technical SEO — what you can control. It doesn't include backlinks or domain authority (requires external data).
+
+**Q: What score do I need to rank on Google?**
+A: There's no magic number. But fixing critical issues (score below 50) is essential. Most top-ranking sites score 80+.
+
+**Q: How often should I check my SEO score?**
+A: Monthly, or after any significant website change. Set up monitoring for automatic weekly checks.
+
+Try it now — [Analyze your site free](/).`,
+  },
+  'content-depth-seo-guide': {
+    title: 'Content Depth in SEO: Why Word Count Alone Isn\'t Enough',
+    content: `## The Word Count Myth
+
+Many SEO guides say "write 2000+ words to rank." This is misleading. Google doesn't rank pages by word count — it ranks by **content quality and relevance**.
+
+A 500-word page that perfectly answers a query will outrank a 3000-word page that rambles.
+
+## What Is Content Depth?
+
+Content depth measures how thoroughly a page covers its topic. It's a combination of:
+
+1. **Topic breadth** — how many subtopics are covered
+2. **Structural quality** — headings, lists, tables, images
+3. **Readability** — sentence length, vocabulary level
+4. **Supporting evidence** — examples, data, citations
+5. **User engagement signals** — bounce rate, time on page
+
+## How We Measure Content Depth
+
+[SEO Snapshot](/) calculates a **Content Depth Score** (0-100) based on 7 factors:
+
+| Factor | What We Check |
+|--------|--------------|
+| H2 headings | At least 2 for topic breadth |
+| H3 headings | At least 1 for subtopic depth |
+| Lists (ul/ol) | Present for scannable content |
+| Images | At least 1 for visual context |
+| Word count | 500+ for meaningful depth |
+| Paragraphs | 3+ for structured argument |
+| Tables/FAQ | Present for structured data |
+
+## Content Depth vs Word Count
+
+| Metric | Good Content | Bad Content |
+|--------|-------------|-------------|
+| Word count | 800-1500 | 300 OR 5000 (padded) |
+| H2 headings | 4-6 (covering subtopics) | 0-1 (wall of text) |
+| Lists | Yes (key points summarized) | No (buried in paragraphs) |
+| Images | Relevant screenshots/diagrams | Stock photos or none |
+| FAQ section | Answers real questions | No user questions addressed |
+| Internal links | Links to related content | No internal linking |
+
+## How to Improve Content Depth
+
+### 1. Cover Related Questions
+Use Google's "People Also Ask" for subtopic ideas:
+- Search your target keyword
+- Note the PAA questions
+- Add H2 sections answering each one
+
+### 2. Add Structured Elements
+\`\`\`
+<h2>Main Topic</h2>
+<p>Introduction paragraph...</p>
+
+<h3>Subtopic A</h3>
+<p>Detailed explanation...</p>
+<ul>
+  <li>Key point 1</li>
+  <li>Key point 2</li>
+</ul>
+
+<h3>Subtopic B</h3>
+<table>
+  <tr><th>Comparison</th><th>Option A</th><th>Option B</th></tr>
+  ...
+</table>
+\`\`\`
+
+### 3. Add FAQ Section
+FAQ sections can trigger Google's FAQ rich snippet:
+
+\`\`\`
+<h2>Frequently Asked Questions</h2>
+<h3>Q: What is content depth?</h3>
+<p>A: Content depth measures how thoroughly...</p>
+\`\`\`
+
+## FAQ
+
+**Q: Is longer content always better?**
+A: No. Match content length to search intent. "What time is it in Tokyo?" needs 1 sentence, not 2000 words.
+
+**Q: Does Google measure content depth?**
+A: Not directly, but Google's Helpful Content system rewards comprehensive, well-structured content.
+
+**Q: How do I know if my content is deep enough?**
+A: Use [SEO Snapshot](/) — our Content Depth Score tells you exactly what's missing.`,
+  },
+  'website-speed-optimization-guide': {
+    title: 'Website Speed Optimization: 15 Proven Techniques',
+    content: `## Why Speed Matters
+
+Google confirmed page speed as a ranking factor. Faster sites also convert better:
+- 1 second delay = 7% less conversions
+- 53% of mobile users leave if page takes 3+ seconds
+- Core Web Vitals are a ranking signal
+
+## 15 Speed Optimization Techniques
+
+### Server-Side (1-5)
+
+**1. Enable Compression**
+\`\`\`
+# Nginx
+gzip on;
+gzip_vary on;
+gzip_min_length 256;
+gzip_types text/plain text/css application/json application/javascript text/xml;
+\`\`\`
+
+**2. Set Cache-Control Headers**
+\`\`\`
+# Static assets — cache for 1 year
+location ~* \\.(css|js|jpg|png|svg|woff2)$ {
+    add_header Cache-Control "public, max-age=31536000, immutable";
+}
+\`\`\`
+
+**3. Use a CDN**
+Cloudflare (free) or AWS CloudFront. Serves content from edge servers closest to users.
+
+**4. Upgrade to HTTP/2 or HTTP/3**
+HTTP/2 allows multiplexing (multiple files over one connection). Most modern servers support it.
+
+**5. Optimize Time to First Byte (TTFB)**
+- Use server-side caching (Redis, Varnish)
+- Optimize database queries
+- Use static site generation when possible
+
+### Frontend (6-10)
+
+**6. Lazy Load Images**
+\`\`\`
+<img src="photo.jpg" loading="lazy" alt="Description" width="800" height="600">
+\`\`\`
+
+**7. Use Modern Image Formats**
+\`\`\`
+<picture>
+  <source srcset="photo.avif" type="image/avif">
+  <source srcset="photo.webp" type="image/webp">
+  <img src="photo.jpg" alt="Description">
+</picture>
+\`\`\`
+
+**8. Defer Non-Critical JavaScript**
+\`\`\`
+<script src="analytics.js" defer></script>
+<script src="chat-widget.js" async></script>
+\`\`\`
+
+**9. Inline Critical CSS**
+Extract above-the-fold CSS and inline it in the HTML head. Load remaining CSS asynchronously.
+
+**10. Preconnect to Third-Party Domains**
+\`\`\`
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="dns-prefetch" href="https://www.google-analytics.com">
+\`\`\`
+
+### Content (11-15)
+
+**11. Optimize Font Loading**
+\`\`\`
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter.woff2') format('woff2');
+  font-display: swap;
+}
+\`\`\`
+
+**12. Remove Unused CSS/JS**
+Use Chrome DevTools Coverage tab to find unused code.
+
+**13. Minimize DOM Size**
+Keep under 1500 DOM elements. Deep nesting slows rendering.
+
+**14. Avoid Layout Shifts (CLS)**
+Always set width/height on images and embeds.
+
+**15. Reduce Third-Party Scripts**
+Each third-party script adds 50-200ms. Audit and remove unnecessary ones.
+
+## Measuring Speed
+
+Use [SEO Snapshot](/) to check:
+- Response time (TTFB)
+- Compression status
+- Cache-Control headers
+- Render-blocking resources
+- Lazy loading usage
+- Page weight estimation
+- Request count
+- Third-party script detection
+
+## FAQ
+
+**Q: What's a good page load time?**
+A: Under 3 seconds. Aim for under 2 seconds for competitive advantage.
+
+**Q: Does page speed directly affect rankings?**
+A: Yes. Core Web Vitals (LCP, INP, CLS) are confirmed ranking factors.
+
+**Q: Which optimization has the biggest impact?**
+A: Compression + caching. They're server-side changes that affect every page instantly.`,
+  },
+  'keyword-cannibalization-fix': {
+    title: 'Keyword Cannibalization: How to Find and Fix It',
+    content: `## What Is Keyword Cannibalization?
+
+Keyword cannibalization happens when **multiple pages on your site target the same keyword**. Instead of one strong page ranking, Google gets confused and splits ranking power between them — often resulting in neither page ranking well.
+
+## How to Detect It
+
+### Method 1: Google Search
+Search \`site:yoursite.com "target keyword"\` — if multiple pages appear, you have cannibalization.
+
+### Method 2: Google Search Console
+Go to Performance → Filter by query → Check which pages rank for the same keyword. If multiple pages appear, they're cannibalizing each other.
+
+### Method 3: SEO Tools
+Use [SEO Snapshot](/) to analyze individual pages and check:
+- Keyword density per page
+- Title tag keyword usage
+- H1 keyword usage
+
+## How to Fix It
+
+### Option 1: Consolidate (Best)
+Merge competing pages into one comprehensive page:
+1. Pick the stronger page (more backlinks, better content)
+2. Merge content from the weaker page
+3. 301 redirect the weaker page to the stronger one
+
+### Option 2: Differentiate
+Give each page a unique angle:
+- Page A: "Best SEO Tools for Beginners" (informational)
+- Page B: "SEO Tool Pricing Comparison" (commercial)
+
+### Option 3: Canonical Tag
+If you need both pages, add canonical to point to the primary:
+\`\`\`
+<link rel="canonical" href="https://yoursite.com/primary-page">
+\`\`\`
+
+### Option 4: Noindex
+If one page is low-value, noindex it:
+\`\`\`
+<meta name="robots" content="noindex, follow">
+\`\`\`
+
+## Prevention
+
+1. **Keyword map** — assign one primary keyword per page
+2. **Check before publishing** — search your site for the keyword first
+3. **Use distinct titles** — never use the same keyword in two title tags
+4. **Internal linking** — link from supporting pages to the main page
+
+## FAQ
+
+**Q: Can cannibalization affect my entire site?**
+A: Severe cases can. If Google can't determine your best page for a topic, it may lower trust in your entire domain for that topic.
+
+**Q: How do I know which page to keep?**
+A: Check Google Search Console — the page with more impressions and backlinks is usually the stronger one.
+
+Check your pages for keyword overlap with [SEO Snapshot](/) — we detect keyword density, title/H1 keyword placement, and duplicate content signals.`,
+  },
 };
 
 export default function BlogPost() {
