@@ -478,6 +478,31 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   });
   if (linksWithoutTitle > 5) issues.push({ severity: 'warning', problem: `${linksWithoutTitle} links without accessible text or title`, fix: 'Add title or aria-label to image-only links for screen readers.', category: 'Content' });
 
+  // ===== COMPRESSION CHECK =====
+  const contentEncoding = response.headers.get('content-encoding') || '';
+  const hasCompression = contentEncoding.includes('gzip') || contentEncoding.includes('br') || contentEncoding.includes('deflate');
+  if (!hasCompression) issues.push({ severity: 'warning', problem: 'No gzip/brotli compression detected', fix: 'Enable gzip or brotli compression. Reduces page size by 60-80%.', category: 'Performance' });
+
+  // ===== CACHE-CONTROL CHECK =====
+  const cacheControl = response.headers.get('cache-control') || '';
+  if (!cacheControl) issues.push({ severity: 'warning', problem: 'No Cache-Control header', fix: 'Add Cache-Control for static assets: public, max-age=31536000, immutable', category: 'Performance' });
+
+  // ===== X-POWERED-BY =====
+  const xPoweredBy = response.headers.get('x-powered-by') || '';
+  if (xPoweredBy) issues.push({ severity: 'warning', problem: `X-Powered-By header exposes: "${xPoweredBy}"`, fix: 'Remove X-Powered-By header — it reveals server technology to attackers.', category: 'Security' });
+
+  // ===== PAGE WEIGHT =====
+  const estimatedPageWeight = Math.round(html.length / 1024) + (scripts.length * 30) + (stylesheets * 15);
+  if (estimatedPageWeight > 3000) issues.push({ severity: 'warning', problem: `Estimated page weight: ${estimatedPageWeight} KB`, fix: 'Reduce total page weight. Compress images, minify CSS/JS, remove unused code.', category: 'Performance' });
+
+  // ===== TOTAL REQUESTS =====
+  const totalRequests = scripts.length + stylesheets + imgs.length + iframeCount;
+  if (totalRequests > 80) issues.push({ severity: 'warning', problem: `High request count: ${totalRequests} requests`, fix: 'Reduce HTTP requests. Combine CSS/JS files, use image sprites or SVG, lazy-load below-fold resources.', category: 'Performance' });
+
+  // ===== PRECONNECT/DNS-PREFETCH =====
+  const preconnects = $('link[rel="preconnect"]').length;
+  const dnsPrefetch = $('link[rel="dns-prefetch"]').length;
+
   // ===== OPEN GRAPH COMPLETENESS SCORE =====
   const ogCompleteness = Object.values(og).filter(Boolean).length;
   if (ogCompleteness > 0 && ogCompleteness < 4) {
@@ -495,5 +520,9 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
     accessibility: { score: a11yScore, issues: a11yIssues },
     contentQuality: { readabilityScore: readScore, readabilityGrade: readGrade, avgSentenceLength: avgSentLen, totalSentences: allSentences.length, longSentences: longSent },
     linkUrls, kwInTitle, kwInH1, isHttps, noLabel, missingAlt, skippedH, readScore, badFontDisplay, titlePixelWidth, urlPath, textToHtmlRatio, inlineScriptKB, noSriCount: 0, titleLen, descLen, titleTags: $('title').length, descTags: $('meta[name="description"]').length,
+    // New technical data
+    serverInfo: { contentEncoding, cacheControl, xPoweredBy, server: response.headers.get('server') || '' },
+    pageWeight: { estimated: estimatedPageWeight, totalRequests, iframeCount, preconnects, dnsPrefetch, externalDomains: externalDomains.length },
+    socialLinks: foundSocial, exposedEmails, noopenerMissing, foundDeprecated, metaRefresh: !!metaRefresh,
   };
 }
