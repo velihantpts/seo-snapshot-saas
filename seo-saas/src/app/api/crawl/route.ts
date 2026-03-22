@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { validateTargetURL } from '@/lib/ssrf-protection';
 import { logger } from '@/lib/logger';
+import { crawlQueue } from '@/lib/queue';
 import * as cheerio from 'cheerio';
 
 export async function POST(req: Request) {
@@ -97,13 +98,25 @@ export async function POST(req: Request) {
     },
   });
 
-  logger.info('crawl.started', { userId, domain, totalUrls: urls.length, crawlJobId: crawlJob.id });
+  // Add to BullMQ queue instead of processing synchronously
+  await crawlQueue.add('crawl-site', {
+    crawlJobId: crawlJob.id,
+    urls,
+    userId,
+  }, {
+    attempts: 2,
+    backoff: { type: 'exponential', delay: 5000 },
+    removeOnComplete: { age: 86400 },
+    removeOnFail: { age: 604800 },
+  });
+
+  logger.info('crawl.queued', { userId, domain, totalUrls: urls.length, crawlJobId: crawlJob.id });
 
   return NextResponse.json({
     id: crawlJob.id,
     domain,
     totalUrls: urls.length,
-    urls,
+    status: 'queued',
   });
 }
 

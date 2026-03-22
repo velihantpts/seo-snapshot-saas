@@ -1,4 +1,4 @@
-# Multi-stage Docker build for Next.js standalone
+# Multi-stage Docker build for Next.js standalone + PostgreSQL
 FROM node:20-alpine AS base
 RUN apk add --no-cache openssl
 
@@ -14,9 +14,9 @@ FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-# Create empty SQLite database during build
-ENV DATABASE_URL="file:/app/build.db"
-RUN npx prisma generate && npx prisma db push && npm run build
+# Use a dummy DATABASE_URL for build time (prisma generate only)
+ENV DATABASE_URL="postgresql://dummy:dummy@localhost:5432/dummy?schema=public"
+RUN npx prisma generate && npm run build
 
 # --- Production ---
 FROM base AS runner
@@ -31,19 +31,19 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/prisma ./prisma
-COPY --from=builder /app/build.db /app/seed.db
 
 # Copy prisma engine for runtime
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
-RUN mkdir -p /app/data && chown nextjs:nodejs /app/data
-ENV DATABASE_URL="file:/app/data/prod.db"
+# Copy ioredis + bullmq for runtime (needed by queue/cache/rate-limit)
+COPY --from=builder /app/node_modules/ioredis ./node_modules/ioredis
+COPY --from=builder /app/node_modules/bullmq ./node_modules/bullmq
 
 USER nextjs
 EXPOSE 3000
 ENV PORT=3000
 ENV HOSTNAME="0.0.0.0"
 
-# Copy seed DB if prod.db doesn't exist, then start
-CMD ["sh", "-c", "if [ ! -f /app/data/prod.db ]; then cp /app/seed.db /app/data/prod.db; fi && node server.js"]
+# Run prisma migrate on startup, then start the app
+CMD ["sh", "-c", "npx prisma migrate deploy --schema=./prisma/schema.prisma 2>/dev/null; node server.js"]

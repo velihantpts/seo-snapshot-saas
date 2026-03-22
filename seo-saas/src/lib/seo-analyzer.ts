@@ -5,12 +5,21 @@ import { calculateScore } from './analyzer/scoring';
 import { detectTechStack } from './analyzer/tech-stack';
 import { getCrUXData } from './pagespeed';
 import { logger } from './logger';
+import { getCache, setCache } from './cache';
 import type { Issue } from './analyzer/types';
 
 // Re-export types
 export type { SEOResult } from './analyzer/types';
 
 export async function analyzeURL(targetUrl: string) {
+  // Cache check — return cached result if available (1 hour TTL)
+  const cacheKey = `analysis:${targetUrl}`;
+  const cached = await getCache(cacheKey);
+  if (cached) {
+    logger.info('analysis.cache-hit', { url: targetUrl });
+    return cached;
+  }
+
   const issues: Issue[] = [];
 
   // 1. Fetch page + parallel resources (robots, sitemap, pagespeed)
@@ -115,4 +124,9 @@ export async function analyzeURL(targetUrl: string) {
     crux: cruxData,
     issues,
   };
+
+  // Cache the result for 1 hour
+  await setCache(cacheKey, result, 3600);
+
+  return result;
 }

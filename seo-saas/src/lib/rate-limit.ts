@@ -1,23 +1,4 @@
-// In-memory sliding window rate limiter
-// For production with multiple instances, replace with Redis (Upstash)
-
-interface RateLimitEntry {
-  timestamps: number[];
-}
-
-const store = new Map<string, RateLimitEntry>();
-const CLEANUP_INTERVAL = 60_000; // cleanup every minute
-
-// Periodic cleanup of expired entries
-if (typeof setInterval !== 'undefined') {
-  setInterval(() => {
-    const now = Date.now();
-    store.forEach((entry, key) => {
-      entry.timestamps = entry.timestamps.filter(t => now - t < 86_400_000);
-      if (entry.timestamps.length === 0) store.delete(key);
-    });
-  }, CLEANUP_INTERVAL);
-}
+import { redis } from './redis';
 
 export interface RateLimitResult {
   allowed: boolean;
@@ -26,27 +7,40 @@ export interface RateLimitResult {
   retryAfter?: number;
 }
 
-export function checkRateLimit(
+export async function checkRateLimit(
   identifier: string,
   limit: number,
   windowMs: number = 86_400_000 // default: 24 hours
-): RateLimitResult {
+): Promise<RateLimitResult> {
+  const key = `rl:${identifier}`;
   const now = Date.now();
-  const entry = store.get(identifier) || { timestamps: [] };
+  const windowStart = now - windowMs;
 
-  // Remove timestamps outside the window
-  entry.timestamps = entry.timestamps.filter(t => now - t < windowMs);
+  try {
+    // Redis sliding window: sorted set with timestamp as score
+    const pipeline = redis.pipeline();
+    pipeline.zremrangebyscore(key, 0, windowStart); // remove expired
+    pipeline.zadd(key, now, `${now}:${Math.random()}`); // add current
+    pipeline.zcard(key); // count in window
+    pipeline.pexpire(key, windowMs); // set TTL
+    const results = await pipeline.exec();
 
-  if (entry.timestamps.length >= limit) {
-    const oldestInWindow = entry.timestamps[0];
-    const retryAfter = Math.ceil((oldestInWindow + windowMs - now) / 1000);
-    return { allowed: false, remaining: 0, limit, retryAfter };
+    const count = (results?.[2]?.[1] as number) || 0;
+
+    if (count > limit) {
+      // Over limit — remove the entry we just added
+      await redis.zremrangebyscore(key, now, now);
+      const oldest = await redis.zrange(key, 0, 0, 'WITHSCORES');
+      const oldestTime = oldest.length >= 2 ? parseInt(oldest[1]) : now;
+      const retryAfter = Math.ceil((oldestTime + windowMs - now) / 1000);
+      return { allowed: false, remaining: 0, limit, retryAfter };
+    }
+
+    return { allowed: true, remaining: limit - count, limit };
+  } catch {
+    // Redis down — fallback to allow (fail-open)
+    return { allowed: true, remaining: limit, limit };
   }
-
-  entry.timestamps.push(now);
-  store.set(identifier, entry);
-
-  return { allowed: true, remaining: limit - entry.timestamps.length, limit };
 }
 
 export function getClientIP(req: Request): string {

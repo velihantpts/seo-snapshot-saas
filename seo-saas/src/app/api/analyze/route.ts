@@ -31,7 +31,7 @@ export async function POST(req: Request) {
   // Rate limiting: IP-based for all users, stricter for free
   const dailyLimit = isPro ? 100 : 5;
   const rateLimitKey = userId ? `user:${userId}` : `ip:${clientIP}`;
-  const rateResult = checkRateLimit(rateLimitKey, dailyLimit);
+  const rateResult = await checkRateLimit(rateLimitKey, dailyLimit);
 
   if (!rateResult.allowed) {
     logger.rateLimit(clientIP, '/api/analyze');

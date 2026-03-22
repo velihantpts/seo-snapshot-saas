@@ -31,7 +31,7 @@ export async function GET(req: Request) {
   }
 
   // Rate limit: 50/day for API
-  const rateResult = checkRateLimit(`api:${user.id}`, 50);
+  const rateResult = await checkRateLimit(`api:${user.id}`, 50);
   if (!rateResult.allowed) {
     return NextResponse.json({ error: 'API rate limit exceeded (50/day)' }, { status: 429 });
   }
