@@ -78,7 +78,7 @@ export default function Pricing() {
             <div key={plan.name} className={`rounded-2xl p-6 sm:p-7 relative transition-all duration-200 ${
               plan.popular ? 'glass-card glow-border scale-[1.02] shadow-glow' : plan.name === 'Lifetime' ? 'glass-card border-amber-500/20' : 'glass-card'
             }`}>
-              {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-accent-500 text-xs font-bold tracking-wide shadow-glow-sm">POPULAR</div>}
+              {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-accent-500 text-xs font-bold tracking-wide shadow-glow-sm">{t('pricing.popular')}</div>}
               <h3 className="font-medium text-lg mb-1 text-white/90">{plan.name}</h3>
               <p className="text-white/30 text-xs mb-4">{plan.description}</p>
               <div className="mb-6">
@@ -110,13 +110,13 @@ export default function Pricing() {
 
         {/* FAQ */}
         <div className="mt-20 sm:mt-24 max-w-2xl mx-auto">
-          <h2 className="text-2xl font-medium tracking-tight text-center mb-10">FAQ</h2>
+          <h2 className="text-2xl font-medium tracking-tight text-center mb-10">{t('pricing.faq')}</h2>
           <div className="space-y-3">
             {[
-              { q: 'Can I cancel anytime?', a: 'Yes. Cancel from your Stripe billing portal. You keep access until the end of your billing period.' },
-              { q: 'What happens at the free limit?', a: 'You can still view past analyses. The limit resets daily at midnight UTC.' },
-              { q: 'What is scheduled monitoring?', a: 'Pro users can set up automatic SEO checks. We run the analysis on your schedule and notify you if your score drops.' },
-              { q: 'Do you offer refunds?', a: 'Yes. Full refund within 7 days of purchase, no questions asked.' },
+              { q: t('faq.cancel.q'), a: t('faq.cancel.a') },
+              { q: t('faq.limit.q'), a: t('faq.limit.a') },
+              { q: t('faq.monitor.q'), a: t('faq.monitor.a') },
+              { q: t('faq.refund.q'), a: t('faq.refund.a') },
             ].map(faq => (
               <details key={faq.q} className="group glass-card rounded-xl">
                 <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-white/70 hover:text-white/90 transition-colors duration-150 list-none flex items-center justify-between">

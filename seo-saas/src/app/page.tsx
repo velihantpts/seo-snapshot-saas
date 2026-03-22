@@ -180,16 +180,16 @@ export default function Home() {
                 <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4">
                   <div className="text-[10px] text-white/25 uppercase tracking-wider mb-3">{t('diff.others')}</div>
                   <div className="space-y-2">
-                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> "Add a meta description"</p>
-                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> "Improve security headers"</p>
-                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> "Add structured data"</p>
+                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex1')}</p>
+                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex2')}</p>
+                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex3')}</p>
                   </div>
                 </div>
                 {/* Us */}
                 <div className="rounded-xl bg-accent-500/[0.04] border border-accent-500/10 p-4">
                   <div className="text-[10px] text-accent-400 uppercase tracking-wider mb-3">{t('diff.wegive')}</div>
                   <div className="space-y-2">
-                    <p className="text-xs text-white/60 flex gap-2"><span className="text-emerald-400">✓</span> Copy-paste <code className="text-accent-300/70 text-[10px]">&lt;meta&gt;</code> tag</p>
+                    <p className="text-xs text-white/60 flex gap-2"><span className="text-emerald-400">✓</span> {t('diff.us.copy')} <code className="text-accent-300/70 text-[10px]">&lt;meta&gt;</code> tag</p>
                     <p className="text-xs text-white/60 flex gap-2"><span className="text-emerald-400">✓</span> nginx / next.config.js code</p>
                     <p className="text-xs text-white/60 flex gap-2"><span className="text-emerald-400">✓</span> Complete JSON-LD schema</p>
                   </div>
@@ -274,7 +274,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t border-white/[0.04] text-center">
-                <span className="text-xs text-white/35">Try it yourself — enter any URL above</span>
+                <span className="text-xs text-white/35">{t('demo.try')}</span>
               </div>
             </div>
           </div>
@@ -331,7 +331,7 @@ export default function Home() {
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.06] py-8 px-4 sm:px-6">
         <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
-          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.122.0</span></span>
+          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.123.0</span></span>
           <div className="flex gap-4">
             <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
             <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>
