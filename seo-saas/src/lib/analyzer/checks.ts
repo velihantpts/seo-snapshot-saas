@@ -56,7 +56,7 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
     try {
       const u = new URL(href, targetUrl);
       if (u.hostname === parsedUrl.hostname) { internal++; uniqueInt.add(u.pathname); }
-      else if (u.protocol.startsWith('http')) { external++; uniqueExt.add(u.hostname); if (linkUrls.length < 5) linkUrls.push(u.toString()); }
+      else if (u.protocol.startsWith('http')) { external++; uniqueExt.add(u.hostname); if (linkUrls.length < 20) linkUrls.push(u.toString()); }
     } catch (e) { if (typeof console !== "undefined") console.error(e); }
     if ($(el).attr('rel')?.includes('nofollow')) nofollow++;
     const text = $(el).text().trim().toLowerCase();
@@ -545,6 +545,7 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   // ===== PRECONNECT/DNS-PREFETCH =====
   const preconnects = $('link[rel="preconnect"]').length;
   const dnsPrefetch = $('link[rel="dns-prefetch"]').length;
+
 
   // ===== E-E-A-T SIGNALS =====
   const hasAuthorMeta = !!($('meta[name="author"]').attr('content'));
