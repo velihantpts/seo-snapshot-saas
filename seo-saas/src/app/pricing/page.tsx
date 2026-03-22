@@ -80,10 +80,10 @@ export default function Pricing() {
             }`}>
               {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-accent-500 text-xs font-bold tracking-wide shadow-glow-sm">{t('pricing.popular')}</div>}
               <h3 className="font-medium text-lg mb-1 text-white/90">{plan.name}</h3>
-              <p className="text-white/30 text-xs mb-4">{plan.description}</p>
+              <p className="text-white/45 text-xs mb-4">{plan.description}</p>
               <div className="mb-6">
                 <span className="text-4xl font-semibold tracking-tight">{plan.price}</span>
-                {plan.period && <span className="text-white/30 text-sm ml-1">{plan.period}</span>}
+                {plan.period && <span className="text-white/45 text-sm ml-1">{plan.period}</span>}
               </div>
               {plan.href ? (
                 <Link href={plan.href} className={`block w-full text-center py-3 rounded-xl text-sm font-medium transition-all duration-150 mb-7 ${plan.style}`}>{plan.cta}</Link>
@@ -98,7 +98,7 @@ export default function Pricing() {
               <ul className="space-y-3">
                 {plan.features.map(f => (
                   <li key={f.text} className={`flex items-start gap-2.5 text-sm ${f.ok ? 'text-white/60' : 'text-white/35'}`}>
-                    {f.ok ? <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.popular ? 'text-accent-400' : plan.name === 'Lifetime' ? 'text-amber-400' : 'text-white/30'}`} />
+                    {f.ok ? <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.popular ? 'text-accent-400' : plan.name === 'Lifetime' ? 'text-amber-400' : 'text-white/45'}`} />
                       : <X className="w-4 h-4 mt-0.5 flex-shrink-0 text-white/10" />}
                     {f.text}
                   </li>

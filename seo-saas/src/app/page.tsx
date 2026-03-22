@@ -109,7 +109,7 @@ export default function Home() {
           <form onSubmit={handleAnalyze} className="max-w-2xl mx-auto opacity-0 animate-fade-in-up-delay-2" role="search" aria-label="SEO Analysis">
             <div className="flex flex-col sm:flex-row gap-2 p-2 rounded-2xl bg-white/[0.03] border border-white/[0.05] input-glow transition-all duration-200">
               <div className="flex-1 flex items-center gap-3 px-4 relative">
-                <Search className="w-5 h-5 text-white/30 flex-shrink-0" />
+                <Search className="w-5 h-5 text-white/45 flex-shrink-0" />
                 <div className="flex-1 relative">
                   <input
                     type="text"
@@ -167,7 +167,7 @@ export default function Home() {
           {loading && <AnalysisLoader />}
 
           {!loading && (
-            <p className="text-white/25 text-xs mt-5 opacity-0 animate-fade-in-up-delay-3">
+            <p className="text-white/50 text-xs mt-5 opacity-0 animate-fade-in-up-delay-3">
               {t('hero.free')}
             </p>
           )}
@@ -178,11 +178,11 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-3 text-left">
                 {/* Others */}
                 <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4">
-                  <div className="text-[10px] text-white/25 uppercase tracking-wider mb-3">{t('diff.others')}</div>
+                  <div className="text-[10px] text-white/40 uppercase tracking-wider mb-3">{t('diff.others')}</div>
                   <div className="space-y-2">
-                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex1')}</p>
-                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex2')}</p>
-                    <p className="text-xs text-white/30 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex3')}</p>
+                    <p className="text-xs text-white/45 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex1')}</p>
+                    <p className="text-xs text-white/45 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex2')}</p>
+                    <p className="text-xs text-white/45 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex3')}</p>
                   </div>
                 </div>
                 {/* Us */}
@@ -197,13 +197,13 @@ export default function Home() {
               </div>
               {/* Unique badges */}
               <div className="flex justify-center gap-4 mt-4">
-                <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+                <div className="flex items-center gap-1.5 text-[10px] text-white/45">
                   <span className="text-amber-400 font-bold text-xs">A+→F</span> {t('diff.secgrade')}
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+                <div className="flex items-center gap-1.5 text-[10px] text-white/45">
                   <span className="text-emerald-400 font-bold text-xs">+15</span> {t('diff.impact')}
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-white/30">
+                <div className="flex items-center gap-1.5 text-[10px] text-white/45">
                   <span className="text-accent-400 font-bold text-xs">56</span> {t('diff.snippets')}
                 </div>
               </div>
@@ -224,7 +224,7 @@ export default function Home() {
             ].map(stat => (
               <div key={stat.label}>
                 <div className="text-2xl sm:text-3xl font-semibold tracking-tight text-white/90">{stat.value}</div>
-                <div className="text-white/30 text-xs mt-1 uppercase tracking-wider">{stat.label}</div>
+                <div className="text-white/45 text-xs mt-1 uppercase tracking-wider">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -256,7 +256,7 @@ export default function Home() {
                 </div>
                 <div>
                   <div className="text-sm font-medium text-white/80 mb-1">example.com</div>
-                  <div className="text-xs text-white/30">3 issues found · 1.2s response · 42 KB</div>
+                  <div className="text-xs text-white/45">3 issues found · 1.2s response · 42 KB</div>
                 </div>
               </div>
               <div className="space-y-2">
@@ -312,7 +312,7 @@ export default function Home() {
         <ScrollReveal className="max-w-xl mx-auto text-center">
           <h2 className="heading-section mb-4">{t('cta.title')}</h2>
           <p className="text-white/40 mb-6 text-sm">{t('cta.desc')}</p>
-          <p className="text-white/25 mb-10 text-xs leading-relaxed max-w-md mx-auto">
+          <p className="text-white/40 mb-10 text-xs leading-relaxed max-w-md mx-auto">
             {t('cta.longdesc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
@@ -330,8 +330,8 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-white/[0.06] py-8 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/25 text-xs">
-          <span>&copy; 2026 SEO Snapshot · <span className="text-white/15">v1.123.0</span></span>
+        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/50 text-xs">
+          <span>&copy; 2026 SEO Snapshot · <span className="text-white/30">v1.124.0</span></span>
           <div className="flex gap-4">
             <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
             <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>
