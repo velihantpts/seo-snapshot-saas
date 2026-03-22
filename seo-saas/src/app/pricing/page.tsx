@@ -2,7 +2,7 @@
 import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { Check, X } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocale } from '@/lib/i18n';
 
 
@@ -11,12 +11,19 @@ export default function Pricing() {
   const [loading, setLoading] = useState<string | null>(null);
   const { t } = useLocale();
 
-  const handleCheckout = async (priceType: string) => {
-    if (!session) { signIn(); return; }
-    if (!process.env.NEXT_PUBLIC_STRIPE_ENABLED) {
-      alert('Payments coming soon! Contact support@seosnapshot.dev');
-      return;
+  // Auto-checkout after login redirect
+  useEffect(() => {
+    if (typeof window === 'undefined' || !session) return;
+    const params = new URLSearchParams(window.location.search);
+    const checkoutPlan = params.get('checkout');
+    if (checkoutPlan) {
+      handleCheckout(checkoutPlan);
+      window.history.replaceState({}, '', '/pricing');
     }
+  }, [session]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleCheckout = async (priceType: string) => {
+    if (!session) { signIn(undefined, { callbackUrl: `/pricing?checkout=${priceType}` }); return; }
     setLoading(priceType);
     try {
       const res = await fetch('/api/lemon', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: priceType }) });

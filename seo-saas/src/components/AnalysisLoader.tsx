@@ -89,6 +89,7 @@ export function AnalysisLoader() {
           style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
         />
       </div>
+      <p className="text-center text-white/25 text-xs mt-3">Running 119 checks — typically 5-15 seconds</p>
     </div>
   );
 }

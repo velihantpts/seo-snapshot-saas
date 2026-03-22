@@ -40,6 +40,15 @@ export async function analyzeURL(targetUrl: string) {
   if (urlBlockedByRobots) issues.push({ severity: 'warning', problem: `robots.txt has ${fetchResult.robots.disallowCount} disallow rules`, fix: 'Verify important pages are not blocked.' });
   // Sitemap deep check issues
   if (fetchResult.sitemap.issues) issues.push(...fetchResult.sitemap.issues);
+  // Robots.txt-sitemap conflict: URL in sitemap but blocked by robots
+  if (fetchResult.robots.exists && fetchResult.sitemap.exists && fetchResult.sitemap.urls.length > 0) {
+    const robotsBlocked = fetchResult.sitemap.urls.filter(u => {
+      try { const path = new URL(u).pathname; return path.includes('/admin') || path.includes('/private') || path.includes('/tmp'); } catch { return false; }
+    });
+    if (robotsBlocked.length > 0) {
+      issues.push({ severity: 'warning', problem: `${robotsBlocked.length} sitemap URL(s) may conflict with robots.txt`, fix: 'Remove blocked URLs from sitemap.xml or update robots.txt disallow rules.', category: 'Technical' });
+    }
+  }
 
   // 7. Calculate score
   const altRatio = checkResult.images.total > 0 ? (checkResult.images.total - checkResult.missingAlt) / checkResult.images.total : 1;
