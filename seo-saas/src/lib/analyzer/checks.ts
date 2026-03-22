@@ -565,6 +565,72 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   if (!hasContactLink) { eeatIssues.push('No contact information'); issues.push({ severity: 'warning', problem: 'No contact page or email link found', fix: 'Add a Contact page or mailto: link. Google values sites that provide ways to reach the author/business.', category: 'Content' }); }
   if (!hasDatePublished && wordCount > 300) { eeatIssues.push('No publish date'); issues.push({ severity: 'warning', problem: 'No publish or modified date found', fix: 'Add <time datetime="2026-01-15"> or datePublished in JSON-LD. Content freshness is a Google ranking signal.', category: 'Content' }); }
 
+  // ===== PAGE TYPE DETECTION =====
+  const hasProductSchema = schemas.some(s => s.type === 'Product');
+  const hasFaqSchema = schemas.some(s => s.type === 'FAQ' || s.type === 'FAQPage');
+  const hasArticleSchema = schemas.some(s => s.type === 'Article' || s.type === 'BlogPosting' || s.type === 'NewsArticle');
+  const isHomepage = parsedUrl.pathname === '/' || parsedUrl.pathname === '';
+  const isBlogPost = hasArticleSchema || $('article').length > 0 || urlPath.includes('/blog/') || urlPath.includes('/post/');
+  const isProductPage = hasProductSchema || $('[itemtype*="Product"]').length > 0 || urlPath.includes('/product');
+  const isFaqPage = hasFaqSchema || $('details, .faq, .accordion').length > 2;
+  const pageType = isHomepage ? 'homepage' : isBlogPost ? 'article' : isProductPage ? 'product' : isFaqPage ? 'faq' : 'page';
+  // Page-type specific word count expectations
+  if (isBlogPost && wordCount < 600) issues.push({ severity: 'warning', problem: `Blog post has only ${wordCount} words (recommended: 800+)`, fix: 'Blog posts need depth to rank. Expand with examples, data, FAQs. Aim for 800-1500 words.', category: 'Content' });
+
+  // ===== CONTENT DEPTH SCORE =====
+  const h2Count = headings.h2?.count || 0;
+  const h3Count = headings.h3?.count || 0;
+  const cdHasTables = $('table').length > 0;
+  const cdHasImages = imgs.length > 0;
+  const cdHasFaq = $('details, .faq, [itemtype*="FAQ"]').length > 0;
+  const contentDepthFactors = [h2Count >= 2, h3Count >= 1, hasLists, cdHasImages, wordCount >= 500, paragraphs.length >= 3, cdHasTables || cdHasFaq].filter(Boolean).length;
+  const contentDepthScore = Math.round((contentDepthFactors / 7) * 100);
+
+  // ===== CONTENT FRESHNESS =====
+  const oldYearRegex = /\b(201[0-9]|202[0-3])\b/g;
+  const pageTextSample = $('body').text().slice(0, 5000);
+  const oldYears = pageTextSample.match(oldYearRegex) || [];
+  const currentYear = new Date().getFullYear();
+  const staleYears = oldYears.filter(y => parseInt(y) < currentYear - 2);
+  if (staleYears.length > 3) issues.push({ severity: 'warning', problem: `Content references old years (${Array.from(new Set(staleYears)).join(', ')})`, fix: 'Update date references to current year. Stale content signals to Google that the page is not maintained.', category: 'Content' });
+
+  // ===== 3RD PARTY SCRIPT IMPACT =====
+  const thirdPartyScripts: { name: string; size: string }[] = [];
+  const knownScripts: Record<string, string> = { 'google-analytics': 'Google Analytics (~45KB)', 'googletagmanager': 'Google Tag Manager (~80KB)', 'facebook': 'Facebook Pixel (~60KB)', 'hotjar': 'Hotjar (~35KB)', 'intercom': 'Intercom (~200KB)', 'crisp': 'Crisp Chat (~100KB)', 'hubspot': 'HubSpot (~150KB)', 'clarity': 'Microsoft Clarity (~30KB)', 'sentry': 'Sentry (~30KB)', 'stripe': 'Stripe (~40KB)' };
+  scripts.each((_, el) => { const src = $(el).attr('src') || ''; Object.entries(knownScripts).forEach(([key, name]) => { if (src.includes(key)) thirdPartyScripts.push({ name, size: '' }); }); });
+  if (thirdPartyScripts.length > 5) issues.push({ severity: 'warning', problem: `${thirdPartyScripts.length} third-party scripts detected`, fix: 'Each script adds load time. Review if all are necessary. Lazy-load non-critical scripts.', category: 'Performance' });
+
+  // ===== FONT LOADING ANALYSIS =====
+  const fontFaces = html.match(/@font-face\s*\{[^}]*\}/gi) || [];
+  const fontPreloads = $('link[rel="preload"][as="font"]').length;
+  if (fontFaces.length > 4) issues.push({ severity: 'warning', problem: `${fontFaces.length} font faces loaded — consider reducing`, fix: 'Each font variant adds ~20-100KB. Use 2-3 weights max. Consider system fonts for body text.', category: 'Performance' });
+
+  // ===== RESOURCE HINTS =====
+  const prefetch = $('link[rel="prefetch"]').length;
+  const prerender = $('link[rel="prerender"]').length;
+  const modulePreload = $('link[rel="modulepreload"]').length;
+  const preloadCount = $('link[rel="preload"]').length;
+
+  // ===== OUTBOUND LINK QUALITY =====
+  const outboundDomains = new Set<string>();
+  let eduGovLinks = 0;
+  $('a[href^="http"]').each((_, el) => {
+    const href = $(el).attr('href') || '';
+    try { const u = new URL(href); if (u.hostname !== parsedUrl.hostname) { outboundDomains.add(u.hostname); if (u.hostname.endsWith('.edu') || u.hostname.endsWith('.gov')) eduGovLinks++; } } catch {}
+  });
+
+  // ===== SOCIAL PROOF SIGNALS =====
+  const hasSocialProof = {
+    testimonials: $('[class*="testimonial"], [class*="review"], [class*="rating"], [itemtype*="Review"]').length > 0,
+    trustBadges: $('[class*="trust"], [class*="badge"], [class*="certified"], [alt*="ssl"], [alt*="secure"]').length > 0,
+    customerCount: /(\d{1,3}[,.]?\d{3}\+?\s*(customers|users|clients|companies))/i.test(pageTextSample),
+    starRating: $('[class*="star"], [class*="rating"], [itemtype*="Rating"]').length > 0,
+  };
+  const socialProofCount = Object.values(hasSocialProof).filter(Boolean).length;
+
+  // ===== VIEWPORT UNITS CHECK =====
+  const has100vh = html.includes('100vh') && !html.includes('100dvh');
+
   // ===== OPEN GRAPH COMPLETENESS SCORE =====
   const ogCompleteness = Object.values(og).filter(Boolean).length;
   if (ogCompleteness > 0 && ogCompleteness < 4) {
@@ -588,5 +654,10 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
     socialLinks: foundSocial, exposedEmails, noopenerMissing, foundDeprecated, metaRefresh: !!metaRefresh,
     kwInUrl, kwInDesc, topKwDensity, noSrcset, shortAlt, longAlt, smallTapTargets, spamLinks,
     eeat: { score: eeatSignals, total: 6, hasAuthor: hasAuthorMeta || hasAuthorSchema, hasAbout: hasAboutLink, hasPrivacy: hasPrivacyLink, hasTerms: hasTermsLink, hasContact: hasContactLink, hasDate: hasDatePublished, issues: eeatIssues },
+    pageType, contentDepth: { score: contentDepthScore, factors: contentDepthFactors },
+    thirdPartyScripts, fontCount: fontFaces.length, fontPreloads,
+    outboundLinks: { domains: outboundDomains.size, eduGov: eduGovLinks },
+    socialProof: { count: socialProofCount, ...hasSocialProof },
+    resourceHints: { preload: preloadCount, prefetch, prerender, modulePreload, preconnects, dnsPrefetch },
   };
 }
