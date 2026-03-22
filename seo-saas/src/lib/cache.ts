@@ -2,9 +2,9 @@ import { redis } from './redis';
 
 const DEFAULT_TTL = 3600; // 1 hour
 
-export async function getCache<T>(key: string): Promise<T | null> {
+export async function getCache<T = unknown>(key: string): Promise<T | null> {
   try {
-    const data = await redis.get(`cache:${key}`);
+    const data = await redis.get(`cache:${key}`).catch(() => null);
     return data ? JSON.parse(data) : null;
   } catch {
     return null;

@@ -54,27 +54,27 @@ describe('SSRF Protection', () => {
 
 // ===== Rate Limiter Tests =====
 describe('Rate Limiter', () => {
-  test('allows requests within limit', () => {
+  test('allows requests within limit', async () => {
     const key = `test-allow-${Date.now()}`;
-    const result = checkRateLimit(key, 3, 60000);
+    const result = await checkRateLimit(key, 3, 60000);
     expect(result.allowed).toBe(true);
     expect(result.remaining).toBe(2);
   });
 
-  test('blocks requests exceeding limit', () => {
+  test('blocks requests exceeding limit', async () => {
     const key = `test-block-${Date.now()}`;
-    checkRateLimit(key, 2, 60000);
-    checkRateLimit(key, 2, 60000);
-    const result = checkRateLimit(key, 2, 60000);
+    await checkRateLimit(key, 2, 60000);
+    await checkRateLimit(key, 2, 60000);
+    const result = await checkRateLimit(key, 2, 60000);
     expect(result.allowed).toBe(false);
     expect(result.remaining).toBe(0);
   });
 
-  test('tracks remaining correctly', () => {
+  test('tracks remaining correctly', async () => {
     const key = `test-remaining-${Date.now()}`;
-    expect(checkRateLimit(key, 5, 60000).remaining).toBe(4);
-    expect(checkRateLimit(key, 5, 60000).remaining).toBe(3);
-    expect(checkRateLimit(key, 5, 60000).remaining).toBe(2);
+    expect((await checkRateLimit(key, 5, 60000)).remaining).toBe(4);
+    expect((await checkRateLimit(key, 5, 60000)).remaining).toBe(3);
+    expect((await checkRateLimit(key, 5, 60000)).remaining).toBe(2);
   });
 });
 

@@ -6,7 +6,7 @@ import { detectTechStack } from './analyzer/tech-stack';
 import { getCrUXData } from './pagespeed';
 import { logger } from './logger';
 import { getCache, setCache } from './cache';
-import type { Issue } from './analyzer/types';
+import type { Issue, SEOResult } from './analyzer/types';
 
 // Re-export types
 export type { SEOResult } from './analyzer/types';
@@ -14,7 +14,7 @@ export type { SEOResult } from './analyzer/types';
 export async function analyzeURL(targetUrl: string) {
   // Cache check — return cached result if available (1 hour TTL)
   const cacheKey = `analysis:${targetUrl}`;
-  const cached = await getCache(cacheKey);
+  const cached = await getCache<SEOResult>(cacheKey);
   if (cached) {
     logger.info('analysis.cache-hit', { url: targetUrl });
     return cached;
@@ -94,7 +94,7 @@ export async function analyzeURL(targetUrl: string) {
 
   logger.debug('analysis.complete', { url: targetUrl, score: scoring.score, issues: issues.length });
 
-  return {
+  const analysisResult = {
     url: targetUrl,
     score: scoring.score,
     potentialScore: scoring.potentialScore,
@@ -126,7 +126,7 @@ export async function analyzeURL(targetUrl: string) {
   };
 
   // Cache the result for 1 hour
-  await setCache(cacheKey, result, 3600);
+  await setCache(cacheKey, analysisResult, 3600);
 
-  return result;
+  return analysisResult;
 }
