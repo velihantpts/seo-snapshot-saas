@@ -19,9 +19,10 @@ export default function Pricing() {
     }
     setLoading(priceType);
     try {
-      const res = await fetch('/api/stripe', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ priceType }) });
+      const res = await fetch('/api/lemon', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: priceType }) });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
+      else if (data.error) alert(data.error);
     } catch (e) { if (typeof console !== "undefined") console.error(e); }
     setLoading(null);
   };
