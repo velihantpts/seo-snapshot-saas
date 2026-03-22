@@ -70,6 +70,8 @@ export async function analyzeURL(targetUrl: string) {
     spamLinks: checkResult.spamLinks || 0,
     totalRequests: checkResult.pageWeight?.totalRequests || 0,
     estimatedPageWeight: checkResult.pageWeight?.estimated || 0,
+    isEnglish: !checkResult.meta.lang || checkResult.meta.lang.toLowerCase().startsWith('en'),
+    headingCount: Object.values(checkResult.headings).reduce((sum, h) => sum + h.count, 0),
   }, issues);
 
   logger.debug('analysis.complete', { url: targetUrl, score: scoring.score, issues: issues.length });
