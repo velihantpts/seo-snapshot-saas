@@ -30,9 +30,7 @@ function copyToClipboard(text: string): boolean {
   return true;
 }
 
-// Admin credentials from env — never hardcode secrets in source
-const ADMIN_EMAIL = process.env.NEXT_PUBLIC_ADMIN_EMAIL || '';
-const ADMIN_PASS = process.env.NEXT_PUBLIC_ADMIN_PASS || '';
+// Admin auth handled server-side via /api/admin
 
 export default function AdminPage() {
   const [authed, setAuthed] = useState(false);
@@ -46,14 +44,14 @@ export default function AdminPage() {
   const [copied, setCopied] = useState('');
   const [showText, setShowText] = useState<string | null>(null);
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
-      setAuthed(true);
-      setAuthError('');
-    } else {
-      setAuthError('Invalid credentials');
-    }
+        try {
+      const res = await fetch('/api/admin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ email, password }) });
+      const data = await res.json();
+      if (data.ok) { setAuthed(true); setAuthError(''); }
+      else { setAuthError('Invalid credentials'); }
+    } catch { setAuthError('Connection error'); }
   };
 
   // Login screen
