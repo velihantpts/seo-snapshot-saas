@@ -38,6 +38,8 @@ export async function analyzeURL(targetUrl: string) {
   if (!fetchResult.sitemap.exists) issues.push({ severity: 'warning', problem: 'No sitemap.xml found', fix: 'Create /sitemap.xml listing all important pages.' });
   const urlBlockedByRobots = fetchResult.robots.exists && fetchResult.robots.disallowCount > 5;
   if (urlBlockedByRobots) issues.push({ severity: 'warning', problem: `robots.txt has ${fetchResult.robots.disallowCount} disallow rules`, fix: 'Verify important pages are not blocked.' });
+  // Sitemap deep check issues
+  if (fetchResult.sitemap.issues) issues.push(...fetchResult.sitemap.issues);
 
   // 7. Calculate score
   const altRatio = checkResult.images.total > 0 ? (checkResult.images.total - checkResult.missingAlt) / checkResult.images.total : 1;

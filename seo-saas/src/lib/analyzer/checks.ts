@@ -200,6 +200,8 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   if (topKw && !kwInH1 && headings.h1.count > 0) issues.push({ severity: 'warning', problem: `Top keyword "${topKw}" not found in H1`, fix: `Include "${topKw}" in your H1.`, category: 'Content' });
   const kwInUrl = topKw ? parsedUrl.pathname.toLowerCase().includes(topKw) : true;
   if (topKw && !kwInUrl && parsedUrl.pathname !== '/') issues.push({ severity: 'warning', problem: `Top keyword "${topKw}" not found in URL`, fix: `Include "${topKw}" in the URL slug for better relevance signal.`, category: 'Content' });
+  const kwInDesc = topKw ? descEl.toLowerCase().includes(topKw) : true;
+  if (topKw && !kwInDesc && descLen > 0) issues.push({ severity: 'warning', problem: `Top keyword "${topKw}" not found in meta description`, fix: `Include "${topKw}" in your meta description to improve relevance and click-through rate.`, category: 'Content' });
   const topKwDensity = topKw && wordCount > 0 ? ((topKeywords[0]?.count || 0) / wordCount) * 100 : 0;
   if (topKwDensity > 4) issues.push({ severity: 'warning', problem: `Keyword stuffing: "${topKw}" density ${topKwDensity.toFixed(1)}%`, fix: 'Keep keyword density under 3-4%. Use synonyms and related terms instead of repeating the same keyword.', category: 'Content' });
 

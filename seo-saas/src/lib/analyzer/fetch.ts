@@ -10,7 +10,7 @@ export interface FetchResult {
   redirectChain: { url: string; status: number }[];
   issues: Issue[];
   robots: { exists: boolean; disallowCount: number; hasSitemapRef: boolean; userAgents: string[]; };
-  sitemap: { exists: boolean; urls: string[]; };
+  sitemap: { exists: boolean; urls: string[]; totalUrls: number; staleUrls: number; sitemapSizeKB: number; issues: Issue[]; };
   pageSpeed: any;
 }
 
@@ -97,18 +97,34 @@ async function fetchRobots(origin: string) {
 async function fetchSitemap(origin: string, $: cheerio.CheerioAPI) {
   let urls: string[] = [];
   let exists = false;
+  let totalUrls = 0;
+  let staleUrls = 0;
+  let sitemapSizeKB = 0;
+  const issues: Issue[] = [];
   try {
-    const r = await fetch(`${origin}/sitemap.xml`, { method: 'HEAD', signal: AbortSignal.timeout(5000) });
-    exists = r.ok;
+    const full = await fetch(`${origin}/sitemap.xml`, { signal: AbortSignal.timeout(5000) });
+    exists = full.ok;
     if (exists) {
-      const full = await fetch(`${origin}/sitemap.xml`, { signal: AbortSignal.timeout(5000) });
-      if (full.ok) {
-        const xml = await full.text();
-        const sm$ = cheerio.load(xml, { xmlMode: true });
-        sm$('url > loc').each((_, el) => { urls.push(sm$(el).text().trim()); });
-        urls = urls.slice(0, 50);
-      }
+      const xml = await full.text();
+      sitemapSizeKB = Math.round(xml.length / 1024);
+      const sm$ = cheerio.load(xml, { xmlMode: true });
+      const allLocs: string[] = [];
+      sm$('url > loc').each((_, el) => { allLocs.push(sm$(el).text().trim()); });
+      totalUrls = allLocs.length;
+      urls = allLocs.slice(0, 50);
+
+      // Lastmod freshness check
+      const sixMonthsAgo = Date.now() - (180 * 24 * 60 * 60 * 1000);
+      sm$('url > lastmod').each((_, el) => {
+        const d = Date.parse(sm$(el).text().trim());
+        if (!isNaN(d) && d < sixMonthsAgo) staleUrls++;
+      });
+      if (staleUrls > 5) issues.push({ severity: 'warning', problem: `${staleUrls} sitemap URLs have lastmod older than 6 months`, fix: 'Update lastmod dates in sitemap.xml when pages are modified. Stale dates signal unmaintained content.', category: 'Technical' });
+
+      // Size limit check
+      if (totalUrls > 50000) issues.push({ severity: 'warning', problem: `Sitemap exceeds 50,000 URL limit (${totalUrls} URLs)`, fix: 'Split into multiple sitemaps with a sitemap index file. Google limit is 50,000 URLs per sitemap.', category: 'Technical' });
+      if (sitemapSizeKB > 50000) issues.push({ severity: 'warning', problem: `Sitemap exceeds 50MB limit (${sitemapSizeKB} KB)`, fix: 'Split into smaller sitemaps. Google limit is 50MB uncompressed per sitemap.', category: 'Technical' });
     }
   } catch (e) { if (typeof console !== "undefined") console.error(e); }
-  return { exists, urls };
+  return { exists, urls, totalUrls, staleUrls, sitemapSizeKB, issues };
 }
