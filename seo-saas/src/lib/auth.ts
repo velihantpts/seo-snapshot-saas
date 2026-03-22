@@ -67,6 +67,13 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.plan = user.plan || 'free';
       }
+      // Refresh plan from DB on every request to catch upgrades
+      if (token.id) {
+        try {
+          const dbUser = await prisma.user.findUnique({ where: { id: token.id as string }, select: { plan: true } });
+          if (dbUser) token.plan = dbUser.plan || 'free';
+        } catch {}
+      }
       return token;
     },
     async session({ session, token }) {
