@@ -73,13 +73,41 @@ export async function POST(req: Request) {
     urls = [parsedUrl.toString()];
   }
 
+  // Fetch robots.txt disallow rules
+  const disallowPaths: string[] = [];
+  try {
+    const robotsRes = await fetch(`${parsedUrl.origin}/robots.txt`, { signal: AbortSignal.timeout(5000) });
+    if (robotsRes.ok) {
+      const robotsTxt = await robotsRes.text();
+      const lines = robotsTxt.split('\n');
+      let inAllAgent = false;
+      for (const line of lines) {
+        const trimmed = line.trim().toLowerCase();
+        if (trimmed.startsWith('user-agent:') && trimmed.includes('*')) inAllAgent = true;
+        else if (trimmed.startsWith('user-agent:')) inAllAgent = false;
+        if (inAllAgent && trimmed.startsWith('disallow:')) {
+          const path = line.split(':').slice(1).join(':').trim();
+          if (path) disallowPaths.push(path);
+        }
+      }
+    }
+  } catch {}
+
   // Cap at 100 URLs for Pro
   const maxUrls = 100;
   urls = urls.slice(0, maxUrls);
 
-  // Filter to same domain only
+  // Filter to same domain only + respect robots.txt
   urls = urls.filter(u => {
-    try { return new URL(u).hostname === domain; } catch { return false; }
+    try {
+      const parsed = new URL(u);
+      if (parsed.hostname !== domain) return false;
+      // Exclude URLs blocked by robots.txt
+      for (const disallow of disallowPaths) {
+        if (parsed.pathname.startsWith(disallow)) return false;
+      }
+      return true;
+    } catch { return false; }
   });
 
   if (urls.length === 0) {
