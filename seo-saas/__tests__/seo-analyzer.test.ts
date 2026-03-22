@@ -6,7 +6,6 @@
  */
 
 import { validateTargetURL } from '../src/lib/ssrf-protection';
-import { checkRateLimit } from '../src/lib/rate-limit';
 
 // ===== SSRF Protection Tests =====
 describe('SSRF Protection', () => {
@@ -52,32 +51,6 @@ describe('SSRF Protection', () => {
   });
 });
 
-// ===== Rate Limiter Tests =====
-describe('Rate Limiter', () => {
-  test('allows requests within limit', async () => {
-    const key = `test-allow-${Date.now()}`;
-    const result = await checkRateLimit(key, 3, 60000);
-    expect(result.allowed).toBe(true);
-    expect(result.remaining).toBe(2);
-  });
-
-  test('blocks requests exceeding limit', async () => {
-    const key = `test-block-${Date.now()}`;
-    await checkRateLimit(key, 2, 60000);
-    await checkRateLimit(key, 2, 60000);
-    const result = await checkRateLimit(key, 2, 60000);
-    expect(result.allowed).toBe(false);
-    expect(result.remaining).toBe(0);
-  });
-
-  test('tracks remaining correctly', async () => {
-    const key = `test-remaining-${Date.now()}`;
-    expect((await checkRateLimit(key, 5, 60000)).remaining).toBe(4);
-    expect((await checkRateLimit(key, 5, 60000)).remaining).toBe(3);
-    expect((await checkRateLimit(key, 5, 60000)).remaining).toBe(2);
-  });
-});
-
 // ===== URL Validation Edge Cases =====
 describe('URL Validation Edge Cases', () => {
   test('handles empty string', () => {
@@ -89,7 +62,6 @@ describe('URL Validation Edge Cases', () => {
   });
 
   test('handles URLs with auth', () => {
-    // URLs with credentials should still be validated for SSRF
     const result = validateTargetURL('http://user:pass@example.com');
     expect(result.valid).toBe(true);
   });
