@@ -320,6 +320,87 @@ export function generateFixCode(issue: { problem: string; fix: string; severity:
     return `<!-- Install a WordPress SEO plugin: -->\n\n<!-- Option 1: Yoast SEO (most popular) -->\n<!-- Dashboard → Plugins → Add New → Search "Yoast SEO" → Install → Activate -->\n\n<!-- Option 2: Rank Math (free + powerful) -->\n<!-- Dashboard → Plugins → Add New → Search "Rank Math" → Install → Activate -->\n\n<!-- Both auto-generate JSON-LD structured data -->`;
   }
 
+  // ===== COMPLETE SECURITY CONFIG =====
+  if (problem.includes('security') && (problem.includes('header') || problem.includes('grade'))) {
+    if (isNextJs) return `// next.config.js — Complete security headers\nconst nextConfig = {\n  headers: async () => [{\n    source: '/(.*)',\n    headers: [\n      { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' },\n      { key: 'X-Frame-Options', value: 'DENY' },\n      { key: 'X-Content-Type-Options', value: 'nosniff' },\n      { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },\n      { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },\n    ]\n  }],\n  poweredByHeader: false, // removes X-Powered-By\n};\nmodule.exports = nextConfig;`;
+    return `# Nginx — Complete security headers for ${domain}\nadd_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;\nadd_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:;" always;\nadd_header X-Frame-Options "DENY" always;\nadd_header X-Content-Type-Options "nosniff" always;\nadd_header Referrer-Policy "strict-origin-when-cross-origin" always;\nadd_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;\nserver_tokens off; # hide nginx version\n\n# Apache (.htaccess)\nHeader always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"\nHeader always set X-Frame-Options "DENY"\nHeader always set X-Content-Type-Options "nosniff"\nHeader always set Referrer-Policy "strict-origin-when-cross-origin"\nHeader always set Permissions-Policy "camera=(), microphone=(), geolocation=()"`;
+  }
+
+  // ===== X-POWERED-BY =====
+  if (problem.includes('x-powered-by')) {
+    if (isNextJs) return `// next.config.js\nconst nextConfig = {\n  poweredByHeader: false, // removes X-Powered-By: Next.js\n};\nmodule.exports = nextConfig;`;
+    return `# Nginx\nproxy_hide_header X-Powered-By;\n\n# Apache\nHeader unset X-Powered-By\n\n# Express.js\napp.disable('x-powered-by');`;
+  }
+
+  // ===== COMPRESSION =====
+  if (problem.includes('compression') || problem.includes('gzip') || problem.includes('brotli')) {
+    if (isNextJs) return `// Next.js enables compression by default.\n// If using a reverse proxy (nginx):\n\n# Nginx\ngzip on;\ngzip_types text/plain text/css application/json application/javascript text/xml;\ngzip_min_length 256;\n\n# Vercel — automatic, no config needed`;
+    return `# Nginx — Enable gzip + brotli\ngzip on;\ngzip_vary on;\ngzip_min_length 256;\ngzip_types text/plain text/css application/json application/javascript text/xml application/xml image/svg+xml;\n\n# Apache (.htaccess)\nAddOutputFilterByType DEFLATE text/plain text/css application/json application/javascript text/xml`;
+  }
+
+  // ===== CACHE-CONTROL =====
+  if (problem.includes('cache-control') || problem.includes('cache duration')) {
+    return `# Nginx — Cache static assets for 1 year\nlocation ~* \\.(css|js|jpg|jpeg|png|gif|svg|woff2)$ {\n  add_header Cache-Control "public, max-age=31536000, immutable";\n}\n\n# HTML pages — short cache with revalidation\nlocation ~* \\.html$ {\n  add_header Cache-Control "public, max-age=0, must-revalidate";\n}\n\n# Next.js — automatic for _next/static/\n# Vercel — automatic caching headers`;
+  }
+
+  // ===== PRECONNECT FROM REAL DOMAINS =====
+  if (problem.includes('preconnect') || problem.includes('dns-prefetch')) {
+    const extDomains = result.pageWeight?.externalDomains || 0;
+    return `<!-- Add preconnect hints for your ${extDomains} external domains: -->\n<!-- Put these in <head> before any external resources -->\n<link rel="preconnect" href="https://fonts.googleapis.com">\n<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n<link rel="dns-prefetch" href="https://www.google-analytics.com">\n\n<!-- Why: Each preconnect saves 100-300ms by establishing\n     the TCP+TLS connection before the browser needs it.\n     Only preconnect to domains used above the fold. -->`;
+  }
+
+  // ===== IMAGE ALT FROM FILENAME =====
+  if (problem.includes('alt') && (problem.includes('short') || problem.includes('length'))) {
+    return `<!-- Write descriptive alt text (10-125 characters): -->\n\n<!-- BAD: -->\n<img src="img1.jpg" alt="img">\n\n<!-- GOOD (describe what's IN the image): -->\n<img src="dashboard-analytics.jpg" alt="SEO analytics dashboard showing score trends and top issues">\n\n<!-- For decorative images: -->\n<img src="divider.svg" alt="" role="presentation">\n\n<!-- Tip: Don't start with "Image of..." or "Picture of..." -->\n<!-- Screen readers already announce it as an image. -->`;
+  }
+
+  // ===== SRCSET / RESPONSIVE IMAGES =====
+  if (problem.includes('srcset') || problem.includes('responsive')) {
+    return `<!-- Serve different sizes for different viewports: -->\n<img \n  src="photo-800.jpg"\n  srcset="photo-400.jpg 400w, photo-800.jpg 800w, photo-1200.jpg 1200w"\n  sizes="(max-width: 600px) 400px, (max-width: 1200px) 800px, 1200px"\n  alt="Descriptive alt text"\n  width="800" height="600"\n  loading="lazy"\n>\n\n<!-- Or use <picture> for art direction: -->\n<picture>\n  <source media="(max-width: 600px)" srcset="photo-mobile.webp">\n  <source media="(min-width: 601px)" srcset="photo-desktop.webp">\n  <img src="photo-fallback.jpg" alt="Description">\n</picture>\n\n<!-- Why: Serving 1200px images on 400px screens\n     wastes bandwidth and slows page load. -->`;
+  }
+
+  // ===== FORM LABEL FIX =====
+  if (problem.includes('form') && problem.includes('label')) {
+    return `<!-- Every input needs an associated label: -->\n\n<!-- Method 1: Wrapping -->\n<label>\n  Email address\n  <input type="email" name="email" autocomplete="email">\n</label>\n\n<!-- Method 2: for/id pairing -->\n<label for="email">Email address</label>\n<input type="email" id="email" name="email" autocomplete="email">\n\n<!-- Why: Labels help screen readers announce what\n     each form field is for. Required by WCAG 2.1. -->`;
+  }
+
+  // ===== AUTHOR / E-E-A-T FIXES =====
+  if (problem.includes('author') && problem.includes('not found')) {
+    return `<!-- Add author information: -->\n<meta name="author" content="Your Name">\n\n<!-- Better: Add author schema in JSON-LD: -->\n<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "Article",\n  "author": {\n    "@type": "Person",\n    "name": "Your Name",\n    "url": "https://${domain}/about"\n  },\n  "headline": "${title}",\n  "datePublished": "${new Date().toISOString().slice(0, 10)}"\n}\n</script>\n\n<!-- Why: Google uses authorship for E-E-A-T evaluation.\n     Pages with identified authors rank better. -->`;
+  }
+
+  if (problem.includes('publish') && problem.includes('date')) {
+    return `<!-- Add publish date with <time> element: -->\n<time datetime="${new Date().toISOString().slice(0, 10)}">March 22, 2026</time>\n\n<!-- Or in JSON-LD: -->\n<script type="application/ld+json">\n{\n  "@context": "https://schema.org",\n  "@type": "WebPage",\n  "datePublished": "${new Date().toISOString().slice(0, 10)}",\n  "dateModified": "${new Date().toISOString().slice(0, 10)}"\n}\n</script>\n\n<!-- Why: Content freshness is a Google ranking signal.\n     Dated content shows it's actively maintained. -->`;
+  }
+
+  if (problem.includes('about') && problem.includes('page')) {
+    return `<!-- Add an About page link in your footer: -->\n<footer>\n  <a href="/about">About Us</a>\n  <a href="/contact">Contact</a>\n  <a href="/privacy">Privacy Policy</a>\n</footer>\n\n<!-- Your About page should include: -->\n<!-- - Who you are / company background -->\n<!-- - Team members with real photos -->\n<!-- - Contact information -->\n<!-- - Social media links -->\n\n<!-- Why: Google's E-E-A-T guidelines value transparency.\n     About pages build trust with users and search engines. -->`;
+  }
+
+  if (problem.includes('privacy') && problem.includes('not found')) {
+    return `<!-- Add a privacy policy link in your footer: -->\n<footer>\n  <a href="/privacy">Privacy Policy</a>\n  <a href="/terms">Terms of Service</a>\n</footer>\n\n<!-- Why: Required by GDPR, CCPA, and Google AdSense.\n     Builds trust — Google's E-E-A-T guidelines value\n     sites that are transparent about data practices. -->`;
+  }
+
+  // ===== EMAIL OBFUSCATION =====
+  if (problem.includes('email') && problem.includes('exposed')) {
+    return `<!-- Don't put plain emails in HTML: -->\n<!-- BAD: -->\n<p>Contact us at support@${domain}</p>\n\n<!-- GOOD: Use a contact form or obfuscate: -->\n<a href="/contact">Contact Us</a>\n\n<!-- Or JavaScript obfuscation: -->\n<script>\n  const e = 'support' + '@' + '${domain}';\n  document.getElementById('email').href = 'mailto:' + e;\n</script>\n\n<!-- Why: Spam bots scrape plain text emails.\n     Obfuscation reduces spam by 95%+. -->`;
+  }
+
+  // ===== NOOPENER =====
+  if (problem.includes('noopener') || (problem.includes('target') && problem.includes('blank'))) {
+    return `<!-- Add rel="noopener noreferrer" to external links: -->\n\n<!-- Before (security risk): -->\n<a href="https://example.com" target="_blank">Link</a>\n\n<!-- After (secure): -->\n<a href="https://example.com" target="_blank" rel="noopener noreferrer">Link</a>\n\n<!-- Why: Without rel="noopener", the linked page can\n     access your page via window.opener — potentially\n     redirecting your users to a phishing page. -->`;
+  }
+
+  // ===== PAGE WEIGHT =====
+  if (problem.includes('page weight') || problem.includes('page size')) {
+    return `<!-- Reduce page weight: -->\n\n<!-- 1. Compress images (biggest win): -->\n<!-- Use WebP/AVIF, resize to display size -->\n<!-- Tool: squoosh.app -->\n\n<!-- 2. Minify CSS/JS: -->\n<!-- Next.js/Vite do this automatically -->\n<!-- Otherwise: npm install terser cssnano -->\n\n<!-- 3. Remove unused code: -->\n<!-- Check with Chrome DevTools → Coverage tab -->\n\n<!-- 4. Lazy load below-fold content: -->\n<img loading="lazy" src="photo.jpg">\n<iframe loading="lazy" src="..."></iframe>\n\n<!-- Target: < 1.5MB total page weight -->`;
+  }
+
+  // ===== COPYRIGHT YEAR =====
+  if (problem.includes('copyright') && problem.includes('year')) {
+    return `<!-- Auto-update copyright year: -->\n\n<!-- HTML + JavaScript: -->\n<p>&copy; <span id="year"></span> ${domain}</p>\n<script>document.getElementById('year').textContent = new Date().getFullYear();</script>\n\n<!-- React/Next.js: -->\n<p>&copy; {new Date().getFullYear()} ${domain}</p>\n\n<!-- PHP: -->\n<p>&copy; <?= date('Y') ?> ${domain}</p>\n\n<!-- Why: Outdated copyright years make your site\n     look abandoned — hurting trust and credibility. -->`;
+  }
+
   // ===== URL FIXES =====
   if (problem.includes('url') && problem.includes('uppercase')) {
     const fixedUrl = url.toLowerCase();
