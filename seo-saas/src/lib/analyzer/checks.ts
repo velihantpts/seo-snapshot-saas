@@ -585,7 +585,7 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
     serverInfo: { contentEncoding, cacheControl, xPoweredBy, server: response.headers.get('server') || '' },
     pageWeight: { estimated: estimatedPageWeight, totalRequests, iframeCount, preconnects, dnsPrefetch, externalDomains: externalDomains.length },
     socialLinks: foundSocial, exposedEmails, noopenerMissing, foundDeprecated, metaRefresh: !!metaRefresh,
-    kwInUrl, topKwDensity, noSrcset, shortAlt, longAlt, smallTapTargets, spamLinks,
+    kwInUrl, kwInDesc, topKwDensity, noSrcset, shortAlt, longAlt, smallTapTargets, spamLinks,
     eeat: { score: eeatSignals, total: 6, hasAuthor: hasAuthorMeta || hasAuthorSchema, hasAbout: hasAboutLink, hasPrivacy: hasPrivacyLink, hasTerms: hasTermsLink, hasContact: hasContactLink, hasDate: hasDatePublished, issues: eeatIssues },
   };
 }

@@ -64,7 +64,12 @@ export async function analyzeURL(targetUrl: string) {
     textToHtmlRatio: checkResult.textToHtmlRatio, titlePixelWidth: checkResult.titlePixelWidth,
     titleTags: checkResult.titleTags, descTags: checkResult.descTags,
     hasCompression: !!(secResult.encoding), hasCacheControl: !!(secResult.cacheControl),
-    noopenerMissing: 0,
+    noopenerMissing: checkResult.noopenerMissing || 0,
+    kwInUrl: checkResult.kwInUrl, kwInDesc: checkResult.kwInDesc,
+    eeatScore: checkResult.eeat?.score || 0,
+    spamLinks: checkResult.spamLinks || 0,
+    totalRequests: checkResult.pageWeight?.totalRequests || 0,
+    estimatedPageWeight: checkResult.pageWeight?.estimated || 0,
   }, issues);
 
   logger.debug('analysis.complete', { url: targetUrl, score: scoring.score, issues: issues.length });
