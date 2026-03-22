@@ -17,6 +17,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     'website-accessibility-seo-checklist',
     'sitemap-xml-guide',
     'heading-hierarchy-seo',
+    'free-seo-audit-tool-2026',
+    'seo-checklist-for-developers',
+    'eeat-seo-guide',
+    'nginx-security-headers-guide',
+    'how-to-improve-lighthouse-score',
+    'meta-description-length-2026',
+    'website-security-check-guide',
   ];
 
   return [
