@@ -546,6 +546,24 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   const preconnects = $('link[rel="preconnect"]').length;
   const dnsPrefetch = $('link[rel="dns-prefetch"]').length;
 
+  // ===== E-E-A-T SIGNALS =====
+  const hasAuthorMeta = !!($('meta[name="author"]').attr('content'));
+  const hasAuthorSchema = schemas.some(s => (s as any).author || (s as any).creator);
+  const hasAboutLink = $('a[href*="/about"], a[href*="about-us"], a[href*="about_us"]').length > 0;
+  const hasPrivacyLink = $('a[href*="/privacy"], a[href*="privacy-policy"]').length > 0;
+  const hasTermsLink = $('a[href*="/terms"], a[href*="terms-of-service"], a[href*="tos"]').length > 0;
+  const hasContactLink = $('a[href*="/contact"], a[href*="contact-us"], a[href*="mailto:"]').length > 0;
+  const hasDatePublished = $('time[datetime]').length > 0 || schemas.some(s => (s as any).datePublished);
+  const hasDateModified = schemas.some(s => (s as any).dateModified);
+
+  const eeatSignals = [hasAuthorMeta || hasAuthorSchema, hasAboutLink, hasPrivacyLink, hasTermsLink, hasContactLink, hasDatePublished].filter(Boolean).length;
+  const eeatIssues: string[] = [];
+  if (!hasAuthorMeta && !hasAuthorSchema) { eeatIssues.push('No author information'); issues.push({ severity: 'warning', problem: 'No author information found', fix: 'Add <meta name="author" content="Your Name"> or author field in JSON-LD schema. Google uses authorship for E-E-A-T evaluation.', category: 'Content' }); }
+  if (!hasAboutLink) { eeatIssues.push('No About page link'); issues.push({ severity: 'warning', problem: 'No "About" page link found', fix: 'Add a link to an About page. It helps establish E-E-A-T (Experience, Expertise, Authority, Trust) with Google.', category: 'Content' }); }
+  if (!hasPrivacyLink) { eeatIssues.push('No Privacy Policy link'); issues.push({ severity: 'warning', problem: 'No privacy policy link found', fix: 'Add a link to your privacy policy in the footer. Required by GDPR and helps build trust.', category: 'Content' }); }
+  if (!hasContactLink) { eeatIssues.push('No contact information'); issues.push({ severity: 'warning', problem: 'No contact page or email link found', fix: 'Add a Contact page or mailto: link. Google values sites that provide ways to reach the author/business.', category: 'Content' }); }
+  if (!hasDatePublished && wordCount > 300) { eeatIssues.push('No publish date'); issues.push({ severity: 'warning', problem: 'No publish or modified date found', fix: 'Add <time datetime="2026-01-15"> or datePublished in JSON-LD. Content freshness is a Google ranking signal.', category: 'Content' }); }
+
   // ===== OPEN GRAPH COMPLETENESS SCORE =====
   const ogCompleteness = Object.values(og).filter(Boolean).length;
   if (ogCompleteness > 0 && ogCompleteness < 4) {
@@ -568,5 +586,6 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
     pageWeight: { estimated: estimatedPageWeight, totalRequests, iframeCount, preconnects, dnsPrefetch, externalDomains: externalDomains.length },
     socialLinks: foundSocial, exposedEmails, noopenerMissing, foundDeprecated, metaRefresh: !!metaRefresh,
     kwInUrl, topKwDensity, noSrcset, shortAlt, longAlt, smallTapTargets, spamLinks,
+    eeat: { score: eeatSignals, total: 6, hasAuthor: hasAuthorMeta || hasAuthorSchema, hasAbout: hasAboutLink, hasPrivacy: hasPrivacyLink, hasTerms: hasTermsLink, hasContact: hasContactLink, hasDate: hasDatePublished, issues: eeatIssues },
   };
 }
