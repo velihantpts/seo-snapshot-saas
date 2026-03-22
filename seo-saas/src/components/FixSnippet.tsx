@@ -2,27 +2,22 @@
 import { useState } from 'react';
 import { Copy, CheckCircle, Code } from 'lucide-react';
 
-function highlightSyntax(code: string): string {
-  // Escape HTML, then color each line based on content
-  const escaped = code.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-  return escaped.split('\n').map(line => {
-    // Comment lines
-    if (line.trimStart().startsWith('&lt;!--') || line.trimStart().startsWith('//') || line.trimStart().startsWith('<!--'))
-      return `<span class="text-white/25">${line}</span>`;
-    // Why/Tip explanation lines
-    if (line.trimStart().startsWith('Why:') || line.trimStart().startsWith('Tip:'))
-      return `<span class="text-white/30 italic">${line}</span>`;
-    // Config comment lines (# ...)
-    if (line.trimStart().startsWith('#') && !line.includes('{'))
-      return `<span class="text-white/25">${line}</span>`;
-    // HTML tag lines
-    if (line.includes('&lt;'))
-      return line
-        .replace(/(&lt;\/?[\w-]+)/g, '<span class="text-indigo-400">$1</span>')
-        .replace(/(&gt;)/g, '<span class="text-indigo-400">$1</span>');
-    // Default — accent color
-    return `<span class="text-accent-300/70">${line}</span>`;
-  }).join('\n');
+interface HighlightedLine {
+  text: string;
+  className: string;
+}
+
+function classifyLine(line: string): HighlightedLine {
+  const trimmed = line.trimStart();
+  if (trimmed.startsWith('<!--') || trimmed.startsWith('//'))
+    return { text: line, className: 'text-white/25' };
+  if (trimmed.startsWith('Why:') || trimmed.startsWith('Tip:'))
+    return { text: line, className: 'text-white/30 italic' };
+  if (trimmed.startsWith('#') && !line.includes('{'))
+    return { text: line, className: 'text-white/25' };
+  if (line.includes('<') && line.includes('>'))
+    return { text: line, className: 'text-indigo-400' };
+  return { text: line, className: 'text-accent-300/70' };
 }
 
 export function FixSnippet({ code, language = 'html' }: { code: string; language?: string }) {
@@ -45,8 +40,12 @@ export function FixSnippet({ code, language = 'html' }: { code: string; language
           {copied ? <><CheckCircle className="w-3 h-3 text-emerald-400" /> Copied</> : <><Copy className="w-3 h-3" /> Copy</>}
         </button>
       </div>
-      <pre className="p-3 text-xs font-mono overflow-x-auto scrollbar-thin bg-white/[0.02] leading-relaxed whitespace-pre-wrap break-all"
-        dangerouslySetInnerHTML={{ __html: highlightSyntax(code) }} />
+      <pre className="p-3 text-xs font-mono overflow-x-auto scrollbar-thin bg-white/[0.02] leading-relaxed whitespace-pre-wrap break-all">
+        {code.split('\n').map((line, i) => {
+          const { className } = classifyLine(line);
+          return <span key={i} className={className}>{line}{'\n'}</span>;
+        })}
+      </pre>
     </div>
   );
 }
