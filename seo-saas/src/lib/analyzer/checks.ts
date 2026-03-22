@@ -198,6 +198,19 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   const kwInH1 = topKw ? (headings.h1.texts[0] || '').toLowerCase().includes(topKw) : true;
   if (topKw && !kwInTitle) issues.push({ severity: 'warning', problem: `Top keyword "${topKw}" not found in title`, fix: `Include "${topKw}" in the title tag.`, category: 'Content' });
   if (topKw && !kwInH1 && headings.h1.count > 0) issues.push({ severity: 'warning', problem: `Top keyword "${topKw}" not found in H1`, fix: `Include "${topKw}" in your H1.`, category: 'Content' });
+  const kwInUrl = topKw ? parsedUrl.pathname.toLowerCase().includes(topKw) : true;
+  if (topKw && !kwInUrl && parsedUrl.pathname !== '/') issues.push({ severity: 'warning', problem: `Top keyword "${topKw}" not found in URL`, fix: `Include "${topKw}" in the URL slug for better relevance signal.`, category: 'Content' });
+  const topKwDensity = topKw && wordCount > 0 ? ((topKeywords[0]?.count || 0) / wordCount) * 100 : 0;
+  if (topKwDensity > 4) issues.push({ severity: 'warning', problem: `Keyword stuffing: "${topKw}" density ${topKwDensity.toFixed(1)}%`, fix: 'Keep keyword density under 3-4%. Use synonyms and related terms instead of repeating the same keyword.', category: 'Content' });
+
+  // ===== SRCSET + ALT LENGTH =====
+  let noSrcset = 0;
+  imgs.each((_, el) => { if (!$(el).attr('srcset') && !$(el).parent('picture').length) noSrcset++; });
+  if (noSrcset > 5) issues.push({ severity: 'warning', problem: `${noSrcset} images without srcset/responsive variants`, fix: 'Add srcset attribute or use <picture> element for responsive images. Serve appropriate sizes for each viewport.', category: 'Content' });
+  let shortAlt = 0, longAlt = 0;
+  imgs.each((_, el) => { const alt = $(el).attr('alt'); if (alt && alt.length > 0 && alt.length < 5) shortAlt++; if (alt && alt.length > 125) longAlt++; });
+  if (shortAlt > 2) issues.push({ severity: 'warning', problem: `${shortAlt} images with very short alt text (<5 chars)`, fix: 'Write descriptive alt text (10-125 characters) that describes the image content.', category: 'Content' });
+  if (longAlt > 0) issues.push({ severity: 'warning', problem: `${longAlt} images with overly long alt text (>125 chars)`, fix: 'Keep alt text under 125 characters. Move detailed descriptions to figcaption or surrounding text.', category: 'Content' });
 
   const hasFavicon = $('link[rel="icon"], link[rel="shortcut icon"], link[rel="apple-touch-icon"]').length > 0;
   if (!hasFavicon) issues.push({ severity: 'warning', problem: 'No favicon found', fix: 'Add <link rel="icon" href="/favicon.ico">.', category: 'Meta' });
@@ -249,6 +262,34 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   const hasXDefault = hreflangTags.some(h => h.lang === 'x-default');
   const hreflangIssues: string[] = [];
   if (hreflangTags.length > 0 && !hasXDefault) { hreflangIssues.push('Missing x-default'); issues.push({ severity: 'warning', problem: 'Missing x-default hreflang', fix: 'Add hreflang x-default as fallback.' }); }
+  // Hreflang lang code validation
+  const validLangCodes = /^(x-default|[a-z]{2}(-[A-Z]{2})?)$/;
+  hreflangTags.forEach(h => { if (!validLangCodes.test(h.lang)) issues.push({ severity: 'warning', problem: `Invalid hreflang language code: "${h.lang}"`, fix: `Use valid ISO 639-1 codes like "en", "tr", "de-DE". "${h.lang}" is not recognized.`, category: 'Technical' }); });
+  // Self-referencing hreflang
+  if (hreflangTags.length > 0 && !hreflangTags.some(h => { try { return new URL(h.url, targetUrl).toString() === targetUrl; } catch { return false; } })) {
+    issues.push({ severity: 'warning', problem: 'Missing self-referencing hreflang tag', fix: 'Add a hreflang tag that points to this page itself.', category: 'Technical' });
+  }
+
+  // ===== MOBILE TAP TARGET + FONT SIZE =====
+  let smallTapTargets = 0;
+  $('a, button, input, select, textarea').each((_, el) => {
+    const style = $(el).attr('style') || '';
+    const cls = $(el).attr('class') || '';
+    const sizeMatch = style.match(/(?:width|height)\s*:\s*(\d+)/);
+    if (sizeMatch && parseInt(sizeMatch[1]) < 44) smallTapTargets++;
+    if (cls.includes('text-[10px]') || cls.includes('text-[8px]')) smallTapTargets++;
+  });
+  const baseFontSize = $('body').css('font-size') || '';
+  const htmlFontMatch = html.match(/body\s*{[^}]*font-size\s*:\s*(\d+)/);
+  if (htmlFontMatch && parseInt(htmlFontMatch[1]) < 14) {
+    issues.push({ severity: 'warning', problem: `Base font size too small (${htmlFontMatch[1]}px)`, fix: 'Use at least 16px base font size for readability on mobile devices.', category: 'Mobile' });
+  }
+
+  // ===== SPAM DOMAIN DETECTION =====
+  const spamDomains = ['casino', 'poker', 'viagra', 'cialis', 'payday', 'loan-shark', 'xxx', 'porn'];
+  let spamLinks = 0;
+  $('a[href]').each((_, el) => { const href = ($(el).attr('href') || '').toLowerCase(); spamDomains.forEach(s => { if (href.includes(s)) spamLinks++; }); });
+  if (spamLinks > 0) issues.push({ severity: 'critical', problem: `${spamLinks} link(s) to potentially spammy domains`, fix: 'Remove or add rel="nofollow" to links pointing to spam/gambling/adult domains. These hurt your SEO.', category: 'Security' });
 
   // ===== STRUCTURED DATA DEEP VALIDATION =====
   schemas.forEach(s => {
@@ -524,5 +565,6 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
     serverInfo: { contentEncoding, cacheControl, xPoweredBy, server: response.headers.get('server') || '' },
     pageWeight: { estimated: estimatedPageWeight, totalRequests, iframeCount, preconnects, dnsPrefetch, externalDomains: externalDomains.length },
     socialLinks: foundSocial, exposedEmails, noopenerMissing, foundDeprecated, metaRefresh: !!metaRefresh,
+    kwInUrl, topKwDensity, noSrcset, shortAlt, longAlt, smallTapTargets, spamLinks,
   };
 }
