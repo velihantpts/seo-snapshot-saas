@@ -59,7 +59,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'faq.cancel.q': 'Can I cancel anytime?', 'faq.cancel.a': 'Yes. Cancel from your Stripe billing portal. You keep access until the end of your billing period.',
     'faq.limit.q': 'What happens at the free limit?', 'faq.limit.a': 'You can still view past analyses. The limit resets daily at midnight UTC.',
     'faq.monitor.q': 'What is scheduled monitoring?', 'faq.monitor.a': 'Pro users can set up automatic SEO checks. We run the analysis on your schedule and notify you if your score drops.',
-    'faq.refund.q': 'Do you offer refunds?', 'faq.refund.a': 'Yes. Full refund within 7 days of purchase, no questions asked.',
+    'faq.refund.q': 'Do you offer refunds?', 'faq.refund.a': 'Yes. Full refund within 14 days of purchase, no questions asked.',
 
     // Stats
     'stats.checks': 'SEO Checks',
@@ -262,7 +262,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'faq.cancel.q': '\u0130stedi\u011fim zaman iptal edebilir miyim?', 'faq.cancel.a': 'Evet. Stripe faturaland\u0131rma portalinizden iptal edin.',
     'faq.limit.q': '\u00dccretsiz limit dolunca ne olur?', 'faq.limit.a': 'Ge\u00e7mi\u015f analizleri g\u00f6r\u00fcnt\u00fcleyebilirsiniz. Limit her gece s\u0131f\u0131rlan\u0131r.',
     'faq.monitor.q': 'Zamanlanm\u0131\u015f izleme nedir?', 'faq.monitor.a': 'Pro kullan\u0131c\u0131lar otomatik SEO kontrolleri ayarlayabilir.',
-    'faq.refund.q': '\u0130ade yap\u0131yor musunuz?', 'faq.refund.a': 'Evet. Sat\u0131n alma tarihinden 7 g\u00fcn i\u00e7inde tam iade.',
+    'faq.refund.q': '\u0130ade yap\u0131yor musunuz?', 'faq.refund.a': 'Evet. Sat\u0131n alma tarihinden 14 g\u00fcn i\u00e7inde tam iade.',
     'footer.copy': '© 2026 SEO Snapshot',
   },
 
@@ -362,7 +362,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'faq.cancel.q': 'Kann ich jederzeit k\u00fcndigen?', 'faq.cancel.a': 'Ja. K\u00fcndigen Sie \u00fcber das Stripe-Portal.',
     'faq.limit.q': 'Was passiert am Limit?', 'faq.limit.a': 'Sie k\u00f6nnen alte Analysen sehen. Limit wird t\u00e4glich zur\u00fcckgesetzt.',
     'faq.monitor.q': 'Was ist geplantes Monitoring?', 'faq.monitor.a': 'Pro-Nutzer k\u00f6nnen automatische SEO-Checks einrichten.',
-    'faq.refund.q': 'Bieten Sie R\u00fcckerstattungen?', 'faq.refund.a': 'Ja. Volle R\u00fcckerstattung innerhalb von 7 Tagen.',
+    'faq.refund.q': 'Bieten Sie R\u00fcckerstattungen?', 'faq.refund.a': 'Ja. Volle R\u00fcckerstattung innerhalb von 14 Tagen.',
     'footer.copy': '© 2026 SEO Snapshot',
   },
 
@@ -462,7 +462,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'faq.cancel.q': 'Puedo cancelar?', 'faq.cancel.a': 'S\u00ed. Cancela desde el portal de Stripe.',
     'faq.limit.q': 'Qu\u00e9 pasa en el l\u00edmite?', 'faq.limit.a': 'Puedes ver an\u00e1lisis anteriores. El l\u00edmite se reinicia diariamente.',
     'faq.monitor.q': 'Qu\u00e9 es el monitoreo?', 'faq.monitor.a': 'Los usuarios Pro pueden configurar verificaciones autom\u00e1ticas.',
-    'faq.refund.q': 'Ofrecen reembolsos?', 'faq.refund.a': 'S\u00ed. Reembolso completo en 7 d\u00edas.',
+    'faq.refund.q': 'Ofrecen reembolsos?', 'faq.refund.a': 'S\u00ed. Reembolso completo en 14 d\u00edas.',
     'footer.copy': '© 2026 SEO Snapshot',
   },
 
@@ -562,7 +562,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'faq.cancel.q': 'Puis-je annuler ?', 'faq.cancel.a': 'Oui. Annulez depuis le portail Stripe.',
     'faq.limit.q': 'Que se passe-t-il \u00e0 la limite ?', 'faq.limit.a': 'Vous pouvez voir les anciennes analyses. La limite est r\u00e9initialis\u00e9e quotidiennement.',
     'faq.monitor.q': 'Qu\'est-ce que la surveillance ?', 'faq.monitor.a': 'Les utilisateurs Pro peuvent configurer des v\u00e9rifications automatiques.',
-    'faq.refund.q': 'Proposez-vous des remboursements ?', 'faq.refund.a': 'Oui. Remboursement complet sous 7 jours.',
+    'faq.refund.q': 'Proposez-vous des remboursements ?', 'faq.refund.a': 'Oui. Remboursement complet sous 14 jours.',
     'footer.copy': '© 2026 SEO Snapshot',
   },
 };
