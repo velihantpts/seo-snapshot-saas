@@ -26,7 +26,7 @@ export default function Pricing() {
     if (!session) { signIn(undefined, { callbackUrl: `/pricing?checkout=${priceType}` }); return; }
     setLoading(priceType);
     try {
-      const res = await fetch('/api/lemon', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: priceType }) });
+      const res = await fetch('/api/paddle', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: priceType }) });
       const data = await res.json();
       if (data.url) window.location.href = data.url;
       else if (data.error) alert(data.error);
