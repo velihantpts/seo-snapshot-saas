@@ -46,8 +46,8 @@ export const logger = {
   auth: (event: string, userId?: string, provider?: string) =>
     log('info', `auth.${event}`, { userId, provider }),
 
-  stripe: (event: string, data?: Record<string, unknown>) =>
-    log('info', `stripe.${event}`, data),
+  paddle: (event: string, data?: Record<string, unknown>) =>
+    log('info', `paddle.${event}`, data),
 
   ssrf: (url: string, ip: string) =>
     log('warn', 'ssrf.blocked', { url, ip }),

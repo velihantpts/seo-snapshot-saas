@@ -15,7 +15,7 @@ export default function Privacy() {
           <h2 className="text-white/80 font-medium text-base mt-6">How we use it</h2>
           <p>Your data is used solely to provide the SEO Snapshot service — analysis history, scheduled monitoring, and account management.</p>
           <h2 className="text-white/80 font-medium text-base mt-6">Third parties</h2>
-          <p>We use Stripe for payments, Google/GitHub for authentication, and Google PageSpeed Insights API for performance data. We do not sell your data.</p>
+          <p>We use Paddle for payments, Google/GitHub for authentication, and Google PageSpeed Insights API for performance data. We do not sell your data.</p>
           <h2 className="text-white/80 font-medium text-base mt-6">Cookies</h2>
           <p>We use essential cookies for authentication session management. No tracking or advertising cookies.</p>
           <h2 className="text-white/80 font-medium text-base mt-6">Data deletion</h2>

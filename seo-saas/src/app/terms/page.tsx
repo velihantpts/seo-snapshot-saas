@@ -15,7 +15,7 @@ export default function Terms() {
           <h2 className="text-white/80 font-medium text-base mt-6">2. Usage</h2>
           <p>Free accounts are limited to 5 analyses per day. Pro accounts have higher limits. Abuse or automated scraping is prohibited.</p>
           <h2 className="text-white/80 font-medium text-base mt-6">3. Payment</h2>
-          <p>Pro subscriptions are billed monthly via Stripe. Lifetime purchases are one-time. Refunds available within 14 days of purchase, no questions asked.</p>
+          <p>Pro subscriptions are billed monthly via Paddle. Lifetime purchases are one-time. Refunds available within 14 days of purchase, no questions asked.</p>
           <h2 className="text-white/80 font-medium text-base mt-6">4. Data</h2>
           <p>Analysis results are stored to provide history features. We do not sell or share your data with third parties.</p>
           <h2 className="text-white/80 font-medium text-base mt-6">5. Legal</h2>

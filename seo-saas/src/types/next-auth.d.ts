@@ -5,7 +5,7 @@ declare module 'next-auth' {
   interface User {
     id: string;
     plan: string;
-    stripeId?: string | null;
+    paddleCustomerId?: string | null;
   }
   interface Session {
     user: User & {

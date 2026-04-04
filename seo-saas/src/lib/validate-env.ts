@@ -16,11 +16,10 @@ const config: EnvConfig = {
     'GOOGLE_CLIENT_SECRET',
     'GITHUB_CLIENT_ID',
     'GITHUB_CLIENT_SECRET',
-    'STRIPE_SECRET_KEY',
-    'STRIPE_PUBLISHABLE_KEY',
-    'STRIPE_WEBHOOK_SECRET',
-    'STRIPE_PRICE_MONTHLY',
-    'STRIPE_PRICE_LIFETIME',
+    'PADDLE_API_KEY',
+    'PADDLE_WEBHOOK_SECRET',
+    'PADDLE_PRICE_MONTHLY',
+    'PADDLE_PRICE_LIFETIME',
     'PAGESPEED_API_KEY',
     'ANTHROPIC_API_KEY',
   ],
@@ -40,8 +39,8 @@ export function validateEnv(): { valid: boolean; missing: string[]; warnings: st
   if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
     warnings.push('Google OAuth not configured — Google sign-in will not work');
   }
-  if (!process.env.STRIPE_SECRET_KEY) {
-    warnings.push('Stripe not configured — payments will not work');
+  if (!process.env.PADDLE_API_KEY) {
+    warnings.push('Paddle not configured — payments will not work');
   }
 
   return { valid: missing.length === 0, missing, warnings };
