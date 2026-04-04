@@ -28,7 +28,6 @@ export async function POST(req: NextRequest) {
     const transaction = await paddle.transactions.create({
       items: [{ priceId, quantity: 1 }],
       customData: { email: session.user.email },
-      checkout: { url: `${process.env.NEXTAUTH_URL}/dashboard?upgraded=true` },
     });
 
     const checkoutUrl = transaction.checkout?.url;
