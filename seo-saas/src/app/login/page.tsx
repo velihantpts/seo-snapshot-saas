@@ -107,7 +107,7 @@ export default function Login() {
               placeholder={mode === 'register' ? 'At least 6 characters' : 'Your password'}
               className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/35 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
               required
-              minLength={6}
+              minLength={mode === 'register' ? 6 : 1}
             />
           </div>
 
