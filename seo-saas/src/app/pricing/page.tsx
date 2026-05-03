@@ -28,8 +28,16 @@ export default function Pricing() {
     try {
       const res = await fetch('/api/paddle', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ plan: priceType }) });
       const data = await res.json();
-      if (data.url) window.location.href = data.url;
-      else if (data.error) alert(data.error);
+      if (data.transactionId && typeof window !== 'undefined' && (window as any).Paddle) {
+        (window as any).Paddle.Checkout.open({
+          transactionId: data.transactionId,
+          settings: {
+            successUrl: `${window.location.origin}/dashboard?upgraded=true`,
+          },
+        });
+      } else if (data.error) {
+        alert(data.error);
+      }
     } catch (e) { if (typeof console !== "undefined") console.error(e); }
     setLoading(null);
   };

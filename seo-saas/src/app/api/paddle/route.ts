@@ -30,11 +30,7 @@ export async function POST(req: NextRequest) {
       customData: { email: session.user.email },
     });
 
-    // Build Paddle checkout URL from transaction ID
-    const txnId = transaction.id;
-    const checkoutUrl = `https://checkout.paddle.com/transaction/${txnId}`;
-
-    return NextResponse.json({ url: checkoutUrl });
+    return NextResponse.json({ transactionId: transaction.id });
   } catch (err) {
     console.error('[Paddle] Checkout error:', err);
     return NextResponse.json({ error: 'Failed to create checkout' }, { status: 500 });
