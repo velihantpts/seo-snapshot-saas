@@ -11,6 +11,17 @@ export default function Pricing() {
   const [loading, setLoading] = useState<string | null>(null);
   const { t } = useLocale();
 
+  // Load Paddle.js
+  useEffect(() => {
+    if (typeof window === 'undefined' || (window as any).Paddle) return;
+    const script = document.createElement('script');
+    script.src = 'https://cdn.paddle.com/paddle/v2/paddle.js';
+    script.onload = () => {
+      (window as any).Paddle?.Initialize({ token: 'live_c476757398a653a03b15f0497c8' });
+    };
+    document.head.appendChild(script);
+  }, []);
+
   // Auto-checkout after login redirect
   useEffect(() => {
     if (typeof window === 'undefined' || !session) return;
