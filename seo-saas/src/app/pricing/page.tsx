@@ -4,23 +4,14 @@ import Link from 'next/link';
 import { Check, X } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import { useLocale } from '@/lib/i18n';
+import Script from 'next/script';
 
 
 export default function Pricing() {
   const { data: session } = useSession();
   const [loading, setLoading] = useState<string | null>(null);
+  const [paddleReady, setPaddleReady] = useState(false);
   const { t } = useLocale();
-
-  // Load Paddle.js
-  useEffect(() => {
-    if (typeof window === 'undefined' || (window as any).Paddle) return;
-    const script = document.createElement('script');
-    script.src = 'https://cdn.paddle.com/paddle/v2/paddle.js';
-    script.onload = () => {
-      (window as any).Paddle?.Initialize({ token: 'live_c476757398a653a03b15f0497c8' });
-    };
-    document.head.appendChild(script);
-  }, []);
 
   // Auto-checkout after login redirect
   useEffect(() => {
@@ -90,6 +81,14 @@ export default function Pricing() {
 
   return (
     <div className="min-h-screen bg-surface relative">
+      <Script
+        src="https://cdn.paddle.com/paddle/v2/paddle.js"
+        strategy="afterInteractive"
+        onLoad={() => {
+          const P = (window as any)['Paddle'];
+          if (P) { P.Initialize({ token: 'live_c476757398a653a03b15f0497c8' }); setPaddleReady(true); }
+        }}
+      />
       <div className="fixed inset-0 bg-grid opacity-30 pointer-events-none" />
 
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
