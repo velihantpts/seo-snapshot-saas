@@ -49,8 +49,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <script src="https://cdn.paddle.com/paddle/v2/paddle.js" async />
         <script dangerouslySetInnerHTML={{ __html: `
           document.addEventListener('DOMContentLoaded', function() {
-            if (window.Paddle) { window.Paddle.Initialize({ token: '${process.env.PADDLE_CLIENT_TOKEN || ''}' }); }
-            else { document.querySelector('script[src*="paddle"]')?.addEventListener('load', function() { if (window.Paddle) window.Paddle.Initialize({ token: '${process.env.PADDLE_CLIENT_TOKEN || ''}' }); }); }
+            if (window.Paddle) { window.Paddle.Initialize({ token: '${process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN || ''}' }); }
+            else { document.querySelector('script[src*="paddle"]')?.addEventListener('load', function() { if (window.Paddle) window.Paddle.Initialize({ token: '${process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN || ''}' }); }); }
           });
         `}} />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({
