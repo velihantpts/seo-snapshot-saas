@@ -30,10 +30,9 @@ export async function POST(req: NextRequest) {
       customData: { email: session.user.email },
     });
 
-    const checkoutUrl = transaction.checkout?.url;
-    if (!checkoutUrl) {
-      return NextResponse.json({ error: 'No checkout URL returned' }, { status: 500 });
-    }
+    // Build Paddle checkout URL from transaction ID
+    const txnId = transaction.id;
+    const checkoutUrl = `https://checkout.paddle.com/transaction/${txnId}`;
 
     return NextResponse.json({ url: checkoutUrl });
   } catch (err) {
