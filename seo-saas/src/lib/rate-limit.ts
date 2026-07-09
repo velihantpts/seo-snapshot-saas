@@ -1,10 +1,44 @@
 import { redis } from './redis';
+import { logger } from './logger';
 
 export interface RateLimitResult {
   allowed: boolean;
   remaining: number;
   limit: number;
   retryAfter?: number;
+}
+
+// In-memory fallback used ONLY when Redis is unavailable. The app runs as a
+// single long-lived container, so this map is effective (unlike serverless).
+// It prevents the previous fail-open behaviour (unlimited requests on Redis
+// outage) from being abused.
+const memoryStore = new Map<string, number[]>();
+
+function memoryRateLimit(identifier: string, limit: number, windowMs: number): RateLimitResult {
+  const key = `rl:${identifier}`;
+  const now = Date.now();
+  const windowStart = now - windowMs;
+  const hits = (memoryStore.get(key) || []).filter((t) => t > windowStart);
+
+  if (hits.length >= limit) {
+    const retryAfter = Math.ceil((hits[0] + windowMs - now) / 1000);
+    memoryStore.set(key, hits);
+    return { allowed: false, remaining: 0, limit, retryAfter };
+  }
+
+  hits.push(now);
+  memoryStore.set(key, hits);
+
+  // Opportunistic cleanup so the map does not grow unbounded.
+  if (memoryStore.size > 10_000) {
+    memoryStore.forEach((v, k) => {
+      const fresh = v.filter((t) => t > windowStart);
+      if (fresh.length === 0) memoryStore.delete(k);
+      else memoryStore.set(k, fresh);
+    });
+  }
+
+  return { allowed: true, remaining: limit - hits.length, limit };
 }
 
 export async function checkRateLimit(
@@ -37,9 +71,10 @@ export async function checkRateLimit(
     }
 
     return { allowed: true, remaining: limit - count, limit };
-  } catch {
-    // Redis down — fallback to allow (fail-open)
-    return { allowed: true, remaining: limit, limit };
+  } catch (err) {
+    // Redis down — fall back to an in-memory limiter instead of failing open.
+    logger.error('ratelimit.redis_down', { error: (err as Error)?.message });
+    return memoryRateLimit(identifier, limit, windowMs);
   }
 }
 

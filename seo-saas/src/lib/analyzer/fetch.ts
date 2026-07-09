@@ -1,5 +1,6 @@
 import * as cheerio from 'cheerio';
 import { getPageSpeedData } from '../pagespeed';
+import { validatePublicURL } from '../ssrf-protection';
 import type { Issue } from './types';
 
 export interface FetchResult {
@@ -26,7 +27,13 @@ export async function fetchPage(targetUrl: string): Promise<FetchResult> {
 
   try {
     for (let i = 0; i < 10; i++) {
-      const res = await fetch(currentUrl, {
+      // Re-validate every hop (incl. the initial URL) against SSRF before fetching,
+      // so a public URL cannot redirect into a private/internal address.
+      const check = await validatePublicURL(currentUrl);
+      if (!check.valid || !check.url) {
+        throw new Error(`Blocked URL: ${check.error || 'failed SSRF validation'}`);
+      }
+      const res = await fetch(check.url.toString(), {
         headers: { 'User-Agent': 'SEOSnapshotBot/1.0 (+https://seosnapshot.dev)' },
         signal: controller.signal,
         redirect: 'manual',
@@ -34,7 +41,7 @@ export async function fetchPage(targetUrl: string): Promise<FetchResult> {
       redirectChain.push({ url: currentUrl, status: res.status });
       if (res.status >= 300 && res.status < 400) {
         const location = res.headers.get('location');
-        if (!location) break;
+        if (!location) { response = res; break; }
         currentUrl = new URL(location, currentUrl).toString();
       } else {
         response = res;
@@ -42,11 +49,8 @@ export async function fetchPage(targetUrl: string): Promise<FetchResult> {
       }
     }
     if (!response) {
-      response = await fetch(currentUrl, {
-        headers: { 'User-Agent': 'SEOSnapshotBot/1.0 (+https://seosnapshot.dev)' },
-        signal: controller.signal,
-        redirect: 'follow',
-      });
+      // Exhausted the redirect budget without a final response.
+      throw new Error('Too many redirects (>10)');
     }
   } finally { clearTimeout(timeout); }
 

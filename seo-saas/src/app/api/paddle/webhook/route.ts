@@ -1,12 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { Paddle, Environment } from '@paddle/paddle-node-sdk';
-import { PrismaClient } from '@prisma/client';
+import { prisma } from '@/lib/prisma';
 
 const paddle = new Paddle(process.env.PADDLE_API_KEY!, {
   environment: process.env.PADDLE_SANDBOX === 'true' ? Environment.sandbox : Environment.production,
 });
-
-const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
   try {

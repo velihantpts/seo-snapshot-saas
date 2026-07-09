@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { validateTargetURL } from '@/lib/ssrf-protection';
+import { validateTargetURL, validatePublicURL } from '@/lib/ssrf-protection';
 import { logger } from '@/lib/logger';
 import { crawlQueue } from '@/lib/queue';
 import * as cheerio from 'cheerio';
@@ -22,7 +22,8 @@ export async function POST(req: Request) {
   const { url } = await req.json();
   if (!url) return NextResponse.json({ error: 'URL required' }, { status: 400 });
 
-  const validation = validateTargetURL(url);
+  // DNS-aware validation (catches rebinding on the submitted domain too)
+  const validation = await validatePublicURL(url);
   if (!validation.valid || !validation.url) {
     return NextResponse.json({ error: validation.error }, { status: 400 });
   }
@@ -52,9 +53,13 @@ export async function POST(req: Request) {
       // Check if it's a sitemap index
       const sitemapLocs = $('sitemap > loc').map((_, el) => $(el).text().trim()).get();
       if (sitemapLocs.length > 0) {
-        // Sitemap index — fetch first child sitemap
+        // Sitemap index — fetch first child sitemap.
+        // The child URL is attacker-controlled (it comes from their sitemap),
+        // so it MUST pass SSRF validation before we fetch it.
         try {
-          const childRes = await fetch(sitemapLocs[0], { signal: AbortSignal.timeout(8000) });
+          const childCheck = await validatePublicURL(sitemapLocs[0]);
+          if (!childCheck.valid || !childCheck.url) throw new Error('Blocked child sitemap URL');
+          const childRes = await fetch(childCheck.url.toString(), { signal: AbortSignal.timeout(8000) });
           if (childRes.ok) {
             const childXml = await childRes.text();
             const child$ = cheerio.load(childXml, { xmlMode: true });

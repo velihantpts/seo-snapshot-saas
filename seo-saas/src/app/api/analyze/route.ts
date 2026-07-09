@@ -55,7 +55,9 @@ export async function POST(req: Request) {
           score: result.score,
           data: JSON.stringify(result),
           issues: JSON.stringify(result.issues),
-          public: true,
+          // Private by default — a signed-in user's history is theirs. Sharing is
+          // opt-in via the PATCH toggle (which flips `public` to true).
+          public: false,
         },
       });
       analysisId = analysis.id;

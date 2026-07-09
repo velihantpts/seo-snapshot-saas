@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Copy, CheckCircle, ExternalLink, Image, Lock } from 'lucide-react';
 
 interface QuickResult {
@@ -43,6 +43,14 @@ export default function AdminPage() {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState('');
   const [showText, setShowText] = useState<string | null>(null);
+
+  // Restore admin session from the httpOnly cookie (verified server-side).
+  useEffect(() => {
+    fetch('/api/admin')
+      .then((r) => r.json())
+      .then((d) => { if (d.authed) setAuthed(true); })
+      .catch(() => {});
+  }, []);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();

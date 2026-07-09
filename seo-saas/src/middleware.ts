@@ -25,14 +25,17 @@ function getRateLimitResult(ip: string, limit: number, windowSec: number) {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // Rate limit /api/analyze
+  // Per-minute burst limit for /api/analyze (the per-day quota lives in the
+  // route handler, backed by Redis). This is an in-memory guard against bursts.
+  const BURST_LIMIT = 20;
+  const BURST_WINDOW_SEC = 60;
+
   if (pathname === '/api/analyze') {
     const ip = request.headers.get('x-forwarded-for')?.split(',')[0]?.trim()
       || request.headers.get('x-real-ip')
       || '0.0.0.0';
 
-    // 100 requests per minute for testing (revert to 20 for production)
-    const result = getRateLimitResult(`analyze:${ip}`, 100, 60);
+    const result = getRateLimitResult(`analyze:${ip}`, BURST_LIMIT, BURST_WINDOW_SEC);
 
     if (!result.allowed) {
       return NextResponse.json(
@@ -40,8 +43,8 @@ export function middleware(request: NextRequest) {
         {
           status: 429,
           headers: {
-            'Retry-After': String(result.retryAfter || 60),
-            'X-RateLimit-Limit': '20',
+            'Retry-After': String(result.retryAfter || BURST_WINDOW_SEC),
+            'X-RateLimit-Limit': String(BURST_LIMIT),
             'X-RateLimit-Remaining': '0',
           },
         }
@@ -49,7 +52,7 @@ export function middleware(request: NextRequest) {
     }
 
     const response = NextResponse.next();
-    response.headers.set('X-RateLimit-Limit', '20');
+    response.headers.set('X-RateLimit-Limit', String(BURST_LIMIT));
     response.headers.set('X-RateLimit-Remaining', String(result.remaining));
     return response;
   }
