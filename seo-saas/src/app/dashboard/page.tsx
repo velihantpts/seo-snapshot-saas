@@ -4,6 +4,7 @@ import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import Link from 'next/link';
 import { formatDistanceToNow } from 'date-fns';
+import { ScoreTrend } from '@/components/Charts';
 
 export default async function Dashboard() {
   const session = await getServerSession(authOptions);
@@ -35,6 +36,18 @@ export default async function Dashboard() {
   const avgScore = totalAnalyses > 0 ? Math.round(analyses.reduce((s, a) => s + a.score, 0) / totalAnalyses) : 0;
   const bestScore = totalAnalyses > 0 ? Math.max(...analyses.map(a => a.score)) : 0;
   const uniqueUrls = new Set(analyses.map(a => a.url)).size;
+
+  // Daily score trend (average per day, oldest → newest)
+  const trendMap = new Map<string, number[]>();
+  for (const a of analyses) {
+    const day = new Date(a.createdAt).toISOString().slice(0, 10);
+    const arr = trendMap.get(day) || [];
+    arr.push(a.score);
+    trendMap.set(day, arr);
+  }
+  const dailyTrend = Array.from(trendMap.entries())
+    .map(([date, scores]) => ({ date, score: Math.round(scores.reduce((x, y) => x + y, 0) / scores.length) }))
+    .sort((a, b) => a.date.localeCompare(b.date));
 
   return (
     <div className="min-h-screen bg-surface relative">
@@ -72,6 +85,24 @@ export default async function Dashboard() {
                 <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wide">{stat.label}</div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Score trend chart */}
+        {dailyTrend.length >= 2 && (
+          <div className="glass-card rounded-xl p-5 mb-8">
+            <ScoreTrend data={dailyTrend} />
+          </div>
+        )}
+
+        {/* Upgrade nudge for free users */}
+        {!isPro && totalAnalyses > 0 && (
+          <div className="glass-card rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 border border-accent-500/20">
+            <div>
+              <p className="text-sm font-medium text-white/85">Unlock the full audit</p>
+              <p className="text-xs text-white/40 mt-1 max-w-md">Unlimited analyses, every issue with copy-paste fix code, security &amp; accessibility, PDF reports, and scheduled monitoring.</p>
+            </div>
+            <Link href="/pricing" className="btn-primary text-sm whitespace-nowrap flex-shrink-0">Upgrade to Pro</Link>
           </div>
         )}
 
