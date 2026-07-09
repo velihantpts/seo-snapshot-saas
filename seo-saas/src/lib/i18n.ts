@@ -18,6 +18,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'nav.monitor': 'Monitor',
     'nav.signin': 'Sign in',
     'nav.blog': 'Blog',
+    'nav.tools': 'Tools',
 
     // Hero
     'hero.badge': '100 SEO checks in seconds',

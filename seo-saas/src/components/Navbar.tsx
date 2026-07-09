@@ -25,6 +25,7 @@ export function Navbar() {
   const navLinks = [
     { href: '/pricing', label: t('nav.pricing'), desktop: true },
     { href: '/compare', label: t('nav.compare'), desktop: 'lg' as const },
+    { href: '/tools', label: t('nav.tools'), desktop: true },
     { href: '/docs', label: t('nav.api'), desktop: 'lg' as const },
     { href: '/blog', label: t('nav.blog'), desktop: false },
   ];
