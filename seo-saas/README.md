@@ -5,11 +5,12 @@ Full-stack SEO analyzer. Enter any URL, get a complete audit with fix recommenda
 ## Tech Stack
 
 - **Frontend:** Next.js 14 + Tailwind CSS + TypeScript
-- **Auth:** NextAuth.js + Google OAuth
-- **DB:** Prisma + SQLite (dev) / Postgres (prod)
-- **Payments:** Stripe (monthly + lifetime)
+- **Auth:** NextAuth.js — email/password + optional Google & GitHub OAuth
+- **DB:** Prisma + PostgreSQL
+- **Payments:** Paddle (Pro monthly + lifetime)
 - **SEO Engine:** Server-side Cheerio-based analyzer
-- **Deploy:** Vercel
+- **Queue/Cache:** Redis + BullMQ (crawl & scheduled monitor workers)
+- **Deploy:** Docker (standalone) — self-hosted via Coolify
 
 ## Quick Start
 
@@ -37,15 +38,16 @@ Open http://localhost:3000
 3. Set redirect URI: `http://localhost:3000/api/auth/callback/google`
 4. Copy Client ID + Secret to `.env`
 
-### Stripe
-1. Go to https://dashboard.stripe.com/apikeys
-2. Copy Secret Key + Publishable Key to `.env`
-3. Create two products in Stripe:
-   - **Pro Monthly:** $1.99/mo recurring → copy Price ID to `STRIPE_PRICE_MONTHLY`
-   - **Pro Lifetime:** $7.99 one-time → copy Price ID to `STRIPE_PRICE_LIFETIME`
-4. Set up webhook endpoint: `https://yourdomain.com/api/stripe/webhook`
-   - Events: `checkout.session.completed`, `customer.subscription.deleted`
-   - Copy Webhook Secret to `STRIPE_WEBHOOK_SECRET`
+### Paddle
+1. Go to https://vendors.paddle.com/authentication and copy your API key + client-side token.
+2. Set `PADDLE_API_KEY`, `NEXT_PUBLIC_PADDLE_CLIENT_TOKEN`, and `PADDLE_WEBHOOK_SECRET` in `.env`.
+3. Create two prices in Paddle:
+   - **Pro Monthly:** $4.99/mo recurring → copy Price ID to `PADDLE_PRICE_MONTHLY`
+   - **Pro Lifetime:** $29.99 one-time → copy Price ID to `PADDLE_PRICE_LIFETIME`
+4. Set up a webhook endpoint: `https://yourdomain.com/api/paddle/webhook`
+   - Events: `subscription.created`, `subscription.activated`, `subscription.canceled`, `transaction.completed`
+   - Copy the webhook secret to `PADDLE_WEBHOOK_SECRET`
+5. Set `PADDLE_SANDBOX="true"` while testing, `"false"` for production.
 
 ### NextAuth
 ```bash
@@ -90,7 +92,7 @@ Then run `npx prisma db push`.
 - JSON-LD schema detection
 - Copy & JSON export
 
-### Pro Tier ($1.99/mo or $7.99 lifetime)
+### Pro Tier ($4.99/mo or $29.99 lifetime)
 - Unlimited analyses
 - Server-side HTTP security headers (HSTS, CSP, X-Frame, etc.)
 - Top 15 keywords with density
