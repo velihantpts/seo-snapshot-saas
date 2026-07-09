@@ -15,7 +15,7 @@ import { ScoreTrend } from './Charts';
 import {
   AlertTriangle, XCircle, ChevronDown, ChevronUp, Lightbulb, Copy, CheckCircle,
   Download, Share2, FileText, BarChart3, Search, Link2, Image, Hash, Globe,
-  Code, Bot, Zap, Shield, Smartphone, Languages, ArrowRightLeft
+  Code, Bot, Zap, Shield, Smartphone, Languages, ArrowRightLeft, Info
 } from 'lucide-react';
 
 // ===== Sub-components =====
@@ -270,6 +270,18 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
 
       {/* Action Summary */}
       <ActionSummary result={d} />
+
+      {/* Off-page scope note — honest about what this tool does and doesn't measure */}
+      <div className="glass-card rounded-xl p-4 mb-8 flex items-start gap-3 print:hidden">
+        <Info className="w-4 h-4 text-accent-400/70 mt-0.5 flex-shrink-0" />
+        <p className="text-xs text-white/45 leading-relaxed">
+          This is an <span className="text-white/70 font-medium">on-page</span> audit — roughly 30% of SEO.
+          Rankings also depend on <span className="text-white/70 font-medium">off-page</span> factors like
+          backlinks and domain authority, which this tool doesn&apos;t measure. A strong score here is
+          necessary but not sufficient to rank.{' '}
+          <a href="/blog/what-is-a-good-seo-score" className="text-accent-400 hover:text-accent-300 transition">Why →</a>
+        </p>
+      </div>
 
       {/* Tabs */}
       <div className="relative mb-8 print:hidden">

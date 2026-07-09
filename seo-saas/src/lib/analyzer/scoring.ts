@@ -16,6 +16,7 @@ interface ScoringInput {
   kwInUrl?: boolean; kwInDesc?: boolean; eeatScore?: number;
   spamLinks?: number; totalRequests?: number; estimatedPageWeight?: number;
   isEnglish?: boolean; headingCount?: number;
+  isLikelySPA?: boolean;
 }
 
 export function calculateScore(input: ScoringInput, issues: Issue[]) {
@@ -64,8 +65,12 @@ export function calculateScore(input: ScoringInput, issues: Issue[]) {
   // and given partial credit (previously 40% of sites scored <40 here). Sub-
   // scores now sum to exactly 18 (was 17, which capped the whole score at ~91). =====
   let contentScore = 0;
-  // Word count (depth) — homepage-friendly thresholds + partial credit
-  contentScore += input.wordCount >= 800 ? 5 : input.wordCount >= 400 ? 4 : input.wordCount >= 200 ? 3 : input.wordCount >= 80 ? 2 : input.wordCount > 0 ? 1 : 0;
+  // Word count (depth) — homepage-friendly thresholds + partial credit.
+  // Client-rendered (SPA) pages inject content via JS, which our initial-HTML
+  // snapshot can't see — so give a neutral score instead of penalizing to 0.
+  contentScore += input.isLikelySPA && input.wordCount < 200
+    ? 3
+    : input.wordCount >= 800 ? 5 : input.wordCount >= 400 ? 4 : input.wordCount >= 200 ? 3 : input.wordCount >= 80 ? 2 : input.wordCount > 0 ? 1 : 0;
   // Readability — neutral score for non-English content
   const effectiveReadScore = (input.isEnglish === false && input.readScore === 0) ? 55 : input.readScore;
   contentScore += effectiveReadScore >= 60 ? 2.5 : effectiveReadScore >= 40 ? 1.5 : effectiveReadScore > 0 ? 0.5 : 0;

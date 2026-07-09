@@ -67,6 +67,16 @@ export async function analyzeURL(targetUrl: string, opts: { light?: boolean } = 
     }
   }
 
+  // 6b. Detect client-side rendered (SPA) pages. Our snapshot sees the initial
+  // HTML only, so JS-injected content/meta may be missing — flag it and let the
+  // scorer avoid over-penalizing content it genuinely can't see.
+  const scriptCount = (fetchResult.html.match(/<script/gi) || []).length;
+  const emptyAppRoot = /<div\s+id=["'](root|app|__next)["']\s*>\s*<\/div>/i.test(fetchResult.html);
+  const isLikelySPA = checkResult.wordCount < 150 && (emptyAppRoot || scriptCount >= 8);
+  if (isLikelySPA) {
+    issues.push({ severity: 'warning', problem: 'Page appears to be client-side rendered (JavaScript)', fix: 'This page loads its content with JavaScript, so this snapshot sees only the initial HTML — some text, headings, or meta tags may be missing from this analysis. Googlebot renders JS, but for reliable SEO, server-render (SSR/SSG) or prerender your critical content and meta tags.', category: 'Technical' });
+  }
+
   // 7. Calculate score
   const altRatio = checkResult.images.total > 0 ? (checkResult.images.total - checkResult.missingAlt) / checkResult.images.total : 1;
   const scoring = calculateScore({
@@ -98,6 +108,7 @@ export async function analyzeURL(targetUrl: string, opts: { light?: boolean } = 
     estimatedPageWeight: checkResult.pageWeight?.estimated || 0,
     isEnglish: !checkResult.meta.lang || checkResult.meta.lang.toLowerCase().startsWith('en'),
     headingCount: Object.values(checkResult.headings).reduce((sum, h) => sum + h.count, 0),
+    isLikelySPA,
   }, issues);
 
   logger.debug('analysis.complete', { url: targetUrl, score: scoring.score, issues: issues.length });
