@@ -44,13 +44,53 @@ export default function AdminPage() {
   const [copied, setCopied] = useState('');
   const [showText, setShowText] = useState<string | null>(null);
 
+  // Blog composer
+  const [bTitle, setBTitle] = useState('');
+  const [bSlug, setBSlug] = useState('');
+  const [bExcerpt, setBExcerpt] = useState('');
+  const [bCategory, setBCategory] = useState('Guide');
+  const [bContent, setBContent] = useState('');
+  const [bMsg, setBMsg] = useState('');
+  const [bLoading, setBLoading] = useState(false);
+  const [bPosts, setBPosts] = useState<{ id: string; slug: string; title: string; published: boolean }[]>([]);
+
+  const loadPosts = () => {
+    fetch('/api/admin/blog').then((r) => r.json()).then((d) => { if (d.posts) setBPosts(d.posts); }).catch(() => {});
+  };
+
   // Restore admin session from the httpOnly cookie (verified server-side).
   useEffect(() => {
     fetch('/api/admin')
       .then((r) => r.json())
-      .then((d) => { if (d.authed) setAuthed(true); })
+      .then((d) => { if (d.authed) { setAuthed(true); loadPosts(); } })
       .catch(() => {});
   }, []);
+
+  const publishPost = async () => {
+    if (!bTitle.trim() || !bContent.trim()) { setBMsg('Title and content are required'); return; }
+    setBLoading(true); setBMsg('');
+    try {
+      const res = await fetch('/api/admin/blog', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ title: bTitle, slug: bSlug, excerpt: bExcerpt, category: bCategory, content: bContent }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        setBMsg(`✓ Published: ${data.url}`);
+        setBTitle(''); setBSlug(''); setBExcerpt(''); setBContent('');
+        loadPosts();
+      } else {
+        setBMsg(data.error || 'Publish failed');
+      }
+    } catch { setBMsg('Connection error'); }
+    setBLoading(false);
+  };
+
+  const deletePost = async (slug: string) => {
+    await fetch(`/api/admin/blog?slug=${encodeURIComponent(slug)}`, { method: 'DELETE' });
+    loadPosts();
+  };
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -139,6 +179,46 @@ Tool: https://seosnapshot.dev (free, no signup needed)`;
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12">
+        {/* Blog publisher — paste markdown, publish instantly (auto sitemap + IndexNow) */}
+        <h1 className="text-2xl font-medium tracking-tight mb-2">Blog Publisher</h1>
+        <p className="text-white/40 text-sm mb-6">Paste a Markdown article and publish. Auto-added to the sitemap + pinged to IndexNow. Keep each post genuinely useful — Google penalizes mass low-value content.</p>
+
+        <div className="glass-card rounded-xl p-5 mb-6 space-y-3">
+          <input value={bTitle} onChange={e => setBTitle(e.target.value)} placeholder="Title"
+            className="w-full px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30" />
+          <div className="flex gap-3">
+            <input value={bSlug} onChange={e => setBSlug(e.target.value)} placeholder="slug (optional — auto from title)"
+              className="flex-1 px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30" />
+            <input value={bCategory} onChange={e => setBCategory(e.target.value)} placeholder="Category"
+              className="w-40 px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30" />
+          </div>
+          <input value={bExcerpt} onChange={e => setBExcerpt(e.target.value)} placeholder="Excerpt (meta description — 150-160 chars)"
+            className="w-full px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30" />
+          <textarea value={bContent} onChange={e => setBContent(e.target.value)} placeholder="Paste Markdown content here…" rows={12}
+            className="w-full px-4 py-3 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30 font-mono resize-y" />
+          <div className="flex items-center justify-between gap-3">
+            <span className={`text-xs ${bMsg.startsWith('✓') ? 'text-emerald-400' : 'text-red-400'}`}>{bMsg}</span>
+            <button onClick={publishPost} disabled={bLoading} className="btn-primary !py-2 text-sm disabled:opacity-50">
+              {bLoading ? 'Publishing…' : 'Publish'}
+            </button>
+          </div>
+        </div>
+
+        {bPosts.length > 0 && (
+          <div className="glass-card rounded-xl p-4 mb-10">
+            <p className="text-xs text-white/40 mb-3">Published posts ({bPosts.length})</p>
+            <div className="space-y-1.5">
+              {bPosts.map(p => (
+                <div key={p.id} className="flex items-center justify-between gap-3 text-sm py-1">
+                  <a href={`/blog/${p.slug}`} target="_blank" className="text-white/60 hover:text-accent-400 truncate">{p.title}</a>
+                  <button onClick={() => deletePost(p.slug)} className="text-white/25 hover:text-red-400 text-xs flex-shrink-0">delete</button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        <div className="border-t border-white/[0.06] pt-8">
         <h1 className="text-2xl font-medium tracking-tight mb-2">Admin — Reddit Marketing</h1>
         <p className="text-white/40 text-sm mb-8">Analyze sites, get ready-to-post Reddit content + shareable report cards.</p>
 
@@ -226,6 +306,7 @@ Tool: https://seosnapshot.dev (free, no signup needed)`;
             <p className="text-white/15 text-xs">Each analysis generates: Reddit post text + visual report card + shareable link</p>
           </div>
         )}
+        </div>
       </div>
 
       {/* Manual copy modal (fallback for HTTP) */}

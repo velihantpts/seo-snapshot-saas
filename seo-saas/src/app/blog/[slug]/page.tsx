@@ -1,61 +1,78 @@
-'use client';
-import { useParams } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
-import { articles } from '@/lib/blog-articles';
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { getBlogPost, getBlogList, renderMarkdown } from '@/lib/blog';
 
-export default function BlogPost() {
-  const params = useParams();
-  const slug = params.slug as string;
-  const article = articles[slug];
+export const revalidate = 60;
 
-  if (!article) {
-    return (
-      <div className="min-h-screen bg-surface flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-xl font-medium mb-2">Article not found</h1>
-          <Link href="/blog" className="text-accent-400 text-sm">Back to blog</Link>
-        </div>
-      </div>
-    );
-  }
+const SITE = 'https://seosnapshot.dev';
 
-  // Simple markdown-like rendering
-  const renderContent = (content: string) => {
-    return content.split('\n').map((line, i) => {
-      if (line.startsWith('## ')) return <h2 key={i} className="text-lg font-medium mt-8 mb-3 text-white/90">{line.slice(3)}</h2>;
-      if (line.startsWith('### ')) return <h3 key={i} className="text-base font-medium mt-6 mb-2 text-white/80">{line.slice(4)}</h3>;
-      if (line.startsWith('```')) return null;
-      if (line.startsWith('|')) {
-        const cells = line.split('|').filter(Boolean).map(c => c.trim());
-        if (cells.every(c => c.match(/^-+$/))) return null;
-        return <div key={i} className="grid grid-cols-3 gap-2 text-xs text-white/50 py-1.5 border-b border-white/[0.04]">{cells.map((c, j) => <span key={j}>{c}</span>)}</div>;
-      }
-      if (line.match(/^\d+\./)) return <p key={i} className="text-sm text-white/50 leading-relaxed ml-4 mb-1">{line}</p>;
-      if (line.startsWith('- ')) return <p key={i} className="text-sm text-white/50 leading-relaxed ml-4 mb-1">{line}</p>;
-      if (line.trim() === '') return <div key={i} className="h-2" />;
-      if (line.startsWith('  ') && (line.includes('<') || line.includes('{') || line.includes('}'))) {
-        return <pre key={i} className="text-xs font-mono text-accent-300/70 bg-white/[0.02] px-3 py-0.5">{line}</pre>;
-      }
-      return <p key={i} className="text-sm text-white/50 leading-relaxed mb-2">{line}</p>;
-    });
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const post = await getBlogPost(params.slug);
+  if (!post) return { title: 'Article not found' };
+  const description = post.excerpt || `${post.title} — a practical SEO guide from SEO Snapshot.`;
+  const url = `${SITE}/blog/${post.slug}`;
+  return {
+    title: post.title,
+    description,
+    alternates: { canonical: url },
+    openGraph: { type: 'article', title: post.title, description, url },
+    twitter: { card: 'summary_large_image', title: post.title, description },
+  };
+}
+
+export default async function BlogPost({ params }: { params: { slug: string } }) {
+  const post = await getBlogPost(params.slug);
+  if (!post) notFound();
+
+  const html = renderMarkdown(post.content);
+  const related = (await getBlogList()).filter((p) => p.slug !== post.slug).slice(0, 3);
+  const url = `${SITE}/blog/${post.slug}`;
+
+  const jsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'Article',
+    headline: post.title,
+    description: post.excerpt || undefined,
+    datePublished: post.date || undefined,
+    dateModified: post.date || undefined,
+    mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+    author: { '@type': 'Organization', name: 'SEO Snapshot' },
+    publisher: { '@type': 'Organization', name: 'SEO Snapshot', url: SITE },
   };
 
   return (
     <div className="min-h-screen bg-surface relative">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <Link href="/blog" className="flex items-center gap-2 text-white/40 hover:text-white/70 transition text-sm mb-8">
           <ArrowLeft className="w-4 h-4" /> Back to blog
         </Link>
-        <h1 className="text-2xl font-medium tracking-tight mb-8 text-white/90">{article.title}</h1>
-        <div className="prose-custom">
-          {renderContent(article.content)}
-        </div>
+        <h1 className="text-2xl font-medium tracking-tight mb-8 text-white/90">{post.title}</h1>
+
+        <article className="blog-content" dangerouslySetInnerHTML={{ __html: html }} />
+
         <div className="mt-12 glass-card rounded-xl p-6 text-center">
           <p className="text-white/60 text-sm mb-3">Check your site&apos;s SEO score for free</p>
           <Link href="/" className="btn-primary text-sm">Analyze your site</Link>
         </div>
+
+        {related.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-sm font-medium text-white/50 mb-4">Related articles</h2>
+            <div className="space-y-3">
+              {related.map((r) => (
+                <Link key={r.slug} href={`/blog/${r.slug}`}
+                  className="flex items-center justify-between gap-3 glass-card rounded-lg px-4 py-3 group hover:border-white/[0.1] transition">
+                  <span className="text-sm text-white/70 group-hover:text-accent-400 transition-colors">{r.title}</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-white/30 flex-shrink-0" />
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

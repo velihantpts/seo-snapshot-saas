@@ -293,3 +293,25 @@ body {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+/* ===== Blog article (rendered markdown) ===== */
+.blog-content { color: rgba(255,255,255,0.55); font-size: 0.9375rem; line-height: 1.75; }
+.blog-content h2 { color: rgba(255,255,255,0.9); font-size: 1.25rem; font-weight: 500; margin: 2rem 0 0.75rem; }
+.blog-content h3 { color: rgba(255,255,255,0.8); font-size: 1.0625rem; font-weight: 500; margin: 1.5rem 0 0.5rem; }
+.blog-content h4 { color: rgba(255,255,255,0.75); font-size: 0.9375rem; font-weight: 600; margin: 1.25rem 0 0.5rem; }
+.blog-content p { margin: 0 0 1rem; }
+.blog-content a { color: #a5b4fc; text-decoration: underline; text-underline-offset: 2px; }
+.blog-content a:hover { color: #c7d2fe; }
+.blog-content strong { color: rgba(255,255,255,0.85); font-weight: 600; }
+.blog-content ul, .blog-content ol { margin: 0 0 1rem; padding-left: 1.5rem; }
+.blog-content ul { list-style: disc; }
+.blog-content ol { list-style: decimal; }
+.blog-content li { margin: 0.25rem 0; }
+.blog-content code { background: rgba(255,255,255,0.06); color: #a5b4fc; padding: 0.1rem 0.35rem; border-radius: 0.3rem; font-size: 0.85em; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+.blog-content pre { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 0.6rem; padding: 1rem; overflow-x: auto; margin: 0 0 1rem; }
+.blog-content pre code { background: none; color: rgba(255,255,255,0.7); padding: 0; }
+.blog-content blockquote { border-left: 2px solid rgba(129,140,248,0.4); padding-left: 1rem; margin: 0 0 1rem; color: rgba(255,255,255,0.5); font-style: italic; }
+.blog-content table { width: 100%; border-collapse: collapse; margin: 0 0 1rem; font-size: 0.85rem; display: block; overflow-x: auto; }
+.blog-content th, .blog-content td { border: 1px solid rgba(255,255,255,0.08); padding: 0.5rem 0.75rem; text-align: left; }
+.blog-content th { color: rgba(255,255,255,0.75); font-weight: 600; background: rgba(255,255,255,0.03); }
+.blog-content hr { border: none; border-top: 1px solid rgba(255,255,255,0.08); margin: 2rem 0; }
