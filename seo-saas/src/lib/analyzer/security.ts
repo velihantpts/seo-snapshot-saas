@@ -80,7 +80,10 @@ export function runSecurityChecks($: cheerio.CheerioAPI, html: string, response:
   if (headers['referrer-policy']) gradePoints += 10;
   if (headers['permissions-policy']) gradePoints += 5;
   if (mixedContentCount === 0) gradePoints += 10;
-  const grade = gradePoints >= 95 ? 'A+' : gradePoints >= 85 ? 'A' : gradePoints >= 70 ? 'B' : gradePoints >= 55 ? 'C' : gradePoints >= 40 ? 'D' : 'F';
+  // Recalibrated against 12k real sites (27% previously got "F"). HTTPS is the
+  // security baseline, so an HTTPS site with no optional headers now lands at C,
+  // not F. "F" is reserved for genuinely insecure sites (no HTTPS / mixed content).
+  const grade = gradePoints >= 90 ? 'A+' : gradePoints >= 70 ? 'A' : gradePoints >= 50 ? 'B' : gradePoints >= 30 ? 'C' : gradePoints >= 18 ? 'D' : 'F';
 
   // ===== SERVER DETECTION =====
   const serverHeader = response.headers.get('server') || '';
