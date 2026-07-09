@@ -49,6 +49,7 @@ export default function Pricing() {
 
   const plans = [
     {
+      id: 'free',
       name: t('pricing.free'), price: '$0', period: '', description: t('pricing.free.desc'),
       cta: t('pricing.free.cta'), style: 'btn-ghost', href: '/',
       features: [
@@ -59,6 +60,7 @@ export default function Pricing() {
       ],
     },
     {
+      id: 'pro',
       name: t('pricing.pro'), price: '$4.99', period: '/mo', description: t('pricing.pro.desc'),
       cta: t('pricing.pro.cta'), style: 'btn-primary', priceType: 'monthly', popular: true,
       features: [
@@ -69,6 +71,7 @@ export default function Pricing() {
       ],
     },
     {
+      id: 'lifetime',
       name: t('pricing.lifetime'), price: '$29.99', period: '', description: t('pricing.lifetime.desc'),
       cta: t('pricing.lifetime.cta'), style: 'lifetime', priceType: 'lifetime',
       features: [
@@ -86,7 +89,8 @@ export default function Pricing() {
         strategy="afterInteractive"
         onLoad={() => {
           const P = (window as any)['Paddle'];
-          if (P) { P.Initialize({ token: 'live_c476757398a653a03b15f0497c8' }); setPaddleReady(true); }
+          const token = process.env.NEXT_PUBLIC_PADDLE_CLIENT_TOKEN || 'live_c476757398a653a03b15f0497c8';
+          if (P) { P.Initialize({ token }); setPaddleReady(true); }
         }}
       />
       <div className="fixed inset-0 bg-grid opacity-30 pointer-events-none" />
@@ -104,8 +108,8 @@ export default function Pricing() {
 
         <div className="grid md:grid-cols-3 gap-5 opacity-0 animate-fade-in-up-delay-2">
           {plans.map(plan => (
-            <div key={plan.name} className={`rounded-2xl p-6 sm:p-7 relative transition-all duration-200 ${
-              plan.popular ? 'glass-card glow-border scale-[1.02] shadow-glow' : plan.name === 'Lifetime' ? 'glass-card border-amber-500/20' : 'glass-card'
+            <div key={plan.id} className={`rounded-2xl p-6 sm:p-7 relative transition-all duration-200 ${
+              plan.popular ? 'glass-card glow-border scale-[1.02] shadow-glow' : plan.id === 'lifetime' ? 'glass-card border-amber-500/20' : 'glass-card'
             }`}>
               {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-accent-500 text-xs font-bold tracking-wide shadow-glow-sm">{t('pricing.popular')}</div>}
               <h3 className="font-medium text-lg mb-1 text-white/90">{plan.name}</h3>
@@ -121,13 +125,13 @@ export default function Pricing() {
                   className={`w-full py-3 rounded-xl text-sm font-semibold transition-all duration-150 disabled:opacity-50 mb-7 ${
                     plan.style === 'lifetime' ? 'bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-surface shadow-[0_0_20px_rgba(245,158,11,0.2)]' : plan.style
                   }`}>
-                  {loading === plan.priceType ? 'Loading...' : plan.cta}
+                  {loading === plan.priceType ? t('pricing.loading') : plan.cta}
                 </button>
               )}
               <ul className="space-y-3">
                 {plan.features.map(f => (
                   <li key={f.text} className={`flex items-start gap-2.5 text-sm ${f.ok ? 'text-white/60' : 'text-white/35'}`}>
-                    {f.ok ? <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.popular ? 'text-accent-400' : plan.name === 'Lifetime' ? 'text-amber-400' : 'text-white/45'}`} />
+                    {f.ok ? <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.popular ? 'text-accent-400' : plan.id === 'lifetime' ? 'text-amber-400' : 'text-white/45'}`} />
                       : <X className="w-4 h-4 mt-0.5 flex-shrink-0 text-white/10" />}
                     {f.text}
                   </li>

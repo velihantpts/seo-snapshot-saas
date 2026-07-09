@@ -1,9 +1,11 @@
 'use client';
-import { signIn } from 'next-auth/react';
+import { signIn, getProviders } from 'next-auth/react';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocale } from '@/lib/i18n';
+
+type OAuthProvider = { id: string; name: string };
 
 export default function Login() {
   const [mode, setMode] = useState<'login' | 'register'>('login');
@@ -12,8 +14,28 @@ export default function Login() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [oauthProviders, setOauthProviders] = useState<OAuthProvider[]>([]);
+  const [callbackUrl, setCallbackUrl] = useState('/dashboard');
   const router = useRouter();
   const { t } = useLocale();
+
+  useEffect(() => {
+    // Only show OAuth buttons for providers that are actually configured.
+    getProviders()
+      .then((provs) => {
+        if (!provs) return;
+        setOauthProviders(
+          Object.values(provs)
+            .filter((p) => p.type === 'oauth')
+            .map((p) => ({ id: p.id, name: p.name }))
+        );
+      })
+      .catch(() => {});
+
+    // Preserve where the user was headed (e.g. pricing checkout flow).
+    const cb = new URLSearchParams(window.location.search).get('callbackUrl');
+    if (cb) setCallbackUrl(cb);
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +43,6 @@ export default function Login() {
     setLoading(true);
 
     if (mode === 'register') {
-      // Register first
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -29,26 +50,22 @@ export default function Login() {
       });
       const data = await res.json();
       if (!res.ok) {
-        setError(data.error || 'Registration failed');
+        setError(data.error || t('login.err.register'));
         setLoading(false);
         return;
       }
     }
 
-    // Sign in
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    });
+    const result = await signIn('credentials', { email, password, redirect: false });
 
     if (result?.error) {
-      setError(mode === 'register' ? 'Account created but login failed. Try logging in.' : 'Invalid email or password');
+      setError(mode === 'register' ? t('login.err.afterRegister') : t('login.err.invalid'));
       setLoading(false);
       return;
     }
 
-    router.push('/dashboard');
+    // Honour callbackUrl so the pricing checkout (and similar) flows resume.
+    router.push(callbackUrl);
   };
 
   return (
@@ -69,6 +86,26 @@ export default function Login() {
           </p>
         </div>
 
+        {oauthProviders.length > 0 && (
+          <div className="space-y-2.5 mb-5 opacity-0 animate-fade-in-up-delay-1">
+            {oauthProviders.map((p) => (
+              <button
+                key={p.id}
+                type="button"
+                onClick={() => signIn(p.id, { callbackUrl })}
+                className="w-full min-h-[44px] rounded-xl bg-white/[0.04] border border-white/[0.08] text-white text-sm font-medium hover:bg-white/[0.08] transition-all duration-150 flex items-center justify-center gap-2"
+              >
+                {p.id === 'google' ? t('login.google') : p.id === 'github' ? t('login.github') : p.name}
+              </button>
+            ))}
+            <div className="flex items-center gap-3 py-1">
+              <div className="flex-1 h-px bg-white/[0.08]" />
+              <span className="text-white/25 text-xs">{t('login.or')}</span>
+              <div className="flex-1 h-px bg-white/[0.08]" />
+            </div>
+          </div>
+        )}
+
         <form onSubmit={handleSubmit} className="space-y-4 opacity-0 animate-fade-in-up-delay-1">
           {mode === 'register' && (
             <div>
@@ -78,7 +115,7 @@ export default function Login() {
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
-                placeholder="Your name"
+                placeholder={t('login.name.ph')}
                 className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/35 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
               />
             </div>
@@ -104,7 +141,7 @@ export default function Login() {
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
-              placeholder={mode === 'register' ? 'At least 6 characters' : 'Your password'}
+              placeholder={mode === 'register' ? t('login.pw.ph.reg') : t('login.pw.ph')}
               className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/35 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
               required
               minLength={mode === 'register' ? 6 : 1}
@@ -120,30 +157,30 @@ export default function Login() {
             disabled={loading}
             className="w-full btn-primary min-h-[44px] disabled:opacity-50"
           >
-            {loading ? 'Please wait...' : mode === 'login' ? 'Sign in' : 'Create account'}
+            {loading ? t('login.wait') : mode === 'login' ? t('login.submit') : t('login.submit.register')}
           </button>
         </form>
 
         <div className="text-center mt-6 opacity-0 animate-fade-in-up-delay-2">
           {mode === 'login' ? (
             <p className="text-white/30 text-sm">
-              Don&apos;t have an account?{' '}
+              {t('login.noAccount')}{' '}
               <button onClick={() => { setMode('register'); setError(''); }} className="text-accent-400 hover:text-accent-300 transition">
-                Sign up free
+                {t('login.signupFree')}
               </button>
             </p>
           ) : (
             <p className="text-white/30 text-sm">
-              Already have an account?{' '}
+              {t('login.hasAccount')}{' '}
               <button onClick={() => { setMode('login'); setError(''); }} className="text-accent-400 hover:text-accent-300 transition">
-                Sign in
+                {t('login.signinLink')}
               </button>
             </p>
           )}
         </div>
 
         <p className="text-center text-white/15 text-xs mt-8">
-          By signing up, you agree to our <Link href="/terms" className="text-white/25 hover:text-white/40">Terms</Link> and <Link href="/privacy" className="text-white/25 hover:text-white/40">Privacy Policy</Link>.
+          {t('login.agree')} <Link href="/terms" className="text-white/25 hover:text-white/40">{t('terms.title')}</Link> {t('login.and')} <Link href="/privacy" className="text-white/25 hover:text-white/40">{t('privacy.title')}</Link>.
         </p>
       </div>
     </div>
