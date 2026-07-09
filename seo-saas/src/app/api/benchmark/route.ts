@@ -2,6 +2,10 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { getCache, setCache } from '@/lib/cache';
 
+// Must run at request time (reads the DB) — otherwise Next prerenders it static
+// at build with an empty dataset and serves count:0 forever.
+export const dynamic = 'force-dynamic';
+
 // Public: the honest "global average" score, computed from our internal
 // benchmark dataset. Cached 30 min. Consumed by the report's benchmark badge.
 export async function GET() {
