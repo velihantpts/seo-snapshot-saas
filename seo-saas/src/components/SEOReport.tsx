@@ -134,7 +134,17 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
   const [severityFilter, setSeverityFilter] = useState<'all' | 'critical' | 'warning'>('all');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [history, setHistory] = useState<{ date: string; score: number }[]>([]);
+  const [benchmarkAvg, setBenchmarkAvg] = useState<number | null>(null);
   const { toast } = useToast();
+
+  // Real "vs global average" from our benchmark dataset (falls back to a
+  // heuristic until enough sites are benchmarked).
+  useEffect(() => {
+    fetch('/api/benchmark')
+      .then((r) => r.json())
+      .then((b) => { if (b?.count >= 30 && b?.avgScore) setBenchmarkAvg(b.avgScore); })
+      .catch(() => {});
+  }, []);
 
   const d = result;
   const issues = d.issues || [];
@@ -248,7 +258,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
           </div>
           {/* Benchmark */}
           <div className="mt-3">
-            <BenchmarkBadge score={d.score} average={d.score > 70 ? 55 : 62} />
+            <BenchmarkBadge score={d.score} average={benchmarkAvg ?? (d.score > 70 ? 55 : 62)} />
           </div>
           {isPublic && (
             <p className="text-xs text-white/30 mt-3">

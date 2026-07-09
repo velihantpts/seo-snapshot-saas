@@ -11,19 +11,23 @@ import type { Issue, SEOResult } from './analyzer/types';
 // Re-export types
 export type { SEOResult } from './analyzer/types';
 
-export async function analyzeURL(targetUrl: string) {
-  // Cache check — return cached result if available (1 hour TTL)
+export async function analyzeURL(targetUrl: string, opts: { light?: boolean } = {}) {
+  // Cache check — return cached result if available (1 hour TTL).
+  // Light (benchmark) runs bypass the shared cache so they never overwrite or
+  // serve a stripped-down result to real users.
   const cacheKey = `analysis:${targetUrl}`;
-  const cached = await getCache<SEOResult>(cacheKey);
-  if (cached) {
-    logger.info('analysis.cache-hit', { url: targetUrl });
-    return cached;
+  if (!opts.light) {
+    const cached = await getCache<SEOResult>(cacheKey);
+    if (cached) {
+      logger.info('analysis.cache-hit', { url: targetUrl });
+      return cached;
+    }
   }
 
   const issues: Issue[] = [];
 
   // 1. Fetch page + parallel resources (robots, sitemap, pagespeed)
-  const fetchResult = await fetchPage(targetUrl);
+  const fetchResult = await fetchPage(targetUrl, opts);
   issues.push(...fetchResult.issues);
 
   // 2. Run all HTML-based checks
@@ -32,12 +36,16 @@ export async function analyzeURL(targetUrl: string) {
   // 3. Run security checks
   const secResult = runSecurityChecks(fetchResult.$, fetchResult.html, fetchResult.response, checkResult.isHttps, issues);
 
-  // 4. Broken links + OG image + CrUX (parallel)
-  const [brokenLinks, , cruxData] = await Promise.all([
-    checkBrokenLinks(checkResult.linkUrls, issues),
-    checkOgImage(checkResult.og.image, issues),
-    getCrUXData(targetUrl),
-  ]);
+  // 4. Broken links + OG image + CrUX (parallel).
+  // Light mode skips these — they fire many extra requests (one per link), which
+  // we don't want to aim at other people's sites during a bulk benchmark.
+  const [brokenLinks, , cruxData] = opts.light
+    ? [[] as string[], null, null]
+    : await Promise.all([
+        checkBrokenLinks(checkResult.linkUrls, issues),
+        checkOgImage(checkResult.og.image, issues),
+        getCrUXData(targetUrl),
+      ]);
 
   // 5. Tech stack detection
   const techStack = detectTechStack(fetchResult.html, fetchResult.$, checkResult.schemas, issues);
@@ -125,8 +133,8 @@ export async function analyzeURL(targetUrl: string) {
     issues,
   };
 
-  // Cache the result for 1 hour
-  await setCache(cacheKey, analysisResult, 3600);
+  // Cache the result for 1 hour (skip for light/benchmark runs)
+  if (!opts.light) await setCache(cacheKey, analysisResult, 3600);
 
   return analysisResult;
 }

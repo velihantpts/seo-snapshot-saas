@@ -90,6 +90,19 @@ model CrawlJob {
   @@index([userId, createdAt])
 }
 
+// Internal benchmark dataset — bulk-analyzed real sites used to compute honest
+// "vs global average" figures. NOT public, never in the sitemap.
+model Benchmark {
+  id         String   @id @default(cuid())
+  url        String   @unique
+  score      Int
+  categories String?  @db.Text // JSON of categoryScores
+  ttfb       Int?
+  secGrade   String?
+  createdAt  DateTime @default(now())
+  @@index([createdAt])
+}
+
 model PageView {
   id          String   @id @default(cuid())
   path        String

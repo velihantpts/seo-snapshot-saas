@@ -15,7 +15,7 @@ export interface FetchResult {
   pageSpeed: any;
 }
 
-export async function fetchPage(targetUrl: string): Promise<FetchResult> {
+export async function fetchPage(targetUrl: string, opts: { light?: boolean } = {}): Promise<FetchResult> {
   const startTime = Date.now();
   const issues: Issue[] = [];
   const redirectChain: { url: string; status: number }[] = [];
@@ -72,11 +72,13 @@ export async function fetchPage(targetUrl: string): Promise<FetchResult> {
   const $ = cheerio.load(html);
   const parsedUrl = new URL(targetUrl);
 
-  // Parallel: robots.txt, sitemap.xml, PageSpeed
+  // Parallel: robots.txt, sitemap.xml, PageSpeed.
+  // In light mode (bulk benchmarking) skip the PageSpeed API call — it doesn't
+  // affect the score, costs quota, and slows the batch down.
   const [robotsResult, sitemapResult, pageSpeedResult] = await Promise.all([
     fetchRobots(parsedUrl.origin),
     fetchSitemap(parsedUrl.origin, $),
-    getPageSpeedData(targetUrl),
+    opts.light ? Promise.resolve(null) : getPageSpeedData(targetUrl),
   ]);
 
   return { response, html, $, fetchTime, redirectChain, issues, robots: robotsResult, sitemap: sitemapResult, pageSpeed: pageSpeedResult };
