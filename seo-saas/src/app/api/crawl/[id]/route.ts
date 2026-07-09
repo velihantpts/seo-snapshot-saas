@@ -56,6 +56,7 @@ export async function GET(_req: Request, { params }: { params: { id: string } })
   return NextResponse.json({
     ...crawlJob,
     urls: JSON.parse(crawlJob.urls),
+    insights: crawlJob.insights ? JSON.parse(crawlJob.insights) : null,
     analyses,
     siteHealth: {
       avgScore,

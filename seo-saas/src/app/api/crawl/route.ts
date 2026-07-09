@@ -2,10 +2,9 @@ import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { validateTargetURL, validatePublicURL } from '@/lib/ssrf-protection';
+import { validatePublicURL } from '@/lib/ssrf-protection';
 import { logger } from '@/lib/logger';
-import { crawlQueue } from '@/lib/queue';
-import * as cheerio from 'cheerio';
+import { runCrawlJob } from '@/lib/crawler/run-crawl-job';
 
 export async function POST(req: Request) {
   const session = await getServerSession(authOptions);
@@ -27,130 +26,30 @@ export async function POST(req: Request) {
   if (!validation.valid || !validation.url) {
     return NextResponse.json({ error: validation.error }, { status: 400 });
   }
-
   const parsedUrl = validation.url;
   const domain = parsedUrl.hostname;
 
-  // Check daily crawl limit (5 per day)
+  // Daily crawl limit (5/day)
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const todayCrawls = await prisma.crawlJob.count({
-    where: { userId, createdAt: { gte: today } },
-  });
+  const todayCrawls = await prisma.crawlJob.count({ where: { userId, createdAt: { gte: today } } });
   if (todayCrawls >= 5) {
     return NextResponse.json({ error: 'Daily crawl limit reached (5/day). Try again tomorrow.' }, { status: 429 });
   }
 
-  // Fetch sitemap.xml to get URL list
-  let urls: string[] = [];
-  try {
-    // Try sitemap.xml first
-    const smRes = await fetch(`${parsedUrl.origin}/sitemap.xml`, { signal: AbortSignal.timeout(8000) });
-    if (smRes.ok) {
-      const smXml = await smRes.text();
-      const $ = cheerio.load(smXml, { xmlMode: true });
-
-      // Check if it's a sitemap index
-      const sitemapLocs = $('sitemap > loc').map((_, el) => $(el).text().trim()).get();
-      if (sitemapLocs.length > 0) {
-        // Sitemap index — fetch first child sitemap.
-        // The child URL is attacker-controlled (it comes from their sitemap),
-        // so it MUST pass SSRF validation before we fetch it.
-        try {
-          const childCheck = await validatePublicURL(sitemapLocs[0]);
-          if (!childCheck.valid || !childCheck.url) throw new Error('Blocked child sitemap URL');
-          const childRes = await fetch(childCheck.url.toString(), { signal: AbortSignal.timeout(8000) });
-          if (childRes.ok) {
-            const childXml = await childRes.text();
-            const child$ = cheerio.load(childXml, { xmlMode: true });
-            child$('url > loc').each((_, el) => { urls.push(child$(el).text().trim()); });
-          }
-        } catch (e) { if (typeof console !== "undefined") console.error(e); }
-      } else {
-        // Regular sitemap
-        $('url > loc').each((_, el) => { urls.push($(el).text().trim()); });
-      }
-    }
-  } catch (e) { if (typeof console !== "undefined") console.error(e); }
-
-  // If no sitemap, use the homepage as the only URL
-  if (urls.length === 0) {
-    urls = [parsedUrl.toString()];
-  }
-
-  // Fetch robots.txt disallow rules
-  const disallowPaths: string[] = [];
-  try {
-    const robotsRes = await fetch(`${parsedUrl.origin}/robots.txt`, { signal: AbortSignal.timeout(5000) });
-    if (robotsRes.ok) {
-      const robotsTxt = await robotsRes.text();
-      const lines = robotsTxt.split('\n');
-      let inAllAgent = false;
-      for (const line of lines) {
-        const trimmed = line.trim().toLowerCase();
-        if (trimmed.startsWith('user-agent:') && trimmed.includes('*')) inAllAgent = true;
-        else if (trimmed.startsWith('user-agent:')) inAllAgent = false;
-        if (inAllAgent && trimmed.startsWith('disallow:')) {
-          const path = line.split(':').slice(1).join(':').trim();
-          if (path) disallowPaths.push(path);
-        }
-      }
-    }
-  } catch {}
-
-  // Cap at 100 URLs for Pro
-  const maxUrls = 100;
-  urls = urls.slice(0, maxUrls);
-
-  // Filter to same domain only + respect robots.txt
-  urls = urls.filter(u => {
-    try {
-      const parsed = new URL(u);
-      if (parsed.hostname !== domain) return false;
-      // Exclude URLs blocked by robots.txt
-      for (const disallow of disallowPaths) {
-        if (parsed.pathname.startsWith(disallow)) return false;
-      }
-      return true;
-    } catch { return false; }
-  });
-
-  if (urls.length === 0) {
-    urls = [parsedUrl.toString()];
-  }
-
-  // Create crawl job
+  // Create the job, then run a link-following deep crawl in the background.
   const crawlJob = await prisma.crawlJob.create({
-    data: {
-      userId,
-      domain,
-      status: 'running',
-      totalUrls: urls.length,
-      completedUrls: 0,
-      urls: JSON.stringify(urls),
-    },
+    data: { userId, domain, status: 'running', totalUrls: 0, completedUrls: 0, urls: '[]' },
   });
 
-  // Add to BullMQ queue instead of processing synchronously
-  await crawlQueue.add('crawl-site', {
-    crawlJobId: crawlJob.id,
-    urls,
-    userId,
-  }, {
-    attempts: 2,
-    backoff: { type: 'exponential', delay: 5000 },
-    removeOnComplete: { age: 86400 },
-    removeOnFail: { age: 604800 },
-  });
+  // Fire-and-forget: respond immediately; the crawl continues in the long-lived
+  // server process (the BullMQ worker isn't deployed). /crawl/[id] polls status.
+  runCrawlJob(crawlJob.id, parsedUrl.toString(), userId).catch((e) =>
+    logger.error('crawl.dispatch_failed', { crawlJobId: crawlJob.id, error: (e as Error)?.message })
+  );
 
-  logger.info('crawl.queued', { userId, domain, totalUrls: urls.length, crawlJobId: crawlJob.id });
-
-  return NextResponse.json({
-    id: crawlJob.id,
-    domain,
-    totalUrls: urls.length,
-    status: 'queued',
-  });
+  logger.info('crawl.started', { userId, domain, crawlJobId: crawlJob.id });
+  return NextResponse.json({ id: crawlJob.id, domain, status: 'running' });
 }
 
 // GET — list user's crawl jobs

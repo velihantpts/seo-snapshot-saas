@@ -83,6 +83,7 @@ model CrawlJob {
   completedUrls Int        @default(0)
   avgScore      Int?
   urls          String     @default("[]") @db.Text // JSON array of URLs to crawl
+  insights      String?    @db.Text // JSON: deep-crawl structural findings (orphans, depth, broken links)
   createdAt     DateTime   @default(now())
   updatedAt     DateTime   @updatedAt
   user          User       @relation(fields: [userId], references: [id], onDelete: Cascade)
