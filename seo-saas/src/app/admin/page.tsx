@@ -53,16 +53,20 @@ export default function AdminPage() {
   const [bMsg, setBMsg] = useState('');
   const [bLoading, setBLoading] = useState(false);
   const [bPosts, setBPosts] = useState<{ id: string; slug: string; title: string; published: boolean }[]>([]);
+  const [stats, setStats] = useState<any>(null);
 
   const loadPosts = () => {
     fetch('/api/admin/blog').then((r) => r.json()).then((d) => { if (d.posts) setBPosts(d.posts); }).catch(() => {});
+  };
+  const loadStats = () => {
+    fetch('/api/admin/analytics').then((r) => r.json()).then((d) => { if (!d.error) setStats(d); }).catch(() => {});
   };
 
   // Restore admin session from the httpOnly cookie (verified server-side).
   useEffect(() => {
     fetch('/api/admin')
       .then((r) => r.json())
-      .then((d) => { if (d.authed) { setAuthed(true); loadPosts(); } })
+      .then((d) => { if (d.authed) { setAuthed(true); loadPosts(); loadStats(); } })
       .catch(() => {});
   }, []);
 
@@ -179,6 +183,54 @@ Tool: https://seosnapshot.dev (free, no signup needed)`;
     <div className="min-h-screen bg-surface relative">
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12">
+        {/* Analytics — first-party, real humans (bots filtered) */}
+        {stats && (
+          <div className="mb-10">
+            <h1 className="text-2xl font-medium tracking-tight mb-4">Analytics <span className="text-white/30 text-sm font-normal">· last 30 days</span></h1>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+              {[
+                { label: 'Visitors (30d)', value: stats.visitors?.d30 ?? 0 },
+                { label: 'Pageviews (30d)', value: stats.pageviews?.d30 ?? 0 },
+                { label: 'Visitors (7d)', value: stats.visitors?.d7 ?? 0 },
+                { label: 'Pageviews (7d)', value: stats.pageviews?.d7 ?? 0 },
+              ].map(s => (
+                <div key={s.label} className="glass-card rounded-xl p-4">
+                  <div className="text-2xl font-semibold text-white/90">{s.value}</div>
+                  <div className="text-xs text-white/40 mt-0.5">{s.label}</div>
+                </div>
+              ))}
+            </div>
+            <div className="glass-card rounded-xl p-4 mb-4">
+              <p className="text-xs text-white/40 mb-2">Funnel (30d)</p>
+              <div className="flex flex-wrap items-center gap-2 text-sm">
+                <span className="px-3 py-1.5 rounded-lg bg-white/[0.04] text-white/70">{stats.visitors?.d30 ?? 0} visitors</span>
+                <span className="text-white/25">→</span>
+                <span className="px-3 py-1.5 rounded-lg bg-white/[0.04] text-white/70">{stats.funnel?.analyses30 ?? 0} analyses</span>
+                <span className="text-white/25">→</span>
+                <span className="px-3 py-1.5 rounded-lg bg-white/[0.04] text-white/70">{stats.funnel?.users ?? 0} signups</span>
+                <span className="text-white/25">→</span>
+                <span className="px-3 py-1.5 rounded-lg bg-emerald-500/10 text-emerald-400">{stats.funnel?.paid ?? 0} paid</span>
+              </div>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-4">
+              <div className="glass-card rounded-xl p-4">
+                <p className="text-xs text-white/40 mb-2">Top pages</p>
+                {(stats.topPages || []).length === 0 && <p className="text-xs text-white/25">No data yet</p>}
+                {(stats.topPages || []).map((p: any) => (
+                  <div key={p.path} className="flex justify-between text-sm py-1"><span className="text-white/60 truncate">{p.path}</span><span className="text-white/40">{p.count}</span></div>
+                ))}
+              </div>
+              <div className="glass-card rounded-xl p-4">
+                <p className="text-xs text-white/40 mb-2">Top referrers</p>
+                {(stats.topReferrers || []).length === 0 && <p className="text-xs text-white/25">No external referrers yet</p>}
+                {(stats.topReferrers || []).map((r: any) => (
+                  <div key={r.referrer} className="flex justify-between text-sm py-1"><span className="text-white/60 truncate">{r.referrer}</span><span className="text-white/40">{r.count}</span></div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Blog publisher — paste markdown, publish instantly (auto sitemap + IndexNow) */}
         <h1 className="text-2xl font-medium tracking-tight mb-2">Blog Publisher</h1>
         <p className="text-white/40 text-sm mb-6">Paste a Markdown article and publish. Auto-added to the sitemap + pinged to IndexNow. Keep each post genuinely useful — Google penalizes mass low-value content.</p>

@@ -90,6 +90,16 @@ model CrawlJob {
   @@index([userId, createdAt])
 }
 
+model PageView {
+  id          String   @id @default(cuid())
+  path        String
+  referrer    String?
+  visitorHash String
+  createdAt   DateTime @default(now())
+  @@index([createdAt])
+  @@index([path])
+}
+
 model BlogPost {
   id        String   @id @default(cuid())
   slug      String   @unique

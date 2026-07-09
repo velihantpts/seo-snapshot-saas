@@ -4,6 +4,7 @@ import AuthProvider from '@/components/AuthProvider';
 import { ToastProvider } from '@/components/Toast';
 import { Navbar } from '@/components/Navbar';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { Analytics } from '@/components/Analytics';
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://seosnapshot.dev'),
@@ -64,6 +65,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </a>
         <AuthProvider>
           <ToastProvider>
+            <Analytics />
             <Navbar />
             <ErrorBoundary><main id="main-content">{children}</main></ErrorBoundary>
           </ToastProvider>
