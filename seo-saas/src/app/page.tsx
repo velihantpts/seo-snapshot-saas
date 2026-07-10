@@ -328,20 +328,6 @@ export default function Home() {
         </ScrollReveal>
       </section>
 
-      {/* Footer */}
-      <footer className="relative z-10 border-t border-white/[0.06] py-8 px-4 sm:px-6">
-        <div className="max-w-6xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-white/50 text-xs">
-          <span>&copy; 2026 SEO Snapshot · <span className="text-white/30">v1.140.0</span></span>
-          <div className="flex gap-4">
-            <Link href="/pricing" className="hover:text-white/50 transition-colors duration-150">Pricing</Link>
-            <Link href="/blog" className="hover:text-white/50 transition-colors duration-150">Blog</Link>
-            <Link href="/docs" className="hover:text-white/50 transition-colors duration-150">API</Link>
-            <Link href="/terms" className="hover:text-white/50 transition-colors duration-150">Terms</Link>
-            <Link href="/privacy" className="hover:text-white/50 transition-colors duration-150">Privacy</Link>
-            <a href="mailto:support@seosnapshot.dev" className="hover:text-white/50 transition-colors duration-150">Contact</a>
-          </div>
-        </div>
-      </footer>
     </div>
   );
 }
