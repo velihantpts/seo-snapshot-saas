@@ -38,7 +38,7 @@ export default function RobotsMetaGeneratorClient() {
       <input type="checkbox" checked={on} onChange={e => set(e.target.checked)} className="accent-accent-500 mt-0.5" />
       <span>
         <span className="text-sm text-white/80 font-mono">{label}</span>
-        <span className="block text-xs text-white/40 mt-0.5">{hint}</span>
+        <span className="block text-xs text-white/60 mt-0.5">{hint}</span>
       </span>
     </label>
   );
@@ -62,7 +62,7 @@ export default function RobotsMetaGeneratorClient() {
         <Toggle on={maxSnippet} set={setMaxSnippet} label="max-snippet:-1" hint="Allow any snippet length." />
         <Toggle on={maxImagePreview} set={setMaxImagePreview} label="max-image-preview:large" hint="Allow large image previews." />
         <div className="pt-2">
-          <label className="block text-xs text-white/40 mb-1.5">Canonical URL (optional)</label>
+          <label className="block text-xs text-white/60 mb-1.5">Canonical URL (optional)</label>
           <input value={canonical} onChange={e => setCanonical(e.target.value)} placeholder="https://example.com/page" className={field} />
         </div>
       </div>
@@ -70,7 +70,7 @@ export default function RobotsMetaGeneratorClient() {
       <div className="space-y-5">
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs text-white/40">In your &lt;head&gt;</span>
+            <span className="text-xs text-white/60">In your &lt;head&gt;</span>
             <button onClick={() => copy(meta)} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
               {copied ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
             </button>
@@ -79,7 +79,7 @@ export default function RobotsMetaGeneratorClient() {
         </div>
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs text-white/40">As an HTTP header (for non-HTML files)</span>
+            <span className="text-xs text-white/60">As an HTTP header (for non-HTML files)</span>
             <button onClick={() => copy(header)} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition"><Copy className="w-3.5 h-3.5" /> Copy</button>
           </div>
           <pre className="glass-card rounded-lg p-4 text-xs text-white/70 font-mono whitespace-pre-wrap break-words overflow-auto">{header}</pre>

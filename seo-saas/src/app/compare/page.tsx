@@ -50,7 +50,7 @@ export default function ComparePage() {
     return (
       <div className="grid grid-cols-3 gap-4 py-2.5 border-b border-white/[0.04] last:border-0 text-sm">
         <span className={`font-mono ${winner === 1 ? 'text-emerald-400' : 'text-white/70'}`}>{v1}</span>
-        <span className="text-white/40 text-center text-xs">{label}</span>
+        <span className="text-white/60 text-center text-xs">{label}</span>
         <span className={`font-mono text-right ${winner === 2 ? 'text-emerald-400' : 'text-white/70'}`}>{v2}</span>
       </div>
     );
@@ -62,7 +62,7 @@ export default function ComparePage() {
       <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 py-12">
         <div className="text-center mb-10">
           <h1 className="text-2xl font-medium tracking-tight mb-2">{t('compare.title')}</h1>
-          <p className="text-white/40 text-sm">{t('compare.desc')}</p>
+          <p className="text-white/60 text-sm">{t('compare.desc')}</p>
         </div>
 
         {/* Input */}
@@ -104,7 +104,7 @@ export default function ComparePage() {
               ) : (
                 <span className="text-sm">
                   <span className="text-emerald-400 font-medium">{result1.score > result2.score ? result1.url : result2.url}</span>
-                  <span className="text-white/40"> wins by </span>
+                  <span className="text-white/60"> wins by </span>
                   <span className="text-emerald-400 font-medium">{Math.abs(result1.score - result2.score)} points</span>
                 </span>
               )}
@@ -112,7 +112,7 @@ export default function ComparePage() {
 
             {/* Detail comparison */}
             <div className="glass-card rounded-xl p-5">
-              <h3 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-4">Detailed Comparison</h3>
+              <h3 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-4">Detailed Comparison</h3>
               <CompareRow label="SEO Score" v1={result1.score} v2={result2.score} />
               <CompareRow label="Security Grade" v1={result1.security?.grade || 'F'} v2={result2.security?.grade || 'F'} higher="neutral" />
               <CompareRow label="Security Score" v1={result1.security?.score || 0} v2={result2.security?.score || 0} />
@@ -130,7 +130,7 @@ export default function ComparePage() {
             <div className="grid grid-cols-2 gap-4">
               {[result1, result2].map((r, idx) => (
                 <div key={idx} className="glass-card rounded-xl p-4">
-                  <h4 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-3">
+                  <h4 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">
                     Issues ({r.issues?.length || 0})
                   </h4>
                   <div className="space-y-1.5 max-h-60 overflow-y-auto scrollbar-thin">

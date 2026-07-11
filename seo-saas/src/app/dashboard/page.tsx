@@ -61,7 +61,7 @@ export default async function Dashboard() {
             <p className="text-white/30 text-sm mt-1">Your SEO analysis history</p>
           </div>
           <div className="flex items-center gap-2">
-            <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${isPro ? 'bg-accent-500/10 text-accent-400' : 'bg-white/[0.06] text-white/40'}`}>
+            <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${isPro ? 'bg-accent-500/10 text-accent-400' : 'bg-white/[0.06] text-white/60'}`}>
               {planLabel}
             </span>
             {!isPro && (
@@ -82,7 +82,7 @@ export default async function Dashboard() {
             ].map(stat => (
               <div key={stat.label} className="glass-card rounded-xl p-4 text-center">
                 <div className={`text-2xl font-semibold font-mono tracking-tight ${stat.color}`}>{stat.value}</div>
-                <div className="text-[11px] text-white/40 mt-1 uppercase tracking-wide">{stat.label}</div>
+                <div className="text-[11px] text-white/60 mt-1 uppercase tracking-wide">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -100,7 +100,7 @@ export default async function Dashboard() {
           <div className="glass-card rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4 border border-accent-500/20">
             <div>
               <p className="text-sm font-medium text-white/85">Unlock the full audit</p>
-              <p className="text-xs text-white/40 mt-1 max-w-md">Unlimited analyses, every issue with copy-paste fix code, security &amp; accessibility, PDF reports, and scheduled monitoring.</p>
+              <p className="text-xs text-white/60 mt-1 max-w-md">Unlimited analyses, every issue with copy-paste fix code, security &amp; accessibility, PDF reports, and scheduled monitoring.</p>
             </div>
             <Link href="/pricing" className="btn-primary text-sm whitespace-nowrap flex-shrink-0">Upgrade to Pro</Link>
           </div>
@@ -139,7 +139,7 @@ export default async function Dashboard() {
                     ↻
                   </a>
                   <Link href={`/analyze/${a.id}`}
-                    className="text-white/15 group-hover:text-white/40 transition-colors duration-150 text-sm flex-shrink-0">
+                    className="text-white/15 group-hover:text-white/60 transition-colors duration-150 text-sm flex-shrink-0">
                     →
                   </Link>
                 </div>

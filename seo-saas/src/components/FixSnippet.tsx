@@ -36,7 +36,7 @@ export function FixSnippet({ code, language = 'html' }: { code: string; language
           <Code className="w-3 h-3 text-accent-400" />
           <span className="text-[10px] text-white/30 uppercase tracking-wider">{language}</span>
         </div>
-        <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-white/40 hover:text-white/70 transition-colors duration-150">
+        <button onClick={handleCopy} className="flex items-center gap-1 text-[10px] text-white/60 hover:text-white/70 transition-colors duration-150">
           {copied ? <><CheckCircle className="w-3 h-3 text-emerald-400" /> Copied</> : <><Copy className="w-3 h-3" /> Copy</>}
         </button>
       </div>

@@ -49,32 +49,32 @@ export default function MetaTagGeneratorClient() {
     <div className="grid md:grid-cols-2 gap-6">
       <div className="space-y-4">
         <div>
-          <label className="flex items-center justify-between text-xs text-white/40 mb-1.5">
+          <label className="flex items-center justify-between text-xs text-white/60 mb-1.5">
             <span>Title tag</span><span className={titleColor}>{title.length}/60</span>
           </label>
           <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Your Page Title | Brand" className={field} />
         </div>
         <div>
-          <label className="flex items-center justify-between text-xs text-white/40 mb-1.5">
+          <label className="flex items-center justify-between text-xs text-white/60 mb-1.5">
             <span>Meta description</span><span className={descColor}>{description.length}/160</span>
           </label>
           <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="A compelling 150-160 character summary with your keyword." rows={3} className={field} />
         </div>
         <div>
-          <label className="block text-xs text-white/40 mb-1.5">Canonical URL</label>
+          <label className="block text-xs text-white/60 mb-1.5">Canonical URL</label>
           <input value={url} onChange={e => setUrl(e.target.value)} placeholder="https://example.com/page" className={field} />
         </div>
         <div>
-          <label className="block text-xs text-white/40 mb-1.5">OG image URL</label>
+          <label className="block text-xs text-white/60 mb-1.5">OG image URL</label>
           <input value={image} onChange={e => setImage(e.target.value)} placeholder="https://example.com/og.png (1200x630)" className={field} />
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-white/40 mb-1.5">Site name</label>
+            <label className="block text-xs text-white/60 mb-1.5">Site name</label>
             <input value={siteName} onChange={e => setSiteName(e.target.value)} placeholder="Brand" className={field} />
           </div>
           <div>
-            <label className="block text-xs text-white/40 mb-1.5">Twitter handle</label>
+            <label className="block text-xs text-white/60 mb-1.5">Twitter handle</label>
             <input value={twitter} onChange={e => setTwitter(e.target.value)} placeholder="@brand" className={field} />
           </div>
         </div>
@@ -82,7 +82,7 @@ export default function MetaTagGeneratorClient() {
 
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-white/40">Generated tags</span>
+          <span className="text-xs text-white/60">Generated tags</span>
           <button onClick={copy} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
             {copied ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
           </button>

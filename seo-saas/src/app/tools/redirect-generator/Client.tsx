@@ -35,11 +35,11 @@ export default function RedirectGeneratorClient() {
         <div className="flex items-center gap-3">
           <div className="inline-flex rounded-lg border border-white/[0.08] p-0.5 bg-white/[0.02]">
             {(['301', '302'] as const).map(c => (
-              <button key={c} onClick={() => setCode(c)} className={`px-3 py-1.5 rounded-md text-xs transition ${code === c ? 'bg-accent-500/20 text-accent-300' : 'text-white/40 hover:text-white/70'}`}>{c} {c === '301' ? 'permanent' : 'temporary'}</button>
+              <button key={c} onClick={() => setCode(c)} className={`px-3 py-1.5 rounded-md text-xs transition ${code === c ? 'bg-accent-500/20 text-accent-300' : 'text-white/60 hover:text-white/70'}`}>{c} {c === '301' ? 'permanent' : 'temporary'}</button>
             ))}
           </div>
         </div>
-        <p className="text-xs text-white/40">From = the old path on your site. To = the full destination URL.</p>
+        <p className="text-xs text-white/60">From = the old path on your site. To = the full destination URL.</p>
         {rows.map((r, i) => (
           <div key={i} className="flex items-center gap-2">
             <input value={r.from} onChange={e => update(i, { from: e.target.value })} placeholder="/old-page" className={`${field} font-mono`} />
@@ -55,7 +55,7 @@ export default function RedirectGeneratorClient() {
         <div className="flex items-center justify-between mb-2">
           <div className="inline-flex rounded-lg border border-white/[0.08] p-0.5 bg-white/[0.02]">
             {(['apache', 'nginx'] as const).map(s => (
-              <button key={s} onClick={() => setServer(s)} className={`px-3 py-1.5 rounded-md text-xs capitalize transition ${server === s ? 'bg-accent-500/20 text-accent-300' : 'text-white/40 hover:text-white/70'}`}>{s === 'apache' ? '.htaccess (Apache)' : 'Nginx'}</button>
+              <button key={s} onClick={() => setServer(s)} className={`px-3 py-1.5 rounded-md text-xs capitalize transition ${server === s ? 'bg-accent-500/20 text-accent-300' : 'text-white/60 hover:text-white/70'}`}>{s === 'apache' ? '.htaccess (Apache)' : 'Nginx'}</button>
             ))}
           </div>
           <button onClick={copy} disabled={!output} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition disabled:opacity-40">
@@ -63,7 +63,7 @@ export default function RedirectGeneratorClient() {
           </button>
         </div>
         <pre className="glass-card rounded-lg p-4 text-xs text-white/70 font-mono whitespace-pre-wrap break-words min-h-[220px] overflow-auto">{output || 'Add redirects to generate config…'}</pre>
-        <p className="text-xs text-white/35 mt-3 leading-relaxed">
+        <p className="text-xs text-white/55 mt-3 leading-relaxed">
           {server === 'apache'
             ? 'Add to your .htaccess in the site root. Requires mod_alias (enabled by default on most Apache hosts).'
             : 'Add inside the relevant server { } block, then reload Nginx (nginx -s reload).'}

@@ -53,7 +53,7 @@ export default function GlossaryPage() {
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <h1 className="text-2xl font-medium tracking-tight mb-2">SEO Glossary</h1>
-        <p className="text-white/40 text-sm mb-10">Plain-English definitions of the SEO terms that actually matter.</p>
+        <p className="text-white/60 text-sm mb-10">Plain-English definitions of the SEO terms that actually matter.</p>
         <dl className="space-y-5">
           {terms.map(t => (
             <div key={t.term} className="glass-card rounded-xl p-5">

@@ -47,7 +47,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <Link href="/blog" className="flex items-center gap-2 text-white/40 hover:text-white/70 transition text-sm mb-8">
+        <Link href="/blog" className="flex items-center gap-2 text-white/60 hover:text-white/70 transition text-sm mb-8">
           <ArrowLeft className="w-4 h-4" /> Back to blog
         </Link>
         <h1 className="text-2xl font-medium tracking-tight mb-8 text-white/90">{post.title}</h1>

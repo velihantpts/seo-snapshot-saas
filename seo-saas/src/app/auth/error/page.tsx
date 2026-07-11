@@ -35,7 +35,7 @@ function AuthErrorContent() {
           <span className="text-red-400 text-2xl">!</span>
         </div>
         <h1 className="text-xl font-medium tracking-tight mb-2">{msg.title}</h1>
-        <p className="text-white/40 text-sm mb-8 leading-relaxed">{msg.desc}</p>
+        <p className="text-white/60 text-sm mb-8 leading-relaxed">{msg.desc}</p>
         <div className="flex gap-3 justify-center">
           <Link href="/" className="btn-primary text-sm">Go home</Link>
           <Link href="/login" className="btn-ghost text-sm">Try again</Link>
@@ -47,7 +47,7 @@ function AuthErrorContent() {
 
 export default function AuthError() {
   return (
-    <Suspense fallback={<div className="min-h-screen bg-surface flex items-center justify-center"><p className="text-white/40">Loading...</p></div>}>
+    <Suspense fallback={<div className="min-h-screen bg-surface flex items-center justify-center"><p className="text-white/60">Loading...</p></div>}>
       <AuthErrorContent />
     </Suspense>
   );

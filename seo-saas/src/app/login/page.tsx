@@ -81,7 +81,7 @@ export default function Login() {
           <h1 className="text-2xl font-medium tracking-tight mb-2">
             {mode === 'login' ? t('login.title') : t('login.title.register')}
           </h1>
-          <p className="text-white/40 text-sm">
+          <p className="text-white/60 text-sm">
             {mode === 'login' ? t('login.desc') : t('login.desc.register')}
           </p>
         </div>
@@ -109,40 +109,40 @@ export default function Login() {
         <form onSubmit={handleSubmit} className="space-y-4 opacity-0 animate-fade-in-up-delay-1">
           {mode === 'register' && (
             <div>
-              <label htmlFor="name" className="block text-xs text-white/40 mb-1.5 ml-1">{t('login.name')}</label>
+              <label htmlFor="name" className="block text-xs text-white/60 mb-1.5 ml-1">{t('login.name')}</label>
               <input
                 id="name"
                 type="text"
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder={t('login.name.ph')}
-                className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/35 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
+                className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/55 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
               />
             </div>
           )}
 
           <div>
-            <label htmlFor="email" className="block text-xs text-white/40 mb-1.5 ml-1">{t('login.email')}</label>
+            <label htmlFor="email" className="block text-xs text-white/60 mb-1.5 ml-1">{t('login.email')}</label>
             <input
               id="email"
               type="email"
               value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="name@example.com"
-              className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/35 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
+              className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/55 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-xs text-white/40 mb-1.5 ml-1">{t('login.password')}</label>
+            <label htmlFor="password" className="block text-xs text-white/60 mb-1.5 ml-1">{t('login.password')}</label>
             <input
               id="password"
               type="password"
               value={password}
               onChange={e => setPassword(e.target.value)}
               placeholder={mode === 'register' ? t('login.pw.ph.reg') : t('login.pw.ph')}
-              className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/35 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
+              className="w-full px-4 py-3 rounded-xl bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/55 outline-none focus:border-accent-500/30 transition-all duration-200 min-h-[44px]"
               required
               minLength={mode === 'register' ? 6 : 1}
             />
@@ -180,7 +180,7 @@ export default function Login() {
         </div>
 
         <p className="text-center text-white/15 text-xs mt-8">
-          {t('login.agree')} <Link href="/terms" className="text-white/25 hover:text-white/40">{t('terms.title')}</Link> {t('login.and')} <Link href="/privacy" className="text-white/25 hover:text-white/40">{t('privacy.title')}</Link>.
+          {t('login.agree')} <Link href="/terms" className="text-white/25 hover:text-white/60">{t('terms.title')}</Link> {t('login.and')} <Link href="/privacy" className="text-white/25 hover:text-white/60">{t('privacy.title')}</Link>.
         </p>
       </div>
     </div>

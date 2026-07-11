@@ -115,7 +115,7 @@ export default function SchemaGeneratorClient() {
             {faqs.map((x, i) => (
               <div key={i} className="glass-card rounded-lg p-3 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-white/40">Q{i + 1}</span>
+                  <span className="text-xs text-white/60">Q{i + 1}</span>
                   {faqs.length > 1 && <button onClick={() => setFaqs(faqs.filter((_, j) => j !== i))} className="text-white/25 hover:text-red-400"><Trash2 className="w-3.5 h-3.5" /></button>}
                 </div>
                 <input value={x.q} onChange={e => setFaqs(faqs.map((y, j) => j === i ? { ...y, q: e.target.value } : y))} placeholder="Question" className={field} />
@@ -154,11 +154,11 @@ export default function SchemaGeneratorClient() {
             <Area label="Description" v={f.description} on={v => set('description', v)} ph="Short description of the event" />
           </>)}
           {type === 'BreadcrumbList' && (<div className="space-y-3">
-            <p className="text-xs text-white/40">Top-level page first, current page last.</p>
+            <p className="text-xs text-white/60">Top-level page first, current page last.</p>
             {crumbs.map((c, i) => (
               <div key={i} className="glass-card rounded-lg p-3 space-y-2">
                 <div className="flex items-center justify-between">
-                  <span className="text-xs text-white/40">Level {i + 1}</span>
+                  <span className="text-xs text-white/60">Level {i + 1}</span>
                   {crumbs.length > 1 && <button onClick={() => setCrumbs(crumbs.filter((_, j) => j !== i))} className="text-white/25 hover:text-red-400"><Trash2 className="w-3.5 h-3.5" /></button>}
                 </div>
                 <input value={c.name} onChange={e => setCrumbs(crumbs.map((y, j) => j === i ? { ...y, name: e.target.value } : y))} placeholder="Name (e.g. Blog)" className={field} />
@@ -171,7 +171,7 @@ export default function SchemaGeneratorClient() {
 
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs text-white/40">JSON-LD</span>
+            <span className="text-xs text-white/60">JSON-LD</span>
             <button onClick={copy} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
               {copied ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
             </button>
@@ -191,7 +191,7 @@ export default function SchemaGeneratorClient() {
 function Input({ label, v, on, ph }: { label: string; v?: string; on: (v: string) => void; ph?: string }) {
   return (
     <div>
-      <label className="block text-xs text-white/40 mb-1.5">{label}</label>
+      <label className="block text-xs text-white/60 mb-1.5">{label}</label>
       <input value={v || ''} onChange={e => on(e.target.value)} placeholder={ph} className="w-full px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30" />
     </div>
   );
@@ -199,7 +199,7 @@ function Input({ label, v, on, ph }: { label: string; v?: string; on: (v: string
 function Area({ label, v, on, ph }: { label: string; v?: string; on: (v: string) => void; ph?: string }) {
   return (
     <div>
-      <label className="block text-xs text-white/40 mb-1.5">{label}</label>
+      <label className="block text-xs text-white/60 mb-1.5">{label}</label>
       <textarea value={v || ''} onChange={e => on(e.target.value)} placeholder={ph} rows={3} className="w-full px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30" />
     </div>
   );

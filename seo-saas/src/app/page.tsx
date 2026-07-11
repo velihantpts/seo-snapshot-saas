@@ -88,7 +88,7 @@ export default function Home() {
 
 
       {/* Hero */}
-      <section className="relative z-10 pt-20 sm:pt-28 lg:pt-36 pb-16 sm:pb-20 px-4 sm:px-6">
+      <section className="relative z-10 pt-12 sm:pt-16 lg:pt-24 pb-16 sm:pb-20 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <div className="flex justify-center mb-8 opacity-0 animate-fade-in">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.1] text-white/50 text-[11px]">
@@ -109,7 +109,7 @@ export default function Home() {
           <form onSubmit={handleAnalyze} className="max-w-2xl mx-auto opacity-0 animate-fade-in-up-delay-2" role="search" aria-label="SEO Analysis">
             <div className="flex flex-col sm:flex-row gap-2 p-2 rounded-2xl bg-white/[0.03] border border-white/[0.05] input-glow transition-all duration-200">
               <div className="flex-1 flex items-center gap-3 px-4 relative">
-                <Search className="w-5 h-5 text-white/45 flex-shrink-0" />
+                <Search className="w-5 h-5 text-white/65 flex-shrink-0" />
                 <div className="flex-1 relative">
                   <input
                     type="text"
@@ -178,11 +178,11 @@ export default function Home() {
               <div className="grid grid-cols-2 gap-3 text-left">
                 {/* Others */}
                 <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4">
-                  <div className="text-[10px] text-white/40 uppercase tracking-wider mb-3">{t('diff.others')}</div>
+                  <div className="text-[10px] text-white/60 uppercase tracking-wider mb-3">{t('diff.others')}</div>
                   <div className="space-y-2">
-                    <p className="text-xs text-white/45 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex1')}</p>
-                    <p className="text-xs text-white/45 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex2')}</p>
-                    <p className="text-xs text-white/45 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex3')}</p>
+                    <p className="text-xs text-white/65 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex1')}</p>
+                    <p className="text-xs text-white/65 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex2')}</p>
+                    <p className="text-xs text-white/65 flex gap-2"><span className="text-red-400/60">✗</span> {t('diff.ex3')}</p>
                   </div>
                 </div>
                 {/* Us */}
@@ -197,13 +197,13 @@ export default function Home() {
               </div>
               {/* Unique badges */}
               <div className="flex justify-center gap-4 mt-4">
-                <div className="flex items-center gap-1.5 text-[10px] text-white/45">
+                <div className="flex items-center gap-1.5 text-[10px] text-white/65">
                   <span className="text-amber-400 font-bold text-xs">A+→F</span> {t('diff.secgrade')}
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-white/45">
+                <div className="flex items-center gap-1.5 text-[10px] text-white/65">
                   <span className="text-emerald-400 font-bold text-xs">+15</span> {t('diff.impact')}
                 </div>
-                <div className="flex items-center gap-1.5 text-[10px] text-white/45">
+                <div className="flex items-center gap-1.5 text-[10px] text-white/65">
                   <span className="text-accent-400 font-bold text-xs">56</span> {t('diff.snippets')}
                 </div>
               </div>
@@ -224,7 +224,7 @@ export default function Home() {
             ].map(stat => (
               <div key={stat.label}>
                 <div className="text-2xl sm:text-3xl font-semibold tracking-tight text-white/90">{stat.value}</div>
-                <div className="text-white/45 text-xs mt-1 uppercase tracking-wider">{stat.label}</div>
+                <div className="text-white/65 text-xs mt-1 uppercase tracking-wider">{stat.label}</div>
               </div>
             ))}
           </div>
@@ -240,7 +240,7 @@ export default function Home() {
                 <div className="w-3 h-3 rounded-full bg-red-500/60" />
                 <div className="w-3 h-3 rounded-full bg-amber-500/60" />
                 <div className="w-3 h-3 rounded-full bg-emerald-500/60" />
-                <span className="text-xs text-white/35 ml-2 font-mono">seosnapshot.dev/analyze</span>
+                <span className="text-xs text-white/55 ml-2 font-mono">seosnapshot.dev/analyze</span>
               </div>
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 mb-5">
                 <div className="relative w-20 h-20 flex-shrink-0">
@@ -256,7 +256,7 @@ export default function Home() {
                 </div>
                 <div>
                   <div className="text-sm font-medium text-white/80 mb-1">example.com</div>
-                  <div className="text-xs text-white/45">3 issues found · 1.2s response · 42 KB</div>
+                  <div className="text-xs text-white/65">3 issues found · 1.2s response · 42 KB</div>
                 </div>
               </div>
               <div className="space-y-2">
@@ -274,7 +274,7 @@ export default function Home() {
                 ))}
               </div>
               <div className="mt-4 pt-4 border-t border-white/[0.04] text-center">
-                <span className="text-xs text-white/35">{t('demo.try')}</span>
+                <span className="text-xs text-white/55">{t('demo.try')}</span>
               </div>
             </div>
           </div>
@@ -286,7 +286,7 @@ export default function Home() {
         <section className="relative z-10 py-16 px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="heading-section mb-2">{t('tools.homeTitle')}</h2>
-            <p className="text-white/40 text-sm mb-8">{t('tools.homeDesc')}</p>
+            <p className="text-white/60 text-sm mb-8">{t('tools.homeDesc')}</p>
             <div className="flex flex-wrap justify-center gap-2.5">
               {[
                 { href: '/tools/open-graph-preview', label: 'Open Graph Preview' },
@@ -315,7 +315,7 @@ export default function Home() {
         <div className="divider max-w-6xl mx-auto mb-20" />
         <ScrollReveal className="max-w-5xl mx-auto">
           <h2 className="heading-section text-center mb-4">{t('features.title')}</h2>
-          <p className="text-white/40 text-center mb-14 sm:mb-16 max-w-md mx-auto text-sm leading-relaxed">
+          <p className="text-white/60 text-center mb-14 sm:mb-16 max-w-md mx-auto text-sm leading-relaxed">
             {t('features.desc')}
           </p>
         </ScrollReveal>
@@ -328,7 +328,7 @@ export default function Home() {
                   <Icon className="w-5 h-5 text-accent-400" />
                 </div>
                 <h3 className="font-medium text-[15px] mb-2 text-white/90">{title}</h3>
-                <p className="text-white/40 text-sm leading-relaxed">{desc}</p>
+                <p className="text-white/60 text-sm leading-relaxed">{desc}</p>
               </GlowCard>
             </ScrollReveal>
           ))}
@@ -340,8 +340,8 @@ export default function Home() {
         <div className="divider max-w-6xl mx-auto mb-20" />
         <ScrollReveal className="max-w-xl mx-auto text-center">
           <h2 className="heading-section mb-4">{t('cta.title')}</h2>
-          <p className="text-white/40 mb-6 text-sm">{t('cta.desc')}</p>
-          <p className="text-white/40 mb-10 text-xs leading-relaxed max-w-md mx-auto">
+          <p className="text-white/60 mb-6 text-sm">{t('cta.desc')}</p>
+          <p className="text-white/60 mb-10 text-xs leading-relaxed max-w-md mx-auto">
             {t('cta.longdesc')}
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">

@@ -38,7 +38,7 @@ export default function HreflangGeneratorClient() {
   return (
     <div className="grid lg:grid-cols-2 gap-6">
       <div className="space-y-3">
-        <p className="text-xs text-white/40">One row per language/region version of the page.</p>
+        <p className="text-xs text-white/60">One row per language/region version of the page.</p>
         {rows.map((r, i) => (
           <div key={i} className="flex items-center gap-2">
             <input list="hreflang-codes" value={r.lang} onChange={e => update(i, { lang: e.target.value })} placeholder="en-US" className={`${field} w-28 font-mono ${r.lang && !codeOk(r.lang) ? 'border-amber-500/40' : ''}`} />
@@ -50,7 +50,7 @@ export default function HreflangGeneratorClient() {
         <button onClick={add} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition"><Plus className="w-3.5 h-3.5" /> Add language</button>
 
         <div className="pt-3 border-t border-white/[0.06]">
-          <label className="block text-xs text-white/40 mb-1.5">x-default URL <span className="text-white/25">(fallback for unmatched locales — recommended)</span></label>
+          <label className="block text-xs text-white/60 mb-1.5">x-default URL <span className="text-white/25">(fallback for unmatched locales — recommended)</span></label>
           <input value={xDefault} onChange={e => setXDefault(e.target.value)} placeholder="https://example.com/" className={field} />
         </div>
 
@@ -61,13 +61,13 @@ export default function HreflangGeneratorClient() {
 
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-white/40">Generated hreflang tags</span>
+          <span className="text-xs text-white/60">Generated hreflang tags</span>
           <button onClick={copy} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
             {copied ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
           </button>
         </div>
         <pre className="glass-card rounded-lg p-4 text-xs text-white/70 font-mono whitespace-pre-wrap break-words min-h-[220px] overflow-auto">{output || 'Add languages and URLs to generate hreflang tags…'}</pre>
-        <p className="text-xs text-white/35 mt-3 leading-relaxed">Place these in the <code className="text-accent-300">&lt;head&gt;</code> of <em>every</em> language version. Each page must list all versions including itself, and the links must be reciprocal.</p>
+        <p className="text-xs text-white/55 mt-3 leading-relaxed">Place these in the <code className="text-accent-300">&lt;head&gt;</code> of <em>every</em> language version. Each page must list all versions including itself, and the links must be reciprocal.</p>
         <div className="mt-4 glass-card rounded-lg p-4 text-center">
           <p className="text-white/50 text-sm mb-2">Running a multi-language site?</p>
           <Link href="/" className="btn-primary text-sm">Audit any URL free</Link>

@@ -72,13 +72,13 @@ export default function AnalyzeByIdPage() {
       <ScrollProgress />
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-40 max-w-5xl mx-auto px-4 sm:px-6 pt-4 flex items-center justify-between print:hidden">
-        <Link href="/" className="flex items-center gap-2 text-white/40 hover:text-white/70 transition-colors duration-150 text-sm">
+        <Link href="/" className="flex items-center gap-2 text-white/60 hover:text-white/70 transition-colors duration-150 text-sm">
           <ArrowLeft className="w-4 h-4" /> New analysis
         </Link>
         <button
           onClick={handleReanalyze}
           disabled={reanalyzing}
-          className="flex items-center gap-1.5 text-sm text-white/40 hover:text-accent-400 transition-colors duration-150 disabled:opacity-30"
+          className="flex items-center gap-1.5 text-sm text-white/60 hover:text-accent-400 transition-colors duration-150 disabled:opacity-30"
         >
           <RotateCw className={`w-3.5 h-3.5 ${reanalyzing ? 'animate-spin' : ''}`} />
           Re-analyze

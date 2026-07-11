@@ -71,7 +71,7 @@ export default function CrawlPage() {
       <ScrollProgress />
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-40 max-w-5xl mx-auto px-4 sm:px-6 pt-4">
-        <Link href="/dashboard" className="flex items-center gap-2 text-white/40 hover:text-white/70 transition text-sm">
+        <Link href="/dashboard" className="flex items-center gap-2 text-white/60 hover:text-white/70 transition text-sm">
           <ArrowLeft className="w-4 h-4" /> Dashboard
         </Link>
       </div>
@@ -81,7 +81,7 @@ export default function CrawlPage() {
           <div className="w-12 h-12 rounded-xl bg-accent-500/15 flex items-center justify-center"><Globe className="w-6 h-6 text-accent-400" /></div>
           <div>
             <h1 className="text-xl font-medium tracking-tight">{crawl.domain}</h1>
-            <p className="text-white/40 text-sm">Deep site crawl · follows internal links</p>
+            <p className="text-white/60 text-sm">Deep site crawl · follows internal links</p>
           </div>
           {avg > 0 && <div className={`ml-auto text-3xl font-bold ${avgColor}`}>{avg}<span className="text-lg text-white/30">/100</span></div>}
         </div>
@@ -91,7 +91,7 @@ export default function CrawlPage() {
             <div className="w-6 h-6 border-2 border-accent-400/40 border-t-accent-400 rounded-full animate-spin flex-shrink-0" />
             <div>
               <p className="text-sm text-white/70">Crawling the site — following internal links like Googlebot…</p>
-              <p className="text-xs text-white/35 mt-1">This walks up to 250 pages to map structure (orphans, click-depth, broken links). Refreshes automatically.</p>
+              <p className="text-xs text-white/55 mt-1">This walks up to 250 pages to map structure (orphans, click-depth, broken links). Refreshes automatically.</p>
             </div>
           </div>
         )}
@@ -113,7 +113,7 @@ export default function CrawlPage() {
               ].map(s => (
                 <div key={s.label} className="glass-card rounded-xl p-4 text-center">
                   <div className={`text-2xl font-semibold ${s.warn ? 'text-amber-400' : 'text-white/85'}`}>{s.value}</div>
-                  <div className="text-[10px] text-white/40 mt-1 uppercase tracking-wide">{s.label}</div>
+                  <div className="text-[10px] text-white/60 mt-1 uppercase tracking-wide">{s.label}</div>
                 </div>
               ))}
             </div>
@@ -127,7 +127,7 @@ export default function CrawlPage() {
               <div className="space-y-1.5">
                 {ins.depthHistogram.map(d => (
                   <div key={d.depth} className="flex items-center gap-3 text-xs">
-                    <span className="w-16 text-white/40">Depth {d.depth}</span>
+                    <span className="w-16 text-white/60">Depth {d.depth}</span>
                     <div className="flex-1 h-4 bg-white/[0.03] rounded overflow-hidden">
                       <div className={`h-full rounded ${d.depth >= 4 ? 'bg-amber-400/70' : 'bg-accent-400/70'}`} style={{ width: `${(d.count / maxDepthCount) * 100}%`, minWidth: d.count ? '6px' : 0 }} />
                     </div>
@@ -173,7 +173,7 @@ export default function CrawlPage() {
                   {ins.topLinkedPages.map(p => (
                     <div key={p.url} className="flex items-center justify-between gap-3 text-xs">
                       <span className="text-white/55 font-mono truncate">{short(p.url)}</span>
-                      <span className="text-white/40 font-mono flex-shrink-0">{p.inlinks} links</span>
+                      <span className="text-white/60 font-mono flex-shrink-0">{p.inlinks} links</span>
                     </div>
                   ))}
                 </div>

@@ -36,7 +36,7 @@ export default function PublicReportPage() {
   if (error || !result) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-surface gap-4">
-        <p className="text-white/40 text-lg">{error || 'Report not found'}</p>
+        <p className="text-white/60 text-lg">{error || 'Report not found'}</p>
         <Link href="/" className="btn-primary text-sm">Analyze your own site</Link>
       </div>
     );

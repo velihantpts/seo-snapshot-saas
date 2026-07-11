@@ -26,7 +26,7 @@ export default function ToolsPage() {
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <h1 className="text-2xl font-medium tracking-tight mb-2">Free SEO Tools</h1>
-        <p className="text-white/40 text-sm mb-10">Fast, copy-paste generators. No signup, completely free.</p>
+        <p className="text-white/60 text-sm mb-10">Fast, copy-paste generators. No signup, completely free.</p>
         <div className="space-y-4">
           {tools.map(tool => (
             <Link key={tool.href} href={tool.href} className="flex items-start gap-4 glass-card rounded-xl p-5 group hover:border-white/[0.1] transition-all duration-200">
@@ -35,7 +35,7 @@ export default function ToolsPage() {
               </div>
               <div className="flex-1">
                 <h2 className="text-base font-medium text-white/90 group-hover:text-accent-400 transition-colors mb-1">{tool.title}</h2>
-                <p className="text-sm text-white/40 leading-relaxed">{tool.desc}</p>
+                <p className="text-sm text-white/60 leading-relaxed">{tool.desc}</p>
               </div>
               <ArrowRight className="w-4 h-4 text-white/25 mt-1 flex-shrink-0" />
             </Link>

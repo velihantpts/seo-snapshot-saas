@@ -21,7 +21,7 @@ export function ProGate({ children, feature, isPro = false }: {
             <Lock className="w-5 h-5 text-accent-400" />
           </div>
           <p className="text-sm font-medium text-white/80 mb-1">Pro Feature</p>
-          <p className="text-xs text-white/40 mb-3 max-w-[200px]">Upgrade to see {feature}</p>
+          <p className="text-xs text-white/60 mb-3 max-w-[200px]">Upgrade to see {feature}</p>
           <Link href="/pricing" className="btn-primary !py-2 !px-4 text-xs inline-block">
             Upgrade to Pro
           </Link>

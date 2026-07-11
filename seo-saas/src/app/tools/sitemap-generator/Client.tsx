@@ -66,7 +66,7 @@ export default function SitemapGeneratorClient() {
     <div className="grid lg:grid-cols-2 gap-6">
       <div className="space-y-4">
         <div>
-          <label className="flex items-center justify-between text-xs text-white/40 mb-1.5">
+          <label className="flex items-center justify-between text-xs text-white/60 mb-1.5">
             <span>Your URLs (one per line)</span>
             <span className="text-white/30">{urls.valid.length} valid{urls.invalid.length ? ` · ${urls.invalid.length} skipped` : ''}</span>
           </label>
@@ -76,13 +76,13 @@ export default function SitemapGeneratorClient() {
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="block text-xs text-white/40 mb-1.5">changefreq</label>
+            <label className="block text-xs text-white/60 mb-1.5">changefreq</label>
             <select value={freq} onChange={e => setFreq(e.target.value)} className={field}>
               {FREQS.map(f => <option key={f} value={f} className="bg-surface">{f}</option>)}
             </select>
           </div>
           <div>
-            <label className="block text-xs text-white/40 mb-1.5">priority</label>
+            <label className="block text-xs text-white/60 mb-1.5">priority</label>
             <select value={priority} onChange={e => setPriority(e.target.value)} className={field}>
               {['(none)', '1.0', '0.9', '0.8', '0.7', '0.6', '0.5', '0.4', '0.3'].map(p => <option key={p} value={p} className="bg-surface">{p}</option>)}
             </select>
@@ -101,7 +101,7 @@ export default function SitemapGeneratorClient() {
 
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-white/40">sitemap.xml</span>
+          <span className="text-xs text-white/60">sitemap.xml</span>
           <div className="flex items-center gap-3">
             <button onClick={download} disabled={!xml} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition disabled:opacity-40"><Download className="w-3.5 h-3.5" /> Download</button>
             <button onClick={copy} disabled={!xml} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition disabled:opacity-40">
@@ -110,7 +110,7 @@ export default function SitemapGeneratorClient() {
           </div>
         </div>
         <pre className="glass-card rounded-lg p-4 text-xs text-white/70 font-mono whitespace-pre-wrap break-words min-h-[320px] max-h-[520px] overflow-auto">{xml || 'Paste your URLs to build a valid XML sitemap…'}</pre>
-        <p className="text-xs text-white/35 mt-3">Upload to your domain root (e.g. <code className="text-accent-300">/sitemap.xml</code>) and submit it in Google Search Console.</p>
+        <p className="text-xs text-white/55 mt-3">Upload to your domain root (e.g. <code className="text-accent-300">/sitemap.xml</code>) and submit it in Google Search Console.</p>
         <div className="mt-4 glass-card rounded-lg p-4 text-center">
           <p className="text-white/50 text-sm mb-2">Want to check indexing &amp; crawl issues too?</p>
           <Link href="/" className="btn-primary text-sm">Analyze any URL free</Link>

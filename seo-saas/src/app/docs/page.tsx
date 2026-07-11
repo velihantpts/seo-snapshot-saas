@@ -8,7 +8,7 @@ export default function ApiDocs() {
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <h1 className="text-2xl font-medium tracking-tight mb-2">{t('docs.title')}</h1>
-        <p className="text-white/40 text-sm mb-10">{t('docs.desc')}</p>
+        <p className="text-white/60 text-sm mb-10">{t('docs.desc')}</p>
 
         {/* Endpoint */}
         <div className="glass-card rounded-xl p-5 mb-6">
@@ -16,7 +16,7 @@ export default function ApiDocs() {
             <span className="text-xs font-bold bg-emerald-500/15 text-emerald-400 px-2 py-0.5 rounded">POST</span>
             <code className="text-sm text-white/80 font-mono">/api/v1/analyze</code>
           </div>
-          <p className="text-white/40 text-sm mb-4">Analyze a URL and get a full SEO report with score, issues, and recommendations.</p>
+          <p className="text-white/60 text-sm mb-4">Analyze a URL and get a full SEO report with score, issues, and recommendations.</p>
 
           <h3 className="text-xs font-medium text-white/50 uppercase tracking-wider mb-2">Request</h3>
           <pre className="bg-white/[0.03] rounded-lg p-4 text-xs font-mono text-white/70 overflow-x-auto mb-4">{`curl -X POST https://seosnapshot.dev/api/v1/analyze \\
@@ -80,7 +80,7 @@ export default function ApiDocs() {
         {/* Authentication */}
         <div className="glass-card rounded-xl p-5">
           <h2 className="text-base font-medium mb-3">Authentication</h2>
-          <p className="text-white/40 text-sm mb-3">
+          <p className="text-white/60 text-sm mb-3">
             API key is optional for free-tier usage. Pro users get an API key from their dashboard.
           </p>
           <pre className="bg-white/[0.03] rounded-lg p-3 text-xs font-mono text-white/70">Authorization: Bearer sk_live_...</pre>

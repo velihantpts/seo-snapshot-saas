@@ -116,7 +116,7 @@ export default function AdminPage() {
               <Lock className="w-6 h-6 text-red-400" />
             </div>
             <h1 className="text-xl font-medium">Admin Access</h1>
-            <p className="text-white/40 text-sm mt-1">Restricted area</p>
+            <p className="text-white/60 text-sm mt-1">Restricted area</p>
           </div>
           <form onSubmit={handleLogin} className="space-y-4">
             <input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="Email"
@@ -196,12 +196,12 @@ Tool: https://seosnapshot.dev (free, no signup needed)`;
               ].map(s => (
                 <div key={s.label} className="glass-card rounded-xl p-4">
                   <div className="text-2xl font-semibold text-white/90">{s.value}</div>
-                  <div className="text-xs text-white/40 mt-0.5">{s.label}</div>
+                  <div className="text-xs text-white/60 mt-0.5">{s.label}</div>
                 </div>
               ))}
             </div>
             <div className="glass-card rounded-xl p-4 mb-4">
-              <p className="text-xs text-white/40 mb-2">Funnel (30d)</p>
+              <p className="text-xs text-white/60 mb-2">Funnel (30d)</p>
               <div className="flex flex-wrap items-center gap-2 text-sm">
                 <span className="px-3 py-1.5 rounded-lg bg-white/[0.04] text-white/70">{stats.visitors?.d30 ?? 0} visitors</span>
                 <span className="text-white/25">→</span>
@@ -214,17 +214,17 @@ Tool: https://seosnapshot.dev (free, no signup needed)`;
             </div>
             <div className="grid sm:grid-cols-2 gap-4">
               <div className="glass-card rounded-xl p-4">
-                <p className="text-xs text-white/40 mb-2">Top pages</p>
+                <p className="text-xs text-white/60 mb-2">Top pages</p>
                 {(stats.topPages || []).length === 0 && <p className="text-xs text-white/25">No data yet</p>}
                 {(stats.topPages || []).map((p: any) => (
-                  <div key={p.path} className="flex justify-between text-sm py-1"><span className="text-white/60 truncate">{p.path}</span><span className="text-white/40">{p.count}</span></div>
+                  <div key={p.path} className="flex justify-between text-sm py-1"><span className="text-white/60 truncate">{p.path}</span><span className="text-white/60">{p.count}</span></div>
                 ))}
               </div>
               <div className="glass-card rounded-xl p-4">
-                <p className="text-xs text-white/40 mb-2">Top referrers</p>
+                <p className="text-xs text-white/60 mb-2">Top referrers</p>
                 {(stats.topReferrers || []).length === 0 && <p className="text-xs text-white/25">No external referrers yet</p>}
                 {(stats.topReferrers || []).map((r: any) => (
-                  <div key={r.referrer} className="flex justify-between text-sm py-1"><span className="text-white/60 truncate">{r.referrer}</span><span className="text-white/40">{r.count}</span></div>
+                  <div key={r.referrer} className="flex justify-between text-sm py-1"><span className="text-white/60 truncate">{r.referrer}</span><span className="text-white/60">{r.count}</span></div>
                 ))}
               </div>
             </div>
@@ -233,7 +233,7 @@ Tool: https://seosnapshot.dev (free, no signup needed)`;
 
         {/* Blog publisher — paste markdown, publish instantly (auto sitemap + IndexNow) */}
         <h1 className="text-2xl font-medium tracking-tight mb-2">Blog Publisher</h1>
-        <p className="text-white/40 text-sm mb-6">Paste a Markdown article and publish. Auto-added to the sitemap + pinged to IndexNow. Keep each post genuinely useful — Google penalizes mass low-value content.</p>
+        <p className="text-white/60 text-sm mb-6">Paste a Markdown article and publish. Auto-added to the sitemap + pinged to IndexNow. Keep each post genuinely useful — Google penalizes mass low-value content.</p>
 
         <div className="glass-card rounded-xl p-5 mb-6 space-y-3">
           <input value={bTitle} onChange={e => setBTitle(e.target.value)} placeholder="Title"
@@ -258,7 +258,7 @@ Tool: https://seosnapshot.dev (free, no signup needed)`;
 
         {bPosts.length > 0 && (
           <div className="glass-card rounded-xl p-4 mb-10">
-            <p className="text-xs text-white/40 mb-3">Published posts ({bPosts.length})</p>
+            <p className="text-xs text-white/60 mb-3">Published posts ({bPosts.length})</p>
             <div className="space-y-1.5">
               {bPosts.map(p => (
                 <div key={p.id} className="flex items-center justify-between gap-3 text-sm py-1">
@@ -272,7 +272,7 @@ Tool: https://seosnapshot.dev (free, no signup needed)`;
 
         <div className="border-t border-white/[0.06] pt-8">
         <h1 className="text-2xl font-medium tracking-tight mb-2">Admin — Reddit Marketing</h1>
-        <p className="text-white/40 text-sm mb-8">Analyze sites, get ready-to-post Reddit content + shareable report cards.</p>
+        <p className="text-white/60 text-sm mb-8">Analyze sites, get ready-to-post Reddit content + shareable report cards.</p>
 
         {/* Quick analyze */}
         <div className="glass-card rounded-xl p-4 mb-8 flex gap-3">
@@ -281,7 +281,7 @@ Tool: https://seosnapshot.dev (free, no signup needed)`;
             value={url}
             onChange={e => setUrl(e.target.value)}
             placeholder="Enter URL to analyze for Reddit post..."
-            className="flex-1 bg-transparent text-sm text-white placeholder:text-white/35 outline-none"
+            className="flex-1 bg-transparent text-sm text-white placeholder:text-white/55 outline-none"
             onKeyDown={e => e.key === 'Enter' && analyze()}
           />
           <button onClick={analyze} disabled={loading} className="btn-primary !py-2 text-sm flex items-center gap-1.5 disabled:opacity-50">
@@ -344,7 +344,7 @@ Tool: https://seosnapshot.dev (free, no signup needed)`;
 
                 {/* Reddit post preview — always show */}
                 <details className="mt-3">
-                  <summary className="text-[10px] text-white/25 cursor-pointer hover:text-white/40 transition">Show Reddit post text</summary>
+                  <summary className="text-[10px] text-white/25 cursor-pointer hover:text-white/60 transition">Show Reddit post text</summary>
                   <pre className="mt-2 p-3 rounded-lg bg-white/[0.03] text-xs text-white/50 whitespace-pre-wrap break-words font-mono leading-relaxed select-all">{redditPost}</pre>
                 </details>
               </div>

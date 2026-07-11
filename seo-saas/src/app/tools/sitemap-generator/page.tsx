@@ -32,11 +32,11 @@ export default function Page() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-12">
-        <Link href="/tools" className="flex items-center gap-2 text-white/40 hover:text-white/70 transition text-sm mb-6">
+        <Link href="/tools" className="flex items-center gap-2 text-white/60 hover:text-white/70 transition text-sm mb-6">
           <ArrowLeft className="w-4 h-4" /> All tools
         </Link>
         <h1 className="text-2xl font-medium tracking-tight mb-2">XML Sitemap Generator</h1>
-        <p className="text-white/40 text-sm mb-8 max-w-2xl">Paste your URLs and get a valid <code className="text-accent-300">sitemap.xml</code> with optional lastmod, changefreq, and priority. Duplicate and invalid URLs are cleaned automatically.</p>
+        <p className="text-white/60 text-sm mb-8 max-w-2xl">Paste your URLs and get a valid <code className="text-accent-300">sitemap.xml</code> with optional lastmod, changefreq, and priority. Duplicate and invalid URLs are cleaned automatically.</p>
         <Client />
 
         <section className="mt-14 max-w-2xl space-y-4 text-sm text-white/50 leading-relaxed">

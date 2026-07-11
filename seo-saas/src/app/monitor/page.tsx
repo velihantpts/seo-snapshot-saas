@@ -54,7 +54,7 @@ export default function MonitorPage() {
         <div className="text-center">
           <Bell className="w-12 h-12 text-white/20 mx-auto mb-4" />
           <h1 className="text-xl font-medium mb-2">SEO Monitoring</h1>
-          <p className="text-white/40 text-sm mb-6">Sign in to set up scheduled SEO checks for your sites.</p>
+          <p className="text-white/60 text-sm mb-6">Sign in to set up scheduled SEO checks for your sites.</p>
           <Link href="/login" className="btn-primary text-sm">Sign in</Link>
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function MonitorPage() {
         <div className="flex items-center justify-between mb-8">
           <div>
             <h1 className="text-xl font-medium tracking-tight">{t('monitor.title')}</h1>
-            <p className="text-white/40 text-sm mt-1">{t('monitor.desc')}</p>
+            <p className="text-white/60 text-sm mt-1">{t('monitor.desc')}</p>
           </div>
         </div>
 

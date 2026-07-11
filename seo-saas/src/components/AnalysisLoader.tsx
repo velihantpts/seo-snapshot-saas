@@ -70,7 +70,7 @@ export function AnalysisLoader() {
                 }
               </div>
               <span className={`text-sm transition-colors duration-300 ${
-                isDone ? 'text-white/40 line-through' : isActive ? 'text-white/80' : 'text-white/20'
+                isDone ? 'text-white/60 line-through' : isActive ? 'text-white/80' : 'text-white/20'
               }`}>
                 {s.label}
               </span>

@@ -31,7 +31,7 @@ export function IssueDonut({ critical, warning }: { critical: number; warning: n
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-lg font-semibold">{total}</span>
-          <span className="text-[9px] text-white/40 uppercase">issues</span>
+          <span className="text-[9px] text-white/60 uppercase">issues</span>
         </div>
       </div>
       <div className="space-y-2">
@@ -117,7 +117,7 @@ export function ScoreTrend({ data }: { data: { date: string; score: number }[] }
   if (allSame) {
     return (
       <div>
-        <h4 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-2">Score History</h4>
+        <h4 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-2">Score History</h4>
         <div className="flex items-center justify-between py-3">
           <span className="text-sm text-white/50">{deduped.length} analyses &middot; Consistent score</span>
           <span className="text-2xl font-semibold text-accent-400 font-mono">{deduped[0].score}</span>
@@ -147,7 +147,7 @@ export function ScoreTrend({ data }: { data: { date: string; score: number }[] }
 
   return (
     <div>
-      <h4 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-2">Score History</h4>
+      <h4 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-2">Score History</h4>
       <svg viewBox={`0 0 ${w} ${h}`} className="w-full h-auto">
         <defs>
           <linearGradient id="trendGrad" x1="0" y1="0" x2="0" y2="1">
@@ -193,7 +193,7 @@ export function MiniProgress({ value, max = 100, color }: { value: number; max?:
           style={{ width: `${pct}%`, background: barColor }}
         />
       </div>
-      <span className="text-xs font-mono text-white/40 w-7 text-right">{value}</span>
+      <span className="text-xs font-mono text-white/60 w-7 text-right">{value}</span>
     </div>
   );
 }
@@ -282,7 +282,7 @@ export function CategoryBars({ categories }: { categories: { label: string; coun
               }}
             />
           </div>
-          <span className="text-xs text-white/40 w-6 font-mono">{cat.count}</span>
+          <span className="text-xs text-white/60 w-6 font-mono">{cat.count}</span>
         </div>
       ))}
     </div>

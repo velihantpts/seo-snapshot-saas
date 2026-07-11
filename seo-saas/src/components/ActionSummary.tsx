@@ -18,7 +18,7 @@ export function ActionSummary({ result }: { result: SEOResult }) {
           </div>
           <div>
             <p className="text-sm font-medium text-emerald-400">Excellent! No issues found.</p>
-            <p className="text-xs text-white/40 mt-0.5">This page passes all SEO checks.</p>
+            <p className="text-xs text-white/60 mt-0.5">This page passes all SEO checks.</p>
           </div>
         </div>
       </div>

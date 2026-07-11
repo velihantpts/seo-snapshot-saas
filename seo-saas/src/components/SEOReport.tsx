@@ -41,7 +41,7 @@ function Section({ title, icon: Icon, children, defaultOpen = false, badge, badg
         aria-controls={`panel-${sectionId}`}
       >
         <div className="flex items-center gap-3">
-          <Icon className="w-4 h-4 text-white/40" />
+          <Icon className="w-4 h-4 text-white/60" />
           <span className="font-medium text-sm text-white/90">{title}</span>
         </div>
         <div className="flex items-center gap-2">
@@ -109,7 +109,7 @@ function StatCard({ label, value, color, suffix }: { label: string; value: strin
   return (
     <div ref={ref} className="glass-card rounded-xl p-4 text-center hover:scale-[1.02] transition-transform duration-200">
       <div className={`text-2xl font-semibold font-mono tracking-tight ${color || 'text-accent-400'}`}>{display}{suffix && <span className="text-sm text-white/30 font-normal">{suffix}</span>}</div>
-      <div className="text-[11px] text-white/40 mt-1.5 uppercase tracking-wide">{label}</div>
+      <div className="text-[11px] text-white/60 mt-1.5 uppercase tracking-wide">{label}</div>
     </div>
   );
 }
@@ -250,7 +250,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
         <ScoreRing score={d.score} potentialScore={d.potentialScore} size={140} label="Overall SEO" />
         <div className="flex-1 min-w-0">
           <h1 className="text-lg sm:text-xl font-medium tracking-tight mb-1.5 break-all text-white/90">{d.url}</h1>
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/40">
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-white/60">
             <span>Status <span className="text-white/60 font-mono">{d.statusCode}</span></span>
             <span>TTFB <span className="text-white/60 font-mono">{d.fetchTime}ms</span></span>
             <span>Size <span className="text-white/60 font-mono">{d.performance?.htmlSize} KB</span></span>
@@ -274,7 +274,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
       {/* Off-page scope note — honest about what this tool does and doesn't measure */}
       <div className="glass-card rounded-xl p-4 mb-8 flex items-start gap-3 print:hidden">
         <Info className="w-4 h-4 text-accent-400/70 mt-0.5 flex-shrink-0" />
-        <p className="text-xs text-white/45 leading-relaxed">
+        <p className="text-xs text-white/65 leading-relaxed">
           This is an <span className="text-white/70 font-medium">on-page</span> audit — roughly 30% of SEO.
           Rankings also depend on <span className="text-white/70 font-medium">off-page</span> factors like
           backlinks and domain authority, which this tool doesn&apos;t measure. A strong score here is
@@ -301,7 +301,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-150 whitespace-nowrap
                 ${isActive
                   ? 'bg-white/[0.08] text-white border border-white/[0.1] shadow-glow-sm'
-                  : 'text-white/40 hover:text-white/70 hover:bg-white/[0.03]'}`}
+                  : 'text-white/60 hover:text-white/70 hover:bg-white/[0.03]'}`}
             >
               <TabIcon className="w-4 h-4" />
               {tab.label}
@@ -332,7 +332,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
           {/* Tech Stack */}
           {d.techStack?.length > 0 && (
             <div className="glass-card rounded-xl p-5">
-              <h3 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-3">Detected Technology</h3>
+              <h3 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Detected Technology</h3>
               <TechStackBadges stack={d.techStack} />
             </div>
           )}
@@ -343,7 +343,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
         {/* Charts row: Radar + Issue distribution */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-8 opacity-0 animate-fade-in-up-delay-1">
           <div className="glass-card rounded-xl p-5">
-            <h3 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-3">Score Breakdown</h3>
+            <h3 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3">Score Breakdown</h3>
             <ScoreRadar scores={d.categoryScores ? [
               { label: 'Meta', value: d.categoryScores.meta },
               { label: 'Technical', value: d.categoryScores.technical },
@@ -361,7 +361,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
             ]} />
           </div>
           <div className="glass-card rounded-xl p-5">
-            <h3 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-4">Issue Distribution</h3>
+            <h3 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-4">Issue Distribution</h3>
             <IssueDonut critical={criticalCount} warning={warningCount} />
             <div className="mt-4">
               <CategoryBars categories={(() => {
@@ -457,7 +457,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
         {/* AI Content Suggestions — generated from page data, no API needed */}
         {d.topKeywords?.length > 0 && d.wordCount > 0 && (
           <div className="glass-card rounded-xl p-5 mb-8 opacity-0 animate-fade-in-up-delay-3">
-            <h4 className="text-xs font-medium text-white/40 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <h4 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3 flex items-center gap-2">
               <Bot className="w-3.5 h-3.5 text-accent-400" /> Content Suggestions
             </h4>
             <div className="space-y-2 text-sm text-white/50">
@@ -510,7 +510,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
           <div className="text-center py-16">
             <CheckCircle className="w-12 h-12 text-emerald-400 mx-auto mb-3 opacity-60" />
             <p className="text-emerald-400 font-medium">No issues found!</p>
-            <p className="text-white/40 text-sm mt-1">This page passes all SEO checks.</p>
+            <p className="text-white/60 text-sm mt-1">This page passes all SEO checks.</p>
           </div>
         ) : (
           <>
@@ -523,7 +523,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
                   className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150
                     ${severityFilter === filter
                       ? 'bg-white/[0.08] text-white border border-white/[0.1]'
-                      : 'text-white/40 hover:text-white/60 hover:bg-white/[0.03]'}`}
+                      : 'text-white/60 hover:text-white/60 hover:bg-white/[0.03]'}`}
                 >
                   {filter === 'all' ? `All (${issues.length})` : filter === 'critical' ? `Critical (${criticalCount})` : `Warning (${warningCount})`}
                 </button>
@@ -736,7 +736,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
                   <div className="text-xs font-medium text-white/50 mb-2">Sitemap URLs ({d.sitemap.urls.length}{d.sitemap.urls.length >= 50 ? '+' : ''})</div>
                   <div className="max-h-40 overflow-y-auto scrollbar-thin space-y-1">
                     {d.sitemap.urls.slice(0, 20).map((url: string, i: number) => (
-                      <div key={i} className="text-xs font-mono text-white/40 py-0.5 truncate">{url}</div>
+                      <div key={i} className="text-xs font-mono text-white/60 py-0.5 truncate">{url}</div>
                     ))}
                     {d.sitemap.urls.length > 20 && <div className="text-xs text-white/25 py-1">...and {d.sitemap.urls.length - 20} more</div>}
                   </div>
@@ -851,7 +851,7 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
                     {s.valid ? '✓ Valid' : '✗ Issues'}
                   </span>
                 </div>
-              )) : <p className="text-sm text-white/40 py-2">No JSON-LD structured data found.</p>}
+              )) : <p className="text-sm text-white/60 py-2">No JSON-LD structured data found.</p>}
             </div>
           </Section>
           </ProGate>

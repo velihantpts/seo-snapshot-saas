@@ -20,7 +20,7 @@ export default async function Blog() {
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
         <h1 className="text-2xl font-medium tracking-tight mb-2">SEO Blog</h1>
-        <p className="text-white/40 text-sm mb-10">Practical guides to improve your website&apos;s SEO. No fluff.</p>
+        <p className="text-white/60 text-sm mb-10">Practical guides to improve your website&apos;s SEO. No fluff.</p>
 
         <div className="space-y-6">
           {posts.map(post => (
@@ -32,7 +32,7 @@ export default async function Blog() {
                 <span className="text-xs text-white/25 flex items-center gap-1"><Clock className="w-3 h-3" /> {post.readTime}</span>
               </div>
               <h2 className="text-base font-medium text-white/90 group-hover:text-accent-400 transition-colors duration-150 mb-2">{post.title}</h2>
-              <p className="text-sm text-white/40 leading-relaxed">{post.excerpt}</p>
+              <p className="text-sm text-white/60 leading-relaxed">{post.excerpt}</p>
               <div className="flex items-center gap-1 mt-3 text-xs text-accent-400 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
                 Read more <ArrowRight className="w-3 h-3" />
               </div>

@@ -56,18 +56,18 @@ export default function SerpSnippetPreviewClient() {
     <div className="grid lg:grid-cols-2 gap-6">
       <div className="space-y-4">
         <div>
-          <label className="block text-xs text-white/40 mb-1.5">Page URL</label>
+          <label className="block text-xs text-white/60 mb-1.5">Page URL</label>
           <input value={url} onChange={e => setUrl(e.target.value)} placeholder="https://example.com/page" className={field} />
         </div>
         <div>
-          <label className="flex items-center justify-between text-xs text-white/40 mb-1.5">
+          <label className="flex items-center justify-between text-xs text-white/60 mb-1.5">
             <span>Title tag</span>
             <span className={pill(!titleRes.truncated)}>{titleW}px {titleRes.truncated ? '· truncated' : '· fits'}</span>
           </label>
           <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Your Page Title | Brand" className={field} />
         </div>
         <div>
-          <label className="flex items-center justify-between text-xs text-white/40 mb-1.5">
+          <label className="flex items-center justify-between text-xs text-white/60 mb-1.5">
             <span>Meta description</span>
             <span className={pill(!descRes.truncated)}>{descW}px {descRes.truncated ? '· truncated' : '· fits'}</span>
           </label>
@@ -76,7 +76,7 @@ export default function SerpSnippetPreviewClient() {
         <div className="inline-flex rounded-lg border border-white/[0.08] p-0.5 bg-white/[0.02]">
           {(['desktop', 'mobile'] as const).map(dv => (
             <button key={dv} onClick={() => setDevice(dv)}
-              className={`px-4 py-1.5 rounded-md text-xs capitalize transition ${device === dv ? 'bg-accent-500/20 text-accent-300' : 'text-white/40 hover:text-white/70'}`}>
+              className={`px-4 py-1.5 rounded-md text-xs capitalize transition ${device === dv ? 'bg-accent-500/20 text-accent-300' : 'text-white/60 hover:text-white/70'}`}>
               {dv}
             </button>
           ))}
@@ -84,7 +84,7 @@ export default function SerpSnippetPreviewClient() {
       </div>
 
       <div>
-        <p className="text-xs text-white/40 mb-2">Google preview ({device})</p>
+        <p className="text-xs text-white/60 mb-2">Google preview ({device})</p>
         <div className={`bg-white rounded-lg p-4 ${device === 'mobile' ? 'max-w-sm' : ''}`}>
           <div className="flex items-center gap-2 mb-1">
             <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-[10px] text-gray-500">S</div>

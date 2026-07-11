@@ -61,7 +61,7 @@ export function Navbar() {
 
             {/* Language selector */}
             <div className="relative">
-              <button onClick={() => setLangOpen(!langOpen)} className="text-sm text-white/40 hover:text-white/70 transition px-1.5 py-1" aria-label="Change language">
+              <button onClick={() => setLangOpen(!langOpen)} className="text-sm text-white/60 hover:text-white/70 transition px-1.5 py-1" aria-label="Change language">
                 {currentFlag}
               </button>
               {langOpen && (
@@ -88,7 +88,7 @@ export function Navbar() {
 
           {/* Mobile: lang + hamburger */}
           <div className="flex items-center gap-2 sm:hidden">
-            <button onClick={() => setLangOpen(!langOpen)} className="text-white/40 p-2" aria-label="Change language">
+            <button onClick={() => setLangOpen(!langOpen)} className="text-white/60 p-2" aria-label="Change language">
               {currentFlag}
             </button>
             {langOpen && (

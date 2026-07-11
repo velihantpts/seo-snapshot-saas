@@ -42,7 +42,7 @@ export function Footer() {
               <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-accent-400 to-accent-600 flex items-center justify-center text-white font-bold text-xs">S</div>
               <span className="font-semibold text-sm">SEO <span className="text-accent-400">Snapshot</span></span>
             </Link>
-            <p className="text-xs text-white/35 leading-relaxed">Free on-page SEO analysis with copy-paste fixes.</p>
+            <p className="text-xs text-white/55 leading-relaxed">Free on-page SEO analysis with copy-paste fixes.</p>
           </div>
           {columns.map((col) => (
             <div key={col.title}>
@@ -50,7 +50,7 @@ export function Footer() {
               <ul className="space-y-2">
                 {col.links.map((l) => (
                   <li key={l.href}>
-                    <Link href={l.href} className="text-xs text-white/40 hover:text-white/70 transition-colors">{l.label}</Link>
+                    <Link href={l.href} className="text-xs text-white/60 hover:text-white/70 transition-colors">{l.label}</Link>
                   </li>
                 ))}
               </ul>

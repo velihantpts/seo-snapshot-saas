@@ -121,7 +121,7 @@ export default function BulkPage() {
                     <Download className="w-3.5 h-3.5 inline mr-1.5" /> Export CSV
                   </button>
                 )}
-                <button onClick={() => setUrls([])} className="px-5 py-2 rounded-full border border-white/10 text-white/40 text-sm hover:bg-white/5">
+                <button onClick={() => setUrls([])} className="px-5 py-2 rounded-full border border-white/10 text-white/60 text-sm hover:bg-white/5">
                   Clear
                 </button>
               </div>
@@ -132,11 +132,11 @@ export default function BulkPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-white/[0.06]">
-                    <th className="text-left p-3 text-white/40 font-medium">URL</th>
-                    <th className="text-center p-3 text-white/40 font-medium w-20">Score</th>
-                    <th className="text-center p-3 text-white/40 font-medium w-20">Issues</th>
-                    <th className="text-center p-3 text-white/40 font-medium w-24">Status</th>
-                    <th className="text-center p-3 text-white/40 font-medium w-16"></th>
+                    <th className="text-left p-3 text-white/60 font-medium">URL</th>
+                    <th className="text-center p-3 text-white/60 font-medium w-20">Score</th>
+                    <th className="text-center p-3 text-white/60 font-medium w-20">Issues</th>
+                    <th className="text-center p-3 text-white/60 font-medium w-24">Status</th>
+                    <th className="text-center p-3 text-white/60 font-medium w-16"></th>
                   </tr>
                 </thead>
                 <tbody>

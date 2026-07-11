@@ -82,14 +82,14 @@ export default function ReportCard() {
             </svg>
             <div className="absolute inset-0 flex flex-col items-center justify-center">
               <span className="text-3xl font-bold text-white" style={{ color: scoreColor }}>{d.score}</span>
-              <span className="text-[8px] text-white/40 uppercase tracking-widest">{scoreLabel}</span>
+              <span className="text-[8px] text-white/60 uppercase tracking-widest">{scoreLabel}</span>
             </div>
           </div>
 
           {/* URL + stats */}
           <div className="flex-1 min-w-0">
             <h1 className="text-lg font-medium text-white/90 truncate mb-1">{domain}</h1>
-            <div className="flex gap-4 text-xs text-white/35 mb-3">
+            <div className="flex gap-4 text-xs text-white/55 mb-3">
               <span>Status <span className="text-white/60 font-mono">{d.statusCode}</span></span>
               <span>TTFB <span className="text-white/60 font-mono">{d.fetchTime}ms</span></span>
               <span>Size <span className="text-white/60 font-mono">{d.performance?.htmlSize}KB</span></span>

@@ -60,27 +60,27 @@ export default function OpenGraphPreviewClient() {
       {/* Inputs */}
       <div className="space-y-4">
         <div>
-          <label className="block text-xs text-white/40 mb-1.5">Page URL</label>
+          <label className="block text-xs text-white/60 mb-1.5">Page URL</label>
           <input value={url} onChange={e => setUrl(e.target.value)} placeholder="https://example.com/page" className={field} />
         </div>
         <div>
-          <label className="flex items-center justify-between text-xs text-white/40 mb-1.5">
+          <label className="flex items-center justify-between text-xs text-white/60 mb-1.5">
             <span>og:title</span><span className={title.length > 60 ? 'text-amber-400' : 'text-white/30'}>{title.length}/60</span>
           </label>
           <input value={title} onChange={e => setTitle(e.target.value)} placeholder="Your Page Title" className={field} />
         </div>
         <div>
-          <label className="flex items-center justify-between text-xs text-white/40 mb-1.5">
+          <label className="flex items-center justify-between text-xs text-white/60 mb-1.5">
             <span>og:description</span><span className={description.length > 200 ? 'text-amber-400' : 'text-white/30'}>{description.length}</span>
           </label>
           <textarea value={description} onChange={e => setDescription(e.target.value)} placeholder="A short, compelling summary of the page." rows={3} className={field} />
         </div>
         <div>
-          <label className="block text-xs text-white/40 mb-1.5">og:image URL (1200×630)</label>
+          <label className="block text-xs text-white/60 mb-1.5">og:image URL (1200×630)</label>
           <input value={image} onChange={e => setImage(e.target.value)} placeholder="https://example.com/og.png" className={field} />
         </div>
         <div>
-          <label className="block text-xs text-white/40 mb-1.5">og:site_name</label>
+          <label className="block text-xs text-white/60 mb-1.5">og:site_name</label>
           <input value={siteName} onChange={e => setSiteName(e.target.value)} placeholder="Brand" className={field} />
         </div>
 
@@ -96,7 +96,7 @@ export default function OpenGraphPreviewClient() {
 
         <div>
           <div className="flex items-center justify-between mb-1.5">
-            <span className="text-xs text-white/40">Generated tags</span>
+            <span className="text-xs text-white/60">Generated tags</span>
             <button onClick={copy} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
               {copied ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
             </button>
@@ -108,33 +108,33 @@ export default function OpenGraphPreviewClient() {
       {/* Live previews */}
       <div className="space-y-6">
         <div>
-          <p className="text-xs text-white/40 mb-2">Facebook / LinkedIn</p>
+          <p className="text-xs text-white/60 mb-2">Facebook / LinkedIn</p>
           <div className="rounded-lg overflow-hidden border border-white/[0.08] bg-white/[0.02] max-w-md">
             <ImgBox h="h-52" />
             <div className="p-3 bg-white/[0.03]">
-              <p className="text-[11px] uppercase tracking-wide text-white/35">{host}</p>
+              <p className="text-[11px] uppercase tracking-wide text-white/55">{host}</p>
               <p className="text-sm text-white/90 font-medium leading-snug line-clamp-2 mt-0.5">{t}</p>
-              <p className="text-xs text-white/45 line-clamp-2 mt-1">{d}</p>
+              <p className="text-xs text-white/65 line-clamp-2 mt-1">{d}</p>
             </div>
           </div>
         </div>
 
         <div>
-          <p className="text-xs text-white/40 mb-2">X / Twitter (summary_large_image)</p>
+          <p className="text-xs text-white/60 mb-2">X / Twitter (summary_large_image)</p>
           <div className="rounded-2xl overflow-hidden border border-white/[0.08] bg-white/[0.02] max-w-md">
             <ImgBox h="h-52" />
             <div className="p-3">
               <p className="text-sm text-white/90 leading-snug line-clamp-1">{t}</p>
-              <p className="text-xs text-white/45 line-clamp-2 mt-0.5">{d}</p>
-              <p className="text-xs text-white/35 mt-1">{host}</p>
+              <p className="text-xs text-white/65 line-clamp-2 mt-0.5">{d}</p>
+              <p className="text-xs text-white/55 mt-1">{host}</p>
             </div>
           </div>
         </div>
 
         <div>
-          <p className="text-xs text-white/40 mb-2">Discord / Slack</p>
+          <p className="text-xs text-white/60 mb-2">Discord / Slack</p>
           <div className="rounded-lg border-l-4 border-accent-500/50 bg-white/[0.03] p-3 max-w-md">
-            {siteName && <p className="text-[11px] text-white/40 mb-0.5">{siteName}</p>}
+            {siteName && <p className="text-[11px] text-white/60 mb-0.5">{siteName}</p>}
             <p className="text-sm text-accent-300 font-medium leading-snug line-clamp-2">{t}</p>
             <p className="text-xs text-white/50 line-clamp-3 mt-1">{d}</p>
             {image && <img src={image} alt="" className="mt-2 rounded max-h-40 object-cover w-full" onError={(e) => { (e.target as HTMLImageElement).style.display = 'none'; }} />}

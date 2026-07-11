@@ -98,8 +98,8 @@ export default function Pricing() {
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
         <div className="text-center mb-14 sm:mb-16">
           <h1 className="heading-section mb-4 opacity-0 animate-fade-in-up">{t('pricing.title')}</h1>
-          <p className="text-white/40 text-base opacity-0 animate-fade-in-up-delay-1">{t('pricing.desc')}</p>
-          <p className="text-white/35 text-xs mt-3 opacity-0 animate-fade-in-up-delay-2">{t('pricing.trust')}</p>
+          <p className="text-white/60 text-base opacity-0 animate-fade-in-up-delay-1">{t('pricing.desc')}</p>
+          <p className="text-white/55 text-xs mt-3 opacity-0 animate-fade-in-up-delay-2">{t('pricing.trust')}</p>
           <div className="inline-flex items-center gap-2 mt-4 px-4 py-2 rounded-full bg-emerald-500/10 border border-emerald-500/20 opacity-0 animate-fade-in-up-delay-2">
             <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
             <span className="text-emerald-400 text-xs font-medium">{t('early.badge')}</span>
@@ -113,10 +113,10 @@ export default function Pricing() {
             }`}>
               {plan.popular && <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-accent-500 text-xs font-bold tracking-wide shadow-glow-sm">{t('pricing.popular')}</div>}
               <h3 className="font-medium text-lg mb-1 text-white/90">{plan.name}</h3>
-              <p className="text-white/45 text-xs mb-4">{plan.description}</p>
+              <p className="text-white/65 text-xs mb-4">{plan.description}</p>
               <div className="mb-6">
                 <span className="text-4xl font-semibold tracking-tight">{plan.price}</span>
-                {plan.period && <span className="text-white/45 text-sm ml-1">{plan.period}</span>}
+                {plan.period && <span className="text-white/65 text-sm ml-1">{plan.period}</span>}
               </div>
               {plan.href ? (
                 <Link href={plan.href} className={`block w-full text-center py-3 rounded-xl text-sm font-medium transition-all duration-150 mb-7 ${plan.style}`}>{plan.cta}</Link>
@@ -130,8 +130,8 @@ export default function Pricing() {
               )}
               <ul className="space-y-3">
                 {plan.features.map(f => (
-                  <li key={f.text} className={`flex items-start gap-2.5 text-sm ${f.ok ? 'text-white/60' : 'text-white/35'}`}>
-                    {f.ok ? <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.popular ? 'text-accent-400' : plan.id === 'lifetime' ? 'text-amber-400' : 'text-white/45'}`} />
+                  <li key={f.text} className={`flex items-start gap-2.5 text-sm ${f.ok ? 'text-white/60' : 'text-white/55'}`}>
+                    {f.ok ? <Check className={`w-4 h-4 mt-0.5 flex-shrink-0 ${plan.popular ? 'text-accent-400' : plan.id === 'lifetime' ? 'text-amber-400' : 'text-white/65'}`} />
                       : <X className="w-4 h-4 mt-0.5 flex-shrink-0 text-white/10" />}
                     {f.text}
                   </li>
@@ -154,11 +154,11 @@ export default function Pricing() {
               <details key={faq.q} className="group glass-card rounded-xl">
                 <summary className="px-5 py-4 cursor-pointer text-sm font-medium text-white/70 hover:text-white/90 transition-colors duration-150 list-none flex items-center justify-between">
                   {faq.q}
-                  <svg className="w-4 h-4 text-white/35 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <svg className="w-4 h-4 text-white/55 group-open:rotate-180 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
                 </summary>
-                <p className="px-5 pb-4 text-sm text-white/40 leading-relaxed">{faq.a}</p>
+                <p className="px-5 pb-4 text-sm text-white/60 leading-relaxed">{faq.a}</p>
               </details>
             ))}
           </div>

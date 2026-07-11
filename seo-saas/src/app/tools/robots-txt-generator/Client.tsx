@@ -29,7 +29,7 @@ export default function RobotsTxtGeneratorClient() {
     <div className="grid md:grid-cols-2 gap-6">
       <div className="space-y-4">
         <div>
-          <label className="block text-xs text-white/40 mb-1.5">Crawling</label>
+          <label className="block text-xs text-white/60 mb-1.5">Crawling</label>
           <div className="flex gap-2">
             <button onClick={() => setMode('allow')} className={`flex-1 py-2.5 rounded-lg text-sm transition ${mode === 'allow' ? 'bg-accent-500/20 text-accent-300 border border-accent-500/30' : 'bg-white/[0.04] text-white/50 border border-white/[0.06]'}`}>Allow all (recommended)</button>
             <button onClick={() => setMode('block')} className={`flex-1 py-2.5 rounded-lg text-sm transition ${mode === 'block' ? 'bg-red-500/20 text-red-300 border border-red-500/30' : 'bg-white/[0.04] text-white/50 border border-white/[0.06]'}`}>Block all</button>
@@ -37,16 +37,16 @@ export default function RobotsTxtGeneratorClient() {
         </div>
         {mode === 'allow' && (
           <div>
-            <label className="block text-xs text-white/40 mb-1.5">Disallow paths (one per line)</label>
+            <label className="block text-xs text-white/60 mb-1.5">Disallow paths (one per line)</label>
             <textarea value={disallow} onChange={e => setDisallow(e.target.value)} placeholder="/admin/&#10;/private/" rows={5} className={field + ' font-mono'} />
           </div>
         )}
         <div>
-          <label className="block text-xs text-white/40 mb-1.5">Sitemap URL</label>
+          <label className="block text-xs text-white/60 mb-1.5">Sitemap URL</label>
           <input value={sitemap} onChange={e => setSitemap(e.target.value)} placeholder="https://example.com/sitemap.xml" className={field} />
         </div>
         <div>
-          <label className="block text-xs text-white/40 mb-1.5">Crawl-delay (seconds, optional)</label>
+          <label className="block text-xs text-white/60 mb-1.5">Crawl-delay (seconds, optional)</label>
           <input value={crawlDelay} onChange={e => setCrawlDelay(e.target.value.replace(/[^0-9]/g, ''))} placeholder="e.g. 10 (leave empty for none)" className={field} />
         </div>
         {mode === 'block' && (
@@ -56,7 +56,7 @@ export default function RobotsTxtGeneratorClient() {
 
       <div>
         <div className="flex items-center justify-between mb-1.5">
-          <span className="text-xs text-white/40">robots.txt</span>
+          <span className="text-xs text-white/60">robots.txt</span>
           <button onClick={copy} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
             {copied ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
           </button>

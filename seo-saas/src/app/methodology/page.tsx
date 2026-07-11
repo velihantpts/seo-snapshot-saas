@@ -172,7 +172,7 @@ function Section({ cat, isOpen, toggle }: { cat: typeof checks[0]; isOpen: boole
         </div>
         <div className="flex-1">
           <h2 className="text-lg font-semibold text-white">{cat.category}</h2>
-          <p className="text-xs text-white/40">{cat.items.length} checks · {cat.weight} of total score</p>
+          <p className="text-xs text-white/60">{cat.items.length} checks · {cat.weight} of total score</p>
         </div>
         <ChevronDown className={`w-5 h-5 text-white/30 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -236,7 +236,7 @@ export default function MethodologyPage() {
             ].map((w, i) => (
               <div key={i} className="p-3 rounded-lg bg-white/[0.03] border border-white/[0.06]">
                 <div className={`text-lg font-bold ${w.color}`}>{w.weight}</div>
-                <div className="text-xs text-white/40">{w.name}</div>
+                <div className="text-xs text-white/60">{w.name}</div>
               </div>
             ))}
           </div>
@@ -259,7 +259,7 @@ export default function MethodologyPage() {
               <div key={i} className="flex-1 text-center">
                 <div className={`h-2 rounded-full ${s.color} mb-2`} />
                 <div className="text-sm font-medium text-white">{s.range}</div>
-                <div className="text-xs text-white/40">{s.label}</div>
+                <div className="text-xs text-white/60">{s.label}</div>
               </div>
             ))}
           </div>
@@ -279,7 +279,7 @@ export default function MethodologyPage() {
           <p className="text-sm text-white/50 mb-3">
             Some SEO factors require data we can&apos;t access from a single page analysis:
           </p>
-          <ul className="text-sm text-white/40 space-y-1.5">
+          <ul className="text-sm text-white/60 space-y-1.5">
             <li>Backlink profile (requires crawl index like Ahrefs/Moz)</li>
             <li>Keyword rankings (requires SERP tracking)</li>
             <li>Domain authority (requires link database)</li>
