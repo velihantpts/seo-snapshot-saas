@@ -8,6 +8,7 @@ import { IssueDonut, ScoreRadar, CategoryBars, BenchmarkBadge, MiniProgress, Sec
 import { FixSnippet, generateFixCode } from './FixSnippet';
 import { ActionSummary } from './ActionSummary';
 import { ProGate } from './ProGate';
+import { ShareBadge } from './ShareBadge';
 import { ErrorBoundary } from './ErrorBoundary';
 import { SerpPreview } from './SerpPreview';
 import { useToast } from './Toast';
@@ -270,6 +271,9 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
 
       {/* Action Summary */}
       <ActionSummary result={d} />
+
+      {/* Share your grade / embeddable badge CTA */}
+      <ShareBadge score={d.score} reportId={(d as any).id} />
 
       {/* Off-page scope note — honest about what this tool does and doesn't measure */}
       <div className="glass-card rounded-xl p-4 mb-8 flex items-start gap-3 print:hidden">
@@ -546,8 +550,8 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
             </div>
             <div className="space-y-3">
               {filteredIssues.map((issue: Issue, i: number) => {
-                const FREE_ISSUE_LIMIT = 5;
-                const FREE_SNIPPET_LIMIT = 2;
+                const FREE_ISSUE_LIMIT = 10;
+                const FREE_SNIPPET_LIMIT = 8;
                 const isLocked = !isPro && i >= FREE_ISSUE_LIMIT;
                 const snippetLocked = !isPro && i >= FREE_SNIPPET_LIMIT;
 
