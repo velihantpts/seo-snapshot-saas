@@ -20,7 +20,12 @@ export const metadata: Metadata = {
     template: '%s | SEO Snapshot',
   },
   description: 'Free SEO analyzer with 100 checks. Get copy-paste code fixes for meta tags, security headers, structured data, and more.',
-  alternates: { canonical: 'https://seosnapshot.dev' },
+  // NOTE: no site-wide `alternates.canonical` here. A default canonical is
+  // inherited by every child route that doesn't set its own, which made
+  // /pricing, /compare, /docs, /methodology, /terms, /privacy, /login all
+  // canonicalize to the homepage → Google deduped them out of the index.
+  // Blog and tool pages set their own self-referencing canonical; every other
+  // page now self-canonicalizes to its real URL (metadataBase resolves it).
   keywords: ['SEO', 'SEO analyzer', 'SEO audit', 'website analysis', 'Core Web Vitals', 'meta tags', 'accessibility'],
   authors: [{ name: 'SEO Snapshot' }],
   creator: 'SEO Snapshot',
