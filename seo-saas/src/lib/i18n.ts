@@ -24,7 +24,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'hero.badge': '100 SEO checks in seconds',
     'hero.title1': "Analyze any page's",
     'hero.title2': 'SEO instantly',
-    'hero.desc': 'Get a complete SEO audit with actionable fix recommendations. Meta tags, Core Web Vitals, security, accessibility, and more. Check your title tags, meta descriptions, headings, images, links, structured data, security headers, mobile-friendliness, and 100 more on-page SEO factors — all in under 10 seconds, completely free.',
+    'hero.desc': 'Paste a URL and get 100 on-page SEO checks with copy-paste code fixes — not just warnings. Under 10 seconds, no signup.',
     'hero.analyze': 'Analyze',
     'hero.crawl': 'Crawl Site',
     'hero.free': 'Free: 5 analyses/day · No signup required · Pro: unlimited',
@@ -72,18 +72,19 @@ const translations: Record<Locale, Record<string, string>> = {
     // Features
     'features.title': 'Everything you need to audit SEO',
     'features.desc': '100 checks covering every aspect of on-page SEO. Get specific code fixes, not just warnings.',
+    'tools.homeTitle': 'Free tools — no signup', 'tools.homeDesc': 'Single-purpose utilities you\'ll actually use.', 'tools.homeAll': 'All free tools',
 
     // CTA
     'cta.title': 'Ready to fix your SEO?',
     'cta.desc': 'Start free. Upgrade when you need unlimited analyses and full reports.',
     'cta.pricing': 'View Pricing',
     'cta.signin': 'Sign in free',
-    'cta.longdesc': 'SEO Snapshot analyzes your website against 100 on-page SEO checks including meta tags, headings, images, links, structured data, security headers, Core Web Vitals, mobile-friendliness, accessibility compliance, and content quality. Get specific code fixes you can copy and paste — not just generic warnings. Used by developers, freelancers, and agencies worldwide.',
+    'cta.longdesc': 'SEO Snapshot analyzes your website against 100 on-page SEO checks including meta tags, headings, images, links, structured data, security headers, Core Web Vitals, mobile-friendliness, accessibility compliance, and content quality. Get specific code fixes you can copy and paste — not just generic warnings. Free, no signup required.',
 
     // Pricing
     'pricing.title': 'Simple, transparent pricing',
     'pricing.desc': 'Start free. Upgrade when you need more power.',
-    'pricing.trust': 'Trusted by developers, freelancers & agencies worldwide',
+    'pricing.trust': 'Every score benchmarked against 4,000+ real websites',
     'pricing.free': 'Free',
     'pricing.free.desc': 'Try it out',
     'pricing.free.cta': 'Get started',
@@ -183,7 +184,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'hero.badge': 'Saniyeler içinde 100 SEO kontrolü',
     'hero.title1': 'Herhangi bir sayfanın',
     'hero.title2': "SEO'sunu anında analiz edin",
-    'hero.desc': "Uygulanabilir düzeltme önerileriyle eksiksiz bir SEO denetimi alın. Meta etiketler, Core Web Vitals, güvenlik, erişilebilirlik ve daha fazlası. Başlık etiketlerinizi, meta açıklamalarınızı, başlıkları, görselleri, bağlantıları, yapılandırılmış verileri, güvenlik başlıklarını, mobil uyumluluğu ve 100'den fazla sayfa içi SEO faktörünü 10 saniyenin altında, tamamen ücretsiz kontrol edin.",
+    'hero.desc': "Bir URL yapıştır, 100 sayfa-içi SEO kontrolünü kopyala-yapıştır kod düzeltmeleriyle al — sadece uyarı değil. 10 saniyeden kısa, kayıt yok.",
     'hero.analyze': 'Analiz Et',
     'hero.crawl': 'Site Tara',
     'hero.free': 'Ücretsiz: Günde 5 analiz · Kayıt gerekmez · Pro: sınırsız',
@@ -209,6 +210,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
     'features.title': "SEO denetimi için ihtiyacınız olan her şey",
     'features.desc': 'Sayfa içi SEO\'nun her yönünü kapsayan 100 kontrol. Sadece uyarı değil, özel kod düzeltmeleri alın.',
+    'tools.homeTitle': 'Ücretsiz araçlar — kayıt yok', 'tools.homeDesc': 'Gerçekten kullanacağın tek-amaçlı araçlar.', 'tools.homeAll': 'Tüm ücretsiz araçlar',
 
     'cta.title': "SEO'nuzu düzeltmeye hazır mısınız?",
     'cta.desc': 'Ücretsiz başlayın. Sınırsız analiz gerektiğinde yükseltin.',
@@ -218,7 +220,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
     'pricing.title': 'Basit, şeffaf fiyatlandırma',
     'pricing.desc': 'Ücretsiz başlayın. Daha fazla güce ihtiyaç duyduğunuzda yükseltin.',
-    'pricing.trust': 'Dünya genelinde geliştiriciler, serbest çalışanlar ve ajanslar tarafından tercih ediliyor',
+    'pricing.trust': 'Her skor 4.000+ gerçek siteyle kıyaslanır',
     'pricing.free': 'Ücretsiz',
     'pricing.free.desc': 'Deneyin',
     'pricing.free.cta': 'Başla',
@@ -298,7 +300,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'hero.badge': '100 SEO-Checks in Sekunden',
     'hero.title1': 'SEO jeder Seite',
     'hero.title2': 'sofort analysieren',
-    'hero.desc': 'Erhalten Sie ein vollständiges SEO-Audit mit umsetzbaren Korrekturempfehlungen. Meta-Tags, Core Web Vitals, Sicherheit, Barrierefreiheit und mehr. Prüfen Sie Title-Tags, Meta-Beschreibungen, Überschriften, Bilder, Links, strukturierte Daten, Sicherheits-Header, Mobilfreundlichkeit und über 100 weitere On-Page SEO-Faktoren — in unter 10 Sekunden, völlig kostenlos.',
+    'hero.desc': 'URL einfügen und 100 On-Page-SEO-Checks mit Copy-paste-Code-Fixes erhalten — nicht nur Warnungen. Unter 10 Sekunden, ohne Anmeldung.',
     'hero.analyze': 'Analysieren',
     'hero.crawl': 'Site crawlen',
     'hero.free': 'Kostenlos: 5 Analysen/Tag · Keine Anmeldung · Pro: unbegrenzt',
@@ -324,6 +326,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
     'features.title': 'Alles was Sie für SEO-Audits brauchen',
     'features.desc': '100 Checks für jeden Aspekt der On-Page SEO. Konkrete Code-Fixes statt allgemeiner Warnungen.',
+    'tools.homeTitle': 'Kostenlose Tools — ohne Anmeldung', 'tools.homeDesc': 'Praktische Einzweck-Tools, die du wirklich nutzt.', 'tools.homeAll': 'Alle kostenlosen Tools',
 
     'cta.title': 'Bereit, Ihr SEO zu verbessern?',
     'cta.desc': 'Starten Sie kostenlos. Upgraden Sie für unbegrenzte Analysen.',
@@ -333,7 +336,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
     'pricing.title': 'Einfache, transparente Preise',
     'pricing.desc': 'Kostenlos starten. Upgraden wenn nötig.',
-    'pricing.trust': 'Vertraut von Entwicklern, Freelancern & Agenturen weltweit',
+    'pricing.trust': 'Jeder Score verglichen mit 4.000+ echten Websites',
     'pricing.free': 'Kostenlos',
     'pricing.free.desc': 'Ausprobieren',
     'pricing.free.cta': 'Loslegen',
@@ -413,7 +416,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'hero.badge': '100 verificaciones SEO en segundos',
     'hero.title1': 'Analiza el SEO de',
     'hero.title2': 'cualquier página al instante',
-    'hero.desc': 'Obtén una auditoría SEO completa con recomendaciones de corrección aplicables. Meta etiquetas, Core Web Vitals, seguridad, accesibilidad y más. Verifica tus etiquetas de título, meta descripciones, encabezados, imágenes, enlaces, datos estructurados, cabeceras de seguridad, compatibilidad móvil y más de 100 factores SEO on-page — todo en menos de 10 segundos, completamente gratis.',
+    'hero.desc': 'Pega una URL y obtén 100 comprobaciones SEO on-page con correcciones de código listas para copiar — no solo avisos. En menos de 10 segundos, sin registro.',
     'hero.analyze': 'Analizar',
     'hero.crawl': 'Rastrear sitio',
     'hero.free': 'Gratis: 5 análisis/día · Sin registro · Pro: ilimitado',
@@ -439,6 +442,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
     'features.title': 'Todo lo que necesitas para auditar SEO',
     'features.desc': '100 verificaciones cubriendo cada aspecto del SEO on-page. Correcciones de código específicas, no solo advertencias.',
+    'tools.homeTitle': 'Herramientas gratis — sin registro', 'tools.homeDesc': 'Utilidades específicas que realmente usarás.', 'tools.homeAll': 'Todas las herramientas',
 
     'cta.title': '¿Listo para arreglar tu SEO?',
     'cta.desc': 'Empieza gratis. Actualiza cuando necesites análisis ilimitados.',
@@ -448,7 +452,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
     'pricing.title': 'Precios simples y transparentes',
     'pricing.desc': 'Empieza gratis. Actualiza cuando necesites más.',
-    'pricing.trust': 'Usado por desarrolladores, freelancers y agencias en todo el mundo',
+    'pricing.trust': 'Cada puntuación comparada con más de 4.000 sitios reales',
     'pricing.free': 'Gratis',
     'pricing.free.desc': 'Pruébalo',
     'pricing.free.cta': 'Empezar',
@@ -528,7 +532,7 @@ const translations: Record<Locale, Record<string, string>> = {
     'hero.badge': '100 vérifications SEO en quelques secondes',
     'hero.title1': "Analysez le SEO de",
     'hero.title2': "n'importe quelle page instantanément",
-    'hero.desc': "Obtenez un audit SEO complet avec des recommandations de correction applicables. Balises meta, Core Web Vitals, sécurité, accessibilité et plus encore. Vérifiez vos balises titre, meta descriptions, en-têtes, images, liens, données structurées, en-têtes de sécurité, compatibilité mobile et plus de 100 facteurs SEO on-page — le tout en moins de 10 secondes, entièrement gratuit.",
+    'hero.desc': "Collez une URL et obtenez 100 vérifications SEO on-page avec des correctifs de code prêts à copier — pas juste des alertes. En moins de 10 secondes, sans inscription.",
     'hero.analyze': 'Analyser',
     'hero.crawl': 'Explorer le site',
     'hero.free': 'Gratuit: 5 analyses/jour · Sans inscription · Pro: illimité',
@@ -554,6 +558,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
     'features.title': "Tout ce qu'il faut pour auditer le SEO",
     'features.desc': '100 vérifications couvrant chaque aspect du SEO on-page. Des corrections de code spécifiques, pas juste des avertissements.',
+    'tools.homeTitle': 'Outils gratuits — sans inscription', 'tools.homeDesc': 'Des utilitaires simples que vous utiliserez vraiment.', 'tools.homeAll': 'Tous les outils gratuits',
 
     'cta.title': 'Prêt à corriger votre SEO?',
     'cta.desc': 'Commencez gratuitement. Passez au niveau supérieur pour des analyses illimitées.',
@@ -563,7 +568,7 @@ const translations: Record<Locale, Record<string, string>> = {
 
     'pricing.title': 'Tarification simple et transparente',
     'pricing.desc': 'Commencez gratuitement. Passez au supérieur quand vous en avez besoin.',
-    'pricing.trust': 'Utilisé par des développeurs, freelances et agences du monde entier',
+    'pricing.trust': 'Chaque score comparé à plus de 4 000 sites réels',
     'pricing.free': 'Gratuit',
     'pricing.free.desc': 'Essayez',
     'pricing.free.cta': 'Commencer',

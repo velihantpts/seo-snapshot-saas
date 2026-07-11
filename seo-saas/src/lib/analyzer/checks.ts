@@ -193,7 +193,9 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   if (titlePixelWidth > 580) issues.push({ severity: 'warning', problem: `Title too wide for SERP (${titlePixelWidth}px, max ~580px)`, fix: 'Shorten title or move keywords to the front.', category: 'Meta' });
   if (descPixelWidth > 920) issues.push({ severity: 'warning', problem: `Description too wide for SERP (${descPixelWidth}px)`, fix: 'Put important info first.', category: 'Meta' });
 
-  const topKw = topKeywords[0]?.word || '';
+  // Only trust the top keyword if it appears with real frequency — a one-off
+  // word (or leftover foreign stopword) is a weak signal and shouldn't drive issues.
+  const topKw = (topKeywords[0] && topKeywords[0].count >= 3) ? topKeywords[0].word : '';
   const kwInTitle = topKw ? title.toLowerCase().includes(topKw) : true;
   const kwInH1 = topKw ? (headings.h1.texts[0] || '').toLowerCase().includes(topKw) : true;
   if (topKw && !kwInTitle) issues.push({ severity: 'warning', problem: `Top keyword "${topKw}" not found in title`, fix: `Include "${topKw}" in the title tag.`, category: 'Content' });

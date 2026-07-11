@@ -34,7 +34,13 @@ export async function fetchPage(targetUrl: string, opts: { light?: boolean } = {
         throw new Error(`Blocked URL: ${check.error || 'failed SSRF validation'}`);
       }
       const res = await fetch(check.url.toString(), {
-        headers: { 'User-Agent': 'SEOSnapshotBot/1.0 (+https://seosnapshot.dev)' },
+        headers: {
+          'User-Agent': 'SEOSnapshotBot/1.0 (+https://seosnapshot.dev)',
+          // Request English + standard HTML so audits are consistent and don't
+          // pick up geo/locale-localized variants (e.g. stripe.com serving German).
+          'Accept-Language': 'en-US,en;q=0.9',
+          'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        },
         signal: controller.signal,
         redirect: 'manual',
       });

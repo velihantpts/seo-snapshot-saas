@@ -79,7 +79,7 @@ function Row({ label, value, status }: { label: string; value: any; status?: str
   );
 }
 
-function StatCard({ label, value, color }: { label: string; value: string | number; color?: string }) {
+function StatCard({ label, value, color, suffix }: { label: string; value: string | number; color?: string; suffix?: string }) {
   const isNumber = typeof value === 'number';
   const [display, setDisplay] = useState(isNumber ? 0 : value);
   const ref = useRef<HTMLDivElement>(null);
@@ -108,7 +108,7 @@ function StatCard({ label, value, color }: { label: string; value: string | numb
 
   return (
     <div ref={ref} className="glass-card rounded-xl p-4 text-center hover:scale-[1.02] transition-transform duration-200">
-      <div className={`text-2xl font-semibold font-mono tracking-tight ${color || 'text-accent-400'}`}>{display}</div>
+      <div className={`text-2xl font-semibold font-mono tracking-tight ${color || 'text-accent-400'}`}>{display}{suffix && <span className="text-sm text-white/30 font-normal">{suffix}</span>}</div>
       <div className="text-[11px] text-white/40 mt-1.5 uppercase tracking-wide">{label}</div>
     </div>
   );
@@ -321,10 +321,10 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
         className={`transition-opacity duration-200 ${activeTab === 'overview' ? 'opacity-100' : 'hidden print:block opacity-0'}`}>
         {/* Bento score cards */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8 opacity-0 animate-fade-in-up-delay-1">
-          <StatCard label="SEO Score" value={d.score} color={d.score >= 75 ? 'text-emerald-400' : d.score >= 50 ? 'text-amber-400' : 'text-red-400'} />
-          <StatCard label="Security" value={d.security?.score || 0} color={d.security?.score >= 80 ? 'text-emerald-400' : 'text-amber-400'} />
-          <StatCard label="Accessibility" value={d.accessibility?.score || 0} color={d.accessibility?.score >= 80 ? 'text-emerald-400' : 'text-amber-400'} />
-          <StatCard label="Mobile" value={d.mobile?.score || 0} color={d.mobile?.score >= 80 ? 'text-emerald-400' : 'text-amber-400'} />
+          <StatCard label="SEO Score" value={d.score} suffix="/100" color={d.score >= 75 ? 'text-emerald-400' : d.score >= 50 ? 'text-amber-400' : 'text-red-400'} />
+          <StatCard label="Security" value={d.security?.score || 0} suffix="/100" color={d.security?.score >= 80 ? 'text-emerald-400' : 'text-amber-400'} />
+          <StatCard label="Accessibility" value={d.accessibility?.score || 0} suffix="/100" color={d.accessibility?.score >= 80 ? 'text-emerald-400' : 'text-amber-400'} />
+          <StatCard label="Mobile" value={d.mobile?.score || 0} suffix="/100" color={d.mobile?.score >= 80 ? 'text-emerald-400' : 'text-amber-400'} />
         </div>
 
         {/* Tech Stack + Security Grade */}

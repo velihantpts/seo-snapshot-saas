@@ -281,6 +281,35 @@ export default function Home() {
         </section>
       </ScrollReveal>
 
+      {/* Free tools strip — surfaces the SEO-magnet tools + internal linking */}
+      <ScrollReveal>
+        <section className="relative z-10 py-16 px-4 sm:px-6">
+          <div className="max-w-3xl mx-auto text-center">
+            <h2 className="heading-section mb-2">{t('tools.homeTitle')}</h2>
+            <p className="text-white/40 text-sm mb-8">{t('tools.homeDesc')}</p>
+            <div className="flex flex-wrap justify-center gap-2.5">
+              {[
+                { href: '/tools/open-graph-preview', label: 'Open Graph Preview' },
+                { href: '/tools/serp-snippet-preview', label: 'SERP Snippet Preview' },
+                { href: '/tools/meta-tag-generator', label: 'Meta Tag Generator' },
+                { href: '/tools/schema-generator', label: 'Schema Generator' },
+                { href: '/tools/hreflang-generator', label: 'Hreflang Generator' },
+                { href: '/tools/sitemap-generator', label: 'Sitemap Generator' },
+                { href: '/tools/robots-txt-generator', label: 'robots.txt Generator' },
+                { href: '/tools/redirect-generator', label: '301 Redirect Generator' },
+              ].map(tool => (
+                <Link key={tool.href} href={tool.href} className="text-xs px-3.5 py-2 rounded-lg bg-white/[0.03] border border-white/[0.06] text-white/60 hover:text-accent-300 hover:border-accent-500/30 transition-all">
+                  {tool.label}
+                </Link>
+              ))}
+            </div>
+            <Link href="/tools" className="inline-flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 mt-6 transition">
+              {t('tools.homeAll')} <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </section>
+      </ScrollReveal>
+
       {/* Features with mouse-tracking glow */}
       <section className="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
         <div className="divider max-w-6xl mx-auto mb-20" />
