@@ -319,44 +319,121 @@ Yes. Multiple \`<script type="application/ld+json">\` blocks are fine — for ex
   },
   'how-to-improve-core-web-vitals': {
     title: 'How to Improve Core Web Vitals: LCP, FID, CLS Explained',
-    content: `## What Are Core Web Vitals?
+    content: `## What Core Web Vitals Actually Are
 
-Core Web Vitals are Google's metrics for measuring real user experience. They directly impact your search rankings since 2021. There are three main metrics:
+Core Web Vitals are Google's attempt to put numbers on "does this page feel good to use." They've been a ranking signal since 2021, folded into the broader page experience system. Three metrics, each covering a different failure mode:
 
-- **LCP (Largest Contentful Paint)** — How fast the main content loads. Target: under 2.5 seconds.
-- **FID/INP (First Input Delay / Interaction to Next Paint)** — How fast the page responds to user interaction. Target: under 200ms.
-- **CLS (Cumulative Layout Shift)** — How much the page layout shifts during loading. Target: under 0.1.
+- **LCP (Largest Contentful Paint)** — how long until the biggest thing in the viewport paints. Loading speed.
+- **INP (Interaction to Next Paint)** — how long the page takes to visually respond after a tap, click, or keypress. Responsiveness.
+- **CLS (Cumulative Layout Shift)** — how much stuff jumps around while the page settles. Visual stability.
 
-## How to Fix LCP
+One correction if you're working from older guides: **FID (First Input Delay) was retired in March 2024 and replaced by INP.** FID only measured the delay before the browser *started* processing your first interaction. INP measures the full interaction — input delay, processing time, and the paint that follows — across *every* interaction on the page, reporting a value near the worst one. It's much harder to game, and plenty of sites that passed FID comfortably fail INP.
 
-LCP is usually caused by large images, slow server response, or render-blocking resources.
+## The Thresholds (and the 75th-percentile Trap)
 
-1. **Optimize your hero image** — Use WebP format, set explicit width/height, add fetchpriority="high"
-2. **Reduce server response time** — Use a CDN (Cloudflare is free), enable compression (gzip/brotli)
-3. **Remove render-blocking CSS** — Inline critical CSS, defer non-critical stylesheets
-4. **Preload key resources** — Add \`<link rel="preload">\` for your largest image and main font
+Here's where each metric sits:
 
-## How to Fix CLS
+| Metric | Good | Needs improvement | Poor |
+|---|---|---|---|
+| LCP | ≤ 2.5 s | 2.5 s – 4 s | > 4 s |
+| INP | ≤ 200 ms | 200 ms – 500 ms | > 500 ms |
+| CLS | ≤ 0.1 | 0.1 – 0.25 | > 0.25 |
 
-CLS happens when elements shift position after the page starts rendering.
+The number that trips people up: Google grades you at the **75th percentile of your real field traffic**, not a single lab run. So if 74% of your visitors get a fast LCP but the slowest quarter sits at 3.1 seconds, your reported LCP is 3.1 seconds — "needs improvement," even though most people had a good experience. You're being scored on your slow tail, which usually means mobile users on mid-tier phones and flaky connections.
 
-1. **Set dimensions on images and videos** — Always include width and height attributes
-2. **Reserve space for ads and embeds** — Use CSS aspect-ratio or min-height
-3. **Avoid inserting content above existing content** — Don't push content down with late-loading banners
-4. **Use font-display: swap** — Prevents invisible text while fonts load
+That's also why **lab and field data disagree constantly**:
 
-## How to Fix INP
+- **Lab data** (Lighthouse, the PageSpeed Insights "diagnostics" tab) is a single simulated run on one throttled device. Reproducible and great for debugging, but it can't measure INP at all — there's no real user clicking. Lighthouse substitutes Total Blocking Time (TBT) as a proxy.
+- **Field data** (the Chrome UX Report / CrUX, surfaced in Search Console and the top of any PageSpeed result) is aggregated from real Chrome users over a rolling 28 days. This is what affects rankings.
 
-INP measures responsiveness to all user interactions, not just the first one.
+Chase the field numbers. Use lab tools to find *why* a field number is bad, then confirm the fix showed up in CrUX weeks later. The [SEO Snapshot analyzer](/) pulls both side by side — so run your URL and read the field column first.
 
-1. **Break up long tasks** — Use \`requestIdleCallback\` or \`setTimeout\` to split heavy JavaScript
-2. **Reduce JavaScript bundle size** — Code-split with dynamic imports
-3. **Avoid long main thread blocking** — Move heavy computation to Web Workers
-4. **Minimize third-party scripts** — Each analytics/chat/ad script adds latency
+## Fixing LCP
 
-## Measure Your Vitals
+The LCP element is almost always a hero image, a big heading, or a background image. Step one is to *identify it* — Lighthouse tells you which element it picked, or you can check the "Largest Contentful Paint element" line in the PSI diagnostics. Once you know the element, everything else is about getting bytes to it faster.
 
-Use [SEO Snapshot](/) to check your Core Web Vitals. We integrate with Google PageSpeed Insights API to show real lab data, and Chrome UX Report (CrUX) for real user field data.`,
+**Prioritize the LCP resource.** Add \`fetchpriority="high"\` so the browser fetches it ahead of other images, and never lazy-load it — \`loading="lazy"\` on your hero image is one of the most common self-inflicted LCP wounds.
+
+\`\`\`html
+<img src="/hero.webp" width="1200" height="630"
+     fetchpriority="high" alt="…">
+\`\`\`
+
+If the image is referenced from CSS (a \`background-image\`) or loaded late by JavaScript, the browser discovers it too late. Preload it:
+
+\`\`\`html
+<link rel="preload" as="image" href="/hero.webp" fetchpriority="high">
+\`\`\`
+
+**Fix TTFB.** A slow server pushes back everything downstream. Put a CDN in front (Cloudflare's free tier, or Vercel's edge network on Next.js), cache HTML where you can, and turn on Brotli or gzip. A TTFB over ~600 ms means you're burning your whole LCP budget before a single pixel paints.
+
+**Kill render-blocking resources.** Every blocking stylesheet and synchronous script in \`<head>\` delays the paint. Inline critical CSS, defer the rest, and load non-critical JS with \`defer\` or \`type="module"\`. This is worth its own deep-dive — see [how to fix render-blocking CSS and JS](/blog/fix-render-blocking-resources), plus the broader [website speed optimization guide](/blog/website-speed-optimization-guide) for the full pipeline. And since the LCP element is usually an image, [image SEO done right](/blog/image-seo-optimization) (WebP/AVIF, correct sizing, no lazy-loading above the fold) does double duty here.
+
+## Fixing INP
+
+INP is a JavaScript problem 90% of the time. When a user clicks, the main thread has to be free to respond — if it's busy running a 300 ms analytics callback or hydrating a component, the interaction just sits there.
+
+**Break up long tasks.** Anything over 50 ms on the main thread blocks input. Split heavy work and yield between chunks:
+
+\`\`\`js
+async function processItems(items) {
+  for (const item of items) {
+    doWork(item);
+    // hand control back so the browser can paint / respond
+    await scheduler.yield?.() ??
+      new Promise(r => setTimeout(r, 0));
+  }
+}
+\`\`\`
+
+**Reduce and defer JavaScript.** Code-split with dynamic \`import()\`, ship less to begin with, and move pure computation into a Web Worker so it never touches the main thread. **Debounce** expensive handlers — a search box that fires on every keystroke should wait until typing pauses. And audit your event handlers: a \`scroll\` or \`input\` listener doing layout-thrashing DOM reads will tank INP.
+
+**Use \`content-visibility\` for long pages.** It tells the browser to skip rendering work for offscreen sections until they're needed, cutting the main-thread cost of the initial render:
+
+\`\`\`css
+.below-the-fold {
+  content-visibility: auto;
+  contain-intrinsic-size: 0 800px; /* reserve height to avoid CLS */
+}
+\`\`\`
+
+## Fixing CLS
+
+CLS is the most fixable metric — it's almost entirely about reserving space before content arrives.
+
+**Always set dimensions on media.** Width and height (or a CSS \`aspect-ratio\`) let the browser reserve the box before the image loads, so nothing reflows when it does:
+
+\`\`\`css
+img, video { aspect-ratio: attr(width) / attr(height); height: auto; }
+\`\`\`
+
+**Reserve space for ads, embeds, and iframes.** Give every ad slot and third-party embed a fixed \`min-height\` matching its most common size. An ad that loads in and shoves your article down is a classic layout-shift.
+
+**Tame web fonts.** A font swapping in at a different size nudges everything around it. Use \`font-display: optional\` (no swap, no shift — the fallback just stays if the font is slow) or \`swap\` paired with a size-matched fallback via \`size-adjust\`:
+
+\`\`\`css
+@font-face {
+  font-family: 'Inter';
+  font-display: optional;
+  src: url('/inter.woff2') format('woff2');
+}
+\`\`\`
+
+**Never insert content above the fold after load.** Cookie banners, promo bars, and "you might also like" strips injected at the top push everything down. If you must show them, overlay them or reserve their space in advance.
+
+## FAQ
+
+**Do I need to pass all three metrics to get the ranking benefit?**
+Yes — a URL is only "good" in Google's page experience assessment when LCP, INP, and CLS are all in the good range at the 75th percentile. One poor metric fails the whole URL group.
+
+**Why does PageSpeed Insights show green but Search Console says I'm failing?**
+Because they measure different things. PSI's headline score is often lab (Lighthouse) data from one run; Search Console reports field (CrUX) data from real users over 28 days. Trust the field data for rankings.
+
+**My site is fast on my laptop — why is INP bad?**
+Your dev machine isn't representative. INP is dominated by the slow quarter of real users on mid-range Android phones. Throttle your CPU 4–6x in DevTools and test on a real budget device.
+
+**How long until fixes show up in Search Console?**
+CrUX is a rolling 28-day window, so expect a few weeks before a deployed fix fully moves your reported numbers. Confirm the change in lab tools right away, then watch the field data catch up.`,
   },
   'security-headers-for-seo': {
     title: 'Security Headers Every Website Needs',
@@ -2054,124 +2131,280 @@ A: Start with CSP in report-only mode, then tighten gradually.`,
   },
   'how-to-improve-lighthouse-score': {
     title: 'How to Get Lighthouse Score 100: Step by Step Guide',
-    content: `## What is Lighthouse?
+    content: `## What Lighthouse actually measures (and what it doesn't)
 
-Lighthouse is Google's open-source tool for auditing web page quality. It scores 4 categories: Performance, Accessibility, Best Practices, and SEO — each 0-100.
+Lighthouse is Google's open-source auditing tool. It grades four categories — Performance, Accessibility, Best Practices, SEO — each 0–100. Chrome DevTools runs it, PageSpeed Insights runs it, and countless CI pipelines gate deploys on it.
 
-## Our Score: 100/96/100/100
+Before you spend a weekend chasing 100, understand one thing: **the Performance score is a lab score.** Lighthouse loads your page in a controlled simulation — a mid-tier phone (roughly a Moto G4-class CPU, 4× slowdown) on a throttled 4G-ish connection — and measures what happens. That's a synthetic environment, not your real users. It varies from run to run, and it is **not** the Core Web Vitals data Google ranks on.
 
-SEO Snapshot scores **100 Performance, 96 Accessibility, 100 Best Practices, 100 SEO** on Lighthouse. Here's how we achieved it.
+The thing Google actually uses for ranking is **field data**: real Chrome users' experiences, aggregated in the Chrome User Experience Report (CrUX). That's the "Discover what your real users are experiencing" panel at the top of PageSpeed Insights. Your lab LCP can be 1.4s while your field LCP sits at 3.8s because real users are on worse networks, older devices, and cold caches. So use Lighthouse for what it's good at — **finding specific, fixable problems** — and judge success against your CrUX/[Core Web Vitals](/blog/how-to-improve-core-web-vitals) field data.
 
-## Performance: 100/100
+## How the Performance score is calculated
 
-### Key Metrics
-- **LCP** (Largest Contentful Paint): Under 2.5s
-- **FID/INP** (Interaction to Next Paint): Under 200ms
-- **CLS** (Cumulative Layout Shift): Under 0.1
+The Performance number isn't a vibe. In Lighthouse 10+ it's a weighted average of five lab metrics:
 
-### What We Did
-1. **Static generation** with Next.js — HTML served from CDN
-2. **No render-blocking scripts** — all JS deferred
-3. **Gzip + Brotli** compression via Cloudflare
-4. **Image optimization** — SVG for icons, lazy loading
-5. **Minimal JavaScript** — no heavy libraries
-6. **Font-display: swap** — no invisible text flash
+- **Total Blocking Time (TBT) — 30%** — the biggest single lever
+- **Largest Contentful Paint (LCP) — 25%**
+- **Cumulative Layout Shift (CLS) — 25%**
+- **First Contentful Paint (FCP) — 10%**
+- **Speed Index — 10%**
 
-### Quick Wins
-- Add \`loading="lazy"\` to below-fold images
-- Add \`defer\` to all script tags
-- Enable gzip compression
-- Set proper Cache-Control headers
-- Use WebP images instead of JPEG/PNG
+TBT is the heavyweight, and it's the lab proxy for **INP** (Interaction to Next Paint), the responsiveness metric Google added to Core Web Vitals in 2024. TBT measures how long the main thread was blocked by long tasks between FCP and interactive. High TBT almost always means one thing: too much JavaScript. If your score is stuck in the 60s–80s, look at TBT before anything else — it's usually where the points are hiding.
 
-## SEO: 100/100
+## Performance: cut JavaScript first
 
-1. Title tag with keyword
-2. Meta description 120-160 chars
-3. Canonical URL
-4. lang attribute on html
-5. robots meta index,follow
-6. Structured data (JSON-LD)
-7. Mobile viewport meta tag
-8. Proper heading hierarchy
+Most Performance losses trace back to shipping and executing too much JS on the main thread.
 
-## Best Practices: 100/100
+**Ship less, defer the rest.** Any non-critical script should load out of the parser's way:
 
-1. HTTPS everywhere
-2. No deprecated APIs
-3. No console errors
-4. Proper image aspect ratios
-5. Charset declared
+\`\`\`html
+<!-- Blocks parsing until downloaded + executed — avoid -->
+<script src="/analytics.js"></script>
 
-## Accessibility: Getting to 96+
+<!-- defer: download in parallel, run after HTML parses, in order -->
+<script src="/analytics.js" defer></script>
 
-1. All images have alt text
-2. Color contrast ratios meet WCAG
-3. Form inputs have labels
-4. Heading hierarchy is logical
-5. Skip navigation link exists
+<!-- async: for independent third-party tags -->
+<script src="https://tag.example.com/loader.js" async></script>
+\`\`\`
 
-## Test Your Score
+In Next.js, push third-party tags to \`afterInteractive\` or \`lazyOnload\` so they don't compete with hydration:
 
-Use [SEO Snapshot](/) for a comprehensive audit that goes beyond Lighthouse — 123 checks with copy-paste fix code for every issue.`,
-  },
-  'meta-description-length-2026': {
-    title: 'Meta Description Length in 2026: Character & Pixel Width Guide',
-    content: `## The Short Answer
+\`\`\`tsx
+import Script from 'next/script'
 
-**Keep meta descriptions between 120-160 characters.** But the real limit is pixels, not characters.
+<Script src="https://widget.example.com/w.js" strategy="lazyOnload" />
+\`\`\`
 
-## Character vs Pixel Limit
+**Serve modern image formats at the right size.** Unsized and oversized images inflate LCP and cause layout shift. Always declare dimensions and prefer AVIF/WebP:
 
-Google doesn't count characters — it measures **pixel width**:
-- **Desktop**: ~920 pixels (~155-160 characters)
-- **Mobile**: ~680 pixels (~120 characters)
+\`\`\`html
+<img src="/hero.avif" width="1200" height="630"
+     alt="Dashboard showing site audit results"
+     fetchpriority="high" decoding="async">
+\`\`\`
 
-Wide characters like "W" take more space than narrow ones like "i". That's why character count alone is unreliable.
+Set \`fetchpriority="high"\` on your LCP image and \`loading="lazy"\` on below-the-fold ones. Never lazy-load the LCP image — that delays the exact thing the metric measures. More on this in the [image SEO guide](/blog/image-seo-optimization).
 
-## SEO Snapshot's Approach
+**Preconnect to critical origins** so the browser opens TLS connections early:
 
-[SEO Snapshot](/) measures **both** character count and estimated pixel width:
-- Title pixel width check (max ~580px desktop)
-- Description pixel width check (max ~920px)
-- Warnings for truncation on both desktop and mobile
+\`\`\`html
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="dns-prefetch" href="https://analytics.example.com">
+\`\`\`
 
-## Best Practices
+**Turn on compression.** Brotli beats gzip by roughly 15–20% on text assets. On nginx:
 
-1. **Front-load important info** — key message in first 120 chars
-2. **Include target keyword** — bolded in search results
-3. **Add a call-to-action** — "Learn more", "Get started", "Free guide"
-4. **Unique per page** — no duplicate descriptions
-5. **Match search intent** — answer the searcher's question
+\`\`\`nginx
+gzip on;
+gzip_types text/css application/javascript image/svg+xml;
+brotli on;
+brotli_types text/css application/javascript image/svg+xml;
+\`\`\`
 
-## Examples
+Also kill render-blocking CSS/JS — inline critical CSS, defer the rest. There's a full walkthrough in [fix render-blocking resources](/blog/fix-render-blocking-resources), and a broader checklist in the [website speed optimization guide](/blog/website-speed-optimization-guide).
 
-**Good** (155 chars):
-\`Learn how to fix missing meta descriptions with copy-paste HTML code. Free SEO audit tool with 123 checks. No signup required.\`
+## Accessibility: real, but capped
 
-**Bad** (too short, 45 chars):
-\`Fix meta descriptions. Check our tool.\`
+Lighthouse's Accessibility audit is automated, which means it catches the machine-checkable failures and nothing else. Fix these first:
 
-**Bad** (too long, 220 chars):
-\`Our comprehensive tool analyzes websites for meta description issues and provides detailed reports with actionable recommendations that you can implement to improve your search engine optimization results and rankings.\`
+- **Color contrast** — text must hit WCAG AA (4.5:1 for normal text, 3:1 for large). Light-gray-on-white placeholder text is the usual culprit.
+- **Labels on every input** — a bare \`<input>\` with only a placeholder fails.
+- **Alt text** on meaningful images; \`alt=""\` on decorative ones.
+- **Accessible names** for icon-only buttons.
+
+\`\`\`html
+<label for="email">Email address</label>
+<input id="email" type="email" name="email">
+
+<button aria-label="Close dialog">
+  <svg aria-hidden="true"><!-- icon --></svg>
+</button>
+\`\`\`
+
+Be realistic: automated tooling only covers a fraction of WCAG. Lighthouse can confirm a button has a name — it can't tell whether that name makes sense, whether keyboard focus order is logical, or whether a screen reader can actually complete your checkout. A page can score 100 and still be painful to use. Practically, most real apps top out in the high 90s because of intangibles the audit can't judge, and that's fine. Pair it with the [web accessibility and SEO checklist](/blog/website-accessibility-seo-checklist) and a real keyboard-only pass.
+
+## Best Practices: mostly hygiene
+
+This category is a grab-bag of "don't do obviously broken things":
+
+- **HTTPS** everywhere — no mixed content.
+- **No errors in the console** — Lighthouse logs every uncaught error and dings you.
+- **Correct image aspect ratio** — the rendered size must match the file's intrinsic ratio, or images look squashed.
+- **No deprecated APIs** — \`document.write\`, unload listeners, old \`Application Cache\`, etc.
+- A valid **Content-Security-Policy** is checked for XSS mitigation.
+
+\`\`\`
+Content-Security-Policy: default-src 'self'; img-src 'self' data:; object-src 'none'
+\`\`\`
+
+If you're setting CSP and other headers, the [security headers guide](/blog/security-headers-for-seo) covers the full set.
+
+## SEO: the easy 100
+
+The Lighthouse SEO audit is a shallow technical check — passing it is table stakes, not real SEO. It looks for:
+
+- A non-empty \`<title>\` and a \`<meta name="description">\`
+- Crawlable \`<a href>\` links (not JS-only click handlers)
+- A \`<meta name="viewport">\` tag
+- The page isn't blocked by \`robots\` or \`X-Robots-Tag: noindex\`
+- Legible font sizes (≥12px for the bulk of text) and adequately sized tap targets
+
+\`\`\`html
+<title>How to Get a Lighthouse Score of 100</title>
+<meta name="description" content="Fix TBT, LCP, and CLS to raise your Lighthouse score — with copy-paste code.">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+\`\`\`
+
+Passing all five doesn't mean you'll rank — it means nothing technical is actively blocking you. For what a meaningful score looks like, see [what is a good SEO score](/blog/what-is-a-good-seo-score).
+
+## Why your score changes every run
+
+You run Lighthouse twice on the same page and get 91, then 78. Nothing's broken — it's **variance**, and it's expected. The causes:
+
+- **Simulated throttling** estimates timings from an unthrottled trace, so small measurement differences swing the result.
+- **Main-thread contention** — other Chrome tabs, extensions, or background CPU on your machine affect a local run.
+- **Third-party scripts** (ads, tag managers, A/B tools) respond at different speeds each load.
+- **Cold vs warm caches and CDN edge state.**
+
+To get a number you can trust: run in an **Incognito window with extensions disabled**, or better, use PageSpeed Insights (server-side, cleaner environment) or Lighthouse CI, and run **at least 3–5 times and take the median**. Chasing a single lab number is how people waste days. Anchor on the field CrUX data instead.
 
 ## FAQ
 
-**Q: Does Google always use my meta description?**
-A: No. Google may rewrite it if it thinks the page content better matches the query. But having one increases the chance Google uses yours.
+**Is a 100 Performance score necessary to rank?**
+No. Google ranks on field Core Web Vitals thresholds (LCP < 2.5s, INP < 200ms, CLS < 0.1), not your lab score. A 90 with green field data beats a flaky lab 100.
 
-**Q: What if I don't add a meta description?**
-A: Google will auto-generate one from your page content. This is often irrelevant or awkwardly truncated.
+**Why is my mobile score so much lower than desktop?**
+Mobile applies CPU and network throttling that desktop doesn't. Mobile is the harder, more realistic test — and it's the one Google's mobile-first index cares about.
 
-Check your meta description length and pixel width with [SEO Snapshot](/) — free, no signup needed.`,
+**Can I really hit 100 on Accessibility?**
+Sometimes, but the automated audit only covers machine-checkable rules. A 100 doesn't guarantee an accessible site; a 96 with clean manual testing is often the honest ceiling.
+
+**What's the single fastest way to raise a low score?**
+Reduce JavaScript to cut TBT. It's 30% of the weight and the metric most sites fail hardest.
+
+## Go beyond Lighthouse
+
+Lighthouse finds problems but rarely hands you the fix. Run your URL through [SEO Snapshot](/) for 123 checks with copy-paste fix code for every issue — headers, structured data, metadata, and the technical gaps Lighthouse skips entirely.`,
+  },
+  'meta-description-length-2026': {
+    title: 'Meta Description Length in 2026: Character & Pixel Width Guide',
+    content: `## The short answer
+
+Keep meta descriptions to roughly **120–160 characters**, but treat that as a proxy. The real constraint is **pixel width**, not character count. Google renders your description in a specific font at a specific size and cuts it off with an ellipsis (…) when the text overflows the container — and that container is measured in pixels.
+
+- **Desktop**: about **920 pixels**, which works out to roughly **155–160 characters** of average-width text.
+- **Mobile**: about **680 pixels**, or roughly **120 characters**.
+
+Mobile is the tighter budget, and most searches happen there, so write for the mobile cut first.
+
+## Why pixels, not characters
+
+Two descriptions with the exact same character count can render at very different widths, because glyphs aren't equal width in Google's font. Wide glyphs like \`W\`, \`M\`, and \`m\` eat far more horizontal space than narrow ones like \`i\`, \`l\`, \`t\`, and \`.\`.
+
+Consider these two strings, both 60 characters:
+
+\`\`\`text
+Willamette wineries welcome warm summer weekends. Wow, mmm!
+illuminating little details in tidy titles, itty-bitty lines
+\`\`\`
+
+Same count. The first is packed with \`W\` and \`m\`; the second is mostly \`i\`, \`l\`, and \`t\`. On a desktop SERP the first can overrun the pixel limit while the second still has room to spare. That's why a hard "160 characters" rule fails: a keyword-heavy line full of capitals truncates early, and a lean one full of narrow letters survives longer than you'd expect.
+
+So don't optimize to a character number — optimize to how it renders. An analyzer that estimates pixel width per glyph, like the one at [SEO Snapshot](/), reports both character count *and* estimated pixel width.
+
+## How truncation actually works
+
+When text exceeds the pixel width, Google doesn't cut at a fixed character — it fits as many whole words as it can, then appends an ellipsis. A description 3 pixels too wide loses an entire trailing word, not three characters. That's why the last clause vanishes first, and why burying your call-to-action or key detail at the end is a mistake.
+
+### The boilerplate prefix eats your width
+
+Google sometimes prepends a **date** or short **boilerplate label** to the snippet — \`Jan 14, 2026 — \` or \`Author · \` — pulled from your publish date or structured data. That prefix renders *inside the same pixel budget*. A date stamp can consume 90–120 pixels before your description even starts, shortening your usable space by 15–20 characters. If your pages show dates in search (common for blogs and news), assume less room than the raw 920/680 numbers suggest and front-load accordingly.
+
+## Google rewrites descriptions more than half the time
+
+Here's the part people underestimate: **your meta description is a suggestion, not a guarantee.** Studies of large SERP samples consistently find Google rewrites or ignores the provided description well over half the time — often around 60%+ of results show text Google generated itself rather than the author's tag.
+
+Why? Google frequently pulls a snippet from the page body that better matches the *specific query* typed. Search "meta description pixel width" and, if your tag only mentions character counts, Google may grab a sentence from your content that literally contains "pixel width" instead. That's usually a feature: a query-matched snippet earns more clicks.
+
+So why write one at all? Two reasons:
+
+1. **It's the default.** When your description already answers the likely query, Google tends to use it as-is. A good tag is the version you control.
+2. **It's the floor.** Without a tag, Google auto-generates from whatever text it finds first — often a nav label, a cookie notice, or an awkward fragment. Writing your own removes that downside. (Seeing a blank tag flagged in an audit? Start with [how to fix a missing meta description](/blog/how-to-fix-missing-meta-description) — that's about *presence*; this is about *length*.)
+
+Don't agonize over the "perfect" 160-character line for a page Google will rewrite anyway. Make it clear, honest, and query-relevant, then move on.
+
+## Keyword bolding: scannability, not ranking
+
+When a searcher's query terms appear in your description (or the generated snippet), Google **bolds** the matching words. That bolding does not directly influence ranking — meta descriptions haven't been a ranking factor for years. What it does is make your result easier to scan, which can lift click-through. Include the natural query language a searcher would use, but don't keyword-stuff; the bolding only helps when the match reads naturally.
+
+## Good, too-short, too-long
+
+**Good** — reads well, front-loaded, ~150 chars:
+
+\`\`\`text
+Fix "missing meta description" in WordPress, Next.js, or plain HTML. Copy-paste snippets plus a free audit that flags length in characters and pixels.
+\`\`\`
+
+**Too short** — 42 chars, wastes the snippet:
+
+\`\`\`text
+Meta description tips. Read our guide.
+\`\`\`
+
+There's nothing wrong with a short description technically, but you're leaving free SERP real estate — and free keyword-matching surface — on the table.
+
+**Too long** — 228 chars, the last third gets truncated on desktop and half of it disappears on mobile:
+
+\`\`\`text
+In this comprehensive and detailed guide we will walk you through absolutely everything you could ever possibly need to know about meta description length, pixel width, truncation behavior, and all of the many best practices to follow.
+\`\`\`
+
+Everything after "pixel width," vanishes behind an ellipsis, and the sentence never delivers a reason to click.
+
+## A testing workflow
+
+Don't ship on a character count. Preview the actual snippet at both widths:
+
+1. **Draft to the mobile budget first.** Write the essential message in the first ~120 characters (roughly 680px). If it still makes sense when cut there, the desktop version is fine too.
+2. **Preview the render.** Paste your title and description into a [SERP snippet preview tool](/tools/serp-snippet-preview) and toggle desktop vs mobile. You'll see the ellipsis land in real position, wide glyphs and all — not a guessed character count.
+3. **Account for the date prefix.** If the page shows a date in search, mentally reserve ~15 chars at the front.
+4. **Generate clean tags.** Producing the final markup for many pages? The [meta tag generator](/tools/meta-tag-generator) outputs a correct \`<meta name="description">\` (and matching Open Graph) so you don't hand-type quotes and encoding.
+5. **Verify live.** After deploy, run the URL through [SEO Snapshot](/) — it reports character count and estimated pixel width together and warns when either the title or description will truncate on desktop or mobile.
+
+The raw tag looks like this:
+
+\`\`\`html
+<meta name="description" content="Fix 'missing meta description' in WordPress, Next.js, or plain HTML. Copy-paste snippets plus a free length check in characters and pixels.">
+\`\`\`
+
+While you're tuning snippets, do the same pass on your social cards — the [Open Graph meta tags guide](/blog/open-graph-meta-tags-guide) covers the equivalent length and image rules for Facebook, LinkedIn, and X. For where description length sits among your other on-page signals, see [what a good SEO score actually measures](/blog/what-is-a-good-seo-score).
+
+## FAQ
+
+**Is there a penalty for a description that's too long?**
+No ranking penalty. Google just truncates it. The only cost is a weaker, cut-off snippet — and any key info past the cutoff going unread.
+
+**Should I write to 160 characters or 920 pixels?**
+Pixels, because character count ignores glyph width. If you only have a character counter, aim lower — around 150 — to leave a safety margin for wide letters and any date prefix.
+
+**Does the pixel limit change?**
+Google adjusts SERP layout periodically, so treat ~920px desktop / ~680px mobile as current-era estimates, not constants. Preview the render rather than trusting a fixed number.
+
+**Why did Google ignore my description entirely?**
+It found body text that matched the searcher's query better. That's normal — happens on the majority of results. Keep your tag clear and relevant; you can't force it, only make yours the best default.
+
+Run your URL through [SEO Snapshot](/) to see character count and estimated pixel width side by side — free, no signup.`,
   },
   'website-security-check-guide': {
     title: 'Website Security Check: How to Grade Your Security Headers',
-    content: `## What is a Security Grade?
+    content: `## What a Security Grade Actually Measures
 
-A security grade (A+ to F) rates how well your website protects users through HTTP security headers. [SEO Snapshot](/) is one of the few tools that provides this grade as part of an SEO audit.
+A security grade (A+ to F) rates how well your site protects visitors through HTTP response headers — the instructions a browser reads before it renders a single byte of your page. Those headers decide whether an injected script can run, whether your site can be framed inside a phishing page, and whether a downgraded HTTP request can be intercepted on public Wi-Fi. [SEO Snapshot](/) is one of the few audit tools that returns this grade alongside the usual SEO checks, and it hands back the exact config to fix each gap.
 
-## How We Calculate the Grade
+Below is how the grade is computed, what separates a header that's *present* from one that's *correct*, and how to actually fix a low score on whatever platform you run.
+
+## How the Grade Is Computed
 
 | Grade | Score | Meaning |
 |-------|-------|---------|
@@ -2182,29 +2415,131 @@ A security grade (A+ to F) rates how well your website protects users through HT
 | D | 30-49 | Significant gaps |
 | F | 0-29 | Little to no protection |
 
-## The 7 Headers We Check
+The score is a weighted sum. HSTS and CSP carry the most weight because they close the highest-impact holes (protocol downgrade and cross-site scripting). The lighter headers each contribute a point or two, and the bonus checks nudge you into A+ territory or drag you out of it.
 
-1. **HSTS** — Forces HTTPS (3 points)
-2. **CSP** — Prevents XSS attacks (3 points)
-3. **X-Frame-Options** — Prevents clickjacking (1 point)
-4. **X-Content-Type-Options** — Prevents MIME sniffing (1 point)
-5. **Referrer-Policy** — Controls referrer data (1 point)
-6. **Permissions-Policy** — Restricts browser features (1 point)
-7. **Mixed content** — No HTTP on HTTPS pages (1 point)
+An **A+ is not just "all seven headers exist."** It requires each header to be configured to a strong *value*. You can ship all seven and still land a B if your CSP is toothless or your HSTS max-age is a token 60 seconds. The grader inspects values, not just presence.
 
-Plus bonus checks: Cookie flags, SRI, X-Powered-By exposure.
+## The 7 Headers, and What Each One Actually Closes
 
-## How to Fix a Low Grade
+1. **HSTS** (\`Strict-Transport-Security\`) — forces every future request over HTTPS, defeating SSL-strip downgrade attacks. *Good value:* \`max-age=31536000; includeSubDomains; preload\` (one year, all subdomains).
+2. **CSP** (\`Content-Security-Policy\`) — controls which scripts, styles, and resources may load, which is your strongest defense against XSS. *Good value:* an explicit allowlist like \`default-src 'self'; script-src 'self'\` with no wildcard or \`'unsafe-inline'\` on scripts.
+3. **X-Frame-Options** — stops your pages being embedded in an attacker's iframe (clickjacking). *Good value:* \`DENY\`, or \`SAMEORIGIN\` if you legitimately frame your own pages.
+4. **X-Content-Type-Options** — blocks MIME-sniffing, so a browser won't execute an uploaded "image" as a script. *Good value:* \`nosniff\` (the only value).
+5. **Referrer-Policy** — limits how much of your URL leaks to third parties. *Good value:* \`strict-origin-when-cross-origin\` or tighter.
+6. **Permissions-Policy** — disables browser features you don't use (camera, mic, geolocation) so a compromised script can't reach them. *Good value:* \`camera=(), microphone=(), geolocation=()\`.
+7. **Mixed content** — no HTTP resources loaded on an HTTPS page. *Good value:* every script, image, and stylesheet on \`https://\`. One \`http://\` asset and the browser flags the padlock.
 
-Check your site's security grade with [SEO Snapshot](/) — we provide the exact server configuration (nginx, Apache, Next.js, Vercel) to copy-paste for each missing header.
+For a deeper walkthrough of each header's syntax and the SEO angle, see [security headers every website needs](/blog/security-headers-for-seo).
+
+## "Present" vs "Correct" — Where Most Sites Lose Points
+
+This is the distinction that trips people up. A scanner that only checks presence will happily give you an A. A real audit reads the value.
+
+**CSP full of \`'unsafe-inline'\`.** A CSP that allows inline scripts barely limits XSS at all — an injected \`<script>\` still runs. It exists, but it scores poorly:
+
+\`\`\`
+Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'
+\`\`\`
+
+That header *is present* and *is weak*. The fix is to move inline scripts into files, or use a nonce/hash, so you can drop \`'unsafe-inline'\` from \`script-src\`.
+
+**HSTS with a short max-age.** \`Strict-Transport-Security: max-age=300\` technically enables HSTS, but a five-minute window means a user who hasn't visited in five minutes is unprotected again. Anything under a few months is weak; aim for \`31536000\` (one year). Only add \`preload\` once you're confident every subdomain serves HTTPS — preload is hard to reverse.
+
+**X-Frame-Options set to a bogus value.** \`ALLOW-FROM\` is deprecated and ignored by modern browsers. If you need per-origin framing control, use CSP's \`frame-ancestors\` instead.
+
+## The Bonus Checks
+
+These are what separate a plain A from an A+, and they're the ones people forget:
+
+- **Cookie flags.** Session cookies should carry \`HttpOnly\` (JS can't read them), \`Secure\` (HTTPS only), and \`SameSite=Lax\` or \`Strict\` (CSRF protection). A \`Set-Cookie\` missing \`HttpOnly\` is a stolen-session waiting to happen.
+- **Subresource Integrity (SRI).** Any third-party \`<script>\` or \`<link>\` should carry an \`integrity="sha384-..."\` hash so a compromised CDN can't swap in malicious code.
+- **Version leakage.** Headers like \`X-Powered-By: Express\` or \`Server: Apache/2.4.29\` hand attackers a version number to look up known CVEs against. Strip them.
+- **Mixed content on HTTPS.** Covered above, but worth repeating because it's the most common single point lost.
+
+## Fixing a Low Grade, by Platform
+
+Add the headers once, at the edge, so every response inherits them.
+
+**nginx** (in your \`server\` block). This is the short version — for the full hardened config including \`map\` blocks and per-location overrides, see the [nginx security headers config](/blog/nginx-security-headers-guide):
+
+\`\`\`nginx
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+add_header Content-Security-Policy "default-src 'self'; script-src 'self'; object-src 'none'; frame-ancestors 'none'" always;
+add_header X-Content-Type-Options "nosniff" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+server_tokens off;
+\`\`\`
+
+**Apache** (in your vhost or \`.htaccess\`):
+
+\`\`\`apache
+Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; frame-ancestors 'none'"
+Header always set X-Content-Type-Options "nosniff"
+Header always set Referrer-Policy "strict-origin-when-cross-origin"
+Header always set Permissions-Policy "camera=(), microphone=(), geolocation=()"
+Header unset X-Powered-By
+\`\`\`
+
+**Next.js** — set them in \`next.config.js\` so they apply to every route:
+
+\`\`\`js
+module.exports = {
+  poweredByHeader: false,
+  async headers() {
+    return [{
+      source: '/:path*',
+      headers: [
+        { key: 'Strict-Transport-Security', value: 'max-age=31536000; includeSubDomains; preload' },
+        { key: 'Content-Security-Policy', value: "default-src 'self'; script-src 'self'" },
+        { key: 'X-Content-Type-Options', value: 'nosniff' },
+        { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+      ],
+    }]
+  },
+}
+\`\`\`
+
+**Vercel** — add a \`headers\` array in \`vercel.json\` with the same key/value pairs (Vercel serves them at the edge, no server needed).
+
+**Cloudflare** — Rules → Transform Rules → Modify Response Header → *Set static*, one rule per header. Handy when you don't control the origin config, though origin-level headers are easier to version-control.
+
+## How to Verify Your Fix
+
+Editing the config isn't the finish line — a typo or a caching layer can silently drop a header. Two checks:
+
+1. **Re-scan.** Run your URL through [SEO Snapshot](/) again and confirm the grade moved.
+2. **Read the live headers with curl.** This shows exactly what the browser receives, including values:
+
+\`\`\`bash
+curl -I https://yourdomain.com
+\`\`\`
+
+\`-I\` fetches headers only. Scan the output for each header and its value — confirm HSTS shows a long \`max-age\`, your CSP has no stray \`'unsafe-inline'\`, and there's no \`X-Powered-By\` or verbose \`Server\` line. To check a redirect chain (HTTP → HTTPS), add \`-L\`:
+
+\`\`\`bash
+curl -IL http://yourdomain.com
+\`\`\`
+
+If a header shows up in curl but not in the browser, a CDN or proxy is stripping it — fix it at the layer closest to the user.
+
+Security headers are one slice of a broader technical health check; pair this with a full [technical SEO audit](/blog/technical-seo-audit-complete-guide) so crawlability and indexing don't quietly regress while you're hardening headers.
 
 ## FAQ
 
-**Q: Do security headers affect SEO?**
-A: HTTPS is a confirmed Google ranking factor. Other headers improve trust but aren't direct ranking signals.
+**Do security headers affect SEO?**
+HTTPS is a confirmed Google ranking factor, so HSTS supports it indirectly. The other headers aren't direct ranking signals, but they protect the trust and integrity that keep users (and your reputation) intact.
 
-**Q: How do I add security headers on Cloudflare?**
-A: Cloudflare → Rules → Transform Rules → Modify Response Header. Add each header as a static value.`,
+**Why is my CSP scored low even though it's present?**
+Almost always \`'unsafe-inline'\` or \`'unsafe-eval'\` in \`script-src\`, or a wildcard \`*\` source. Those keep the header from actually blocking injected scripts. Tighten the allowlist and the score jumps.
+
+**What's the single highest-impact header to add first?**
+HSTS if you're already on HTTPS, then a real CSP. Those two carry the most weight and close the most dangerous holes. The one-point headers are quick wins you can batch in afterward.
+
+**How do I add security headers on Cloudflare without touching my server?**
+Transform Rules → Modify Response Header → Set static, one per header. It applies at Cloudflare's edge before the response reaches the browser.`,
   },
   'technical-seo-audit-complete-guide': {
     title: 'Technical SEO Audit: The Complete 2026 Guide',
@@ -2624,110 +2959,162 @@ A: You still need hreflang. Include both languages + x-default on every page.`,
   },
   'fix-render-blocking-resources-nextjs': {
     title: 'How to Fix Render-Blocking Resources in Next.js',
-    content: `## What Are Render-Blocking Resources?
+    content: `## What "render-blocking" actually means in Next.js
 
-Render-blocking resources are CSS and JavaScript files that prevent the browser from displaying the page until they're fully loaded. They're one of the most common Lighthouse warnings.
+A render-blocking resource is a CSS or JavaScript file in the document \`<head>\` that the browser must download and parse before it can paint anything. In a plain HTML site you'd hand-audit every \`<link>\` and \`<script>\`. Next.js changes the picture: the framework already eliminates most of the classic offenders for you, so when Lighthouse still flags render-blocking on a Next app, the culprit is almost always something *you* added — a third-party script, a font loaded the wrong way, or a giant CSS import in the root layout.
 
-## How Next.js Handles This
+This is the Next.js-specific companion to the general guide on [fixing render-blocking CSS and JavaScript](/blog/fix-render-blocking-resources). Read that one for the browser mechanics; here we go straight to what the App Router does automatically and where you still intervene.
 
-Next.js automatically optimizes most resources:
-- **Code splitting** — only loads JS needed for the current page
-- **Automatic CSS chunking** — splits CSS per page
-- **Script component** — controls loading priority
+## What Next.js already does for you
 
-But you can still have issues with:
-- Third-party scripts (analytics, chat widgets)
-- Custom fonts without font-display
-- Large CSS libraries loaded globally
+With the App Router (Next 13/14) and even the older Pages Router, you get a lot for free:
 
-## Fix 1: Use Next.js Script Component
+- **Automatic code-splitting.** Each route ships only the JavaScript it needs. There's no single monolithic \`bundle.js\` blocking the page.
+- **Per-route CSS.** CSS imported by a route is chunked and scoped to that route, not dumped into one global stylesheet.
+- **Streaming and React Server Components.** In the App Router, Server Components render to HTML on the server and stream to the browser. The user sees content before client JavaScript hydrates — hydration is non-blocking for first paint.
+- **Automatic font optimization** via \`next/font\` (more below), which self-hosts fonts and removes the render-blocking network request to Google's servers.
 
+So a stock \`create-next-app\` project scores well out of the box. Problems creep in through the additions.
+
+## \`next/script\`: control when third-party JS loads
+
+Third-party scripts are the usual real culprit — analytics, tag managers, chat widgets, A/B testing snippets. Dropping a raw \`<script src="…">\` into your layout forces the browser to fetch and execute it before painting. The \`next/script\` component lets you declare *when* a script should load with the \`strategy\` prop.
+
+| Strategy | When it loads | Use it for |
+|----------|---------------|-----------|
+| \`beforeInteractive\` | Before any hydration, injected into initial HTML | Consent managers, bot detection, polyfills that MUST run first. Rarely needed. |
+| \`afterInteractive\` (default) | Right after the page hydrates | Analytics, tag managers (GA4, GTM) |
+| \`lazyOnload\` | During browser idle time, after everything else | Chat widgets, social embeds, non-critical pixels |
+| \`worker\` (experimental) | Off the main thread via Partytown | Heavy analytics you want fully off the UI thread |
+
+A real Google Analytics 4 setup — note \`afterInteractive\`, not \`beforeInteractive\`:
+
+\`\`\`tsx
+import Script from 'next/script'
+
+export default function Analytics() {
+  return (
+    <>
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXX"
+        strategy="afterInteractive"
+      />
+      <Script id="ga4-init" strategy="afterInteractive">
+        {\`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-XXXXXXX');
+        \`}
+      </Script>
+    </>
+  )
+}
 \`\`\`
-import Script from 'next/script';
 
-// BAD — blocks rendering
-<script src="https://analytics.example.com/script.js"></script>
+The inline config script needs an \`id\` so Next can dedupe and order it. Analytics never needs to block first paint, so \`beforeInteractive\` here would be a mistake — it would pull the script into the critical path for zero benefit.
 
-// GOOD — loads after page is interactive
-<Script
-  src="https://analytics.example.com/script.js"
-  strategy="afterInteractive"
+## Fonts: \`next/font\` vs. a raw Google Fonts \`<link>\`
+
+This is the single most common self-inflicted render-blocker in Next apps. The old habit:
+
+\`\`\`html
+<!-- Render-blocking: the browser waits on Google's server -->
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Inter&display=swap"
 />
-
-// GOOD — loads when browser is idle
-<Script
-  src="https://chat-widget.example.com/widget.js"
-  strategy="lazyOnload"
-/>
 \`\`\`
 
-### Script Strategies:
-- **beforeInteractive** — loads before hydration (rarely needed)
-- **afterInteractive** — loads immediately after hydration (default)
-- **lazyOnload** — loads during idle time (best for non-critical)
+That \`<link>\` in \`<head>\` blocks rendering while the browser makes a round trip to \`fonts.googleapis.com\`, parses the returned CSS, *then* fetches the font files from \`fonts.gstatic.com\`. Two extra origins, added latency, and a Lighthouse ding.
 
-## Fix 2: Optimize Fonts
+\`next/font\` fixes all of it at build time. It downloads the font, self-hosts it from your own domain, subsets it, and injects size-adjusted fallback metrics so there's zero layout shift (good for CLS):
 
+\`\`\`tsx
+// app/layout.tsx
+import { Inter } from 'next/font/google'
+
+const inter = Inter({
+  subsets: ['latin'],
+  display: 'swap',       // show fallback text immediately, swap when ready
+  variable: '--font-inter',
+})
+
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" className={inter.variable}>
+      <body>{children}</body>
+    </html>
+  )
+}
 \`\`\`
-// next.config.js
-module.exports = {
-  optimizeFonts: true, // default in Next.js 13+
-};
 
-// Use next/font (auto-optimizes, no layout shift)
-import { Inter } from 'next/font/google';
-const inter = Inter({ subsets: ['latin'] });
-\`\`\`
+No external request, no render-blocking stylesheet, and \`display: swap\` means text is visible during font load instead of invisible. For local font files use \`next/font/local\`. If you must keep an external font link for some reason, at least add \`preconnect\` (see below) — but self-hosting via \`next/font\` is strictly better.
 
-## Fix 3: Dynamic Imports
+## \`next/dynamic\`: defer heavy client components
 
-\`\`\`
-import dynamic from 'next/dynamic';
+Code-splitting handles routes, but a single route can still pull in a heavy client component — a charting library, a rich text editor, a map. \`next/dynamic\` lets you lazy-load it and skip server rendering when it makes sense:
 
-// Heavy component loaded only when needed
+\`\`\`tsx
+import dynamic from 'next/dynamic'
+
 const HeavyChart = dynamic(() => import('./Chart'), {
-  loading: () => <div>Loading chart...</div>,
-  ssr: false, // skip server-side render
-});
+  loading: () => <div>Loading chart…</div>,
+  ssr: false, // don't render on the server; ship its JS only on demand
+})
 \`\`\`
 
-## Fix 4: CSS Optimization
+The important nuance: this doesn't primarily fix *render-blocking* (Next already splits your bundles). It helps **INP and TBT** — Interaction to Next Paint and Total Blocking Time. Deferring a 200 KB chart library means the main thread isn't tied up parsing and executing it during the initial load, so the page responds to taps and clicks sooner. If your Lighthouse pain is "long tasks" or a sluggish INP rather than "eliminate render-blocking resources," \`next/dynamic\` is the tool. See the [Core Web Vitals guide](/blog/how-to-improve-core-web-vitals) for how INP, LCP, and CLS relate.
 
+## Keep global CSS small
+
+Anything imported in \`app/layout.tsx\` ships on *every* route and sits in the critical path. Keep \`globals.css\` to resets, variables, and truly global styles. Push component styles into **CSS Modules** (scoped, tree-shaken per route) or use **Tailwind**, whose JIT compiler only emits the classes you actually use:
+
+\`\`\`tsx
+// styles.module.css → scoped, only loads with the component that imports it
+import styles from './card.module.css'
+export default () => <div className={styles.card}>…</div>
 \`\`\`
-// Move component-specific CSS to CSS Modules
-// styles.module.css
-.card { ... }
 
-// Component
-import styles from './styles.module.css';
-<div className={styles.card}>...</div>
-\`\`\`
+Importing a full UI library's stylesheet (\`import 'some-ui-lib/dist/all.css'\`) in the root layout is a classic mistake — you block paint with CSS 90% of pages never use.
 
-## Fix 5: Preconnect to External Domains
+## Preconnect and preload
 
-\`\`\`
+When you genuinely can't self-host a resource, warm up the connection so the DNS + TLS handshake isn't on the critical path. In the App Router, use the Metadata API or drop links straight in the layout \`<head>\`:
+
+\`\`\`tsx
 // app/layout.tsx
 <head>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+  <link rel="preconnect" href="https://cdn.example.com" crossOrigin="" />
+  <link rel="dns-prefetch" href="https://cdn.example.com" />
 </head>
 \`\`\`
 
-## Measuring Impact
+Preconnect only the origins you actually use — pointing it at \`fonts.gstatic.com\` while using \`next/font\` is pointless, since there's no request to warm up.
 
-Use [SEO Snapshot](/) to check:
-- Total render-blocking scripts count
-- Inline JavaScript size
-- Font-display usage
-- Preconnect/DNS-prefetch hints
+## Pages Router differences
+
+On the older Pages Router the mechanics live elsewhere: global CSS and providers go in \`pages/_app.tsx\`, and document-level \`<html>\`/\`<head>\` structure plus \`beforeInteractive\` scripts go in \`pages/_document.tsx\`. \`next/font\`, \`next/script\`, and \`next/dynamic\` all work the same way. The App Router's streaming/RSC model is the main thing you lose.
+
+## Common mistakes
+
+- **\`beforeInteractive\` overuse.** It pulls scripts into the initial HTML and blocks. Reserve it for consent/bot-detection; default to \`afterInteractive\`.
+- **A big UI library imported globally.** One \`import 'lib.css'\` in the layout blocks every route.
+- **A blocking font \`<link>\`.** The \`fonts.googleapis.com\` stylesheet is render-blocking — migrate to \`next/font\`.
 
 ## FAQ
 
-**Q: Does Next.js automatically fix render-blocking?**
-A: Mostly yes, for your own code. Third-party scripts need manual optimization.
+**Does Next.js automatically fix render-blocking?**
+For your own code, mostly yes — routing-level code-splitting and per-route CSS are automatic. Third-party scripts and fonts still need \`next/script\` and \`next/font\`.
 
-**Q: What about CSS-in-JS libraries?**
-A: Tailwind CSS, CSS Modules, and styled-components are all fine with Next.js. Avoid importing large CSS files globally.`,
+**\`afterInteractive\` or \`lazyOnload\` for analytics?**
+\`afterInteractive\`. You want analytics running as soon as the page is interactive so you don't lose early events. Save \`lazyOnload\` for chat and social widgets.
+
+**Does \`ssr: false\` hurt SEO?**
+Only if the deferred component contains content you need indexed. For interactive widgets (charts, editors) it's fine — crawlers don't need them. Keep primary content server-rendered.
+
+**How do I confirm the fix worked?**
+Run your URL through [SEO Snapshot](/) — it counts render-blocking scripts, checks \`font-display\` usage, and flags missing preconnect hints. Cross-check with the [website speed optimization guide](/blog/website-speed-optimization-guide) and, if you're chasing a perfect score, the [Lighthouse 100 walkthrough](/blog/how-to-improve-lighthouse-score).`,
   },
   'open-graph-image-size-2026': {
     title: 'Open Graph Image Size and Best Practices 2026',
@@ -3135,64 +3522,131 @@ A: Compression + caching. They're server-side changes that affect every page ins
   },
   'keyword-cannibalization-fix': {
     title: 'Keyword Cannibalization: How to Find and Fix It',
-    content: `## What Is Keyword Cannibalization?
+    content: `## What Keyword Cannibalization Actually Is
 
-Keyword cannibalization happens when **multiple pages on your site target the same keyword**. Instead of one strong page ranking, Google gets confused and splits ranking power between them — often resulting in neither page ranking well.
+Keyword cannibalization happens when two or more pages on your site compete for the **same search intent**, and Google can't decide which to rank. The result is usually worse than one page: rankings wobble, clicks split between URLs, and neither page earns the authority it would have alone.
+
+That definition matters, because the term is badly overdiagnosed. Multiple URLs from your domain appearing for one query is not automatically cannibalization. Google routinely ranks two or three pages from the same site when they serve different needs — a product page and a review, a category and a how-to guide. That's healthy coverage.
+
+Cannibalization is only a problem when pages target the **same intent** and dilute each other. If you can't articulate why a searcher would want page A instead of page B, you probably have a real overlap. If you can, you likely don't.
+
+## The Symptoms That Confirm It's Real
+
+Before consolidating anything, look for the signals that two pages are actually fighting:
+
+- **Position flip-flopping in Search Console.** The ranking URL keeps swapping — page A ranks Monday, page B ranks Thursday, back to A the next week. Google is uncertain, and that uncertainty costs you.
+- **A weaker page outranking your money page.** A thin blog post outranks the landing page you actually want to convert on — the wrong page is absorbing the signals.
+- **Split clicks and impressions.** One query shows two URLs each pulling a slice of impressions and a mediocre average position. Combined, they'd likely rank higher.
+- **Overlapping titles and H1s.** Two pages with near-identical titles targeting the same phrase are asking Google to choose.
+
+If none of these show up — if two URLs both rank and both get steady, non-overlapping traffic — leave them be.
 
 ## How to Detect It
 
-### Method 1: Google Search
-Search \`site:yoursite.com "target keyword"\` — if multiple pages appear, you have cannibalization.
+### Method 1: The Search Console workflow (the reliable one)
 
-### Method 2: Google Search Console
-Go to Performance → Filter by query → Check which pages rank for the same keyword. If multiple pages appear, they're cannibalizing each other.
+This is where you confirm cannibalization instead of guessing.
 
-### Method 3: SEO Tools
-Use [SEO Snapshot](/) to analyze individual pages and check:
-- Keyword density per page
-- Title tag keyword usage
-- H1 keyword usage
+1. Open **Performance → Search results** in Google Search Console.
+2. Click **+ New → Query** and filter to the exact keyword you're worried about.
+3. With that filter active, switch to the **Pages** tab.
+4. If more than one URL shows impressions for that single query, you have overlap. Now check whether it's *harmful*.
+5. Add a date comparison (last 3 months vs. the previous 3) and watch the **position** column per page. If the ranking URL keeps changing or both sit at mediocre positions, that's the flip-flop pattern — real cannibalization.
 
-## How to Fix It
+Two pages ranking steadily at positions 3 and 9 for related-but-distinct reasons? Not a problem. Two pages trading position 6 every few days? Fix it.
 
-### Option 1: Consolidate (Best)
-Merge competing pages into one comprehensive page:
-1. Pick the stronger page (more backlinks, better content)
-2. Merge content from the weaker page
-3. 301 redirect the weaker page to the stronger one
+### Method 2: The \`site:\` search
 
-### Option 2: Differentiate
-Give each page a unique angle:
-- Page A: "Best SEO Tools for Beginners" (informational)
-- Page B: "SEO Tool Pricing Comparison" (commercial)
+Quick sanity check from the SERP: \`site:yoursite.com "email marketing tips"\`. If several pages surface for the phrase, note which ones — but treat this as a lead, not a verdict. Confirm with the GSC data above.
 
-### Option 3: Canonical Tag
-If you need both pages, add canonical to point to the primary:
+### Method 3: Content, title, and H1 overlap
+
+Pull the competing URLs side by side and compare their titles, H1s, and opening paragraphs — near-identical framing is the root cause most of the time. The analyzer at [SEO Snapshot](/) checks title, H1, and keyword placement per page, so you can run each URL and see whether two pages are built around the same phrase.
+
+## The Fix: A Decision Tree
+
+No single fix works. Pick based on *why* the pages overlap.
+
+### 1. Consolidate + 301 — when pages are near-duplicates
+
+Two posts saying basically the same thing? Merge them. Keep the stronger URL (more backlinks, more history), fold the useful parts of the weaker one into it, then 301-redirect the weaker URL to the survivor so its link equity transfers. Generate the redirect for your stack with the [redirect generator](/tools/redirect-generator) — nginx, Apache, and Next.js syntax:
+
+\`\`\`js
+// next.config.js
+module.exports = {
+  async redirects() {
+    return [
+      {
+        source: '/blog/email-marketing-tips-for-beginners',
+        destination: '/blog/email-marketing-tips',
+        permanent: true, // 301
+      },
+    ];
+  },
+};
 \`\`\`
+
+### 2. Differentiate intent — when both topics deserve a page
+
+If both pages *should* exist but were written to chase the same phrase, rewrite them to target distinct queries. Re-map titles, H1s, and body focus so each answers a different question — the fix that keeps the most value.
+
+### 3. Canonical — when you need both live, one is primary
+
+Printer-friendly versions, syndicated copies, or a landing page that mirrors a guide: keep both, but tell Google which is canonical.
+
+\`\`\`html
 <link rel="canonical" href="https://yoursite.com/primary-page">
 \`\`\`
 
-### Option 4: Noindex
-If one page is low-value, noindex it:
-\`\`\`
+Canonical is a hint, not a redirect — the non-primary page stays reachable. See [canonical URLs explained](/blog/canonical-url-explained) for how Google interprets these and when it ignores them.
+
+### 4. Noindex / merge — when one page is thin
+
+If the weaker page has no independent value and no backlinks worth keeping, noindex it (or delete and 301). Use \`follow\` so it still passes link signals:
+
+\`\`\`html
 <meta name="robots" content="noindex, follow">
 \`\`\`
 
-## Prevention
+The [robots meta generator](/tools/robots-meta-generator) builds the tag and the equivalent \`X-Robots-Tag\` header for server-side use.
 
-1. **Keyword map** — assign one primary keyword per page
-2. **Check before publishing** — search your site for the keyword first
-3. **Use distinct titles** — never use the same keyword in two title tags
-4. **Internal linking** — link from supporting pages to the main page
+### 5. Internal linking — to concentrate signals
+
+Even without merging, you can nudge Google toward your primary page: link to it from the competing pages using consistent, descriptive anchor text, and make sure your strongest internal links point at the page you want to rank.
+
+## Worked Example: Two Posts Targeting "Email Marketing Tips"
+
+You have \`/blog/email-marketing-tips\` (a broad guide from 2023 with some backlinks) and \`/blog/email-marketing-tips-for-beginners\` (newer, thinner, mostly overlapping advice). You filter GSC to "email marketing tips," switch to the Pages tab, and both URLs show up. Over the last 90 days the ranking URL flip-flops between them and average position sits at 8. Textbook harmful overlap.
+
+Steps:
+
+1. **Decide the survivor.** The 2023 guide has backlinks and history — keep it.
+2. **Salvage content.** Move genuinely unique sections from the beginner post (a starter checklist, example subject lines) into the guide, so the merge adds real depth. Consolidating shouldn't just delete words — see [content depth in SEO](/blog/content-depth-seo-guide) for what "comprehensive" means to Google.
+3. **301 the beginner post** to \`/blog/email-marketing-tips\`.
+4. **Fix titles and H1s** so the survivor clearly owns the phrase and no other page reuses it.
+5. **Re-point internal links** that used to go to the beginner post.
+6. **Resubmit** the survivor in GSC — within a few weeks the flip-flopping should settle and position climb.
+
+## Prevention: A Keyword-to-URL Map
+
+Most cannibalization is created at publish time. Two habits kill it:
+
+- **Keep a keyword-to-URL map** — a spreadsheet assigning one primary query per page, so you always know what each URL is supposed to own.
+- **Check before publishing.** Run \`site:yoursite.com "your phrase"\` and glance at your map. If a page already targets that intent, update it or pick a distinct angle.
+
+Distinct titles and clean internal linking do the rest. Cannibalization is far cheaper to prevent than to untangle after both pages have accumulated links and rankings. For a broader cleanup, the [technical SEO audit guide](/blog/technical-seo-audit-complete-guide) covers where this fits alongside duplicate content and indexation.
 
 ## FAQ
 
-**Q: Can cannibalization affect my entire site?**
-A: Severe cases can. If Google can't determine your best page for a topic, it may lower trust in your entire domain for that topic.
+**Q: Is it always bad for two of my pages to rank for one keyword?**
+A: No. If they serve different intent and both pull steady traffic, that's good coverage. It's only a problem when they target the same intent and dilute each other — watch for position flip-flopping and split clicks.
 
-**Q: How do I know which page to keep?**
-A: Check Google Search Console — the page with more impressions and backlinks is usually the stronger one.
+**Q: Consolidate or canonical — how do I choose?**
+A: Consolidate + 301 when the pages are near-duplicates and only one deserves to exist. Use canonical when you have a legitimate reason to keep both reachable but want one treated as primary.
 
-Check your pages for keyword overlap with [SEO Snapshot](/) — we detect keyword density, title/H1 keyword placement, and duplicate content signals.`,
+**Q: How long until rankings recover?**
+A: Usually a few weeks for Google to recrawl, process the redirect or canonical, and settle on one URL — faster if you resubmit the surviving page in Search Console.
+
+Run your competing URLs through [SEO Snapshot](/) to compare title, H1, and keyword placement side by side and confirm which pages overlap.`,
   },
 };
