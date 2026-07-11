@@ -45,7 +45,13 @@ After adding the description, run your URL through [SEO Snapshot](/) to verify i
   },
   'what-is-a-good-seo-score': {
     title: 'What Is a Good SEO Score?',
-    content: `## SEO Score Ranges
+    content: `## What an SEO Score Actually Is
+
+An SEO score is a proxy. A tool crawls your page, checks a fixed list of on-page and technical signals, weights them, and rolls the result into a single number. That number is useful — it turns "is this page healthy?" into something you can track over time — but it is not a ranking prediction. Google doesn't publish a score, and no third-party tool has access to the ranking system. A score answers "did I do the mechanical parts right?" It cannot answer "will this outrank the incumbent?"
+
+Different tools measure different things and produce wildly different numbers for the same URL. Lighthouse's SEO audit checks about a dozen things — a title, a meta description, a valid \`robots.txt\`, crawlable links, legible font size. You can score 100 on Lighthouse SEO with a thin, backlink-free page. A full audit tool like the [SEO Snapshot analyzer](/) checks 100+ signals across meta, technical, performance, security, content, and social, so its number is stricter and more actionable. Neither is "the" SEO score — they're both proxies with different scopes.
+
+## SEO Score Ranges
 
 | Score | Rating | Meaning |
 |-------|--------|---------|
@@ -54,39 +60,126 @@ After adding the description, run your URL through [SEO Snapshot](/) to verify i
 | 50-74 | Needs Work | Several issues affecting visibility |
 | 0-49 | Poor | Critical issues preventing indexing |
 
-## What Affects Your Score?
+Treat these bands as a health check, not a leaderboard. A brand-new page with clean markup can hit 90 on day one and still get zero traffic for months because nobody links to it and Google hasn't decided it's worth ranking. An established page sitting at 68 might already pull thousands of visits because it earned authority years ago. The score describes the page's technical fitness, not its market position.
 
-SEO Snapshot checks 100 factors across 7 categories:
+## What Affects Your Score
 
-1. **Meta Tags (25%)** — Title, description, canonical, viewport
-2. **Technical (20%)** — HTTPS, robots.txt, sitemap, redirects
-3. **Performance (15%)** — Page speed, render-blocking resources
-4. **Security (15%)** — HTTP headers, cookies, mixed content
-5. **Content (10%)** — Word count, keywords, readability
-6. **Social (10%)** — Open Graph, Twitter Card, JSON-LD
-7. **Accessibility (5%)** — Alt text, form labels, heading hierarchy
+SEO Snapshot checks 100 factors across 7 categories. The weights aren't arbitrary — they roughly track how much each area moves the needle on whether a page can be found, understood, and trusted.
 
-## Fastest Ways to Improve
+1. **Meta Tags (25%)** — Title, description, canonical, viewport. This is the heaviest bucket because these tags are how you tell search engines and users what the page is. A missing or duplicate title, a truncated description, or a wrong canonical directly changes what shows in search results and which URL gets indexed.
+2. **Technical (20%)** — HTTPS, \`robots.txt\`, sitemap, redirects, status codes. This measures whether the page can be crawled and indexed at all. A \`noindex\` you forgot to remove, or a \`robots.txt\` that blocks your own CSS, is more damaging than any missing tag — which is why it's weighted second.
+3. **Performance (15%)** — Page speed, render-blocking resources, and the lab-side signals that feed Core Web Vitals. Slow pages get crawled less and convert worse; Google uses page experience as a tiebreaker.
+4. **Security (15%)** — HTTP response headers (HSTS, CSP, \`X-Content-Type-Options\`), cookie flags, mixed content. HTTPS is a confirmed ranking signal, and mixed-content warnings actively scare users off.
+5. **Content (10%)** — Word count, keyword presence, readability. Weighted lower on purpose: a tool can count words but can't judge whether they're *good*. This is a floor check, not a quality verdict.
+6. **Social (10%)** — Open Graph, Twitter Card, JSON-LD. These don't rank you directly but control how links look when shared and whether you're eligible for rich results.
+7. **Accessibility (5%)** — Alt text, form labels, heading hierarchy. Overlaps with SEO (alt text and headings help both) but is the lightest bucket because most of it is indirect.
 
-1. **Fix critical issues first** — They have the highest impact score
-2. **Add meta description** — Usually worth +15 points
-3. **Add structured data** — +5 points and enables rich snippets
-4. **Fix broken links** — Improves both SEO and user experience
-5. **Enable HTTPS** — +10 points and required by Google
+## What a Score Can't Tell You
 
-## Industry Benchmarks
+Here's where a lot of people misread the number. A perfect on-page score does not mean you'll rank, because the biggest ranking factors are things a page crawler can't see:
 
-Most websites score between 50-70. Scoring above 80 puts you in the top 20% of sites we've analyzed.`,
+- **Backlinks and authority.** Off-page signals — who links to you and how trusted those sites are — are among the strongest ranking factors, and no on-page tool can measure them. A page scoring 100 with zero referring domains will lose to a 70-scoring page with 200 quality links every time on a competitive term.
+- **Search intent.** You can nail every tag and still target the wrong intent. If someone searching "best running shoes" wants a comparison list and you published a single product page, no score fixes that mismatch.
+- **Content quality.** A tool sees 1,800 words and a keyword. It can't tell whether the writing actually answers the question better than the current top result. Depth that genuinely helps is what wins — see the [content depth guide](/blog/content-depth-seo-guide).
+- **E-E-A-T and reputation.** Experience, expertise, authoritativeness, and trust are reputation signals Google builds over time from many sources. There's no header or tag that grants it. Our [E-E-A-T guide](/blog/eeat-seo-guide) covers what actually moves it.
+
+So: chase the score to remove blockers and quick wins, then stop treating it as the goal and start treating traffic and rankings as the goal.
+
+## How to Prioritize Fixes
+
+Not every point is worth the same effort. Work in this order.
+
+**1. Critical and indexability issues first.** Anything that stops the page from being indexed outranks every other fix. Check for a stray \`noindex\`, a \`robots.txt\` disallow on the URL, a broken canonical pointing elsewhere, or a soft 404. One of these can zero out a page no matter how clean the rest is. Confirm the page is actually indexable before touching anything cosmetic. The [technical SEO audit guide](/blog/technical-seo-audit-complete-guide) walks through the full checklist.
+
+**2. High-impact on-page.** Title tag, meta description, and canonical. These are the 25% bucket and they're fast. A [missing meta description](/blog/how-to-fix-missing-meta-description) is usually the single biggest quick win — it's low effort and directly changes your search snippet. Generate clean tags with the [meta tag generator](/tools/meta-tag-generator).
+
+**3. Performance and security polish.** Compress images, defer render-blocking scripts, add the security headers you're missing. Real improvements, but slower to build and lower per-point payoff than steps 1 and 2. Do them once the fundamentals are clean.
+
+## A Realistic Before/After
+
+A client landing page scored **58/100**. Not broken, just neglected. Four fixes over one afternoon:
+
+- Removed a leftover \`noindex\` from a staging config that shipped to production (this was the emergency — the page couldn't rank at all).
+- Wrote a proper 155-character meta description (it had none).
+- Fixed a self-referencing canonical that pointed at the \`http://\` version.
+- Added \`Strict-Transport-Security\` and \`X-Content-Type-Options\` headers.
+
+New score: **86/100**. No new content, no backlinks — just removing blockers and doing the on-page basics right. The \`noindex\` fix is what got the page back into the index; the rest earned the visible points. Rankings followed over the next few weeks because the page could finally compete on the strength it already had.
+
+## FAQ
+
+**Is a 100 SEO score worth chasing?**
+Only to the point of removing blockers and easy wins. Past ~90, extra points come from diminishing-return tweaks. Your time is better spent on content and links, which the score can't measure.
+
+**Why does my Lighthouse SEO score differ from an audit tool's?**
+They check different things. Lighthouse SEO tests roughly a dozen on-page basics; a full audit tool checks 100+ signals including security headers and social markup. Different scope, different number — both can be right.
+
+**My score is 90 but I get no traffic. Why?**
+The score confirms your page is technically healthy. Traffic needs the things it can't see: matching search intent, content that beats the current results, and backlinks. Run your URL in the [free SEO score checker](/blog/seo-score-checker-free) or [compare free audit tools](/blog/free-seo-audit-tool-2026), fix what it flags, then invest in content and authority.
+
+**What's a good score for a brand-new site?**
+Aim for 85+ on technical and on-page from launch — that's fully in your control. Rankings will lag while Google evaluates the site. [Run your URL](/) to see your score with issues ranked by impact.`,
   },
   'structured-data-json-ld-guide': {
     title: 'Structured Data (JSON-LD) Guide for Beginners',
     content: `## What Is Structured Data?
 
-Structured data tells search engines exactly what your content is about — is it an article? A product? A FAQ? This enables rich snippets in search results (star ratings, FAQ dropdowns, recipe cards).
+Structured data is a standardized way to describe your page's content so a machine can read it without guessing. A human sees a headline, an author byline, and a date. A search engine sees a blob of HTML. Structured data hands the machine a labeled map: this is the \`headline\`, this is the \`author\`, this is the \`datePublished\`. The vocabulary everyone uses is [schema.org](https://schema.org), a shared dictionary maintained by Google, Microsoft, and others.
 
-## JSON-LD Templates
+Why bother? Because Google can turn that labeled data into **rich results** — the enhanced listings that stand out in search. Instead of a plain blue link, you might get star ratings under a product, expandable FAQ questions, or a recipe card with cook time and calories. Rich results don't guarantee higher rankings, but they take up more space and pull more clicks. That's the whole payoff.
+
+## What Rich Results Actually Look Like
+
+A few common ones, so the abstract idea gets concrete:
+
+- **FAQ** — your questions appear as collapsible dropdowns directly in the results, so the listing takes up several extra lines.
+- **Product** — price, availability ("In stock"), and a star rating with review count show under the title.
+- **Recipe** — a thumbnail, star rating, total time, and calorie count in a card, often inside a carousel.
+- **Breadcrumbs** — instead of \`example.com/blog/2026/03/slug\`, Google shows \`Home › Blog › Structured Data\`.
+- **Article** — larger thumbnail and clearer publish date in Top Stories and news surfaces.
+
+Google decides whether to show any of these. Valid markup makes you *eligible*; it isn't a switch you flip.
+
+## Which Schema Types Support Rich Results
+
+You can mark up almost anything with schema.org, but only a subset triggers a visual rich result in Google. The ones worth knowing as a beginner:
+
+- **Article** / **BlogPosting** — blog posts and news.
+- **FAQPage** — question-and-answer content you own on the page.
+- **Product** — e-commerce items, usually paired with \`Offer\` and \`AggregateRating\`.
+- **Recipe** — cooking content.
+- **BreadcrumbList** — your page's position in the site hierarchy.
+- **Organization** — your brand, logo, and social profiles (feeds knowledge panels).
+- **LocalBusiness** — a physical business with address, hours, and phone.
+- **Event** — dated events with a location and start time.
+
+There are dozens more (\`Review\`, \`VideoObject\`, \`JobPosting\`…), but start with the type that matches your page. A blog post is an \`Article\`. A store page is a \`Product\`. Don't stack five types onto one page hoping something sticks — mark up what's genuinely there.
+
+## JSON-LD vs Microdata vs RDFa
+
+There are three ways to write structured data. **Microdata** and **RDFa** interleave attributes into your HTML tags (\`itemscope\`, \`itemprop\`, \`vocab\`), so the markup is scattered across the visible content. **JSON-LD** keeps everything in a single \`<script>\` block, separate from your HTML.
+
+Google explicitly recommends JSON-LD, and for good reason. It sits in one place, so you can generate it server-side, template it, and diff it in code review without touching your markup. Microdata forces you to keep attributes in sync with the DOM every time a designer moves an element. Unless you're maintaining a legacy site already full of Microdata, use JSON-LD and don't look back.
+
+Here's the same Article in JSON-LD:
+
+\`\`\`html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Structured Data (JSON-LD) Guide for Beginners",
+  "author": { "@type": "Person", "name": "Author Name" },
+  "datePublished": "2026-03-20",
+  "image": "https://yoursite.com/image.jpg"
+}
+</script>
+\`\`\`
+
+## Ready-to-Use Templates
 
 ### Website + Organization
+
 \`\`\`html
 <script type="application/ld+json">
 {
@@ -99,21 +192,8 @@ Structured data tells search engines exactly what your content is about — is i
 </script>
 \`\`\`
 
-### Article / Blog Post
-\`\`\`html
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "Article",
-  "headline": "Your Article Title",
-  "author": { "@type": "Person", "name": "Author Name" },
-  "datePublished": "2026-03-20",
-  "image": "https://yoursite.com/image.jpg"
-}
-</script>
-\`\`\`
-
 ### FAQ Page
+
 \`\`\`html
 <script type="application/ld+json">
 {
@@ -133,13 +213,51 @@ Structured data tells search engines exactly what your content is about — is i
 </script>
 \`\`\`
 
-## Where to Add It
+Every block starts the same: \`@context\` points at schema.org, \`@type\` names what you're describing. Get those two right and the rest is filling in properties. For more copy-paste blocks — Product, LocalBusiness, BreadcrumbList — see [how to add JSON-LD structured data with examples](/blog/how-to-add-structured-data-json-ld), or generate one for your page with the [schema generator](/tools/schema-generator).
 
-Place the \`<script>\` tag inside your \`<head>\` or at the end of \`<body>\`. Both work.
+## Where to Put the Script
 
-## Validate It
+The \`<script type="application/ld+json">\` tag can go in \`<head>\` or at the end of \`<body>\` — both are valid, and Google reads either. \`<head>\` is the conventional home. On a framework like Next.js, render it server-side so it's in the initial HTML; Google does execute JavaScript, but static output is one less thing to go wrong.
 
-After adding structured data, use [SEO Snapshot](/) to check if it's detected and valid. We parse and validate the most common schema types automatically.`,
+## Required vs Recommended Properties
+
+Each rich-result type has a spec in Google's documentation splitting properties into **required** and **recommended**. Miss a *required* property and you lose eligibility entirely — Search Console flags it as an error. Miss a *recommended* one and you're still eligible, but you leave a possible enhancement on the table (a warning, not an error).
+
+Example: a \`Product\` result needs a \`name\`. To show a price you need an \`Offer\` with \`price\` and \`priceCurrency\`. To show stars you need \`review\` or \`aggregateRating\`. Skip the rating and you still get a valid Product — just no stars. Read the spec for your type once and keep the required fields straight.
+
+## How to Test It
+
+Never trust markup you haven't validated. Three tools:
+
+1. **[Rich Results Test](https://search.google.com/test/rich-results)** — Google's own checker. Tells you which rich result you're eligible for and lists errors and warnings.
+2. **[Schema Markup Validator](https://validator.schema.org)** — checks schema.org syntax generally, beyond just rich-result types.
+3. **Search Console** — the *Enhancements* reports show errors across your whole live site over time, not just one URL.
+
+To confirm your markup is present and parseable on a live page, run the URL through the [SEO Snapshot analyzer](/) — it detects and validates the common schema types automatically, which is a fast first pass before you open the Google testers.
+
+## Common Beginner Mistakes
+
+- **Invalid JSON.** A trailing comma or a smart quote pasted from a doc breaks the whole block silently. Validators catch this instantly.
+- **Marking up content that isn't on the page.** Google's guidelines require the structured data to reflect visible content. Inventing FAQ answers users can't see, or claiming a rating you don't display, is a spam violation that can trigger a manual action.
+- **Wrong \`@type\`.** Tagging a category listing as \`Product\`, or a blog index as \`Article\`, gives Google contradictory signals. Match the type to what the page really is.
+- **Missing required fields.** The most common Search Console error. Check the spec.
+- **Fake or self-serving reviews.** \`AggregateRating\` on your own site, unmoderated, is exactly what Google's reviews policy targets.
+
+Structured data is one layer of a healthy site. Pair it with the fundamentals in a [technical SEO audit](/blog/technical-seo-audit-complete-guide) and back it with the credibility signals covered in the [E-E-A-T guide](/blog/eeat-seo-guide) — schema tells Google *what* the content is; those tell it *whether to trust it*.
+
+## FAQ
+
+**Does adding structured data improve my rankings?**
+Not directly. It makes you eligible for rich results, which can raise click-through rate. Better CTR can indirectly help, but schema itself isn't a ranking factor.
+
+**Do I need to submit structured data to Google anywhere?**
+No. Google picks it up when it crawls the page. You can request re-indexing in Search Console to speed things up, but there's no separate submission step.
+
+**Why isn't my rich result showing even though the test passes?**
+Passing the Rich Results Test means you're *eligible*, not guaranteed. Google chooses per query, and it can take days to weeks after the page is re-crawled. It may also withhold rich results from sites with quality or policy issues.
+
+**Can I use more than one JSON-LD block on a page?**
+Yes. Multiple \`<script type="application/ld+json">\` blocks are fine — for example one for \`BreadcrumbList\` and one for \`Article\`. Just keep each valid on its own.`,
   },
   'how-to-improve-core-web-vitals': {
     title: 'How to Improve Core Web Vitals: LCP, FID, CLS Explained',
@@ -301,106 +419,312 @@ Use [SEO Snapshot](/) to validate all 6 OG tags and check if your og:image URL i
   },
   'fix-render-blocking-resources': {
     title: 'How to Fix Render-Blocking Resources',
-    content: `## What Are Render-Blocking Resources?
+    content: `## What "Render-Blocking" Actually Means
 
-Render-blocking resources are CSS and JavaScript files that prevent the browser from displaying your page until they're fully downloaded and processed. They're one of the biggest causes of slow page loads.
+When the browser parses your HTML and hits a \`<link rel="stylesheet">\` or a plain \`<script src>\`, it can't just keep going. Those resources sit on the **critical rendering path** — the sequence of work the browser must finish before it can paint a single pixel.
 
-## Identify Render-Blocking Resources
+CSS blocks rendering because the browser refuses to paint content it might have to restyle. It builds the DOM from HTML and the CSSOM from your stylesheets, then combines them into the render tree. Until the CSSOM is complete, there's no render tree, so there's nothing to show. A stylesheet in the \`<head>\` therefore holds back **First Contentful Paint (FCP)** for as long as it takes to download and parse.
 
-Run your URL through [SEO Snapshot](/) — we list all render-blocking scripts and stylesheets with their URLs.
+Synchronous JavaScript blocks for a different reason: it can call \`document.write()\` or mutate the DOM, so the parser stops dead at each \`<script>\` tag, fetches the file, executes it, and only then resumes parsing. Worse, if a stylesheet is still loading when the parser reaches a script, the browser also waits for that CSS first (scripts might read computed styles). One slow \`.js\` file in the head can stall everything behind it.
 
-## Fix Render-Blocking JavaScript
+That's the whole problem in one sentence: **resources in the head delay the first paint, and delaying the first paint delays LCP and hurts your [Core Web Vitals](/blog/how-to-improve-core-web-vitals).**
 
-### Option 1: Add defer attribute
+## Reading the Lighthouse Audit
+
+In PageSpeed Insights and Lighthouse the audit is called **"Eliminate render-blocking resources."** It lists each blocking URL with two numbers: **Transfer size** and **Potential savings (ms)**. The savings estimate is Lighthouse's guess at how much FCP would improve if that resource stopped blocking — it's a lab estimate, not a promise, but it tells you where to spend effort.
+
+Sort by savings and work top-down. A 4 ms saving on a tiny stylesheet isn't worth touching; a 900 ms blocking third-party script is. [SEO Snapshot's analyzer](/) also lists render-blocking scripts and stylesheets with their URLs when you run your page, which is a fast way to see what's in the head before you open DevTools.
+
+## defer vs async vs module
+
+For scripts, the fix is almost always an attribute change. Here's how the three loading modes actually behave:
+
+| Attribute | Downloads | Blocks parser? | Executes | Order preserved | Use for |
+|---|---|---|---|---|---|
+| (none) | immediately | **Yes** | as soon as fetched | yes | almost never in \`<head>\` |
+| \`async\` | in parallel | no | the moment it arrives | **no** | independent scripts: analytics, ads |
+| \`defer\` | in parallel | no | after HTML parsing, before \`DOMContentLoaded\` | yes | app code, anything with dependencies |
+| \`type="module"\` | in parallel | no | deferred by default, after parsing | yes (per graph) | modern ES modules |
+
 \`\`\`html
-<script src="script.js" defer></script>
-\`\`\`
-Scripts with \`defer\` download in parallel and execute after HTML parsing.
+<!-- Your main app bundle: order matters, wait for the DOM -->
+<script src="/js/app.js" defer></script>
 
-### Option 2: Add async attribute
+<!-- Fire-and-forget, no dependencies -->
+<script src="https://analytics.example.com/tag.js" async></script>
+
+<!-- ES modules are deferred automatically -->
+<script type="module" src="/js/main.mjs"></script>
+\`\`\`
+
+The mental model: reach for \`defer\` by default. Use \`async\` only when the script genuinely doesn't care about DOM readiness or execution order. Note that \`type="module"\` is deferred *implicitly* — adding \`defer\` to a module does nothing.
+
+## The Critical-CSS + Async-Load Pattern
+
+CSS has no \`defer\`. The standard trick is to inline the small slice of CSS needed to render above-the-fold content, then load the full stylesheet without blocking:
+
 \`\`\`html
-<script src="analytics.js" async></script>
-\`\`\`
-Use \`async\` for scripts that don't depend on other scripts (analytics, ads).
+<head>
+  <style>/* critical, above-the-fold CSS only — header, hero, layout */</style>
 
-### Option 3: Move to bottom of body
+  <link rel="stylesheet" href="/css/full.css"
+        media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="/css/full.css"></noscript>
+</head>
+\`\`\`
+
+\`media="print"\` makes the browser treat the stylesheet as non-render-blocking (it's not for the screen), so it downloads without holding up paint. The \`onload\` handler flips \`media\` back to \`all\` once it arrives, applying the styles. The \`<noscript>\` fallback matters: with JavaScript disabled, \`onload\` never fires, so you'd ship an unstyled page without it.
+
+**The caveat nobody mentions:** if your critical CSS is wrong or incomplete, the async stylesheet lands a moment later and restyles the page — a visible flash. Tools like \`critical\` or \`critters\` (used by some frameworks) extract above-the-fold CSS automatically. Get the critical set right or you're trading a slow paint for a janky one.
+
+## Splitting CSS by Media Query
+
+You don't always need the async trick. The browser downloads stylesheets with non-matching \`media\` at a low priority and doesn't let them block render:
+
 \`\`\`html
-<body>
-  <!-- Page content -->
-  <script src="script.js"></script>
-</body>
+<link rel="stylesheet" href="/css/base.css">
+<link rel="stylesheet" href="/css/print.css" media="print">
+<link rel="stylesheet" href="/css/desktop.css" media="(min-width: 1024px)">
 \`\`\`
 
-## Fix Render-Blocking CSS
+On a phone, \`desktop.css\` and \`print.css\` don't block the first paint. Splitting one giant \`styles.css\` into media-scoped files is a low-risk win if your CSS is already organized by breakpoint.
 
-### Inline critical CSS
-Extract the CSS needed for above-the-fold content and inline it:
+## preload vs preconnect vs dns-prefetch
+
+These three resource hints get confused constantly. They solve different problems:
+
 \`\`\`html
-<style>/* Critical CSS here */</style>
-<link rel="stylesheet" href="full.css" media="print" onload="this.media='all'">
+<!-- Fetch a specific resource early, at high priority -->
+<link rel="preload" href="/fonts/inter.woff2" as="font" type="font/woff2" crossorigin>
+
+<!-- Open the full connection (DNS + TCP + TLS) to a known origin -->
+<link rel="preconnect" href="https://cdn.example.com" crossorigin>
+
+<!-- Just resolve DNS — cheap, for origins you'll touch but not immediately -->
+<link rel="dns-prefetch" href="https://analytics.example.com">
 \`\`\`
 
-### Use media queries
-\`\`\`html
-<link rel="stylesheet" href="print.css" media="print">
-<link rel="stylesheet" href="mobile.css" media="(max-width: 768px)">
-\`\`\`
+- **\`preload\`** tells the browser to fetch *this exact file* now because it's needed soon (fonts, the LCP image, a critical CSS chunk). It does not block render, but it competes for bandwidth.
+- **\`preconnect\`** warms up a connection to a third-party origin so the eventual request skips the handshake — worth ~100–300 ms on a fresh TLS connection. Use it for origins you're certain you'll hit.
+- **\`dns-prefetch\`** does only the DNS lookup. It's the lightweight fallback for \`preconnect\` on origins that are lower priority or many in number.
 
-## Impact
+## Third-Party Scripts
 
-Fixing render-blocking resources typically improves:
-- **LCP** by 0.5-2 seconds
-- **FCP** by 0.3-1 second
-- **Google PageSpeed score** by 10-30 points`,
-  },
-  'robots-txt-guide': {
-    title: 'robots.txt Guide: Control Search Engine Crawling',
-    content: `## What Is robots.txt?
+Third-party tags — tag managers, chat widgets, A/B testing, ads — are often the biggest offenders because you don't control their size or timing. Rules that hold up:
 
-robots.txt is a text file at your website's root that tells search engines which pages to crawl and which to skip. Every website should have one.
-
-## Basic Template
-
-\`\`\`
-User-agent: *
-Allow: /
-Disallow: /admin/
-Disallow: /api/
-Disallow: /private/
-
-Sitemap: https://yoursite.com/sitemap.xml
-\`\`\`
-
-## Important Rules
-
-### Allow everything (default)
-\`\`\`
-User-agent: *
-Allow: /
-\`\`\`
-
-### Block a specific directory
-\`\`\`
-User-agent: *
-Disallow: /staging/
-\`\`\`
-
-### Block a specific bot
-\`\`\`
-User-agent: AhrefsBot
-Disallow: /
-\`\`\`
+- Load them \`async\`, never synchronously in the head.
+- \`preconnect\` to their origin so the request is ready.
+- Delay non-essential widgets (live chat, heatmaps) until user interaction or \`requestIdleCallback\` — they don't need to run during first paint.
+- Self-host what you can. A self-hosted analytics snippet avoids an extra DNS + TLS round trip.
 
 ## Common Mistakes
 
-1. **Blocking CSS/JS files** — Don't disallow CSS or JavaScript. Google needs them to render your page.
-2. **Blocking your entire site** — \`Disallow: /\` blocks everything. Use carefully.
-3. **No Sitemap reference** — Always include \`Sitemap:\` directive.
-4. **Using robots.txt for security** — robots.txt is public. Don't hide sensitive URLs here — use authentication instead.
+**Deferring a script an inline script depends on.** If you \`defer\` jQuery but keep an inline \`<script>\` that calls \`$(...)\` in the body, the inline script runs first and throws \`$ is not defined\`. Deferred scripts run *after* parsing; inline scripts run *immediately*. Either defer both or convert the inline code to a \`DOMContentLoaded\` listener.
 
-## Testing
+**Preloading everything.** \`preload\` is a priority instruction. Preload ten things and you've told the browser nothing is more important than anything else — you'll delay your real LCP resource. Preload the one or two assets on the critical path, no more. Chrome will warn in the console when a preloaded resource isn't used within a few seconds.
 
-Run your URL through [SEO Snapshot](/) — we check if robots.txt exists, count disallow rules, verify sitemap reference, and warn if your page is blocked.`,
+**Inlining too much CSS.** Inlined CSS isn't cached and ships on every HTML response. Inline your full 60 KB stylesheet and every page load re-downloads it, bloating the HTML and hurting repeat visits. Keep the inline block to genuine above-the-fold styles — usually a few KB.
+
+## Before / After
+
+\`\`\`html
+<!-- BEFORE: three blocking resources in the head -->
+<head>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="/js/jquery.js"></script>
+  <script src="/js/app.js"></script>
+</head>
+\`\`\`
+
+\`\`\`html
+<!-- AFTER: nothing blocks the first paint -->
+<head>
+  <style>/* critical CSS */</style>
+  <link rel="stylesheet" href="/css/styles.css"
+        media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="/css/styles.css"></noscript>
+  <script src="/js/jquery.js" defer></script>
+  <script src="/js/app.js" defer></script>
+</head>
+\`\`\`
+
+## Measuring the Win
+
+Don't trust the score alone — measure FCP and LCP before and after. Run the page in an incognito window with the DevTools Performance panel, or re-run Lighthouse in a controlled environment (throttling on, no extensions). Field data in the Chrome UX Report is the real judge, but it lags weeks behind, so use lab numbers to iterate. Fixing render-blocking on a page that had two blocking scripts and a full stylesheet in the head commonly moves FCP by 0.3–1 s and LCP by 0.5–2 s.
+
+If you want the framework-specific version of all this, see [fixing render-blocking resources in Next.js](/blog/fix-render-blocking-resources-nextjs). For the broader picture, [website speed optimization](/blog/website-speed-optimization-guide) and [getting a Lighthouse score of 100](/blog/how-to-improve-lighthouse-score) cover the other audits that move alongside this one.
+
+## FAQ
+
+**Does \`defer\` slow anything down?** No. Deferred scripts still download in parallel during parsing; they just execute after the DOM is built. For most sites \`defer\` is strictly better than a blocking script in the head.
+
+**Should I inline all my CSS to pass the audit?** No. Inline only above-the-fold critical CSS and load the rest asynchronously. Inlining everything kills caching and bloats every HTML response.
+
+**Is \`async\` faster than \`defer\`?** Not meaningfully — both download without blocking. \`async\` executes sooner but in unpredictable order, which breaks dependent code. Use \`defer\` unless the script is truly independent.
+
+**Why does Lighthouse still flag a stylesheet after I split it?** Check the \`media\` attribute actually doesn't match the test conditions. Lighthouse runs mobile emulation by default, so a \`media="(min-width: 1024px)"\` sheet won't block — but a plain screen stylesheet still will.`,
+  },
+  'robots-txt-guide': {
+    title: 'robots.txt Guide: Control Search Engine Crawling',
+    content: `## What robots.txt actually does
+
+robots.txt is a plain text file at the root of your host that tells crawlers which URL paths they're allowed to request. That's it. It controls *crawling* — whether a bot fetches the page — not *indexing*, and definitely not access. The file is public, unauthenticated, and advisory. Well-behaved bots (Googlebot, Bingbot) obey it; scrapers and malware ignore it entirely.
+
+A few mechanics that trip people up:
+
+- **It's per-host, per-scheme.** \`https://example.com/robots.txt\` covers \`https://example.com\` only. \`www.example.com\`, \`blog.example.com\`, and the \`http://\` version each need their own file (or a redirect to the canonical one). A subdomain has no access to its parent's rules.
+- **It has to live at exactly \`/robots.txt\`.** \`/subfolder/robots.txt\` does nothing. \`/Robots.txt\` won't be found — the path is case-sensitive on most servers, though the filename crawlers request is always lowercase.
+- **Google caches it for roughly 24 hours.** Change a rule and Googlebot may keep using the old version for up to a day. Don't expect an instant effect.
+- **A 5xx on robots.txt can freeze crawling.** If Google requests your robots.txt and gets a server error, it may treat the whole site as disallowed until the file responds again. A missing file (clean 404) means "crawl everything" — which is fine.
+
+## Crawling vs indexing — the mistake that costs traffic
+
+This is the single most common robots.txt error, so read it twice: **\`Disallow\` does not remove a page from Google.** It stops Google from *fetching* the page. But if other sites link to that URL, Google can still index it — showing the URL with a snippet like "No information is available for this page" because it was never allowed to read the content.
+
+So if your goal is "keep this out of search results," robots.txt is the wrong tool. You need a \`noindex\` signal, which the crawler has to actually *read* the page to see:
+
+\`\`\`html
+<meta name="robots" content="noindex">
+\`\`\`
+
+Or the header equivalent for non-HTML files like PDFs:
+
+\`\`\`nginx
+add_header X-Robots-Tag "noindex" always;
+\`\`\`
+
+The trap: if you \`Disallow\` the page *and* add \`noindex\`, Google can't crawl it, so it never sees the \`noindex\`, and the URL can linger in the index anyway. To deindex, **allow crawling and use noindex** — then, once it's dropped out, you can Disallow it. You can generate either signal with the [robots meta / X-Robots-Tag generator](/tools/robots-meta-generator), and the difference between blocking and de-duplicating is covered in [Canonical URLs explained](/blog/canonical-url-explained). For anything truly private, neither robots.txt nor noindex is security — use authentication or a password.
+
+## Crawl budget: mostly a big-site problem
+
+"I need robots.txt to save crawl budget" is usually premature. Google crawls small and medium sites (say, under ~10k URLs) about as often as it wants to; you're not fighting a limit. Crawl budget becomes real when you have hundreds of thousands of URLs, faceted navigation generating infinite parameter combinations, or a slow server where every crawl request costs you. There, blocking low-value URL patterns (\`?sort=\`, \`?sessionid=\`, internal search results) keeps Googlebot focused on pages that matter. For a normal blog or brochure site, don't over-engineer it.
+
+## How matching works
+
+### User-agent selection
+
+A crawler reads the file, finds the group whose \`User-agent\` line best matches its name, and obeys **only that group**. Matching is by longest (most specific) token, case-insensitive. Given:
+
+\`\`\`
+User-agent: *
+Disallow: /internal/
+
+User-agent: Googlebot
+Disallow: /no-google/
+\`\`\`
+
+Googlebot uses the second group *only* — it ignores the \`*\` group entirely, so \`/internal/\` is *not* blocked for Googlebot. If you want a rule to apply to everyone including a specifically-named bot, you have to repeat it in that bot's group.
+
+### Allow vs Disallow precedence
+
+Within a group, Google doesn't go top-to-bottom. It picks the rule with the **longest path match**; if an Allow and a Disallow tie on length, Allow wins. This lets you carve exceptions:
+
+\`\`\`
+User-agent: *
+Disallow: /downloads/
+Allow: /downloads/public/
+\`\`\`
+
+\`/downloads/public/report.pdf\` is allowed (longer match), while everything else under \`/downloads/\` stays blocked. Note Bing's engine leans more on rule order, so keep patterns unambiguous rather than relying on subtle length ties.
+
+### Wildcards: \`*\` and \`$\`
+
+Two special characters, both supported by Google and Bing:
+
+- \`*\` matches any sequence of characters.
+- \`$\` anchors the end of the URL.
+
+\`\`\`
+User-agent: *
+Disallow: /*?           # any URL containing a query string
+Disallow: /*.pdf$       # any URL ending in .pdf
+Allow: /*.js$           # (usually unnecessary — see below)
+\`\`\`
+
+\`Disallow: /*.pdf$\` blocks \`/report.pdf\` but not \`/report.pdf?v=2\` (the \`$\` requires \`.pdf\` to be the literal end).
+
+### Trailing-slash gotcha
+
+\`Disallow: /blog\` blocks \`/blog\`, \`/blog/\`, \`/blogging\`, and \`/blog-archive\` — it's a prefix, not an exact path. If you only mean the folder, write \`Disallow: /blog/\` with the trailing slash. Getting this wrong quietly blocks pages you never intended to.
+
+### Crawl-delay
+
+\`\`\`
+User-agent: *
+Crawl-delay: 10
+\`\`\`
+
+**Google ignores \`Crawl-delay\` completely.** Bing and Yandex honor it. To throttle Googlebot, set the crawl rate in Search Console instead (or just serve pages faster).
+
+## Platform templates
+
+**WordPress** serves a virtual robots.txt if no physical file exists. A sane starting point:
+
+\`\`\`
+User-agent: *
+Disallow: /wp-admin/
+Allow: /wp-admin/admin-ajax.php
+
+Sitemap: https://example.com/sitemap_index.xml
+\`\`\`
+
+**Next.js (App Router)** — generate it dynamically so it stays in sync with your environment:
+
+\`\`\`typescript
+// app/robots.ts
+import type { MetadataRoute } from 'next'
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: { userAgent: '*', allow: '/', disallow: ['/api/', '/admin/'] },
+    sitemap: 'https://example.com/sitemap.xml',
+  }
+}
+\`\`\`
+
+**Static site (nginx)** — just drop a file at the web root; make sure it's served as \`text/plain\` and not swallowed by a catch-all route.
+
+Whichever platform, pair robots.txt with a real sitemap — see the [XML Sitemap guide](/blog/sitemap-xml-guide) for the \`Sitemap:\` directive and how the two work together — and generate a clean file fast with the [robots.txt generator](/tools/robots-txt-generator).
+
+## Before / after
+
+A blog owner wanted to keep their tag archives out of Google. They wrote:
+
+\`\`\`
+User-agent: *
+Disallow: /tag/
+Disallow: /css/
+Disallow: /js/
+\`\`\`
+
+Two problems: blocking \`/css/\` and \`/js/\` stops Google rendering the site (it can't see your layout or interactive content, which hurts rankings), and \`Disallow: /tag/\` doesn't deindex the tag pages already in Google — it just freezes them. Fixed version:
+
+\`\`\`
+User-agent: *
+Allow: /
+
+Sitemap: https://example.com/sitemap.xml
+\`\`\`
+
+...combined with \`<meta name="robots" content="noindex,follow">\` on the tag templates themselves. Crawlable, renderable, and the tag pages actually drop out of the index over the next few weeks.
+
+## Common mistakes
+
+- **Blocking CSS/JS.** Google renders pages like a browser. Block the assets and you can tank how it understands your content. Almost never disallow these.
+- **Treating it as security.** The file is world-readable and often *advertises* your sensitive paths. Use auth.
+- **Blocking staging, then shipping the block to production.** A \`Disallow: /\` on staging that gets deployed live will quietly remove your whole site from Google. This is the classic launch-day disaster — check production's robots.txt on day one.
+- **Assuming Disallow deindexes.** Covered above. It doesn't.
+- **Prefix vs folder trailing-slash slips.** \`Disallow: /new\` also blocks \`/newsletter\`.
+
+## FAQ
+
+**Do I even need a robots.txt?** Not strictly. A missing file means "crawl everything," which is a fine default. Add one when you have paths to exclude or a sitemap to advertise.
+
+**Why is my page still in Google after I disallowed it?** Because \`Disallow\` blocks crawling, not indexing. Remove the Disallow, add \`noindex\`, let Google re-crawl, then re-block if you want.
+
+**Can I have more than one Sitemap line?** Yes — list each on its own \`Sitemap:\` line, with absolute URLs. They can sit anywhere in the file.
+
+**How do I know if a specific page is blocked?** Run the URL through the [SEO Snapshot analyzer](/) — it fetches your robots.txt, tells you whether the page is crawlable, checks for a sitemap reference, and flags accidental blocks. It's a fast sanity check before and after a launch, and pairs well with a full [technical SEO audit](/blog/technical-seo-audit-complete-guide).`,
   },
   'image-seo-optimization': {
     title: 'Image SEO: Alt Text, Lazy Loading, WebP',
@@ -461,46 +785,141 @@ Check your images with [SEO Snapshot](/) — we detect missing alt text, missing
   },
   'canonical-url-explained': {
     title: 'Canonical URLs: Prevent Duplicate Content',
-    content: `## What Is a Canonical URL?
+    content: `## What a Canonical URL Actually Is
 
-A canonical URL tells search engines which version of a page is the "main" one. This prevents duplicate content issues when the same content is accessible at multiple URLs.
+Canonicalization is the process search engines use to pick one representative URL when the same (or nearly the same) content is reachable at several addresses. The \`rel="canonical"\` tag is how you tell Google which version you consider primary.
 
-## When You Need Canonical Tags
+The part most guides get wrong: \`rel="canonical"\` is a **hint, not a directive**. Google treats it as one signal among several. If your canonical says one thing but your internal links, sitemap, and redirects say another, Google can and will override your choice and pick a different canonical. A directive (like a \`noindex\` tag or a \`Disallow\` in robots.txt) has to be obeyed. A hint gets weighed.
 
-- **www vs non-www** — example.com and www.example.com
-- **HTTP vs HTTPS** — http:// and https:// versions
-- **Trailing slash** — /page and /page/
-- **Query parameters** — /products and /products?sort=price
-- **Syndicated content** — Content republished on other sites
+That distinction explains almost every canonical problem people run into.
 
-## How to Add
+## The Signals Google Weighs to Pick a Canonical
+
+When duplicates exist, Google clusters them and chooses one canonical for the group. The signals it uses include:
+
+- **The \`rel="canonical"\` you declared** — your stated preference.
+- **Internal links** — which version do your own pages link to most?
+- **The URL in your XML sitemap** — sitemaps imply "this is the one I want indexed."
+- **Redirects** — a 301 is a strong vote for the destination.
+- **HTTPS over HTTP** — Google prefers the secure version, all else equal.
+- **Shorter, cleaner URLs** — mild tiebreaker.
+- **\`hreflang\` and other on-page consistency.**
+
+When these agree, canonicalization just works. When they conflict, Google trusts the weight of the evidence over your tag. That's why the fix is almost never "just change the tag" — it's making every signal point at the same URL.
+
+## Where Duplicate URLs Come From
+
+Most sites generate duplicates without anyone deciding to. The usual suspects:
+
+- **www vs non-www** — \`example.com\` and \`www.example.com\` serve the same content.
+- **http vs https** — both protocols resolve.
+- **Trailing slash** — \`/page\` and \`/page/\`.
+- **\`index.html\`** — \`/dir/\` and \`/dir/index.html\`.
+- **Query parameters** — \`/products\` vs \`/products?sort=price\`. Sorting and filtering create near-infinite variants.
+- **UTM and faceted params** — \`?utm_source=newsletter\` is the same page; faceted navigation (\`?color=red&size=m\`) can spawn thousands of crawlable URLs.
+- **Pagination** — \`/blog?page=2\`. Each page is distinct content, so it should usually self-canonicalize, *not* canonical back to page 1 (that hides the deeper pages' links).
+- **Print / AMP versions** — a \`/print\` or AMP copy should canonical to the main article.
+- **Syndication** — when a partner republishes your article, they should point a **cross-domain canonical** at your original so you keep the credit.
+
+For www/non-www, http/https, trailing slash, and \`index.html\`, the right primary fix is a 301 redirect to one form — canonical is the backup. For query-param duplicates you usually can't redirect (the params do real work), so canonical is the main tool.
+
+## How to Set the Canonical
+
+**HTML \`<head>\`** — the common case. Always absolute, always the protocol you actually serve:
 
 \`\`\`html
 <head>
-  <link rel="canonical" href="https://yoursite.com/page">
+  <link rel="canonical" href="https://yoursite.com/page" />
 </head>
 \`\`\`
 
-## Common Mistakes
+**HTTP \`Link\` header** — for non-HTML files (PDFs, images) where there's no \`<head>\` to put a tag in. Set it at the server:
 
-1. **Missing canonical** — Every page should have one, pointing to itself
-2. **Canonical to a 404 page** — Don't point to pages that don't exist
-3. **Canonical doesn't match og:url** — These should be the same URL
-4. **HTTP canonical on HTTPS page** — Always use HTTPS in canonical
-5. **Relative URL** — Always use absolute URL with protocol
+\`\`\`nginx
+location ~* \\.pdf$ {
+  add_header Link '<https://yoursite.com/files/whitepaper.pdf>; rel="canonical"';
+}
+\`\`\`
+
+**Next.js metadata** — the App Router exposes canonical through \`alternates\`:
+
+\`\`\`typescript
+export const metadata = {
+  alternates: {
+    canonical: 'https://yoursite.com/page',
+  },
+};
+\`\`\`
+
+For dynamic routes, build it per-page in \`generateMetadata\` so every URL self-references correctly instead of every page inheriting one hardcoded value.
 
 ## Self-Referencing Canonicals
 
-Even if a page has no duplicates, add a self-referencing canonical:
+Even a page with zero duplicates should point a canonical at itself:
 
 \`\`\`html
 <!-- On https://yoursite.com/about -->
-<link rel="canonical" href="https://yoursite.com/about">
+<link rel="canonical" href="https://yoursite.com/about" />
 \`\`\`
 
-This is a best practice recommended by Google.
+This inoculates the page against accidental duplicates — tracking params, a stray \`index.html\`, a CMS that adds a slash. It costs nothing.
 
-Check your canonicals with [SEO Snapshot](/) — we verify canonical exists, check for protocol mismatches, and compare with og:url.`,
+## Fixing "Duplicate, Google chose a different canonical"
+
+This is the Search Console status that sends people digging. It means: Google found your page, saw your \`rel="canonical"\`, and decided a *different* URL is the real canonical anyway. Your declared preference lost the vote.
+
+It's a hint-vs-signals problem: your other signals contradict your tag. To fix it, align all of them on ONE URL:
+
+1. **Pick the winner** — decide the single canonical URL for the cluster.
+2. **Fix internal links** — make sure your nav, footer, and in-content links point to that exact URL (right protocol, right slash). This is usually the biggest lever.
+3. **Fix the sitemap** — list only the canonical URL, never the duplicates. See the [XML sitemap guide](/blog/sitemap-xml-guide) for keeping sitemaps to canonical URLs only.
+4. **Fix redirects** — 301 the alternates to the chosen URL where you can.
+5. **Confirm the tag** — the \`rel="canonical"\` matches the chosen URL and is served in the raw HTML, not injected late by JavaScript.
+
+Then request validation and wait a crawl cycle. When the signals stop fighting, Google's pick flips to yours.
+
+## Canonical vs 301 vs noindex vs hreflang
+
+These get mixed up constantly. Quick decision guide:
+
+- **301 redirect** — you want *one* URL to exist. Users and bots both land on the destination. Use for www/https consolidation, moved pages, killed duplicates. It's a directive and passes the strongest signal. Generate config with the [redirect generator](/tools/redirect-generator).
+- **rel=canonical** — you need *both* URLs to stay reachable (filters, tracking params, syndication) but want only one indexed. A hint.
+- **noindex** — keep the page live and crawlable but out of the index entirely (thank-you pages, thin tag archives, internal search results). A directive. Don't combine \`noindex\` with a canonical to another page — the mixed signal confuses Google.
+- **hreflang** — the pages are the *same content in different languages/regions* and should *all* be indexed, each shown to the right audience. It's not a duplicate-handling tool. Details in the [hreflang tags guide](/blog/hreflang-tags-complete-guide).
+
+Canonical is also one lever for [fixing keyword cannibalization](/blog/keyword-cannibalization-fix) — when two of your pages compete for the same query, canonicalizing the weaker one to the stronger consolidates the signals. For the full crawl-and-index picture, the [technical SEO audit guide](/blog/technical-seo-audit-complete-guide) covers where canonicals fit alongside redirects and sitemaps.
+
+## Before / After
+
+Before — signals fighting, params indexed separately:
+
+\`\`\`html
+<!-- served at https://shop.com/shoes?utm_source=fb -->
+<link rel="canonical" href="http://shop.com/shoes/" />
+\`\`\`
+
+Protocol mismatch (http on an https page), trailing slash the site doesn't use, and the sitemap listing the param version. Google picks its own canonical.
+
+After — one clean, self-consistent target:
+
+\`\`\`html
+<!-- served at https://shop.com/shoes?utm_source=fb -->
+<link rel="canonical" href="https://shop.com/shoes" />
+\`\`\`
+
+Same protocol, no stray slash, param stripped, and the sitemap plus internal links all point at \`https://shop.com/shoes\`.
+
+## FAQ
+
+**Does a canonical pass link equity like a 301?** Roughly, yes — consolidated signals flow to the canonical. But it's weaker and slower than a 301 because it's a hint. If you don't need both URLs live, redirect instead.
+
+**Can I canonical to a different domain?** Yes — cross-domain canonicals are the correct way to handle syndication. The republisher points at your original.
+
+**Should paginated pages canonical to page 1?** No. Let each page self-canonicalize so Google can crawl the links on pages 2, 3, and beyond. Pointing them all at page 1 buries that content.
+
+**My canonical is ignored — why?** Usually conflicting signals (internal links or sitemap pointing elsewhere), a canonical injected by JavaScript that the crawler doesn't see, or a canonical to a URL that redirects or 404s.
+
+Run your URL through [SEO Snapshot](/) to check that a canonical exists, that it uses the right protocol, and that it matches your \`og:url\` — three of the most common quiet mistakes.`,
   },
   'website-accessibility-seo-checklist': {
     title: 'Web Accessibility & SEO: 15 Checks',
@@ -539,55 +958,146 @@ Check all 15 points with [SEO Snapshot](/) — we audit accessibility alongside 
   },
   'sitemap-xml-guide': {
     title: 'XML Sitemap Guide: Create and Submit',
-    content: `## What Is an XML Sitemap?
+    content: `## What an XML sitemap actually does
 
-An XML sitemap is a file that lists all important pages on your website. It helps search engines discover and crawl your content efficiently.
+An XML sitemap is a list of URLs you want Google to know about. That's it. It doesn't force indexing, it doesn't boost rankings, and it won't rescue thin pages. What it does well is help crawlers *discover* URLs that internal linking might miss — deep pages, fresh posts, pages orphaned by a bad nav. On a small, well-linked site the impact is marginal. On a large site, or one where new content outpaces Google's recrawl, it's how discovery keeps up.
 
-## Basic Sitemap
+The most common mistake: treating the sitemap as a dump of every URL that returns HTML. A sitemap is a set of *recommendations*, and Google reads one full of junk as a signal your site quality is low.
+
+## What belongs in a sitemap (and what doesn't)
+
+Every URL in your sitemap should be a page you'd be happy to see ranking. Concretely, each entry must be:
+
+- **Canonical** — the version you consider authoritative. Never list a URL whose \`<link rel="canonical">\` points somewhere else.
+- **Status 200** — no redirects, no 404s, no soft-404s. If \`/old-page\` 301s to \`/new-page\`, list \`/new-page\`.
+- **Indexable** — not blocked by \`noindex\` (meta tag or \`X-Robots-Tag\`), not disallowed in robots.txt.
+
+Putting a \`noindex\` URL in your sitemap sends Google two contradictory instructions: "index this" and "don't index this." Search Console flags exactly this as an error. Same story with canonicalized-away duplicates — if \`?ref=twitter\` canonicalizes to the clean URL, only the clean URL goes in the sitemap.
+
+For a full pass over which pages should be indexable in the first place, work through the [technical SEO audit guide](/blog/technical-seo-audit-complete-guide); the sitemap is downstream of those decisions. And if you're unsure which URL is canonical, the [canonical URLs explainer](/blog/canonical-url-explained) covers how Google picks a representative when signals conflict.
+
+## The limits: 50,000 URLs, 50MB, and sitemap index files
+
+A single sitemap file caps at **50,000 URLs** or **50MB uncompressed**, whichever you hit first. Gzip is allowed and recommended (\`sitemap.xml.gz\`), but the 50MB limit is measured *before* compression.
+
+Cross either limit and you split into multiple sitemaps referenced by a **sitemap index** — a sitemap of sitemaps:
 
 \`\`\`xml
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://yoursite.com/</loc>
-    <lastmod>2026-03-20</lastmod>
-    <priority>1.0</priority>
-  </url>
-  <url>
-    <loc>https://yoursite.com/about</loc>
-    <lastmod>2026-03-15</lastmod>
-    <priority>0.8</priority>
-  </url>
-</urlset>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <sitemap>
+    <loc>https://yoursite.com/sitemaps/posts-1.xml</loc>
+    <lastmod>2026-07-10</lastmod>
+  </sitemap>
+  <sitemap>
+    <loc>https://yoursite.com/sitemaps/products.xml</loc>
+    <lastmod>2026-07-09</lastmod>
+  </sitemap>
+</sitemapindex>
 \`\`\`
 
-## Next.js Sitemap (app/sitemap.ts)
+Splitting by content type (posts, products, categories) is smarter than splitting arbitrarily — Search Console reports coverage per sitemap, so a logical split tells you *which section* has indexing problems.
+
+## lastmod, priority, and changefreq — what Google reads
+
+\`\`\`xml
+<url>
+  <loc>https://yoursite.com/blog/xml-sitemaps</loc>
+  <lastmod>2026-07-08T14:20:00+00:00</lastmod>
+</url>
+\`\`\`
+
+**\`lastmod\`** is the one field worth getting right. Google uses it to prioritize recrawls — *but only if it trusts you*. If every URL shows today's date on every regeneration, or \`lastmod\` never matches an actual content change, Google learns to ignore the field entirely across your whole site. Set it to the real last-meaningful-modification time (a fixed typo doesn't count; a rewritten section does). Use W3C datetime format — a full timestamp with timezone is fine, or just \`YYYY-MM-DD\`.
+
+**\`priority\`** and **\`changefreq\`** are effectively dead. Google has publicly said it ignores both. They were meant to hint relative importance and update cadence, but sites gamed them (everything \`priority 1.0\`, \`changefreq always\`) until the signals were worthless. You can include them for other consumers, but don't spend a minute tuning them for Google. The before/after below reflects this.
+
+**Before** — a hand-crafted 2019-era entry:
+
+\`\`\`xml
+<url>
+  <loc>https://yoursite.com/about/</loc>
+  <lastmod>2026-07-11</lastmod>
+  <changefreq>daily</changefreq>
+  <priority>0.8</priority>
+</url>
+\`\`\`
+
+That \`changefreq>daily\` on an about page that hasn't changed in two years is a small lie Google notices. **After** — honest and lean:
+
+\`\`\`xml
+<url>
+  <loc>https://yoursite.com/about/</loc>
+  <lastmod>2024-11-03</lastmod>
+</url>
+\`\`\`
+
+## Generating sitemaps
+
+**Next.js (App Router)** — \`app/sitemap.ts\` generates \`/sitemap.xml\` at build or request time. Pull real routes and real modification dates instead of hardcoding:
 
 \`\`\`typescript
-export default function sitemap() {
+import type { MetadataRoute } from 'next'
+import { getAllPosts } from '@/lib/posts'
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const posts = await getAllPosts()
+  const postUrls = posts.map((post) => ({
+    url: \`https://yoursite.com/blog/\${post.slug}\`,
+    lastModified: post.updatedAt, // real date from your CMS/DB
+  }))
+
   return [
     { url: 'https://yoursite.com', lastModified: new Date() },
-    { url: 'https://yoursite.com/about', lastModified: new Date() },
-  ];
+    { url: 'https://yoursite.com/about', lastModified: new Date('2024-11-03') },
+    ...postUrls,
+  ]
 }
 \`\`\`
 
-## Submit to Google
+Past 50,000 URLs, Next.js supports \`generateSitemaps()\` to shard automatically into an index. Filter *before* the map — drafts, \`noindex\` pages, and non-canonical variants should never reach the array.
 
-1. Go to Google Search Console
-2. Click "Sitemaps" in the left menu
-3. Enter your sitemap URL: \`https://yoursite.com/sitemap.xml\`
-4. Click "Submit"
+**WordPress** — don't hand-write anything. Yoast SEO and Rank Math both generate an index at \`/sitemap_index.xml\` and keep it current as you publish, correctly excluding \`noindex\` posts and (usually) archive pages you've told them to hide. WordPress core also ships a basic \`/wp-sitemap.xml\`; the plugins are better because they respect your indexing rules.
 
-## Best Practices
+**Static sites** — most generators (Astro, Hugo, \`next-sitemap\`, Gatsby plugins) emit a sitemap at build. Verify it excludes the same URLs your robots rules do. For a one-off or a quick sanity check, the free [XML sitemap generator](/tools/sitemap-generator) crawls a URL and produces a valid file.
 
-1. **Include only canonical URLs** — No duplicate or redirected URLs
-2. **Keep under 50,000 URLs** — Use sitemap index for larger sites
-3. **Update lastmod dates** — Only when content actually changes
-4. **Reference in robots.txt** — Add \`Sitemap: https://yoursite.com/sitemap.xml\`
-5. **Don't include noindex pages** — Only pages you want indexed
+## Sitemap extensions: image, video, news
 
-Check if your sitemap exists and is properly configured with [SEO Snapshot](/).`,
+Standard sitemaps handle pages. Three extensions add media context:
+
+- **Image** — \`<image:image>\` entries help image discovery, useful for galleries and product shots. Pairs with the fundamentals in [image SEO optimization](/blog/image-seo-optimization).
+- **Video** — \`<video:video>\` carries thumbnail, duration, and title for video-heavy pages.
+- **News** — a separate Google News sitemap for URLs published in the last 48 hours; only relevant if you're in a News-approved publication.
+
+For multilingual sites, hreflang can be declared *inside* the sitemap with \`xhtml:link\` alternates instead of on-page tags — see the [hreflang tags guide](/blog/hreflang-tags-complete-guide) for the annotation pattern.
+
+## Submitting: Search Console AND robots.txt
+
+Do both. They're independent discovery paths.
+
+1. **Search Console** → Sitemaps → paste \`https://yoursite.com/sitemap.xml\` → Submit. This gives you the coverage report, which is the actual reason to bother.
+2. **robots.txt** — add a \`Sitemap:\` line so any crawler finds it without Search Console:
+
+\`\`\`
+Sitemap: https://yoursite.com/sitemap.xml
+\`\`\`
+
+The directive takes an absolute URL and can appear anywhere in the file. Full syntax is in the [robots.txt guide](/blog/robots-txt-guide).
+
+## Debugging the two errors you'll actually see
+
+**"Couldn't fetch"** — Google couldn't retrieve the file. Check, in order: the URL returns 200 (not a redirect to a login or a 404), robots.txt isn't blocking the sitemap path, the \`Content-Type\` is \`application/xml\` or \`text/xml\`, and the XML is well-formed (one stray unescaped \`&\` breaks the whole file — encode it as \`&amp;\`). "Couldn't fetch" often resolves itself on the next crawl; if it persists after a day, the file is genuinely broken or blocked.
+
+**"Discovered – currently not indexed"** — Google *found* the URL (often via the sitemap) but chose not to index it yet. The sitemap did its job; this is a quality/crawl-budget signal, not a sitemap bug. Adding the URL again won't help. Improve internal links to it, strengthen the content, and confirm it isn't a near-duplicate of a page already indexed.
+
+You can confirm a site exposes a sitemap and references it correctly in robots.txt by running the URL through [SEO Snapshot](/) — it checks presence and configuration in one pass.
+
+## FAQ
+
+**Do I need a sitemap if my site is small?** Not strictly. Google can crawl a well-linked 30-page site fine without one. It doesn't hurt to have it, and Search Console's coverage report is worth the two minutes regardless.
+
+**Will a sitemap get my pages indexed faster?** It speeds *discovery*, not the indexing decision. A newly published post in the sitemap gets found sooner, but Google still decides independently whether to index it.
+
+**How often should I regenerate it?** Automatically, whenever content changes — which is what the CMS and framework approaches above do for free. Don't schedule daily rebuilds if nothing changed daily; that just produces fake \`lastmod\` dates Google learns to distrust.`,
   },
   'heading-hierarchy-seo': {
     title: 'H1-H6 Heading Hierarchy: Why It Matters',
