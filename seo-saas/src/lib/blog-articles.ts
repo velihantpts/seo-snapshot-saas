@@ -1900,7 +1900,7 @@ Two tools can both call themselves "SEO audit" and do opposite things. Three axe
 - **SEO professionals:** Ahrefs or Semrush — comprehensive backlink and rank data, but you pay for it.
 - **Everyone:** Search Console — free, official, non-negotiable for field data.
 
-A sensible free stack: a single-page checker for fast fixes, Lighthouse for performance, and Search Console for what real users and Google see. For a repeatable process instead of one-off scans, the [technical SEO audit guide](/blog/technical-seo-audit-complete-guide) walks through it end to end, and the [free SEO score checker](/blog/seo-score-checker-free) explains how a single number gets calculated.
+A sensible free stack: a single-page checker for fast fixes, Lighthouse for performance, and Search Console for what real users and Google see. For a repeatable process instead of one-off scans, the [technical SEO audit guide](/blog/technical-seo-audit-complete-guide) walks through it end to end, and the [free SEO score checker](/blog/seo-score-checker-free) explains how a single number gets calculated. Once a scan flags a gap, small single-purpose generators close it fast — the [meta tag generator](/tools/meta-tag-generator) for a missing title/description block, or the [schema generator](/tools/schema-generator) for JSON-LD — no report-to-code translation needed.
 
 ## FAQ
 
@@ -2445,7 +2445,7 @@ The Lighthouse SEO audit is a shallow technical check — passing it is table st
 <meta name="viewport" content="width=device-width, initial-scale=1">
 \`\`\`
 
-Passing all five doesn't mean you'll rank — it means nothing technical is actively blocking you. For what a meaningful score looks like, see [what is a good SEO score](/blog/what-is-a-good-seo-score).
+Passing all five doesn't mean you'll rank — it means nothing technical is actively blocking you. If Lighthouse flags a missing or truncated title/description, the [meta tag generator](/tools/meta-tag-generator) produces a compliant block in seconds. For what a meaningful score looks like, see [what is a good SEO score](/blog/what-is-a-good-seo-score).
 
 ## Why your score changes every run
 
@@ -3752,6 +3752,8 @@ Two pages with identical facts aren't equally deep if one is scannable and one i
 - **Tables and lists** for anything comparative or sequential.
 - **Original assets** — your own screenshots, a chart from your own data, a real code sample. This is also an **experience** signal: it proves first-hand knowledge, which is the added "E" in [E-E-A-T](/blog/eeat-seo-guide). Stock photos prove nothing.
 - **Real examples** over abstract definitions.
+
+When a page earns an FAQ or how-to section, marking it up with JSON-LD tells Google exactly what those blocks are — spin one up with the [schema generator](/tools/schema-generator). It won't add depth on its own, but it makes the depth you have machine-readable.
 
 ## Add Depth Without Padding
 
