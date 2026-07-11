@@ -1779,62 +1779,107 @@ It helps, because heading text carries on-page weight, but forcing keywords into
     title: 'Free SEO Audit Tool 2026: Compare the Top 10',
     content: `## Why You Need an SEO Audit Tool
 
-An SEO audit tool crawls your website and identifies technical issues that hurt your search rankings. Without regular audits, problems like broken links, missing meta tags, and slow page speed silently damage your traffic.
+An SEO audit tool inspects your pages and flags the technical problems that quietly drag down rankings: missing meta tags, broken links, slow loads, thin structured data, weak security headers. You can find all of this by hand, but a tool does it in seconds and — the good ones — tells you exactly what to change.
+
+The catch is that "free SEO audit tool" covers wildly different things. Some check one page. Some crawl an entire site. Some only measure performance. A few hand you the fix; most just hand you a warning. Before you pick one, it helps to know what a free tool can actually do — and what it can't.
+
+## What a Free Tool Can and Can't Do
+
+Free tools are genuinely good at **on-page and technical SEO** — the stuff that lives in your HTML and server config:
+
+- Title tags, meta descriptions, canonical tags, robots directives
+- Heading hierarchy and image alt text
+- Structured data (JSON-LD) presence and validity
+- Core Web Vitals and render-blocking resources
+- HTTPS, redirects, and security headers
+
+All of that is auditable from the page source and a Lighthouse run, so a free tool can nail it. If you want a benchmark for what "good" looks like across these, see [what counts as a good SEO score](/blog/what-is-a-good-seo-score).
+
+What free tools **can't** give you reliably is anything that depends on a large, paid crawl of the web:
+
+- **Backlink data** — who links to you, anchor text, referring domains. This comes from a proprietary link index (Ahrefs, Semrush) that costs real money to build.
+- **Keyword rank tracking** — your position for specific queries over time.
+- **Domain authority / rating** — third-party scores that estimate ranking strength from link graphs.
+- **Competitor keyword gaps** — needs a keyword database.
+
+You'll sometimes see a "free" version of these, but it's a teaser: a handful of backlinks, three searches a day, one project. If backlinks and rank tracking are your job, budget for a paid seat. If you're a developer shipping a technically clean site, free tools cover you completely.
+
+## How These Tools Differ
+
+Two tools can both call themselves "SEO audit" and do opposite things. Three axes matter:
+
+- **Single-page vs site crawl.** A single-page tool analyzes one URL you paste in — fast, no setup, great for spot checks. A crawler follows your internal links and audits every page it finds, which catches sitewide patterns (a missing canonical on 400 product pages) but needs a project and often a verified domain.
+- **Lab performance vs field data.** Lighthouse runs a *lab* test — one simulated load on a throttled connection. Search Console and the Chrome UX Report show *field* data — what real visitors actually experienced. Lab is repeatable; field is real. You want both.
+- **Fix guidance vs just warnings.** This is the big one. Most tools tell you "meta description missing" and stop. A few tell you *what to write and where*. If you're going to act on the report yourself, that difference is the whole game.
 
 ## Top 10 Free SEO Audit Tools in 2026
 
 ### 1. SEO Snapshot (seosnapshot.dev)
-- **123 checks** — most comprehensive free tool
-- Copy-paste fix code snippets (unique feature)
-- Security grade A+ to F
-- No signup required, 5 free analyses/day
-- E-E-A-T signal detection
+- 123 on-page and technical checks in a single pass
+- Copy-paste fix code for most issues — the actual tag or config, not just a warning
+- Security header grade from A+ to F
+- No signup, runs on any URL you paste
+- E-E-A-T and structured-data signal detection
+
+**Best for:** developers who want the fix, not just the finding. [Run your URL](/) and you get code you can paste straight into your \`<head>\` or server config.
 
 ### 2. Google Lighthouse
-- Built into Chrome DevTools
-- Performance, Accessibility, Best Practices, SEO scores
-- No backlink or content analysis
-- Good for Core Web Vitals
+- Built into Chrome DevTools — no signup, nothing to install
+- Performance, Accessibility, Best Practices, and SEO scores
+- Lab-based Core Web Vitals
+
+**Best for:** performance and a fast sanity check. It won't touch backlinks or content strategy. If you're chasing a perfect run, here's [how to get a Lighthouse score of 100](/blog/how-to-improve-lighthouse-score).
 
 ### 3. Semrush Site Audit (Free Tier)
-- 100 pages per project
-- Good issue categorization
-- Limited to 1 project on free plan
+- Crawls up to 100 pages on the free plan
+- Strong issue categorization and severity sorting
+- Limited to one project without paying
+
+**Best for:** a small sitewide crawl if you already have a Semrush login.
 
 ### 4. Ahrefs Webmaster Tools
-- Free for verified sites
-- Backlink data included
-- Requires Google Search Console verification
+- Free for sites you verify (via Search Console or DNS)
+- Includes real backlink data — rare for a free tool
+- Verification required, so no anonymous spot checks
+
+**Best for:** getting a taste of backlink and site-health data on a domain you own.
 
 ### 5. Seobility Free Checker
-- Quick single-page analysis
-- Clean interface
-- Limited depth on free plan
+- Quick single-page analysis, clean report
+- Shallow on the free plan (limited pages/day)
+
+**Best for:** a fast, readable single-page overview.
 
 ### 6. SEOptimer
 - 5 free reports per month
-- PDF export
+- PDF export — handy for handing a client a document
 - Basic technical checks
 
+**Best for:** a shareable branded report.
+
 ### 7. The HOTH SEO Checker
-- Quick overview scores
-- Basic meta tag analysis
-- Limited free usage
+- Quick overview scores and basic meta analysis
+- Requires an email for full results
+
+**Best for:** a 30-second gut check before a deeper audit.
 
 ### 8. SiteChecker
-- Technical crawl (250 pages free)
-- Chrome extension available
-- Good for small sites
+- Technical crawl up to 250 pages free
+- Chrome extension for on-page checks
+
+**Best for:** crawling a small site's internal structure.
 
 ### 9. Ubersuggest
 - 3 free searches per day
-- Keyword data included
-- Owned by Neil Patel
+- Bundles keyword and traffic estimates
+
+**Best for:** light keyword ideas alongside a basic site check.
 
 ### 10. Google Search Console
-- Official Google tool
-- Index coverage data
-- Real search performance metrics
+- Official Google tool, free, field data
+- Index coverage, real impressions/clicks, actual Core Web Vitals
+
+**Best for:** the ground truth. Every site should have it — it's not a crawler, it's how Google reports your site back to you.
 
 ## Comparison Table
 
@@ -1844,38 +1889,46 @@ An SEO audit tool crawls your website and identifies technical issues that hurt 
 | Fix code | Yes (76 snippets) | No | No |
 | Security grade | A+ to F | No | No |
 | Signup required | No | No | Yes |
+| Type | Single-page | Single-page (lab) | Site crawl |
 | Backlinks | No | No | Limited |
 | API access | Yes | No | No |
 
 ## How to Choose
 
-- **Developers**: SEO Snapshot — gives you actual code to copy-paste
-- **Beginners**: Lighthouse — built into Chrome, easy to understand
-- **SEO professionals**: Semrush or Ahrefs — comprehensive but expensive
-- **Quick check**: SEOptimer or The HOTH — fast overview
+- **Developers:** SEO Snapshot — you get the actual code to paste, so a report turns into a commit.
+- **Beginners:** Lighthouse — already in your browser, plain-language scores.
+- **SEO professionals:** Ahrefs or Semrush — comprehensive backlink and rank data, but you pay for it.
+- **Everyone:** Search Console — free, official, non-negotiable for field data.
+
+A sensible free stack: a single-page checker for fast fixes, Lighthouse for performance, and Search Console for what real users and Google see. For a repeatable process instead of one-off scans, the [technical SEO audit guide](/blog/technical-seo-audit-complete-guide) walks through it end to end, and the [free SEO score checker](/blog/seo-score-checker-free) explains how a single number gets calculated.
 
 ## FAQ
 
-**Q: How often should I run an SEO audit?**
-A: Monthly for active sites, quarterly for static sites. After major changes, audit immediately.
+**How often should I run an SEO audit?**
+Monthly for active sites, quarterly for static ones. After any major change — a redesign, a migration, a framework upgrade — audit immediately, before Google recrawls.
 
-**Q: Are free SEO tools accurate?**
-A: Yes, for on-page technical SEO. Backlink and ranking data requires paid tools.
+**Are free SEO tools accurate?**
+For on-page and technical SEO, yes — that data comes straight from your HTML and headers, so a free tool sees exactly what a paid one does. Backlinks, rank tracking, and domain authority need a paid link index; treat any "free" version of those as a sample, not the full picture.
 
-**Q: What's the most important thing to fix first?**
-A: Critical issues: missing title tags, no HTTPS, broken links. Use the impact score to prioritize.
+**Can a free tool replace a paid platform like Ahrefs?**
+For shipping a technically clean site, yes. For competitive link building and daily rank tracking across hundreds of keywords, no — that's what the paid index is for.
 
-Try [SEO Snapshot](/) now — 123 checks, fix code snippets, no signup needed.`,
+**What should I fix first?**
+Critical, page-blocking issues: missing title tags, no HTTPS, broken links, noindex left on by accident. Sort by impact and work down. A tool that gives you the fix code makes that list a lot shorter.
+
+Try [SEO Snapshot](/) — 123 checks, copy-paste fix code, a security grade, and no signup.`,
   },
   'seo-checklist-for-developers': {
     title: 'SEO Checklist for Developers: 50 Essential Points',
-    content: `## Why Developers Need SEO Knowledge
+    content: `## SEO is mostly your job
 
-Most SEO guides are written for marketers. But developers control the HTML, server config, and page speed — the technical foundation that determines whether SEO efforts succeed or fail.
+Marketers pick keywords and write copy. But the things that actually decide whether a page can rank live in the code: the HTML the server sends, the response headers, the build output, how fast the largest element paints. A marketer can't fix a missing \`<title>\`, a 404 canonical, or a render-blocking bundle. You can.
 
-This checklist covers everything a developer should verify before deploying a website.
+This is a pre-deploy checklist — 50 things to verify before a site ships, grouped into six areas. Each group starts with why it matters and how to check it fast, then the concrete items. Run it against your **staging URL**, not production, so you catch problems before Google does.
 
 ## Meta Tags (10 checks)
+
+This is what search engines and social platforms read first. Get the title and description wrong and you either don't rank or you rank with a snippet nobody clicks. Verify by viewing source (not the DevTools Elements panel — that shows the hydrated DOM, which can differ from what the crawler receives) and confirming each tag is present in the raw HTML. If you're on a JS framework, check the server-rendered response with \`curl -s https://staging.example.com | grep -i '<meta'\`. For the two that cause the most tickets, see [fix missing meta description](/blog/how-to-fix-missing-meta-description); to draft a full set quickly, use the [meta tag generator](/tools/meta-tag-generator).
 
 1. **Title tag exists** and is 30-60 characters
 2. **Meta description** exists and is 120-160 characters
@@ -1890,6 +1943,8 @@ This checklist covers everything a developer should verify before deploying a we
 
 ## Content Structure (8 checks)
 
+Structure is how a crawler understands what a page is *about* before it reads a word of prose. A clean heading outline and real alt text also feed accessibility and featured snippets. Verify with the accessibility tree in DevTools, or a headings-outline extension — if the outline reads like a table of contents, you're fine. The two items that bite most often are broken heading order and images with no alt text; full detail in [heading hierarchy](/blog/heading-hierarchy-seo) and [image SEO](/blog/image-seo-optimization).
+
 11. **Exactly one H1** tag per page
 12. **Heading hierarchy** — H1 → H2 → H3 (no skipping)
 13. **No empty headings** — every heading has text
@@ -1900,6 +1955,8 @@ This checklist covers everything a developer should verify before deploying a we
 18. **Structured data** (JSON-LD) for rich snippets
 
 ## Performance (10 checks)
+
+Speed is a ranking factor and, more importantly, a bounce factor — Core Web Vitals (LCP under 2.5s, INP under 200ms, CLS under 0.1) measure what users actually feel. Verify with Lighthouse in DevTools or a lab run, but confirm with field data in Search Console, because your dev laptop is faster than your users' phones. Most performance failures trace back to two causes: too much blocking CSS/JS, and unoptimized images. Work through [fix render-blocking resources](/blog/fix-render-blocking-resources) and the broader [Core Web Vitals](/blog/how-to-improve-core-web-vitals) guide for the fixes behind these checks.
 
 19. **Gzip/Brotli compression** enabled
 20. **Cache-Control headers** set for static assets
@@ -1914,6 +1971,8 @@ This checklist covers everything a developer should verify before deploying a we
 
 ## Security (8 checks)
 
+Security headers don't directly lift rankings, but HTTPS is a confirmed signal, and a missing HSTS or a permissive CSP is exactly the kind of thing an audit flags and a browser warns users about. A "Not Secure" warning kills conversions faster than any ranking drop. Verify by inspecting response headers — \`curl -sI https://staging.example.com\` — or by grading the site against a headers scanner. The [security headers guide](/blog/security-headers-for-seo) walks through each one with copy-paste config for nginx, Apache, and Vercel.
+
 29. **HTTPS** everywhere
 30. **HSTS header** with max-age ≥ 31536000
 31. **CSP header** without unsafe-inline
@@ -1924,6 +1983,8 @@ This checklist covers everything a developer should verify before deploying a we
 36. **Cookies** have HttpOnly + Secure + SameSite flags
 
 ## Technical SEO (8 checks)
+
+This is the crawl-and-index plumbing. If robots.txt blocks the wrong path, or the sitemap lists dead URLs, or redirects chain three hops deep, Google wastes crawl budget and may never index your best pages. Verify with the URL Inspection tool in Search Console and by fetching \`/robots.txt\` and \`/sitemap.xml\` directly. The three that trip up most teams have dedicated guides: [robots.txt](/blog/robots-txt-guide), [XML sitemap](/blog/sitemap-xml-guide), and [hreflang](/blog/hreflang-tags-complete-guide) for multi-language sites. Generate the first two cleanly with the [sitemap generator](/tools/sitemap-generator) and [robots.txt generator](/tools/robots-txt-generator).
 
 37. **robots.txt** exists and allows important pages
 38. **sitemap.xml** lists all important URLs
@@ -1936,6 +1997,8 @@ This checklist covers everything a developer should verify before deploying a we
 
 ## Accessibility (6 checks)
 
+Accessibility and SEO overlap more than most developers expect: the same semantic HTML that a screen reader needs is what a crawler parses, and Google increasingly rewards pages that are usable for everyone. Verify with axe DevTools or Lighthouse's accessibility audit, then tab through the page with the keyboard alone — if you can't reach a control without a mouse, neither can a lot of your users. The full overlap is covered in the [accessibility & SEO checklist](/blog/website-accessibility-seo-checklist).
+
 45. **Form labels** on all inputs
 46. **Skip navigation** link
 47. **ARIA landmarks** (header, nav, main, footer)
@@ -1943,20 +2006,30 @@ This checklist covers everything a developer should verify before deploying a we
 49. **Keyboard navigable** — all interactive elements focusable
 50. **Heading hierarchy** (also an SEO factor)
 
-## Automated Checking
+## How to actually run this before a deploy
 
-Run all 50 checks automatically with [SEO Snapshot](/) — paste any URL and get results in seconds with copy-paste fix code.
+A checklist you have to click through by hand won't survive contact with a Friday release. Wire it into the pipeline instead:
+
+1. **Test the staging URL, not localhost.** Localhost skips your CDN, your real headers, and your production build minification. Point checks at the deployed staging environment so you're testing what users will actually receive.
+2. **Add Lighthouse CI to the pipeline.** Run \`lhci autorun\` against a preview deploy and set assertions — fail the build if performance drops below a threshold or an accessibility violation appears. That catches regressions in checks 11-28 and 45-50 automatically, on every PR, before anyone reviews it.
+3. **Fetch the raw response in CI.** A short script that \`curl -sI\`s the staging URL and greps for HSTS, CSP, and \`X-Content-Type-Options\` covers most of the security group.
+4. **Spot-check the rest with the analyzer.** For the meta, structured-data, and technical-SEO items that are tedious to script, paste your staging URL into [SEO Snapshot](/) — it runs all of these checks on a live URL in seconds and hands back copy-paste fix code, so a failed check comes with the exact HTML or header to add.
+
+The goal isn't 50/50 on every page. It's knowing *which* checks you're intentionally skipping and why — a \`noindex\` on staging is correct; a \`noindex\` that ships to production by accident is an outage.
 
 ## FAQ
 
 **Q: Should developers learn SEO?**
-A: Yes. 60% of SEO issues are technical — only developers can fix them properly.
+A: Yes. Roughly 60% of common SEO problems are technical — server config, markup, speed, crawlability — and only a developer can fix those correctly. You don't need to learn keyword research; you need to own the technical foundation.
 
-**Q: What's the single most impactful SEO fix?**
-A: Adding proper title tags. Pages without titles can't rank.
+**Q: What's the single most impactful item on this list?**
+A: A correct, unique \`<title>\` on every page (checks 1 and 9). A page with no title, or one duplicated across the site, is competing with one hand tied behind its back — the title is the strongest on-page relevance signal you control.
+
+**Q: My framework renders everything client-side. Does this still apply?**
+A: More than ever. Confirm your meta tags, headings, and structured data appear in the *server-rendered* HTML (\`curl\` the URL and look). If they only exist after JavaScript runs, some crawlers and every social scraper will miss them. Server-side rendering or static generation of your \`<head>\` is the fix.
 
 **Q: How do I test SEO before deploying?**
-A: Use SEO Snapshot on your staging URL, or run Lighthouse in Chrome DevTools.`,
+A: Run the analyzer or Lighthouse against your staging URL, add Lighthouse CI to your pipeline so regressions fail the build, and script the security-header checks with a \`curl\` in CI. Catch it in review, not in Search Console three weeks later.`,
   },
   'eeat-seo-guide': {
     title: 'E-E-A-T in SEO: What It Is and How to Improve Your Score',
@@ -2050,93 +2123,200 @@ No. Person and Organization schema help Google *understand* your signals, but th
   },
   'nginx-security-headers-guide': {
     title: 'Nginx Security Headers: Complete Configuration Guide',
-    content: `## Why Security Headers Matter
+    content: `## What these headers do (and why nginx trips people up)
 
-Security headers protect your website from common attacks: XSS, clickjacking, MIME sniffing, and more. They also contribute to your site's trust signals — Google confirmed HTTPS as a ranking factor, and security headers build on that foundation.
+Security headers tell the browser how to treat your page: force HTTPS, block iframing, restrict which scripts can run. They protect against XSS, clickjacking, MIME sniffing, and protocol downgrades. If you want the full case for *why* each one matters across every stack, read [security headers every website needs](/blog/security-headers-for-seo). This guide is the nginx-specific part — the exact directives, the gotchas that make headers silently disappear, and how to roll them out without breaking your site.
 
-## The Essential Headers
+Two nginx quirks bite almost everyone, so cover them before you copy any config: \`add_header\` inheritance and the \`always\` flag. Get those wrong and your headers look fine in the config file but never reach the browser.
 
-### 1. Strict-Transport-Security (HSTS)
+## The six headers, one directive each
 
-Forces browsers to use HTTPS. Prevents downgrade attacks.
+### Strict-Transport-Security (HSTS)
 
-\`\`\`
+Forces HTTPS for the whole domain and blocks downgrade attacks.
+
+\`\`\`nginx
 add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
 \`\`\`
 
-**max-age=31536000** = 1 year. Browser remembers to always use HTTPS.
+\`max-age=31536000\` is one year in seconds. Read the HSTS rollout warning below before you ship \`preload\` — it is not casually reversible.
 
-### 2. Content-Security-Policy (CSP)
+### Content-Security-Policy (CSP)
 
-Controls which resources can load on your page. Prevents XSS.
+Controls which resources the page may load. The single strongest defense against XSS, and the hardest to get right.
 
-\`\`\`
+\`\`\`nginx
 add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self';" always;
 \`\`\`
 
-### 3. X-Frame-Options
+### X-Frame-Options
 
-Prevents your site from being embedded in iframes (clickjacking).
+Stops your pages being embedded in an iframe (clickjacking).
 
-\`\`\`
+\`\`\`nginx
 add_header X-Frame-Options "DENY" always;
 \`\`\`
 
-### 4. X-Content-Type-Options
+### X-Content-Type-Options
 
-Prevents MIME type sniffing.
+Stops the browser guessing (sniffing) content types.
 
-\`\`\`
+\`\`\`nginx
 add_header X-Content-Type-Options "nosniff" always;
 \`\`\`
 
-### 5. Referrer-Policy
+### Referrer-Policy
 
-Controls how much URL info is sent when users navigate away.
+Limits how much URL data leaks when users click away.
 
-\`\`\`
+\`\`\`nginx
 add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 \`\`\`
 
-### 6. Permissions-Policy
+### Permissions-Policy
 
-Restricts browser features (camera, microphone, etc).
+Turns off browser features you don't use.
 
-\`\`\`
+\`\`\`nginx
 add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
 \`\`\`
 
-## Complete Nginx Configuration
+## The \`add_header\` inheritance gotcha
 
-\`\`\`
+This is the one that wastes an afternoon. In nginx, \`add_header\` directives are **not** cumulative across block levels. If a \`location\` (or nested block) defines *any* \`add_header\`, nginx uses only that block's headers and **drops every \`add_header\` inherited from the parent** \`server\` or \`http\` block.
+
+So this config looks complete but is broken:
+
+\`\`\`nginx
 server {
-    listen 443 ssl http2;
-    server_name yourdomain.com;
-
-    # Security Headers
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
-    add_header Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline';" always;
     add_header X-Frame-Options "DENY" always;
     add_header X-Content-Type-Options "nosniff" always;
-    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-    add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
 
-    # Hide server info
-    server_tokens off;
+    location /api/ {
+        add_header Cache-Control "no-store" always;
+        # X-Frame-Options and X-Content-Type-Options are GONE here.
+    }
 }
 \`\`\`
 
-## How to Check Your Headers
+Requests to \`/api/\` ship \`Cache-Control\` and nothing else. Your security headers vanish for exactly the routes that often need them most.
 
-Use [SEO Snapshot](/) to check all 7 security headers + get a security grade from A+ to F. We also detect cookie security flags, SRI, and mixed content.
+The clean fix: put all security headers in one file and \`include\` it in every block that needs headers. Create \`snippets/security-headers.conf\`:
+
+\`\`\`nginx
+add_header Strict-Transport-Security "max-age=31536000; includeSubDomains; preload" always;
+add_header X-Frame-Options "DENY" always;
+add_header X-Content-Type-Options "nosniff" always;
+add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+add_header Permissions-Policy "camera=(), microphone=(), geolocation=()" always;
+\`\`\`
+
+Then include it wherever you also add a \`location\`-level header:
+
+\`\`\`nginx
+server {
+    include snippets/security-headers.conf;
+
+    location /api/ {
+        include snippets/security-headers.conf;
+        add_header Cache-Control "no-store" always;
+    }
+}
+\`\`\`
+
+The \`include\` re-emits the full set inside the inner block, so nothing is lost. One file, one source of truth — change a header once and every block picks it up.
+
+## Why the \`always\` flag matters
+
+Without \`always\`, nginx only adds the header on "successful" responses (200, 201, 204, 301, 302, 304). Error responses — your 403, 404, 500, 502 pages — go out **naked**. An attacker probing for a clickjacking or MIME-sniffing vector on an error page gets an unprotected response. Adding \`always\` sends the header on every status code, including 4xx and 5xx. Use it on all security headers, every time.
+
+## HSTS rollout: measure twice
+
+HSTS is a one-way door. Once a browser sees the header, it refuses plain HTTP for your domain for the full \`max-age\`. If HTTPS breaks — expired cert, misconfigured subdomain — users get hard errors with no bypass. Roll it out in stages:
+
+\`\`\`nginx
+# Stage 1: short window while you confirm everything works
+add_header Strict-Transport-Security "max-age=300" always;
+\`\`\`
+
+Confirm every subdomain serves valid HTTPS, then raise \`max-age\` to a week, then a year, then add \`includeSubDomains\`. Only add \`preload\` last. \`preload\` bakes your domain into the browser source itself; removing it means submitting a removal request and waiting for browser releases to roll out — months, realistically. Don't preload a domain until you're certain every current and future subdomain will always be HTTPS.
+
+## CSP is the hard one — start in report-only
+
+Ship a strict CSP straight to \`enforce\` and you'll break inline scripts, third-party widgets, and analytics on page one. Deploy it as report-only first. The browser evaluates the policy and reports violations but blocks nothing:
+
+\`\`\`nginx
+add_header Content-Security-Policy-Report-Only "default-src 'self'; script-src 'self'; report-uri /csp-report;" always;
+\`\`\`
+
+Watch the reports (or your DevTools console), add the origins you actually use, then switch the header name to \`Content-Security-Policy\` to enforce.
+
+The big compromise is \`'unsafe-inline'\`. Allowing it on \`script-src\` largely defeats CSP's XSS protection — the whole point is to block injected inline scripts. The proper fix is a per-request nonce, but nginx makes it awkward: it has no native nonce generator, so people reach for \`sub_filter\` to inject a random value into both the header and the \`<script nonce="...">\` tags. That's fragile — sub_filter doesn't run on gzipped upstream responses. If your app renders HTML, generate the nonce in the app and set CSP there. For static sites, hash-based CSP (\`'sha256-...'\`) is the more reliable nginx-friendly path.
+
+## Removing the Server / version banner
+
+\`server_tokens off;\` stops nginx advertising its exact version, which shrinks what an attacker learns from a quick probe:
+
+\`\`\`nginx
+server_tokens off;
+\`\`\`
+
+That only hides the version number — responses still send \`Server: nginx\`. Removing the header entirely isn't possible with stock nginx; you need the third-party \`headers-more\` module (\`ngx_headers_more\`), then:
+
+\`\`\`nginx
+more_clear_headers Server;
+# or spoof it: more_set_headers "Server: web";
+\`\`\`
+
+On Debian/Ubuntu the module ships in \`nginx-extras\`. On a stock build you'd have to recompile, so most people accept \`Server: nginx\` and move on — it's low value either way.
+
+## Reload safely and verify
+
+Never reload a config you haven't tested. \`nginx -t\` parses the config and catches syntax errors *before* they take down the running server:
+
+\`\`\`bash
+sudo nginx -t && sudo systemctl reload nginx
+\`\`\`
+
+The \`&&\` means reload only runs if the test passes. \`reload\` is graceful — it swaps in the new config without dropping live connections.
+
+Then confirm the headers actually land, using \`curl -I\` to see response headers:
+
+\`\`\`bash
+curl -sI https://yourdomain.com | grep -i -E 'strict-transport|content-security|x-frame|x-content-type|referrer|permissions'
+\`\`\`
+
+Check an error path too, to prove \`always\` is working:
+
+\`\`\`bash
+curl -sI https://yourdomain.com/this-page-does-not-exist | grep -i x-frame-options
+\`\`\`
+
+If the header shows on the 200 but not the 404, an \`add_header\` is missing \`always\` somewhere.
+
+## Verify and troubleshoot
+
+- **Header missing on some routes only** — the inheritance gotcha. A \`location\` block added its own \`add_header\` and dropped the inherited set. \`include\` the snippet there.
+- **Header missing on error pages** — add \`always\`.
+- **Duplicate headers** — you set the same header in both \`http\` and \`server\`, or in an included file *and* inline. nginx sends both; dedupe.
+- **CSP blocking your own assets** — read the browser console's CSP violation messages and add the reported origins. Stay in report-only until it's quiet.
+- **Changes not taking effect** — you edited a file that isn't included, or forgot to reload. Re-run \`nginx -t && systemctl reload nginx\`.
+
+For a graded read on what's live right now, [grade your headers with a website security check](/blog/website-security-check-guide) or drop your URL into the [analyzer on the homepage](/) — it scores your live headers A+ to F, flags missing ones, and catches cookie flags and mixed content. Headers are one line item in a broader [technical SEO audit](/blog/technical-seo-audit-complete-guide), so it's worth checking the rest while you're in there.
 
 ## FAQ
 
-**Q: Do security headers affect SEO?**
-A: HTTPS is a confirmed ranking factor. Other headers don't directly affect rankings but improve trust and prevent attacks.
+**Q: Do security headers help SEO?**
+A: HTTPS (which HSTS enforces) is a confirmed Google ranking factor. The other headers don't move rankings directly, but they prevent attacks and build the trust signals a secure site depends on.
 
-**Q: What if I break my site with CSP?**
-A: Start with CSP in report-only mode, then tighten gradually.`,
+**Q: My headers show in the config but not in the browser. Why?**
+A: Almost always the \`add_header\` inheritance rule — an inner \`location\` block redefined a header and dropped the inherited ones. Use a shared \`include snippets/security-headers.conf;\` in every block that sets headers.
+
+**Q: Why aren't my headers on 404/500 pages?**
+A: \`add_header\` skips error responses unless you append the \`always\` flag. Add it to every security header.
+
+**Q: How do I test a CSP without breaking the site?**
+A: Deploy it as \`Content-Security-Policy-Report-Only\` first. The browser reports violations but blocks nothing. Fix the reported origins, then rename the header to \`Content-Security-Policy\` to enforce.`,
   },
   'how-to-improve-lighthouse-score': {
     title: 'How to Get Lighthouse Score 100: Step by Step Guide',
@@ -2554,45 +2734,34 @@ Transform Rules → Modify Response Header → Set static, one per header. It ap
     title: 'Technical SEO Audit: The Complete 2026 Guide',
     content: `## What Is a Technical SEO Audit?
 
-A technical SEO audit examines the infrastructure of your website — how search engines crawl, index, and render your pages. Unlike content SEO (keywords, topics), technical SEO ensures Google can actually access and understand your site.
+A technical SEO audit examines your site's infrastructure — how search engines crawl, index, and render your pages. Content SEO decides *whether you deserve to rank*; technical SEO decides *whether Google can even access and understand the page*. Get the technical layer wrong and the best content in your niche sits invisible.
+
+This is the hub. Each of the 10 steps links out to a focused deep-dive when you need the full walkthrough — treat this page as the map and the linked guides as the terrain.
 
 ## Why Technical SEO Matters
 
-Google crawls billions of pages daily. If your site has technical issues, Google may:
-- **Skip your pages** entirely (crawl budget waste)
-- **Index the wrong version** (duplicate content)
-- **Rank you lower** due to poor performance
-- **Deindex pages** accidentally (noindex, robots.txt block)
+Google crawls on a finite budget per site. When your site has technical issues, Google may:
+
+- **Skip your pages** entirely (crawl budget wasted on junk URLs)
+- **Index the wrong version** (duplicate or non-canonical URLs)
+- **Rank you lower** because the page is slow or unstable
+- **Deindex pages** accidentally (a stray \`noindex\` or a \`Disallow\` line)
+
+The failure mode that hurts most is silent — nothing errors, traffic just never arrives.
 
 ## The 10-Step Technical SEO Audit
 
 ### Step 1: Crawlability
 
-Can Google access all important pages?
-
-**Check:**
-- robots.txt exists and allows important pages
-- No accidental noindex tags
-- Sitemap.xml lists all important URLs
-- No orphan pages (pages with no internal links)
-
-**Tool:** [SEO Snapshot](/) checks robots.txt, sitemap, noindex, and sitemap-robots conflicts automatically.
+Can Googlebot reach every page that matters? Start at \`/robots.txt\`. One overly broad \`Disallow: /\` — common after a staging site ships to production with its blocking rules intact — takes the whole site out of the index. Confirm important directories aren't blocked, then check that \`sitemap.xml\` returns \`200\` and lists your canonical URLs, not \`404\`s or redirects. *What good looks like:* robots.txt allows all indexable sections and points to a live sitemap containing only canonical, 200-status URLs. For directives, wildcards, and the trap of blocking CSS/JS, read the [robots.txt guide](/blog/robots-txt-guide) and [XML sitemap guide](/blog/sitemap-xml-guide) — or build either faster with the [sitemap generator](/tools/sitemap-generator) and [robots.txt generator](/tools/robots-txt-generator).
 
 ### Step 2: Indexability
 
-Is Google actually indexing your pages?
-
-**Check:**
-- Search \`site:yourdomain.com\` in Google
-- Google Search Console → Index Coverage
-- No canonical pointing to wrong URL
-- No duplicate title/description tags
+Crawlable isn't the same as indexed. Search \`site:yourdomain.com\` and compare the count against what you *expect* — a big gap either way is your first signal. Then open Google Search Console → Pages and read the "Not indexed" reasons. The two that quietly bleed rankings are duplicate content and canonical conflicts: a page that canonicalizes to the wrong URL hands its ranking equity elsewhere. *What good looks like:* every important URL is indexed or has a deliberate reason not to be, and each canonical points to itself unless you meant otherwise. If several pages target the same query and cannibalize each other, that's its own fix — see [canonical URLs explained](/blog/canonical-url-explained) and [keyword cannibalization](/blog/keyword-cannibalization-fix).
 
 ### Step 3: Site Architecture
 
-How deep are your pages?
-
-**Best practice:** Every important page should be reachable within 3 clicks from the homepage.
+Depth affects both crawl frequency and perceived importance — pages buried five clicks down get crawled less and rank worse. Aim for every important page to be reachable within three clicks of the homepage.
 
 \`\`\`
 Homepage (depth 0)
@@ -2601,9 +2770,11 @@ Homepage (depth 0)
 │   │   └── /products/shoes/nike-air (depth 3) ← maximum
 \`\`\`
 
+*How to check:* crawl your own site with Screaming Frog (free up to 500 URLs) and sort by crawl depth — anything past depth 3 needs a shorter path in via navigation or a hub link.
+
 ### Step 4: Page Speed
 
-Core Web Vitals are confirmed ranking factors:
+Core Web Vitals are confirmed ranking factors, and they're measured on *real users*, not lab tests:
 
 | Metric | Good | Needs Work | Poor |
 |--------|------|------------|------|
@@ -2611,86 +2782,59 @@ Core Web Vitals are confirmed ranking factors:
 | INP | < 200ms | 200-500ms | > 500ms |
 | CLS | < 0.1 | 0.1-0.25 | > 0.25 |
 
-**Quick wins:**
-1. Enable gzip/brotli compression
-2. Add Cache-Control headers
-3. Lazy load images
-4. Defer non-critical JavaScript
+*How to check:* look at the CrUX field data in Search Console's Core Web Vitals report — that's what Google actually uses — then run Lighthouse to reproduce it. *What good looks like:* the 75th-percentile value for all three metrics sits green. Usual culprits: an unoptimized hero image (LCP), a heavy third-party script (INP), images or ads without reserved dimensions (CLS). The full playbook is in [improve Core Web Vitals](/blog/how-to-improve-core-web-vitals); the broader latency work — compression, caching, critical CSS — is in [website speed optimization](/blog/website-speed-optimization-guide).
 
 ### Step 5: Mobile Friendliness
 
-Google uses mobile-first indexing — your mobile version is what gets ranked.
-
-**Check:**
-- Viewport meta tag present
-- No horizontal scrolling
-- Tap targets at least 48x48px
-- Text readable without zooming
+Google uses mobile-first indexing: the mobile version is the one that gets ranked, so any content you hide on mobile effectively doesn't exist for SEO. *How to check:* open the page in Chrome DevTools device mode at 360px wide and look for horizontal scroll, tap targets under 48×48px, and body text below 16px. *What good looks like:* a present \`<meta name="viewport" content="width=device-width, initial-scale=1">\`, no sideways scroll, and full content parity with desktop.
 
 ### Step 6: HTTPS & Security
 
-HTTPS is a confirmed ranking factor.
-
-**Check:**
-- All pages load over HTTPS
-- No mixed content (HTTP resources on HTTPS pages)
-- HSTS header configured
-- Security grade A or higher
-
-[SEO Snapshot](/) gives you a security grade from A+ to F with exact fix code for every missing header.
+HTTPS is a confirmed ranking signal, but the audit failure is usually subtler than "no certificate." *How to check:* load the page and watch the console for mixed-content warnings — a single \`http://\` image or script on an \`https://\` page downgrades the padlock and can block resources. *What good looks like:* every request is HTTPS, HSTS is set, and your header grade is A or better. [SEO Snapshot](/) grades headers A+ to F with fix code; the reasoning behind each one is in the [security headers guide](/blog/security-headers-for-seo).
 
 ### Step 7: Structured Data
 
-Schema markup enables rich results in Google.
-
-**Check:**
-- JSON-LD structured data present
-- Valid schema (no errors)
-- Appropriate type (Article, Product, FAQ, etc.)
-- Required fields filled
+Schema markup helps Google understand the page and, for supported types, earns rich results. *How to check:* paste your rendered HTML into Google's Rich Results Test and read errors *and* warnings — missing required fields fail silently. *What good looks like:* valid JSON-LD, the right type (\`Article\`, \`Product\`, \`BreadcrumbList\`), required properties filled, and markup that only describes content visible on the page. \`BreadcrumbList\` is the highest-ROI type — trivial to add, shows on almost every result. Copy-paste templates and the required-vs-recommended breakdown are in [how to add JSON-LD](/blog/how-to-add-structured-data-json-ld).
 
 ### Step 8: Internal Linking
 
-Internal links distribute ranking power across your site.
-
-**Check:**
-- No broken internal links
-- No orphan pages
-- Descriptive anchor text (not "click here")
-- Important pages get more internal links
+Internal links pass ranking equity and tell Google which pages matter. *How to check:* in your Screaming Frog crawl, sort by inlinks — pages with zero internal links are orphans Google may never find. *What good looks like:* no orphans, no broken internal links (404s waste equity), descriptive anchor text instead of "click here," and your money pages getting the most links.
 
 ### Step 9: Redirects
 
-**Check:**
-- No redirect chains (A→B→C, should be A→C)
-- No redirect loops
-- 301 for permanent changes (not 302)
-- Old URLs redirect to new ones
+*How to check:* crawl your redirects and look for chains (A→B→C) and loops. Each hop loses a little equity and adds latency; consolidate to a single 301 (A→C). *What good looks like:* permanent moves use 301 not 302, old URLs point straight to their final destination, and no redirect resolves to a 404.
 
 ### Step 10: International SEO
 
-If you serve multiple languages:
+If you serve multiple languages or regions, hreflang tells Google which version to show whom — and it's the most error-prone area of technical SEO. *How to check:* validate that every tag is reciprocal (if EN points to FR, FR must point back) and self-referencing. *What good looks like:* valid ISO language/region codes, an \`x-default\` fallback, and matching return tags across all versions. The full implementation, including the return-tag trap that breaks most setups, is in the [hreflang guide](/blog/hreflang-tags-complete-guide).
 
-**Check:**
-- Hreflang tags present
-- x-default fallback defined
-- Self-referencing hreflang
-- Valid language codes
+## How to Prioritize What You Find
+
+An audit surfaces dozens of issues at once. Fix them in this order:
+
+1. **Indexability and crawl blockers first.** A \`noindex\`, a bad \`Disallow\`, or a wrong canonical can hide entire sections. These are binary — the page ranks or it doesn't — so nothing else matters until they're fixed.
+2. **Core Web Vitals and HTTPS next.** Direct ranking factors that affect every page at once, so the payoff is high.
+3. **Structured data and international polish last.** Schema and hreflang refine how you appear and who sees which version — they compound *on top of* pages that are already indexed and fast, not instead of.
+
+Work top-down. A perfect schema on a \`noindex\` page is wasted effort.
 
 ## Automated Audit
 
-Run all these checks in seconds with [SEO Snapshot](/) — 123 automated checks with copy-paste fix code for every issue found.
+Running all ten steps by hand takes an afternoon. [SEO Snapshot](/) runs the same checks in seconds — robots.txt, sitemap conflicts, noindex, Core Web Vitals, security headers, structured data, hreflang — with copy-paste fix code for each issue. Use it for the first pass, then dig into the deep-dive guides for anything it flags.
 
 ## FAQ
 
 **Q: How often should I do a technical SEO audit?**
-A: Monthly for active sites. After every major update or redesign.
+A: Monthly for active sites, and always after a redesign, migration, or CMS change — those are exactly when a stray \`noindex\` or broken redirect slips in.
 
 **Q: What's the most common technical SEO issue?**
-A: Missing or duplicate meta descriptions, followed by missing alt text and slow page speed.
+A: Missing or duplicate meta descriptions, followed by missing alt text and slow speed. The most *damaging* one, though, is an accidental indexability block — it takes whole sections dark silently.
+
+**Q: Where should I start if I only have an hour?**
+A: Steps 1 and 2 — crawlability and indexability. Confirm robots.txt isn't blocking anything important, check Search Console's Pages report for surprises, and verify canonicals. That protects more traffic than any speed tweak.
 
 **Q: Can I do a technical SEO audit myself?**
-A: Yes. Use free tools like SEO Snapshot, Google Search Console, and Lighthouse. For enterprise sites, consider Screaming Frog or Semrush.`,
+A: Yes. Free tools like SEO Snapshot, Google Search Console, and Lighthouse cover most of it. For sites over a few thousand URLs, add Screaming Frog for crawl-depth and internal-link analysis.`,
   },
   'how-to-add-structured-data-json-ld': {
     title: 'How to Add JSON-LD Structured Data (With Copy-Paste Examples)',
@@ -3435,101 +3579,106 @@ A: Almost always a relative or \`http://\` URL, or a file too large to fetch in 
   },
   'seo-score-checker-free': {
     title: 'Free SEO Score Checker: Analyze Any Website in Seconds',
-    content: `## What Is an SEO Score?
+    content: `## What This Checker Actually Does
 
-An SEO score is a number from 0-100 that represents how well-optimized your website is for search engines. It's calculated by running automated checks against SEO best practices.
+Paste a URL, wait 5-15 seconds, and get a 0-100 score plus a ranked list of what's wrong and how to fix it. [SEO Snapshot](/) fetches the page like a crawler would, parses the HTML and response headers, and runs 123 individual checks against current SEO best practices. No signup, no crawl budget to configure, no PDF gate. Five free analyses per day.
 
-## What We Check (123 Checks)
+The score is a shorthand — useful for tracking progress and spotting regressions — but the value is in the itemized report underneath it. A number tells you *that* something is wrong; the checks tell you *what* and *where*.
 
-[SEO Snapshot](/) runs **123 individual checks** across 7 categories:
+## The 123 Checks, and Why They're Weighted the Way They Are
 
-### Meta Tags (25% of score)
-- Title tag present, length, pixel width
-- Meta description present, length, pixel width
-- Canonical URL and deep analysis
-- Viewport, lang, charset, favicon, DOCTYPE
+The checks group into 7 categories. The weights aren't arbitrary — they roughly track how much each area moves the needle on whether a page can rank at all versus how much it just polishes an already-indexable page.
 
-### Content Quality (18% of score)
-- Word count and readability
-- Keyword placement (title, H1, URL, description)
-- E-E-A-T signals (author, about page, privacy, contact)
-- Heading diversity and content depth
+### Meta Tags — 25% of score
 
-### Technical SEO (17% of score)
-- HTTPS enforcement
-- Robots.txt and sitemap.xml
-- Redirect chain and loop detection
-- URL structure analysis
-- Hreflang validation
+The heaviest category, because title and description are the two things Google reads first and the two things a user sees in the search result. A missing or duplicated title tag caps your ceiling before any other factor matters.
 
-### Performance (15% of score)
-- Response time (TTFB)
-- Compression (gzip/brotli)
-- Render-blocking resources
-- Lazy loading and image optimization
-- Cache-Control headers
-- Page weight and request count
+**Highest-impact check:** the title tag — present, unique, and under ~580 pixels so it doesn't truncate in the SERP. After that, the meta description. If yours is missing, [our guide to fixing missing meta descriptions](/blog/how-to-fix-missing-meta-description) walks through it, and the [meta tag generator](/tools/meta-tag-generator) will produce copy-pasteable tags with live length feedback.
 
-### Security (10% of score)
-- HTTPS (confirmed ranking factor)
-- 7 security headers (HSTS, CSP, etc.)
-- Cookie security flags
-- Mixed content detection
-- Security grade A+ to F
+### Content Quality — 18% of score
 
-### Social & Schema (8% of score)
-- Open Graph tags (6 tags checked)
-- Twitter Card tags
-- JSON-LD structured data validation
+Weighted high because thin or off-intent content is the most common reason a technically-perfect page still doesn't rank. This category checks word count, readability, keyword placement in the title/H1/URL, heading diversity, and E-E-A-T signals like an author byline, an about page, and contact info.
 
-### Accessibility (7% of score)
-- Form labels on inputs
-- Alt text on images
-- Heading hierarchy
-- Language attribute
+**Highest-impact check:** keyword presence in the H1 and title together — the cheapest signal to get right and the one most often missed on template-generated pages.
+
+### Technical SEO — 17% of score
+
+This is the "can Google even reach and trust this URL" category: HTTPS enforcement, a valid \`robots.txt\`, a discoverable \`sitemap.xml\`, redirect-chain and loop detection, URL structure, and hreflang validation. It's weighted just below content because a single misconfiguration here — say, a \`robots.txt\` that disallows your whole site — can zero out everything else.
+
+**Highest-impact check:** indexability. A page blocked by robots rules or buried behind a redirect chain can't rank no matter how good the rest is.
+
+### Performance — 15% of score
+
+TTFB, gzip/brotli compression, render-blocking CSS and JS, lazy loading, \`Cache-Control\` headers, page weight, and request count. Core Web Vitals are a real (if modest) ranking factor, and performance affects real users regardless of rankings.
+
+**Highest-impact check:** render-blocking resources, because they're usually the single largest, most fixable drag on Largest Contentful Paint (the "good" threshold is under 2.5s).
+
+### Security — 10% of score
+
+HTTPS (a confirmed ranking signal), seven security headers including HSTS and CSP, cookie security flags, and mixed-content detection — rolled into a security grade from A+ to F. Weighted lower than the ranking-critical categories because most of these headers don't directly move rankings, but they protect users and are trivially cheap to add.
+
+**Highest-impact check:** HTTPS with proper enforcement. Everything else in this category is hardening on top of it.
+
+### Social & Schema — 8% of score
+
+Open Graph tags, Twitter Card tags, and JSON-LD structured-data validation. Lower weight because it mostly affects how your page looks when shared and whether you qualify for rich results — valuable, but not what gets you indexed. The [schema generator](/tools/schema-generator) produces valid JSON-LD you can drop straight into \`<head>\`.
+
+**Highest-impact check:** valid structured data on eligible page types (articles, products, FAQs), since that's your ticket to rich snippets.
+
+### Accessibility — 7% of score
+
+Form-input labels, image alt text, heading hierarchy, and the \`lang\` attribute. The lowest weight, but there's meaningful overlap with SEO: alt text feeds image search, heading order helps parsing, and \`lang\` supports internationalization.
+
+**Highest-impact check:** alt text on content images — it's both an accessibility requirement and an image-SEO signal.
 
 ## Score Ranges
 
 | Range | Rating | Meaning |
 |-------|--------|---------|
-| 90-100 | Excellent | Top-tier optimization |
-| 70-89 | Good | Solid foundation, minor improvements needed |
-| 50-69 | Needs Work | Significant issues hurting rankings |
+| 90-100 | Excellent | Top-tier on-page optimization |
+| 70-89 | Good | Solid foundation, minor improvements |
+| 50-69 | Needs Work | Real issues holding you back |
 | 0-49 | Poor | Major problems, likely not ranking |
 
-## What Makes Us Different
+For the longer version of what these bands mean and how they map to real-world results, see [what counts as a good SEO score](/blog/what-is-a-good-seo-score) — no point repeating it here.
 
-Unlike other free SEO checkers:
+## How to Read Your Results and What to Fix First
 
-1. **Copy-paste fix code** — not just warnings, actual HTML/config to implement
-2. **Security grade A+ to F** — no other SEO tool does this
-3. **E-E-A-T signal detection** — checks author info, about page, trust signals
-4. **Tech stack detection** — WordPress, Next.js, Shopify specific advice
-5. **Impact scores** — know which fix gives you the most points
+Don't fix things top-to-bottom. Fix them in order of consequence. A page with a great title but a \`noindex\` tag is invisible; a page with a broken CSS request but perfect indexability is merely slow. Work the list like this:
 
-## How to Use
+1. **Critical and indexability first.** Is the page actually crawlable and indexable? Check for accidental \`noindex\`, a \`robots.txt\` disallow, broken canonicals pointing elsewhere, or redirect loops. These are ceiling-setters — nothing below matters until they're clean.
 
-1. Go to [seosnapshot.dev](/)
-2. Enter any URL
-3. Wait 5-15 seconds
-4. Review your score and issues
-5. Copy fix code for each issue
-6. Implement and re-analyze
+2. **High-impact on-page.** Missing or truncated title, missing meta description, no H1 or multiple H1s, keyword absent from the title. These are fast wins that directly change how you appear in search. This is where a missing meta description or a duplicated title gets fixed.
 
-No signup required. 5 free analyses per day.
+3. **Performance and security.** Kill render-blocking resources, turn on compression, add the security headers you're missing. Bigger effort, real but incremental payoff.
+
+4. **Polish.** Open Graph tags, Twitter Cards, structured data, alt-text gaps, accessibility cleanup. Do these once the fundamentals are solid.
+
+Every issue in the report carries an impact score, so when two things compete for your afternoon, you can see which one buys more points. Fix, re-run the same URL, watch the number move.
+
+## What This Score Does and Doesn't Include
+
+Be honest about what a checker can see. This one measures **on-page and technical SEO** — everything in the page's HTML, its response headers, and its crawl configuration. That's the part you fully control.
+
+What it does **not** measure: backlinks, domain authority, brand signals, or your actual keyword rankings. Those depend on external data (other sites linking to you, Google's index) that no page-level scan can pull. So a 95 here means your page is technically excellent — not that it will outrank a competitor with ten years of links. On-page SEO is the necessary condition: get it right and you're eligible to rank; off-page decides the race among eligible pages.
+
+If you want the full manual process behind these automated checks, the [complete technical SEO audit guide](/blog/technical-seo-audit-complete-guide) covers it, and if you're comparing options, we [benchmarked the free audit tools for 2026](/blog/free-seo-audit-tool-2026).
 
 ## FAQ
 
-**Q: How accurate is the SEO score?**
-A: Our score measures on-page technical SEO — what you can control. It doesn't include backlinks or domain authority (requires external data).
+**How accurate is the SEO score?**
+It accurately reflects on-page technical SEO — the checks are deterministic and run against the real fetched page. It intentionally excludes backlinks and domain authority, which need external data no scanner can access.
 
-**Q: What score do I need to rank on Google?**
-A: There's no magic number. But fixing critical issues (score below 50) is essential. Most top-ranking sites score 80+.
+**What score do I need to rank on Google?**
+There's no threshold. Fixing anything that puts you under 50 is essential; below that you usually have an indexability or critical on-page problem. Most well-optimized pages land in the 80s or 90s, but the score is a hygiene check, not a ranking prediction.
 
-**Q: How often should I check my SEO score?**
-A: Monthly, or after any significant website change. Set up monitoring for automatic weekly checks.
+**Why did my score change when nothing on the page changed?**
+Response-header checks (compression, cache, security headers) and response time can shift with server config, CDN behavior, or deploys. If you're on Vercel, Cloudflare, or nginx, a config change upstream can move performance and security points without touching your HTML.
 
-Try it now — [Analyze your site free](/).`,
+**How often should I check?**
+Monthly, and after any significant change — a redesign, a migration, a new CMS plugin, or a CDN switch. Re-run the exact URL each time so the comparison is apples to apples.
+
+Ready to see yours? [Run your URL through the analyzer](/) — it's free.`,
   },
   'content-depth-seo-guide': {
     title: 'Content Depth in SEO: Why Word Count Alone Isn\'t Enough',
