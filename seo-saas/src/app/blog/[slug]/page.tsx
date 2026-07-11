@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { getBlogPost, getBlogList, renderMarkdown } from '@/lib/blog';
 
 export const revalidate = 60;
@@ -17,8 +17,15 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     title: post.title,
     description,
     alternates: { canonical: url },
-    openGraph: { type: 'article', title: post.title, description, url },
-    twitter: { card: 'summary_large_image', title: post.title, description },
+    openGraph: {
+      type: 'article',
+      title: post.title,
+      description,
+      url,
+      publishedTime: post.date || undefined,
+      images: [{ url: `${SITE}/og-image.svg`, width: 1200, height: 630, alt: post.title }],
+    },
+    twitter: { card: 'summary_large_image', title: post.title, description, images: [`${SITE}/og-image.svg`] },
   };
 }
 
@@ -29,28 +36,61 @@ export default async function BlogPost({ params }: { params: { slug: string } })
   const html = renderMarkdown(post.content);
   const related = (await getBlogList()).filter((p) => p.slug !== post.slug).slice(0, 3);
   const url = `${SITE}/blog/${post.slug}`;
+  const wordCount = post.content.trim().split(/\s+/).length;
+  const readTime = Math.max(1, Math.round(wordCount / 200));
 
-  const jsonLd = {
+  const articleLd = {
     '@context': 'https://schema.org',
     '@type': 'Article',
     headline: post.title,
     description: post.excerpt || undefined,
+    image: `${SITE}/og-image.svg`,
     datePublished: post.date || undefined,
     dateModified: post.date || undefined,
+    wordCount,
+    inLanguage: 'en',
     mainEntityOfPage: { '@type': 'WebPage', '@id': url },
-    author: { '@type': 'Organization', name: 'SEO Snapshot' },
-    publisher: { '@type': 'Organization', name: 'SEO Snapshot', url: SITE },
+    author: { '@type': 'Organization', name: 'SEO Snapshot', url: SITE },
+    publisher: { '@type': 'Organization', name: 'SEO Snapshot', url: SITE, logo: { '@type': 'ImageObject', url: `${SITE}/favicon.svg` } },
   };
+  const breadcrumbLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: SITE },
+      { '@type': 'ListItem', position: 2, name: 'Blog', item: `${SITE}/blog` },
+      { '@type': 'ListItem', position: 3, name: post.title, item: url },
+    ],
+  };
+  const prettyDate = post.date
+    ? new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+    : '';
 
   return (
     <div className="min-h-screen bg-surface relative">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <Link href="/blog" className="flex items-center gap-2 text-white/60 hover:text-white/70 transition text-sm mb-8">
-          <ArrowLeft className="w-4 h-4" /> Back to blog
-        </Link>
-        <h1 className="text-2xl font-medium tracking-tight mb-8 text-white/90">{post.title}</h1>
+        {/* Breadcrumb (matches BreadcrumbList schema) */}
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-white/50 mb-6">
+          <Link href="/" className="hover:text-white/80 transition">Home</Link>
+          <span className="text-white/25">/</span>
+          <Link href="/blog" className="hover:text-white/80 transition">Blog</Link>
+          <span className="text-white/25">/</span>
+          <span className="text-accent-400/80">{post.category}</span>
+        </nav>
+
+        <h1 className="text-3xl sm:text-[2.5rem] font-semibold tracking-tight mb-4 text-white/95 leading-[1.15] text-balance">{post.title}</h1>
+
+        {/* Byline — E-E-A-T + freshness + scannability */}
+        <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-white/50 mb-10">
+          {prettyDate && <time dateTime={post.date}>{prettyDate}</time>}
+          {prettyDate && <span className="text-white/25" aria-hidden>·</span>}
+          <span>{readTime} min read</span>
+          <span className="text-white/25" aria-hidden>·</span>
+          <span>By SEO Snapshot</span>
+        </div>
 
         <article className="blog-content" dangerouslySetInnerHTML={{ __html: html }} />
 
