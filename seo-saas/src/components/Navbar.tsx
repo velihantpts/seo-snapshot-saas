@@ -53,11 +53,14 @@ export function Navbar() {
 
           {/* Desktop nav */}
           <div className="hidden sm:flex items-center gap-2 md:gap-3">
-            {[...navLinks, ...authLinks].filter(l => l.desktop).map(link => (
-              <Link key={link.href} href={link.href} className={`text-[13px] text-white/50 hover:text-white/80 transition-colors duration-150 ${link.desktop === 'lg' ? 'hidden lg:inline' : ''}`}>
-                {link.label}
-              </Link>
-            ))}
+            {[...navLinks, ...authLinks].filter(l => l.desktop).map(link => {
+              const isTools = link.href === '/tools';
+              return (
+                <Link key={link.href} href={link.href} className={`text-[13px] transition-colors duration-150 ${link.desktop === 'lg' ? 'hidden lg:inline' : ''} ${isTools ? 'text-accent-400 hover:text-accent-300 font-medium' : 'text-white/50 hover:text-white/80'}`}>
+                  {link.label}
+                </Link>
+              );
+            })}
 
             {/* Language selector */}
             <div className="relative">

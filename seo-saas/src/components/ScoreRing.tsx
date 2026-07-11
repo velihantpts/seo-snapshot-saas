@@ -35,7 +35,7 @@ export function ScoreRing({ score, potentialScore, size = 140, label, showLabel 
       ([entry]) => {
         if (entry.isIntersecting) {
           setHasAnimated(true);
-          const duration = 1200;
+          const duration = 750;
           const startTime = performance.now();
 
           const animate = (currentTime: number) => {

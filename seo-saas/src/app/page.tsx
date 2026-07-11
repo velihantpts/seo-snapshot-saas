@@ -145,7 +145,7 @@ export default function Home() {
                   type="button"
                   onClick={handleCrawl}
                   disabled={loading || crawling || !url.trim()}
-                  className="btn-ghost flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-30 text-accent-400 whitespace-nowrap"
+                  className="btn-ghost flex items-center justify-center gap-2 min-h-[44px] disabled:opacity-50 text-accent-400 whitespace-nowrap"
                   title="Crawl entire site (Pro)"
                 >
                   {crawling ? (
