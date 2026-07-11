@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react';
 import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { UserMenu } from './UserMenu';
-import { Menu, X, Globe } from 'lucide-react';
+import { Menu, X, Globe, ChevronDown } from 'lucide-react';
 import { useLocale, LOCALES, type Locale } from '@/lib/i18n';
 
 export function Navbar() {
@@ -12,6 +13,7 @@ export function Navbar() {
   const [langOpen, setLangOpen] = useState(false);
   const { data: session } = useSession();
   const { locale, t, setLocale } = useLocale();
+  const pathname = usePathname();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -19,8 +21,9 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
-  useEffect(() => { setMobileOpen(false); }, []);
+  // Close both menus whenever the route changes (Navbar persists across routes
+  // in the App Router, so this needs to react to pathname — not just mount).
+  useEffect(() => { setMobileOpen(false); setLangOpen(false); }, [pathname]);
 
   const navLinks = [
     { href: '/pricing', label: t('nav.pricing'), desktop: true },
@@ -34,8 +37,6 @@ export function Navbar() {
     { href: '/dashboard', label: t('nav.dashboard'), desktop: true },
     { href: '/monitor', label: t('nav.monitor'), desktop: false },
   ] : [];
-
-  const currentFlag = LOCALES.find(l => l.code === locale)?.flag || '🇬🇧';
 
   return (
     <>
@@ -64,8 +65,10 @@ export function Navbar() {
 
             {/* Language selector */}
             <div className="relative">
-              <button onClick={() => setLangOpen(!langOpen)} className="text-sm text-white/60 hover:text-white/70 transition px-1.5 py-1" aria-label="Change language">
-                {currentFlag}
+              <button onClick={() => setLangOpen(!langOpen)} className="flex items-center gap-1 text-[13px] text-white/50 hover:text-white/80 transition-colors duration-150 px-2 py-1.5 rounded-lg hover:bg-white/[0.04]" aria-label="Change language" aria-haspopup="true" aria-expanded={langOpen}>
+                <Globe className="w-3.5 h-3.5" />
+                <span className="uppercase tracking-wide">{locale}</span>
+                <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${langOpen ? 'rotate-180' : ''}`} />
               </button>
               {langOpen && (
                 <>
@@ -91,8 +94,9 @@ export function Navbar() {
 
           {/* Mobile: lang + hamburger */}
           <div className="flex items-center gap-2 sm:hidden">
-            <button onClick={() => setLangOpen(!langOpen)} className="text-white/60 p-2" aria-label="Change language">
-              {currentFlag}
+            <button onClick={() => setLangOpen(!langOpen)} className="flex items-center gap-1 text-white/60 p-2" aria-label="Change language" aria-haspopup="true" aria-expanded={langOpen}>
+              <Globe className="w-4 h-4" />
+              <span className="text-xs uppercase tracking-wide">{locale}</span>
             </button>
             {langOpen && (
               <>
