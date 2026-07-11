@@ -1,17 +1,23 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Tag, FileCode, Braces, ArrowRight } from 'lucide-react';
+import { Tag, FileCode, Braces, Share2, Search, Languages, ListTree, EyeOff, CornerUpRight, ArrowRight } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'Free SEO Tools — Generators & Checkers',
-  description: 'Free SEO tools: meta tag generator, robots.txt generator, and JSON-LD schema generator. Copy-paste ready, no signup.',
+  title: 'Free SEO Tools — Generators & Preview Checkers',
+  description: 'Free SEO tools: Open Graph preview, SERP snippet preview, meta tag, schema, hreflang, sitemap, robots.txt & 301 redirect generators. No signup.',
   alternates: { canonical: 'https://seosnapshot.dev/tools' },
 };
 
 const tools = [
+  { href: '/tools/open-graph-preview', icon: Share2, title: 'Open Graph Preview', desc: 'See how your link looks on Facebook, X, LinkedIn & Discord, then get the tags.' },
+  { href: '/tools/serp-snippet-preview', icon: Search, title: 'SERP Snippet Preview', desc: 'Pixel-accurate Google preview — catch truncated titles & descriptions.' },
   { href: '/tools/meta-tag-generator', icon: Tag, title: 'Meta Tag Generator', desc: 'Title, description, Open Graph & Twitter Card tags with live length checks.' },
+  { href: '/tools/schema-generator', icon: Braces, title: 'JSON-LD Schema Generator', desc: 'Structured data for Organization, LocalBusiness, Article, FAQ, Product, Event & more.' },
+  { href: '/tools/hreflang-generator', icon: Languages, title: 'Hreflang Generator', desc: 'Multi-language & multi-region tags with x-default, done right.' },
+  { href: '/tools/sitemap-generator', icon: ListTree, title: 'XML Sitemap Generator', desc: 'Paste your URLs, get a valid sitemap.xml — copy or download.' },
   { href: '/tools/robots-txt-generator', icon: FileCode, title: 'robots.txt Generator', desc: 'Control crawling with disallow rules, sitemap, and crawl-delay.' },
-  { href: '/tools/schema-generator', icon: Braces, title: 'JSON-LD Schema Generator', desc: 'Structured data for Organization, Article, FAQ, Product & WebSite.' },
+  { href: '/tools/robots-meta-generator', icon: EyeOff, title: 'Robots Meta Generator', desc: 'noindex, nofollow, canonical & X-Robots-Tag for a single page.' },
+  { href: '/tools/redirect-generator', icon: CornerUpRight, title: '301 Redirect Generator', desc: '.htaccess & Nginx redirect rules from a list of old → new URLs.' },
 ];
 
 export default function ToolsPage() {

@@ -3,12 +3,13 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { Copy, CheckCircle, Plus, Trash2 } from 'lucide-react';
 
-type SchemaType = 'Organization' | 'Article' | 'FAQPage' | 'Product' | 'WebSite';
+type SchemaType = 'Organization' | 'Article' | 'FAQPage' | 'Product' | 'WebSite' | 'LocalBusiness' | 'BreadcrumbList' | 'Event';
 
 export default function SchemaGeneratorClient() {
   const [type, setType] = useState<SchemaType>('Organization');
   const [f, setF] = useState<Record<string, string>>({});
   const [faqs, setFaqs] = useState<{ q: string; a: string }[]>([{ q: '', a: '' }]);
+  const [crumbs, setCrumbs] = useState<{ name: string; url: string }[]>([{ name: '', url: '' }, { name: '', url: '' }]);
   const [copied, setCopied] = useState(false);
 
   const set = (k: string, v: string) => setF(p => ({ ...p, [k]: v }));
@@ -39,6 +40,30 @@ export default function SchemaGeneratorClient() {
       if (f.price) base.offers = { '@type': 'Offer', price: f.price, priceCurrency: f.currency || 'USD', availability: 'https://schema.org/InStock' };
     } else if (type === 'FAQPage') {
       base.mainEntity = faqs.filter(x => x.q && x.a).map(x => ({ '@type': 'Question', name: x.q, acceptedAnswer: { '@type': 'Answer', text: x.a } }));
+    } else if (type === 'LocalBusiness') {
+      if (f.name) base.name = f.name;
+      if (f.url) base.url = f.url;
+      if (f.telephone) base.telephone = f.telephone;
+      if (f.image) base.image = f.image;
+      if (f.priceRange) base.priceRange = f.priceRange;
+      const addr: Record<string, string> = {};
+      if (f.street) addr.streetAddress = f.street;
+      if (f.city) addr.addressLocality = f.city;
+      if (f.region) addr.addressRegion = f.region;
+      if (f.postal) addr.postalCode = f.postal;
+      if (f.country) addr.addressCountry = f.country;
+      if (Object.keys(addr).length) base.address = { '@type': 'PostalAddress', ...addr };
+    } else if (type === 'BreadcrumbList') {
+      base.itemListElement = crumbs.filter(c => c.name).map((c, i) => ({
+        '@type': 'ListItem', position: i + 1, name: c.name, ...(c.url ? { item: c.url } : {}),
+      }));
+    } else if (type === 'Event') {
+      if (f.name) base.name = f.name;
+      if (f.date) base.startDate = f.date;
+      if (f.endDate) base.endDate = f.endDate;
+      if (f.location) base.location = { '@type': 'Place', name: f.location, ...(f.address ? { address: f.address } : {}) };
+      if (f.url) base.url = f.url;
+      if (f.description) base.description = f.description;
     }
     return base;
   };
@@ -46,7 +71,7 @@ export default function SchemaGeneratorClient() {
   const output = `<script type="application/ld+json">\n${JSON.stringify(build(), null, 2)}\n</script>`;
   const copy = () => { navigator.clipboard?.writeText(output); setCopied(true); setTimeout(() => setCopied(false), 2000); };
 
-  const types: SchemaType[] = ['Organization', 'WebSite', 'Article', 'Product', 'FAQPage'];
+  const types: SchemaType[] = ['Organization', 'LocalBusiness', 'WebSite', 'Article', 'Product', 'FAQPage', 'BreadcrumbList', 'Event'];
 
   return (
     <div>
@@ -98,6 +123,49 @@ export default function SchemaGeneratorClient() {
               </div>
             ))}
             <button onClick={() => setFaqs([...faqs, { q: '', a: '' }])} className="flex items-center gap-1.5 text-sm text-accent-400 hover:text-accent-300"><Plus className="w-4 h-4" /> Add question</button>
+          </div>)}
+          {type === 'LocalBusiness' && (<>
+            <Input label="Business name" v={f.name} on={v => set('name', v)} ph="Acme Coffee" />
+            <Input label="Website URL" v={f.url} on={v => set('url', v)} ph="https://acme.coffee" />
+            <div className="grid grid-cols-2 gap-3">
+              <Input label="Phone" v={f.telephone} on={v => set('telephone', v)} ph="+1 555 123 4567" />
+              <Input label="Price range" v={f.priceRange} on={v => set('priceRange', v)} ph="$$" />
+            </div>
+            <Input label="Image URL" v={f.image} on={v => set('image', v)} ph="https://…/storefront.jpg" />
+            <Input label="Street address" v={f.street} on={v => set('street', v)} ph="123 Main St" />
+            <div className="grid grid-cols-2 gap-3">
+              <Input label="City" v={f.city} on={v => set('city', v)} ph="Austin" />
+              <Input label="Region/State" v={f.region} on={v => set('region', v)} ph="TX" />
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              <Input label="Postal code" v={f.postal} on={v => set('postal', v)} ph="78701" />
+              <Input label="Country" v={f.country} on={v => set('country', v)} ph="US" />
+            </div>
+          </>)}
+          {type === 'Event' && (<>
+            <Input label="Event name" v={f.name} on={v => set('name', v)} ph="Product Launch 2026" />
+            <div className="grid grid-cols-2 gap-3">
+              <Input label="Start date/time" v={f.date} on={v => set('date', v)} ph="2026-09-01T18:00" />
+              <Input label="End date/time" v={f.endDate} on={v => set('endDate', v)} ph="2026-09-01T21:00" />
+            </div>
+            <Input label="Location name" v={f.location} on={v => set('location', v)} ph="Acme HQ / Online" />
+            <Input label="Address (optional)" v={f.address} on={v => set('address', v)} ph="123 Main St, Austin, TX" />
+            <Input label="Event URL" v={f.url} on={v => set('url', v)} ph="https://…/event" />
+            <Area label="Description" v={f.description} on={v => set('description', v)} ph="Short description of the event" />
+          </>)}
+          {type === 'BreadcrumbList' && (<div className="space-y-3">
+            <p className="text-xs text-white/40">Top-level page first, current page last.</p>
+            {crumbs.map((c, i) => (
+              <div key={i} className="glass-card rounded-lg p-3 space-y-2">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-white/40">Level {i + 1}</span>
+                  {crumbs.length > 1 && <button onClick={() => setCrumbs(crumbs.filter((_, j) => j !== i))} className="text-white/25 hover:text-red-400"><Trash2 className="w-3.5 h-3.5" /></button>}
+                </div>
+                <input value={c.name} onChange={e => setCrumbs(crumbs.map((y, j) => j === i ? { ...y, name: e.target.value } : y))} placeholder="Name (e.g. Blog)" className={field} />
+                <input value={c.url} onChange={e => setCrumbs(crumbs.map((y, j) => j === i ? { ...y, url: e.target.value } : y))} placeholder="https://example.com/blog" className={field} />
+              </div>
+            ))}
+            <button onClick={() => setCrumbs([...crumbs, { name: '', url: '' }])} className="flex items-center gap-1.5 text-sm text-accent-400 hover:text-accent-300"><Plus className="w-4 h-4" /> Add level</button>
           </div>)}
         </div>
 

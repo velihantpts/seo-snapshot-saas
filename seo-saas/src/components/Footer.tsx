@@ -5,11 +5,11 @@ const columns = [
     title: 'Tools',
     links: [
       { href: '/', label: 'Analyze a URL' },
+      { href: '/tools/open-graph-preview', label: 'Open Graph Preview' },
+      { href: '/tools/serp-snippet-preview', label: 'SERP Snippet Preview' },
       { href: '/tools/meta-tag-generator', label: 'Meta Tag Generator' },
-      { href: '/tools/robots-txt-generator', label: 'robots.txt Generator' },
       { href: '/tools/schema-generator', label: 'Schema Generator' },
-      { href: '/badge', label: 'SEO Score Badge' },
-      { href: '/compare', label: 'Compare URLs' },
+      { href: '/tools', label: 'All free tools →' },
     ],
   },
   {
