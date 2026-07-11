@@ -4053,4 +4053,540 @@ A: Usually a few weeks for Google to recrawl, process the redirect or canonical,
 
 Run your competing URLs through [SEO Snapshot](/) to compare title, H1, and keyword placement side by side and confirm which pages overlap.`,
   },
+  'fix-crawled-currently-not-indexed': {
+    title: 'How to Fix "Crawled — Currently Not Indexed" in Google Search Console',
+    content: `## What "Crawled — currently not indexed" means
+
+You submitted a page, waited, checked the URL Inspection tool, and got this: **Crawled - currently not indexed**. Googlebot came, read the page, and walked away without adding it to the index. No error, no penalty banner, nothing broken. Just a quiet no.
+
+That's the frustrating part. This status isn't a technical failure you can patch and forget. It's a judgment call. Google fetched your HTML, evaluated it, and decided the page wasn't worth a slot in the index right now. Fixing it means changing that decision.
+
+### What the status actually means
+
+Two GSC statuses get confused constantly, and telling them apart is the first diagnostic step:
+
+- **Discovered - currently not indexed**: Google knows the URL exists but hasn't crawled it yet. That's a crawl-budget and scheduling problem — Google is deprioritizing the fetch, often on large or slow sites.
+- **Crawled - currently not indexed**: Google *did* fetch the page and then chose not to index it. That's a quality and priority problem.
+
+If you're on "Crawled," the raw fetch worked. Your robots.txt is fine, the server returned 200, the page rendered. What failed is the value assessment. Google looked at the content and concluded it either duplicates something already indexed, adds nothing new, or isn't worth the storage given how much it trusts your domain.
+
+Treat it as feedback, not a bug report.
+
+### The real causes, roughly in order of how often they're the culprit
+
+**Thin or templated content.** The page technically has words, but they're boilerplate — a product page that's 90% shared template and 40 words of unique text, a tag archive that just lists three posts, a location page spun from a template with the city name swapped in. Google sees the pattern and passes. This is the single most common cause, and [content depth in SEO](/blog/content-depth-seo-guide) is usually the fix.
+
+**Near-duplicate pages competing for the same intent.** You have \`/blog/nextjs-seo\`, \`/blog/seo-for-nextjs\`, and \`/tag/nextjs\` all targeting roughly the same query. Google indexes one and leaves the others as "crawled, not indexed." This is [keyword cannibalization](/blog/keyword-cannibalization-fix) showing up in the index-coverage report. It also happens with URL variants — trailing slashes, query strings, \`?utm=\` parameters — that resolve to the same content.
+
+**A new or low-authority domain.** On a site launched a few months ago, Google is deliberately conservative. It'll index your homepage and a handful of pages, then throttle the rest until it trusts you more. Sometimes the page is completely fine and the only thing wrong is that your domain is young. This one genuinely does resolve with time.
+
+**Client-side-rendered pages that ship near-empty HTML.** This is the one developers cause and miss. Your React or Vue app returns a \`<div id="root"></div>\` and a bundle. You see a full page in your browser because JS runs. Google can render JS, but rendering is queued and expensive, and if the initial HTML is a shell, Google may evaluate the near-empty version and decide there's nothing to index. From its first look, your page had no content.
+
+**Soft-404-ish pages.** The page returns HTTP 200 but reads like an empty state — "No results found," an out-of-stock product with no description, a filtered category with zero items. Google's heuristics flag these as effectively contentless even though the status code says OK.
+
+**Orphan pages with no internal links.** If nothing on your site links to a URL and it only exists in the sitemap, Google gets a strong signal that even *you* don't think it matters. Internal links are how you vote for your own pages.
+
+**Mass-produced or AI-spun content caught by the Helpful Content system.** Hundreds of near-identical pages generated from a template or a model, with no first-hand value, get filtered at scale. If you published a large batch and most of it landed in "Crawled - not indexed," this is likely why.
+
+### Diagnosing each cause
+
+Start in **GSC URL Inspection**. Paste the URL, then open **View crawled page → HTML**. This shows the HTML Google actually fetched. Read it. Is your article body in there, or just a script tag and an empty container? If the content is missing, you have a rendering problem, not a content problem — and you've just saved yourself from rewriting a page that was fine.
+
+Confirm it outside GSC with a raw fetch — this is what a bot sees before any JavaScript runs:
+
+\`\`\`bash
+curl -sL https://example.com/your-page | grep -i "your unique headline text"
+\`\`\`
+
+No match means your content isn't in the server-sent HTML. That's the CSR trap.
+
+For duplication, run a \`site:\` search for the target phrase (\`site:example.com "your exact heading"\`) and see how many of your own URLs surface. If several near-identical pages show up, you've found the cannibalization. For thinness, be honest about word count and originality — would this page help someone who already read the top three results? You can also drop the URL into the analyzer at [seosnapshot.dev](/) to check whether the content is actually present in the HTML and to flag thin or duplicate signals before you guess.
+
+### The fixes
+
+**If it's thin or templated:** add substantial, genuinely useful content that isn't in the template — real detail, specifics, something only you would write. Then add internal links from related, already-indexed pages so Google has a path in and a reason to re-evaluate.
+
+**If it's duplicates:** consolidate. Pick the strongest URL, 301-redirect the losers to it, or set \`rel="canonical"\` on the variants pointing at the winner. [Canonical URLs explained](/blog/canonical-url-explained) walks through the difference and when to use which. Don't canonical and noindex the same page — pick one signal.
+
+**If it's client-side rendering:** get your content into the initial HTML. On Next.js, render the page in a Server Component (App Router) or use \`getServerSideProps\` / static generation (Pages Router) instead of fetching data in a client-only \`useEffect\`. The test is simple — \`curl\` the URL and confirm the body text is in the response, not injected later.
+
+\`\`\`tsx
+// Pages Router — content is in the HTML Google first sees
+export async function getServerSideProps({ params }) {
+  const post = await getPost(params.slug);
+  return { props: { post } };
+}
+\`\`\`
+
+**If pages shouldn't be indexed at all:** stop making them compete. Thin utility pages — internal search results, faceted filters, thank-you pages, paginated tag archives — should carry \`noindex\` so they don't dilute your quality signal or eat crawl attention. Generate the right tags with the [robots meta / X-Robots-Tag generator](/tools/robots-meta-generator). Fewer, stronger pages beat a pile of mediocre ones.
+
+**After any real fix:** use URL Inspection → **Request Indexing**. This nudges Google to re-crawl sooner. Don't spam it — request once per meaningful change. And run a proper [technical SEO audit](/blog/technical-seo-audit-complete-guide) if a whole section of the site is affected, since the cause is usually structural rather than page-by-page.
+
+### Will it fix itself?
+
+Sometimes — specifically on new domains where the only problem was trust and time. If the page is solid and your site is young, revisiting in four to eight weeks may show it indexed with no action from you.
+
+But if the cause is thin content, duplication, or empty rendered HTML, waiting does nothing. Google already made its call; it won't change its mind about the same page. After a real fix, expect anywhere from a few days to several weeks for re-crawl and re-evaluation. New domains sit at the slow end of that range.
+
+### FAQ
+
+**How long until Google indexes it after I fix the page?**
+Usually days to a few weeks. Requesting indexing speeds up the re-crawl but doesn't override the quality assessment — if the fix was superficial, the status comes back.
+
+**Does requesting indexing repeatedly help?**
+No. Repeated requests on an unchanged page do nothing and can look like impatience. Fix the underlying issue, request once, then wait.
+
+**Can a strong internal link get a page indexed on its own?**
+It helps a lot, especially for orphan pages, because it signals the page matters and gives Google a crawl path. But a great internal link into a thin page won't override a content-quality judgment — you still need something worth indexing at the other end.`,
+  },
+  'fix-discovered-currently-not-indexed': {
+    title: '"Discovered — Currently Not Indexed": Causes and How to Fix It',
+    content: `## What "Discovered — currently not indexed" means
+
+Open the Pages report in Google Search Console, expand "Why pages aren't indexed", and you find a bucket labeled **Discovered - currently not indexed**. It sounds like an error. It isn't. It's a status about timing.
+
+Here's the precise meaning: Google knows your URL exists. It found the address — usually in your sitemap, sometimes from a link — and added it to the crawl queue. But it hasn't fetched the page yet. No crawl has happened. Googlebot hasn't downloaded your HTML, hasn't seen your content, hasn't made any indexing decision. The URL is sitting in line waiting to be crawled.
+
+That queue distinction is the whole point, and it's why this status is often confused with a different one.
+
+## Not the same as "Crawled — currently not indexed"
+
+These two live next to each other in the report and mean opposite things:
+
+- **Discovered — currently not indexed**: Google knows the URL but has *not* fetched it. Nothing has been read. It's queued.
+- **Crawled — currently not indexed**: Google *did* fetch the page, read the content, and then chose not to index it. That's a quality/duplication judgment, not a queue problem.
+
+If your URLs are in the "Crawled" bucket, crawl budget isn't your issue — content quality, thin pages, or duplication is, and the fix is different. Work through the [Crawled — currently not indexed fix](/blog/fix-crawled-currently-not-indexed) instead. The rest of this article assumes the "Discovered" status: Google hasn't looked yet.
+
+## Why Google delays the crawl
+
+Google doesn't crawl every discovered URL immediately. It rations crawling based on how much it trusts a site and how much value it expects. A few things push your URLs to the back of the line:
+
+**A new or low-authority domain.** The most common cause, and the most frustrating because there's often nothing wrong with the page. Google crawls sites it trusts more aggressively. A domain registered three weeks ago with two backlinks gets a small crawl allowance, and Google spends it carefully. On a brand-new site, this status frequently just means *wait* — the page is fine, the domain hasn't earned frequent crawling yet.
+
+**Crawl budget and priority.** Every site gets a rough crawl allowance based on its size, health, and authority. On a large site — tens of thousands of URLs — Google won't crawl all of them on every pass. It prioritizes, and pages that look low-value get deferred.
+
+**A bloated URL space.** Crawl budget's silent killer. Faceted navigation and parameters (\`?color=red&sort=price&page=3\`) can generate thousands of near-identical URLs. Google discovers them all, queues them all, and burns its crawl allowance on junk. Your important URL is stuck behind 4,000 filter combinations.
+
+**Slow server or 5xx errors.** Googlebot watches your response times. If the server is slow to respond or throws 500s, Google backs off to avoid overloading it — that's by design. A consistently slow time to first byte (TTFB) directly shrinks how many pages Google will pull per visit.
+
+**Poor internal linking or orphan pages.** Google found the URL in your sitemap, but if nothing on your site links to it, it looks unimportant. A page's internal links are Google's strongest signal of priority. An orphan page — in the sitemap, linked from nowhere — often sits in "Discovered" indefinitely.
+
+**Thin or duplicate URLs.** If a URL pattern has produced low-value pages before, Google may deprioritize similar ones preemptively, based on what it has learned about the rest of your site.
+
+## Diagnosis: figure out which cause is yours
+
+Before you change anything, narrow it down.
+
+**Check server response time and health.** Slow TTFB and intermittent 5xx are the causes people miss because the site "feels fine" in a browser. Pull up **Settings → Crawl stats** in Search Console. A rising average response time or any meaningful share of 5xx tells you the server is the bottleneck. You can also check response time and server health for a specific URL by running it through the analyzer at [seosnapshot.dev](/).
+
+**Check internal links to the URL.** Ask a blunt question: how many pages on your site link to this one, and how many clicks from the homepage is it? If the answer is "zero links" or "six clicks deep", that's your problem. The analyzer flags orphan and deeply-buried URLs.
+
+**Check the sitemap.** Open your \`sitemap.xml\`. Every URL in it should be a canonical, indexable, 200-status page. If your sitemap is stuffed with redirects, noindex pages, or non-canonical duplicates, you're diluting the priority signal and wasting crawl attention. The [XML sitemap guide](/blog/sitemap-xml-guide) covers what belongs in there.
+
+**Look at the scale of the queue.** Thousands of URLs sitting in "Discovered" means a URL-space or crawl-budget problem, not a per-page one. A handful on a small site is more likely authority and time.
+
+## Fixes, ranked by impact
+
+Start at the top. The early items move the needle most.
+
+**1. Improve internal linking to the affected URLs.** This is the single most actionable fix. Link to the stranded pages from relevant, already-indexed pages — category hubs, your top-traffic articles, contextual body links. Get them within two or three clicks of the homepage. A page with real internal links reads as "important" to Google, and importance is what moves it up the crawl queue.
+
+**2. Speed up TTFB and fix an overloaded server.** If Crawl stats shows a slow average response or 5xx spikes, fix that. Cache aggressively, put a CDN (Cloudflare, Vercel's edge) in front, tune your database, or move off oversubscribed shared hosting. Faster responses let Google crawl more per visit.
+
+**3. Trim your low-value URL space.** If parameters and facets are generating thousands of thin URLs, cut them out of the crawl path. Use \`robots.txt\` to disallow infinite parameter patterns, or \`noindex\` on pages that must exist but shouldn't be indexed. This concentrates the crawl budget on pages that matter — see the [robots.txt guide](/blog/robots-txt-guide) for crawl-budget patterns, and generate the rules with the [robots.txt generator](/tools/robots-txt-generator).
+
+**4. Keep the sitemap clean and honest.** Only canonical, indexable, 200 URLs. Set \`lastmod\` to the *real* last-modified date — don't fake a fresh timestamp on every URL to trick Google into recrawling, because it learns to distrust the signal and ignores your \`lastmod\` entirely. Regenerate a correct file with the [sitemap generator](/tools/sitemap-generator).
+
+**5. Earn a few links and build authority.** On a new domain this is the real unlock. A launch that brings in a handful of legitimate backlinks — a directory listing, a mention, a partner link — raises how much Google trusts the domain, and trusted sites get crawled more often and more deeply. You're not just chasing rankings; you're buying crawl frequency, and that quietly fixes "Discovered" across a whole site at once.
+
+**6. Request indexing for priority pages.** For a few important URLs, use the URL Inspection tool and click "Request Indexing" to push them toward the front of the queue. This works for individual pages. It does not scale to thousands, and spamming it won't help — it's a nudge, not a fix.
+
+**7. On a new site: be patient.** If the domain is young, the pages are fine, and internal links are in place, the honest answer is time. Keep publishing, keep earning links, and the crawl allowance grows on its own.
+
+If you suspect the problem is broader than one status — server health, sitemap hygiene, and internal linking all at once — a full [technical SEO audit](/blog/technical-seo-audit-complete-guide) will surface the pattern faster than fixing URLs one at a time.
+
+## FAQ
+
+**How long until a discovered URL gets crawled?**
+On an established, healthy site, days to a couple of weeks. On a new or low-authority domain it can take considerably longer — sometimes over a month — and there's no fixed SLA. If a URL has been stuck for many weeks *and* has no internal links or a slow server behind it, that's a fixable cause, not just slow luck.
+
+**Will requesting indexing force a crawl?**
+It moves that specific URL up the queue and usually gets it crawled sooner. It doesn't guarantee indexing afterward, and it won't help at scale. Fix internal linking and crawl budget for the bulk; use Request Indexing for the few pages you need now.
+
+**Is "Discovered — currently not indexed" a penalty?**
+No. It's a scheduling state, not a manual action or a quality strike. Google simply hasn't gotten to the page. If Google had crawled it and rejected it, you'd see "Crawled — currently not indexed" instead.`,
+  },
+  'add-sitemap-nextjs': {
+    title: 'How to Add a sitemap.xml in Next.js (App Router)',
+    content: `## Next.js Does Not Ship a Sitemap — You Add One
+
+There's no config flag to flip. Next.js won't generate a \`sitemap.xml\` for you, and no plugin runs by default. But the App Router gives you a clean, first-party way to build one: a single file at \`app/sitemap.ts\` that exports a function returning your URLs. Next handles the XML formatting, the \`Content-Type\` header, and the route. You just describe the pages.
+
+This guide is the App Router way first (Next 13.3+, current through 14 and 15), then the Pages Router fallback if you're on an older setup.
+
+## The Minimal \`app/sitemap.ts\`
+
+Create the file at the root of your \`app\` directory. It exports a default function that returns an array of URL objects typed as \`MetadataRoute.Sitemap\`.
+
+\`\`\`typescript
+import type { MetadataRoute } from 'next'
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  return [
+    {
+      url: 'https://example.com',
+      lastModified: new Date('2026-06-01'),
+    },
+    {
+      url: 'https://example.com/about',
+      lastModified: new Date('2026-05-12'),
+    },
+    {
+      url: 'https://example.com/pricing',
+      lastModified: new Date('2026-06-20'),
+    },
+  ]
+}
+\`\`\`
+
+Two things to get right immediately. First, \`import type { MetadataRoute }\` — the \`type\` keyword means it's erased at build time, and \`MetadataRoute.Sitemap\` gives you autocomplete plus a compile error if you misspell \`lastModified\` or return the wrong shape. Second, **URLs must be absolute.** \`/about\` on its own produces an invalid sitemap. Always include the full origin.
+
+Visit \`http://localhost:3000/sitemap.xml\` and Next renders proper XML with the \`<urlset>\` wrapper. You never write the XML by hand.
+
+## Static Plus Dynamic Routes
+
+Real sites have a handful of hardcoded pages and a pile of database- or CMS-driven ones. Make the function \`async\` and fetch the dynamic slugs. This is where a sitemap earns its keep.
+
+\`\`\`typescript
+import type { MetadataRoute } from 'next'
+import { getAllPosts } from '@/lib/posts'
+
+const BASE_URL = 'https://example.com'
+
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  // Static routes you maintain by hand
+  const staticRoutes: MetadataRoute.Sitemap = [
+    { url: BASE_URL, lastModified: new Date('2026-06-01') },
+    { url: \`\${BASE_URL}/about\`, lastModified: new Date('2026-05-12') },
+    { url: \`\${BASE_URL}/blog\`, lastModified: new Date() },
+  ]
+
+  // Dynamic routes from your data source
+  const posts = await getAllPosts()
+  const postRoutes: MetadataRoute.Sitemap = posts.map((post) => ({
+    url: \`\${BASE_URL}/blog/\${post.slug}\`,
+    lastModified: new Date(post.updatedAt),
+  }))
+
+  return [...staticRoutes, ...postRoutes]
+}
+\`\`\`
+
+\`getAllPosts()\` can be a Prisma query, a \`fetch\` to a headless CMS, or a filesystem read of your MDX files — whatever backs your content. The pattern is identical: map each record to \`{ url, lastModified }\`. Because this runs at build time (or on-demand if the route is dynamic), the sitemap stays in sync with your content without a separate generation step.
+
+## \`lastModified\` Done Right
+
+This is the field developers get wrong, and it quietly makes the sitemap useless. The instinct is to write \`lastModified: new Date()\` on every entry. Every build stamps every URL with "modified right now."
+
+Google is not fooled by this for long. When every page in your sitemap claims to change on every deploy, the signal carries no information, and crawlers learn to ignore your dates entirely. The point of \`lastModified\` is to tell Google *which* pages actually changed so it can prioritize recrawling them. Feed it a real per-page timestamp — the \`updatedAt\` column from your database, the \`git log\` date of the MDX file, the CMS "last published" field. Pages that genuinely haven't changed should keep showing an old date. That's the whole value.
+
+If you truly have no per-page timestamp, omitting \`lastModified\` is better than faking it with \`new Date()\`.
+
+## What About \`changeFrequency\` and \`priority\`?
+
+The \`MetadataRoute.Sitemap\` type also accepts \`changeFrequency\` (\`'daily'\`, \`'weekly'\`, etc.) and \`priority\` (0.0 to 1.0). You can include them:
+
+\`\`\`typescript
+{
+  url: \`\${BASE_URL}/blog/\${post.slug}\`,
+  lastModified: new Date(post.updatedAt),
+  changeFrequency: 'monthly',
+  priority: 0.7,
+}
+\`\`\`
+
+Be honest about what they do: Google has said publicly it largely ignores both. \`priority\` was never a ranking signal, and \`changeFrequency\` is treated as a hint at best. They don't hurt, but don't spend time tuning \`priority\` values expecting a payoff — put that effort into accurate \`lastModified\` instead. The deeper rationale for every field lives in the [XML sitemap guide](/blog/sitemap-xml-guide).
+
+## Large Sites: Splitting Past 50,000 URLs
+
+A single sitemap file is capped at 50,000 URLs and 50 MB uncompressed. Cross that and you need a sitemap index pointing at multiple files. Next handles this with \`generateSitemaps\`.
+
+\`\`\`typescript
+import type { MetadataRoute } from 'next'
+import { getProductCount, getProductsPage } from '@/lib/products'
+
+const BASE_URL = 'https://example.com'
+
+export async function generateSitemaps() {
+  const total = await getProductCount()
+  const pages = Math.ceil(total / 50000)
+  return Array.from({ length: pages }, (_, id) => ({ id }))
+}
+
+export default async function sitemap({
+  id,
+}: {
+  id: number
+}): Promise<MetadataRoute.Sitemap> {
+  const products = await getProductsPage(id, 50000)
+  return products.map((product) => ({
+    url: \`\${BASE_URL}/products/\${product.slug}\`,
+    lastModified: new Date(product.updatedAt),
+  }))
+}
+\`\`\`
+
+Next now serves \`/sitemap/0.xml\`, \`/sitemap/1.xml\`, and so on. Point Search Console at the index (\`/sitemap.xml\`) and it discovers the rest. Don't reach for this until you're actually near the limit — most sites never do.
+
+## Reference It in \`app/robots.ts\`
+
+Search engines find your sitemap two ways: you submit it, and you list it in \`robots.txt\`. Do both. The App Router has a matching \`app/robots.ts\`:
+
+\`\`\`typescript
+import type { MetadataRoute } from 'next'
+
+export default function robots(): MetadataRoute.Robots {
+  return {
+    rules: { userAgent: '*', allow: '/' },
+    sitemap: 'https://example.com/sitemap.xml',
+  }
+}
+\`\`\`
+
+That emits a \`Sitemap:\` directive at \`/robots.txt\`. If you're customizing crawl rules beyond this, the [robots.txt guide](/blog/robots-txt-guide) covers the directive and its edge cases.
+
+## Verify It Actually Works
+
+Before you submit anything, load the file and read it:
+
+- **Visit \`/sitemap.xml\`** in production. It should return valid XML with a \`<urlset>\` (or \`<sitemapindex>\` for split sites), not a 404 or an HTML error page.
+- **Check the URLs are absolute** — \`https://example.com/about\`, never \`/about\`. This is the most common breakage.
+- **Confirm only canonical, indexable pages are listed.** No \`noindex\` pages, no redirects, no \`?utm=\` variants, no staging URLs. A page in your sitemap but marked \`noindex\` sends Google mixed signals.
+- **Watch for trailing-slash mismatches.** If your canonical URLs end in \`/\`, your sitemap entries should too.
+
+Once it's live, run the URL through the [SEO Snapshot analyzer](/) to confirm the sitemap is detected and parses cleanly — a fast sanity check before you hand it to Search Console. Then in Google Search Console, go to Sitemaps, enter \`sitemap.xml\`, and submit. Google will report how many URLs it read and flag parse errors.
+
+While you're in the codebase, the [technical SEO audit guide](/blog/technical-seo-audit-complete-guide) covers the other crawlability checks worth doing in the same pass, and if the site feels slow, [fixing render-blocking resources in Next.js](/blog/fix-render-blocking-resources-nextjs) is the usual first win.
+
+## Pages Router Alternative
+
+On the older \`pages/\` directory there's no \`MetadataRoute\` helper. Two options.
+
+Generate XML in a route with \`getServerSideProps\`:
+
+\`\`\`typescript
+// pages/sitemap.xml.tsx
+import type { GetServerSideProps } from 'next'
+
+function generateXml(urls: string[]) {
+  return \`<?xml version="1.0" encoding="UTF-8"?>
+  <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    \${urls.map((u) => \`<url><loc>\${u}</loc></url>\`).join('')}
+  </urlset>\`
+}
+
+export const getServerSideProps: GetServerSideProps = async ({ res }) => {
+  const urls = ['https://example.com', 'https://example.com/about']
+  res.setHeader('Content-Type', 'text/xml')
+  res.write(generateXml(urls))
+  res.end()
+  return { props: {} }
+}
+
+export default function Sitemap() {
+  return null
+}
+\`\`\`
+
+Or install \`next-sitemap\`, which crawls your build output and writes files automatically. It's the standard Pages Router answer. You do **not** need it on the App Router — the built-in \`app/sitemap.ts\` covers everything it does.
+
+## FAQ
+
+**Does Next.js generate a sitemap automatically?**
+No. There's no default sitemap. You add \`app/sitemap.ts\` (App Router) or generate one yourself (Pages Router). Next only handles the XML rendering once you supply the URLs.
+
+**Why is my sitemap at \`/sitemap/0.xml\` instead of \`/sitemap.xml\`?**
+You're using \`generateSitemaps\`, which splits output into numbered files. That's expected for large sites. Submit the index at \`/sitemap.xml\` and Google follows the links to each part.
+
+**Do I need the next-sitemap package?**
+Not for the App Router — \`app/sitemap.ts\` is built in and does the job. \`next-sitemap\` is worth it on the Pages Router or when you want automatic crawling of a large static export.
+
+If you're on a non-Next stack, or you just want a one-off file without touching code, the [XML sitemap generator](/tools/sitemap-generator) builds a valid \`sitemap.xml\` from a list of URLs in seconds.`,
+  },
+  'canonical-url-nextjs': {
+    title: 'How to Set a Canonical URL in Next.js (App Router)',
+    content: `## The Metadata API, not a hand-written tag
+
+In the App Router you don't hand-write \`<link rel="canonical">\` in the \`<head>\`. You describe it through the Metadata API, and Next.js renders the tag for you. That's cleaner, but it hides a trap that has deindexed a lot of pages — including some of ours — because canonicals set in a layout are inherited by every route below it. Get the mechanics right and you'll never think about it again. Get them wrong once in \`layout.tsx\` and Google quietly points your whole site at the homepage.
+
+If you're fuzzy on what a canonical actually does and when you need one, read [canonical URLs explained](/blog/canonical-url-explained) first — this post is the Next.js implementation, not the concept.
+
+### The basic pattern: \`alternates.canonical\`
+
+Every canonical in the App Router lives under \`alternates\` in a \`metadata\` object:
+
+\`\`\`tsx
+// app/pricing/page.tsx
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: 'Pricing',
+  alternates: {
+    canonical: '/pricing',
+  },
+};
+
+export default function PricingPage() {
+  return <main>{/* ... */}</main>;
+}
+\`\`\`
+
+That renders \`<link rel="canonical" href="https://example.com/pricing" />\` into the head — as long as you've set \`metadataBase\` (next section). A relative string like \`/pricing\` is the right call here: it's self-referencing, and it survives a domain change without a find-and-replace.
+
+### Set \`metadataBase\` once in the root layout
+
+Relative URLs need a base to resolve against. Set it a single time in the root layout and every relative canonical, plus your Open Graph \`url\`, becomes absolute:
+
+\`\`\`tsx
+// app/layout.tsx
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  metadataBase: new URL('https://example.com'),
+  title: {
+    default: 'Acme',
+    template: '%s | Acme',
+  },
+  // NOTE: no \`alternates.canonical\` here — see the gotcha below
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
+}
+\`\`\`
+
+With \`metadataBase\` set, \`canonical: '/pricing'\` resolves to \`https://example.com/pricing\`. Without it, Next.js falls back to \`http://localhost:3000\` in dev and logs a warning, and in production you can end up shipping a canonical that points at the wrong origin. Set it from an env var if you deploy to multiple domains:
+
+\`\`\`tsx
+metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL ?? 'https://example.com'),
+\`\`\`
+
+You *can* pass an absolute string per page (\`canonical: 'https://example.com/pricing'\`) and skip the base, but then OG URLs still need a base and you're maintaining the domain in two mental models. Pick relative + \`metadataBase\` and stay consistent.
+
+### Dynamic routes: a self-referencing canonical from the slug
+
+Static \`metadata\` can't see route params. For a \`[slug]\` page, use \`generateMetadata\`, which receives \`params\` and builds the canonical from the current slug:
+
+\`\`\`tsx
+// app/blog/[slug]/page.tsx
+import type { Metadata } from 'next';
+import { getPost } from '@/lib/posts';
+
+export async function generateMetadata(
+  { params }: { params: { slug: string } }
+): Promise<Metadata> {
+  const post = await getPost(params.slug);
+
+  return {
+    title: post.title,
+    description: post.excerpt,
+    alternates: {
+      canonical: \`/blog/\${params.slug}\`,
+    },
+  };
+}
+
+export default async function PostPage({ params }: { params: { slug: string } }) {
+  const post = await getPost(params.slug);
+  return <article>{/* ... */}</article>;
+}
+\`\`\`
+
+Each post now self-canonicalizes to its own URL. The key detail: the canonical is derived from \`params.slug\`, not hard-coded. If you ever paste \`canonical: '/blog/some-fixed-slug'\` in here, every post points at one URL and the rest fall out of the index. Same failure mode as the layout trap, smaller blast radius.
+
+### The gotcha that deindexes your whole site
+
+Metadata in the App Router is **merged down the tree**. A page inherits everything from its parent layouts and overrides only the fields it sets. \`metadataBase\` and \`title.template\` inheriting is exactly what you want. \`alternates.canonical\` inheriting is not.
+
+If you write this in the root layout:
+
+\`\`\`tsx
+// app/layout.tsx — DON'T DO THIS
+export const metadata: Metadata = {
+  metadataBase: new URL('https://example.com'),
+  alternates: { canonical: 'https://example.com' }, // hard-coded homepage
+};
+\`\`\`
+
+...then **every route that doesn't set its own canonical inherits \`https://example.com\`**. Your pricing page, your blog posts, your docs — all telling Google "the canonical version of me is the homepage." Search Console starts filling up with **Duplicate, Google chose different canonical than user** and **Alternate page with proper canonical tag**, and the affected pages drop out of the index. It looks like a content or authority problem. It's one wrong line in a layout.
+
+We hit this exact thing. The pages weren't thin, weren't duplicated, weren't slow — they were all pointing at \`/\` because of an inherited canonical, and Google did precisely what we told it to.
+
+The fix is a rule, not a patch:
+
+- **Never hard-code a \`canonical\` in the root layout.** Set \`metadataBase\` there and nothing else canonical-related.
+- **Set a self-referencing canonical per route** (\`canonical: '/pricing'\`, \`canonical: '/blog/\${slug}'\`), or set none and let each page resolve to its own URL.
+- If you inherited this mess, audit it: request each page's HTML and check whether the canonical matches the page's own URL. When several unrelated pages all show the homepage as canonical, an ancestor layout is the source.
+
+Wrongly canonicalizing several URLs at one target is a close cousin of [keyword cannibalization](/blog/keyword-cannibalization-fix) — different mechanism, same symptom of pages disappearing from search — and both belong on any [technical SEO audit](/blog/technical-seo-audit-complete-guide).
+
+### Client components can't export metadata
+
+\`export const metadata\` and \`generateMetadata\` only work in Server Components. Add \`'use client'\` to a file and the metadata export is silently ignored — no error, no canonical. If you need interactivity on a page that also needs a canonical, split it: a Server Component \`page.tsx\` owns the metadata and renders a client child.
+
+\`\`\`tsx
+// app/dashboard/page.tsx  (Server Component — exports metadata)
+import type { Metadata } from 'next';
+import DashboardClient from './DashboardClient';
+
+export const metadata: Metadata = {
+  title: 'Dashboard',
+  alternates: { canonical: '/dashboard' },
+};
+
+export default function DashboardPage() {
+  return <DashboardClient />;
+}
+\`\`\`
+
+\`\`\`tsx
+// app/dashboard/DashboardClient.tsx  ('use client' — all the interactivity)
+'use client';
+import { useState } from 'react';
+
+export default function DashboardClient() {
+  const [tab, setTab] = useState('overview');
+  return <section>{/* interactive UI */}</section>;
+}
+\`\`\`
+
+The page component stays a thin server wrapper; everything stateful lives in the client child.
+
+### hreflang is a separate tag — you often need both
+
+\`rel="canonical"\` and \`hreflang\` solve different problems, and one does not replace the other. Canonical picks the single indexable version of *this* page. Hreflang tells Google which URL serves which language/region so it shows the right one to the right user. On a multilingual site you usually need **both**, and the canonical for each language version must point at **itself**, never at another language. Canonicalizing your \`/de/\` page to \`/en/\` tells Google to drop the German page — the opposite of what you want. The App Router expresses hreflang under \`alternates.languages\`; the full setup, including the x-default and the reciprocity rules, is in the [hreflang guide](/blog/hreflang-tags-complete-guide).
+
+### Verifying it actually rendered
+
+Don't trust the source — check it. View source (not the inspector, which shows post-hydration DOM) and confirm the tag:
+
+\`\`\`bash
+curl -sL https://example.com/pricing | grep -i 'rel="canonical"'
+\`\`\`
+
+You want the canonical to match the page's own URL, use \`https\`, and match your OG \`url\` exactly — a canonical on \`https://\` while \`og:url\` sits on \`http://\` (or with/without a trailing slash mismatch) sends conflicting signals. Run the URL through the analyzer at [seosnapshot.dev](/) and it'll surface the canonical, flag a protocol or host mismatch, and check that \`og:url\` lines up — the fast way to catch an inherited-canonical bug across a batch of pages before Google does.
+
+### FAQ
+
+**Relative or absolute canonical?** Either renders correctly once \`metadataBase\` is set — Next.js makes relative ones absolute for you. Prefer relative (\`/pricing\`): it's portable across domains and can't drift from your real origin. Absolute is fine if you're not using \`metadataBase\` at all.
+
+**Do I need a canonical on every page?** You don't strictly have to, but a **self-referencing** canonical on every indexable page is the safest default. It preempts duplicates from query strings, trailing slashes, and tracking parameters. The one thing to avoid is a single hard-coded canonical shared across many pages.
+
+**What if two pages genuinely need the same canonical?** That's the correct use of canonical — point the duplicates at the one you want indexed, and make sure that target canonicalizes to *itself*. If the pages aren't actually duplicates, don't merge them with a canonical; you're just hiding pages that should each rank. Fix the overlap at the content level instead.`,
+  },
 };
