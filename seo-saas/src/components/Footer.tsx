@@ -16,6 +16,7 @@ const columns = [
     title: 'Resources',
     links: [
       { href: '/blog', label: 'Blog' },
+      { href: '/checks', label: 'SEO Checks' },
       { href: '/glossary', label: 'SEO Glossary' },
       { href: '/docs', label: 'API Docs' },
       { href: '/methodology', label: 'Methodology' },

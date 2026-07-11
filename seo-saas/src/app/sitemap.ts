@@ -1,5 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getBlogList } from '@/lib/blog';
+import { GLOSSARY } from '@/lib/glossary';
+import { CHECKS } from '@/lib/checks-catalog';
 import { prisma } from '@/lib/prisma';
 
 export const revalidate = 300;
@@ -29,6 +31,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/tools/redirect-generator`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/docs`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${base}/glossary`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${base}/checks`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/badge`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.5 },
     { url: `${base}/vs/google-lighthouse`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${base}/methodology`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.5 },
@@ -75,5 +78,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // ignore
   }
 
-  return [...staticRoutes, ...blogRoutes, ...reportRoutes];
+  // Programmatic reference pages (glossary terms + SEO checks)
+  const glossaryRoutes: MetadataRoute.Sitemap = GLOSSARY.map((t) => ({
+    url: `${base}/glossary/${t.slug}`,
+    lastModified: SITE_UPDATED,
+    changeFrequency: 'monthly' as const,
+    priority: 0.5,
+  }));
+  const checkRoutes: MetadataRoute.Sitemap = CHECKS.map((c) => ({
+    url: `${base}/checks/${c.slug}`,
+    lastModified: SITE_UPDATED,
+    changeFrequency: 'monthly' as const,
+    priority: 0.6,
+  }));
+
+  return [...staticRoutes, ...blogRoutes, ...reportRoutes, ...glossaryRoutes, ...checkRoutes];
 }
