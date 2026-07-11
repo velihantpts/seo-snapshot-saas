@@ -1960,84 +1960,93 @@ A: Use SEO Snapshot on your staging URL, or run Lighthouse in Chrome DevTools.`,
   },
   'eeat-seo-guide': {
     title: 'E-E-A-T in SEO: What It Is and How to Improve Your Score',
-    content: `## What is E-E-A-T?
+    content: `## What E-E-A-T actually is (and isn't)
 
-E-E-A-T stands for **Experience, Expertise, Authoritativeness, and Trustworthiness**. It's Google's framework for evaluating content quality — not a direct ranking factor, but a guideline that Google's Search Quality Raters use.
+E-E-A-T stands for **Experience, Expertise, Authoritativeness, and Trustworthiness**. It comes from Google's *Search Quality Rater Guidelines* — a ~170-page document Google gives to thousands of external human raters. Those raters don't set your rankings. They can't. What they do is score sample search results so Google's engineers can tell whether an algorithm change is surfacing genuinely trustworthy content or garbage. E-E-A-T is the yardstick they use.
 
-Google added the extra "E" (Experience) in December 2022, emphasizing first-hand experience.
+So "E-E-A-T is a ranking factor" is wrong literally and right practically. There's no \`eeat_score\` in the ranking pipeline, but Google tunes its systems to *approximate* what raters reward, so the signals that make a rater trust a page tend to be the same ones that correlate with ranking well. Google added the second "E" (Experience) in December 2022 to reward first-hand knowledge — someone who has actually done the thing, not just read about it.
 
-## Why E-E-A-T Matters
+One detail people miss: in Google's own diagram, the four letters aren't equal. **Trust sits in the center.** Experience, Expertise, and Authoritativeness are the roads that feed into Trust. A page can be written by a credentialed expert and still be untrustworthy (think a doctor writing paid, undisclosed promotion). Trust is the thing that actually matters; the other three are how you earn it.
 
-Google's Helpful Content Update (2023-2024) significantly increased the weight of E-E-A-T signals. Sites without clear authorship, contact info, or trust indicators saw ranking drops.
+## Why it matters more than it used to
 
-## The Four Pillars
+Google's Helpful Content system, rolled out and then folded into the core algorithm across 2022–2024, is built to reward "people-first" content and demote content made mainly to rank. Sites that were thin on authorship, contact details, and trust indicators — content farms, faceless affiliate sites — saw real drops. This hits **YMYL** ("Your Money or Your Life") topics hardest: health, finance, legal, safety, news. On those queries Google sets the trust bar much higher, because bad advice can cost someone their money or their health. A recipe blog gets more slack than a page about drug interactions.
 
-### Experience
-Does the content creator have first-hand experience with the topic?
+## Turning the pillars into signals you can actually implement
 
-**How to demonstrate:**
-- Share personal examples and case studies
-- Include original screenshots or photos
-- Write from "I tested this" not "experts say"
+The abstract advice ("build authority") is useless on its own. Here's what each pillar looks like as something a developer or site owner can ship this week.
 
-### Expertise
-Does the author have relevant knowledge or qualifications?
+### Experience — prove you did the thing
 
-**How to demonstrate:**
-- Author bio with credentials
-- Links to author's other work
-- Detailed, accurate technical information
+First-hand experience shows up in the *content*, not the metadata. Original screenshots (not stock, not vendor press images), your own test results, real numbers from a job you ran, before/after data, a photo of the actual product on your desk. Write "I ran this migration on a 40k-page site and INP dropped from 340ms to 180ms," not "experts recommend improving INP." Raters are explicitly told to look for signs the author has actually used the product or visited the place. If your page could have been written by someone who never touched the subject, that's the gap to close. This is also where genuine [content depth in SEO](/blog/content-depth-seo-guide) comes from — depth is a byproduct of real experience, not word count.
 
-### Authoritativeness
-Is the site recognized as a go-to source?
+### Expertise — put a real name on it
 
-**How to demonstrate:**
-- Backlinks from respected sites
-- Mentions in industry publications
-- Active social media presence
+- **Real author bylines**, not "Admin" or "Staff Writer."
+- Each byline links to a **detailed author page**: bio, credentials, what they've built, other articles they've written.
+- Mark that author up with **Person schema** and use \`sameAs\` to point at their LinkedIn, ORCID, GitHub, or professional profile. That's how you connect a name on your site to an identity Google already trusts elsewhere.
 
-### Trustworthiness
-Can users trust the site and its content?
+\`\`\`json
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Dr. Jane Okafor",
+  "jobTitle": "Registered Dietitian",
+  "url": "https://example.com/authors/jane-okafor",
+  "sameAs": [
+    "https://www.linkedin.com/in/janeokafor",
+    "https://orcid.org/0000-0002-1825-0097"
+  ]
+}
+\`\`\`
 
-**How to demonstrate:**
-- HTTPS (secure connection)
-- Clear contact information
-- Privacy policy and terms of service
-- About page with real team info
-- No deceptive practices
+Then reference that author from your Article schema, and add **Organization schema** for the site itself. If you're not comfortable hand-writing JSON-LD, the [schema generator](/tools/schema-generator) builds valid Person and Organization blocks, and the deeper mechanics are in [how to add JSON-LD structured data](/blog/how-to-add-structured-data-json-ld).
 
-## How to Check Your E-E-A-T Signals
+### Authoritativeness — reputation you don't control
 
-[SEO Snapshot](/) automatically checks 5 E-E-A-T signals:
-1. **Author information** — meta author tag or JSON-LD author
-2. **About page link** — /about or about-us page exists
-3. **Privacy policy** — /privacy link in footer
-4. **Contact info** — contact page or mailto link
-5. **Publish date** — \`<time>\` element or datePublished schema
+Authority is mostly *off-site*, and here's the uncomfortable part: **what other people say about you matters more than what you say about yourself.** Raters are instructed to research a site's reputation using independent sources — reviews, references in industry publications, mentions on forums, links from respected sites. You can put "trusted by millions" in your footer; a rater will ignore it and read what actual customers wrote elsewhere. Earn real citations, get referenced by people in your field, respond to reviews. There's no schema tag for this.
 
-## Actionable Improvements
+### Trustworthiness — the checkable foundation
 
-1. **Add an author bio** to every blog post
-2. **Create a detailed About page** with team photos
-3. **Add JSON-LD Article schema** with author field
-4. **Include dates** on all content (published + updated)
-5. **Link to authoritative sources** (.edu, .gov, industry leaders)
-6. **Add a privacy policy** and terms of service
-7. **Display contact information** prominently
-8. **Get backlinks** from industry publications
+This is the most fixable pillar, and it's the center of the diagram, so it's where to start:
+
+- **HTTPS** everywhere, valid cert, no mixed content. Also worth hardening your response headers — see [security headers every website needs](/blog/security-headers-for-seo).
+- **Published + updated dates** on every article, exposed as both a visible \`<time>\` element and \`datePublished\`/\`dateModified\` in schema.
+- **An About page with real people** — names, faces, roles. Not a stock-photo team.
+- **Visible contact info**: a real email or contact form, and for a business, physical address and legal/company details.
+- **Citations to primary sources** — link claims to the actual study, the official docs, the .gov/.edu page, not to another blog that summarized it.
+- **Privacy policy and terms**, linked in the footer.
+
+## Quick audit checklist
+
+Run down this list against any page you care about:
+
+- [ ] Every article has a real, named author with a byline
+- [ ] Author name links to a bio page with credentials + \`sameAs\` links
+- [ ] Person + Organization + Article schema present and valid
+- [ ] About page names real people
+- [ ] Contact info and (for businesses) legal/physical details are visible
+- [ ] Published and updated dates shown and in schema
+- [ ] Claims cite primary sources
+- [ ] HTTPS with no mixed-content warnings
+- [ ] Privacy policy and terms linked
+- [ ] You've searched your own brand and read what third parties say
+
+The mechanical half of that list — author info, About page, privacy policy, contact details, published dates — is exactly what the [SEO Snapshot analyzer](/) detects automatically. Point it at a URL and it flags which trust signals are missing before you go hunting by hand. If you want a broader picture of where a page stands, [what a good SEO score looks like](/blog/what-is-a-good-seo-score) puts these trust checks in context with the rest of your technical health.
 
 ## FAQ
 
-**Q: Is E-E-A-T a ranking factor?**
-A: Not directly. It's a quality guideline. But sites that score well on E-E-A-T tend to rank higher because they produce helpful content.
+**Is E-E-A-T a ranking factor?**
+Not literally — there's no E-E-A-T score in the ranking systems. It's the standard human raters use to judge whether algorithm changes are surfacing trustworthy content, so Google tunes toward it. In practice, improving E-E-A-T and improving rankings pull in the same direction.
 
-**Q: Does E-E-A-T matter for all sites?**
-A: It matters most for YMYL (Your Money or Your Life) topics — health, finance, legal, news. But all sites benefit.
+**Does it matter for a small hobby site?**
+Yes, but proportionally. The bar is highest for YMYL topics (health, money, legal, safety). A hobby or entertainment site has more room, but real authorship and basic trust signals still help it compete.
 
-**Q: How long does it take to improve E-E-A-T?**
-A: Some signals (contact page, privacy policy) can be added today. Authority and expertise take months to build.
+**Which fix gives the fastest return?**
+The trust basics — visible contact info, an About page with real people, author bylines, published/updated dates, and HTTPS — can go live today. Authoritativeness and reputation are earned over months and can't be shortcut with markup.
 
-Check your E-E-A-T signals now with [SEO Snapshot](/) — we detect author info, about pages, privacy policies, and more.`,
+**Can schema alone fix weak E-E-A-T?**
+No. Person and Organization schema help Google *understand* your signals, but they don't manufacture trust. If the underlying content shows no real experience and no one off-site vouches for you, clean markup won't rescue it.`,
   },
   'nginx-security-headers-guide': {
     title: 'Nginx Security Headers: Complete Configuration Guide',
@@ -2685,112 +2694,132 @@ A: Yes. Use free tools like SEO Snapshot, Google Search Console, and Lighthouse.
   },
   'how-to-add-structured-data-json-ld': {
     title: 'How to Add JSON-LD Structured Data (With Copy-Paste Examples)',
-    content: `## What Is JSON-LD?
+    content: `## Copy-paste JSON-LD, then make it correct
 
-JSON-LD (JavaScript Object Notation for Linked Data) is Google's preferred format for structured data. It tells search engines what your page is about in a machine-readable way.
+This is the hands-on version: templates you can drop in today, plus the rules that decide whether Google actually uses them. If you want the *why* first — what structured data is, how Linked Data works, why JSON-LD beats microdata — read the [structured data (JSON-LD) guide for beginners](/blog/structured-data-json-ld-guide) and come back. Everything below assumes you just want working markup.
 
-## Why Add Structured Data?
+One thing to get straight before you paste anything: **only mark up content that's actually visible on the page.** Google's structured data guidelines are explicit about this. If your FAQ answers live in the JSON-LD but not in the rendered HTML, that's a manual-action risk, not a shortcut. Schema describes the page; it doesn't replace it.
 
-Pages with structured data can show **rich results** in Google:
-- ⭐ Star ratings
-- 📋 FAQ accordions
-- 🍳 Recipe cards
-- 📅 Event dates
-- 💰 Product prices
-- 🔍 Sitelinks search box
+## What still earns rich results in 2024-2025
 
-Rich results get 20-30% higher click-through rates.
+Structured data got a big reset. In August 2023 Google **removed FAQ rich results for the vast majority of sites** — FAQ and HowTo rich results are now shown only for a narrow set of authoritative government and health domains. So if you add \`FAQPage\` markup expecting the accordion in search, you almost certainly won't get it anymore.
 
-## Copy-Paste Templates
+That doesn't make the markup useless. It still helps Google *understand* the page and feeds other surfaces. But be honest about the payoff.
 
-### WebPage (Any Page)
+What reliably still produces rich results:
 
-\`\`\`
+- **Article** — headline, author, dates in Top Stories and Discover
+- **BreadcrumbList** — the breadcrumb trail under your title (high value, trivial to add)
+- **Product** — price, availability, ratings
+- **Recipe**, **Event**, **Review/AggregateRating**, **Video**, **JobPosting** — all still supported
+
+If you only add one new thing, add BreadcrumbList. It's low effort and shows up on nearly every result.
+
+## Required vs recommended properties
+
+Every type has properties Google *requires* for eligibility and others it merely *recommends*. Miss a required one and you get no rich result — silently. The big ones:
+
+- **Product** needs \`name\` plus either \`offers\`, \`review\`, or \`aggregateRating\`. A Product with just a name and description is ineligible.
+- **Article** wants \`headline\`, \`image\`, \`datePublished\`, and \`author\`. Skip the image and you often lose the enhanced treatment.
+- **BreadcrumbList** needs each \`ListItem\` with \`position\` and either a \`name\`+\`item\` or a linked entity.
+
+Don't guess. Paste your output into the validators (below) and read the warnings — "recommended" fields are flagged separately from errors.
+
+## The templates
+
+Improved versions. Note \`WebPage\` is the least useful of the set — it rarely produces anything visible — so lead with the ones that pay off.
+
+### BreadcrumbList (add this first)
+
+\`\`\`html
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "Your Page Title",
-  "description": "Your page description",
-  "url": "https://yoursite.com/page"
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://yoursite.com/" },
+    { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://yoursite.com/blog" },
+    { "@type": "ListItem", "position": 3, "name": "This Article" }
+  ]
 }
 </script>
 \`\`\`
 
-### Article (Blog Post)
+The last item is the current page — leave off its \`item\` URL so Google treats it as the endpoint.
 
-\`\`\`
+### Article
+
+\`\`\`html
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Article",
   "headline": "Your Article Title",
   "description": "Article summary",
-  "author": {
-    "@type": "Person",
-    "name": "Author Name"
-  },
-  "datePublished": "2026-03-22",
-  "dateModified": "2026-03-22",
+  "image": "https://yoursite.com/cover.jpg",
+  "author": { "@type": "Person", "name": "Author Name", "url": "https://yoursite.com/about" },
   "publisher": {
     "@type": "Organization",
-    "name": "Your Site Name"
-  }
+    "name": "Your Site Name",
+    "logo": { "@type": "ImageObject", "url": "https://yoursite.com/logo.png" }
+  },
+  "datePublished": "2026-03-22",
+  "dateModified": "2026-07-11"
 }
 </script>
 \`\`\`
 
-### FAQ Page
-
-\`\`\`
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  "mainEntity": [
-    {
-      "@type": "Question",
-      "name": "What is SEO?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "SEO (Search Engine Optimization) is the practice of improving your website to increase visibility in search results."
-      }
-    },
-    {
-      "@type": "Question",
-      "name": "How long does SEO take?",
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": "SEO typically takes 3-6 months to see significant results, depending on competition and effort."
-      }
-    }
-  ]
-}
-</script>
-\`\`\`
+The \`author.url\` matters more than it looks — a real author entity with a bio page is part of demonstrating [experience and expertise (E-E-A-T)](/blog/eeat-seo-guide), which Google leans on for YMYL content.
 
 ### Product
 
-\`\`\`
+\`\`\`html
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Product",
   "name": "Product Name",
   "description": "Product description",
+  "image": "https://yoursite.com/product.jpg",
   "offers": {
     "@type": "Offer",
     "price": "29.99",
     "priceCurrency": "USD",
-    "availability": "https://schema.org/InStock"
+    "availability": "https://schema.org/InStock",
+    "url": "https://yoursite.com/product"
+  },
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.6",
+    "reviewCount": "128"
   }
 }
 </script>
 \`\`\`
 
+Only include \`aggregateRating\` if those reviews are real and on the page. Faking them is a fast track to a manual action.
+
+### FAQPage
+
+\`\`\`html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [{
+    "@type": "Question",
+    "name": "What is SEO?",
+    "acceptedAnswer": { "@type": "Answer", "text": "Improving a site to increase visibility in search results." }
+  }]
+}
+</script>
+\`\`\`
+
+Still valid, still worth adding for understanding — just don't expect the accordion unless you're a recognized authority site.
+
 ### Organization
 
-\`\`\`
+\`\`\`html
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -2798,116 +2827,186 @@ Rich results get 20-30% higher click-through rates.
   "name": "Your Company",
   "url": "https://yoursite.com",
   "logo": "https://yoursite.com/logo.png",
-  "sameAs": [
-    "https://twitter.com/yourhandle",
-    "https://linkedin.com/company/yourcompany"
-  ]
+  "sameAs": ["https://twitter.com/yourhandle", "https://linkedin.com/company/yourcompany"]
 }
 </script>
 \`\`\`
 
-## Where to Add JSON-LD
+## Connect entities with @graph
 
-Add the \`<script>\` tag in your HTML \`<head>\` or at the end of \`<body>\`. Google reads it regardless of position.
+A blog post is usually several things at once: an Article, a BreadcrumbList, an Organization, an author. Instead of separate scripts that repeat each other, put them in one \`@graph\` and wire them together with \`@id\`:
 
-**In Next.js:**
+\`\`\`json
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    { "@type": "Organization", "@id": "https://yoursite.com/#org", "name": "Your Site", "logo": "https://yoursite.com/logo.png" },
+    { "@type": "Person", "@id": "https://yoursite.com/#author", "name": "Author Name" },
+    {
+      "@type": "Article",
+      "headline": "Your Article Title",
+      "author": { "@id": "https://yoursite.com/#author" },
+      "publisher": { "@id": "https://yoursite.com/#org" }
+    }
+  ]
+}
 \`\`\`
-// app/layout.tsx
-<script type="application/ld+json"
-  dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
-/>
+
+Define the Organization once, reference it by \`@id\` everywhere else. This is what Yoast and Rank Math generate under the hood in WordPress — and why their output validates cleanly.
+
+## The Next.js pattern
+
+Render it in a Server Component so the JSON is in the initial HTML, not injected client-side:
+
+\`\`\`typescript
+export default function ArticlePage() {
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: "Your Article Title",
+    datePublished: "2026-03-22",
+  };
+  return (
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+      {/* page content */}
+    </>
+  );
+}
 \`\`\`
 
-**In WordPress:**
-Use Yoast SEO or Rank Math plugin — they auto-generate schema.
+\`JSON.stringify\` on an object is the key move — it guarantees valid JSON with no trailing commas and correct escaping. Never hand-build the string. \`dangerouslySetInnerHTML\` sounds scary but is correct here: it stops React from HTML-escaping the quotes, which would break the JSON.
 
-## Validation
+## Validate before you ship
 
-- [Google Rich Results Test](https://search.google.com/test/rich-results)
-- [Schema.org Validator](https://validator.schema.org/)
-- [SEO Snapshot](/) — validates JSON-LD and checks required fields
+Two tools, two jobs:
+
+- **[Rich Results Test](https://search.google.com/test/rich-results)** — tells you whether Google will show a rich result and which required fields are missing.
+- **[Schema Markup Validator](https://validator.schema.org/)** — checks schema.org correctness for any type, including ones Google doesn't render.
+
+For a quick pass on live pages, [SEO Snapshot](/) parses your JSON-LD and flags missing required fields when you run your URL. Generating from scratch? The [schema generator](/tools/schema-generator) outputs valid blocks you can paste straight in.
+
+## Mistakes that cost you the rich result
+
+- **Trailing commas.** JSON-LD is strict JSON — \`"a": 1,}\` is invalid and Google drops the whole block. Stringify from an object and this never happens.
+- **Marking up hidden content.** FAQ answers, prices, or ratings that aren't in the visible HTML.
+- **Wrong \`@type\`.** Using \`WebPage\` where you meant \`Article\`, or \`Thing\` as a catch-all.
+- **Missing required fields.** Product without \`offers\`/\`review\`/\`aggregateRating\`; Article with no author.
+- **Stale \`dateModified\`.** Update it when you actually edit, or you're lying to the crawler.
+
+Structured data is one line in a bigger checklist — see the [technical SEO audit guide](/blog/technical-seo-audit-complete-guide) for where it fits.
 
 ## FAQ
 
-**Q: Does structured data improve rankings?**
-A: Not directly. But rich results increase CTR, which indirectly helps rankings.
+**Does structured data boost rankings?**
+Not directly. It can win rich results and improve how Google understands the page, and that lifts CTR — which helps indirectly.
 
-**Q: Can I have multiple JSON-LD scripts on one page?**
-A: Yes. Google recommends one script per entity but supports multiple.
+**Can I use multiple JSON-LD scripts on one page?**
+Yes. Google merges them. But a single \`@graph\` with \`@id\` references is cleaner and avoids duplicating the same Organization five times.
 
-**Q: What happens if my schema has errors?**
-A: Google ignores invalid schema. It won't hurt rankings but you miss rich result opportunities.`,
+**Why is my valid schema not showing a rich result?**
+Usually a missing required field, or a type Google no longer renders (FAQ/HowTo for most sites). Run the Rich Results Test — it tells you specifically which.`,
   },
   'hreflang-tags-complete-guide': {
     title: 'Hreflang Tags: Complete Guide for Multi-Language Sites',
-    content: `## What Are Hreflang Tags?
+    content: `## What hreflang tags do (and who actually reads them)
 
-Hreflang tags tell Google which language and regional version of a page to show to users. Without them, Google might show the English version to a French user, or the US version to a UK user.
+Hreflang tags tell a search engine which language and regional version of a page to show a given user. Without them, Google might serve your English page to a French reader, or the US pricing page to someone in London.
 
-## When You Need Hreflang
+One thing most guides skip: hreflang is a limited-support signal. **Google and Yandex use it. Bing does not** — Bing relies on the older \`content-language\` header plus its own geo signals (ccTLD, server location, links). Treat hreflang as a hint to Google, not a universal directive. Google can and does override it when its own signals disagree.
 
-You need hreflang if:
-- Your site has pages in **multiple languages** (e.g., English + Spanish)
-- You have **regional variations** of the same language (e.g., en-US vs en-GB)
-- You have a **default version** for users whose language isn't specifically targeted
+## When you need hreflang
 
-## Basic Syntax
+You need it if:
 
-\`\`\`
+- Your site has the same content in **multiple languages** (English + Spanish + German).
+- You have **regional variants of one language** — \`en-US\` vs \`en-GB\`, \`pt-BR\` vs \`pt-PT\`, different currencies or shipping copy.
+- You want a **fallback** for users whose language you don't specifically target.
+
+If you have one language and one region, skip it. It adds maintenance for no benefit.
+
+## Basic syntax
+
+\`\`\`html
 <link rel="alternate" hreflang="en" href="https://example.com/page">
 <link rel="alternate" hreflang="es" href="https://example.com/es/page">
 <link rel="alternate" hreflang="fr" href="https://example.com/fr/page">
 <link rel="alternate" hreflang="x-default" href="https://example.com/page">
 \`\`\`
 
-## The 5 Rules of Hreflang
+## The 5 rules of hreflang
 
-### Rule 1: Always Include x-default
+### Rule 1: Always include x-default
 
-x-default is the fallback for users whose language isn't specifically targeted:
+\`x-default\` is the fallback for users whose language or region you don't cover. Use it for a language selector page, or to point at your primary version. If a Norwegian user hits a site that has only English, Spanish, and French, \`x-default\` decides what they get.
 
-\`\`\`
+\`\`\`html
 <link rel="alternate" hreflang="x-default" href="https://example.com/">
 \`\`\`
 
-### Rule 2: Self-Reference
+It's optional per the spec, but in practice you almost always want it. A common pattern: point \`x-default\` at a country/language chooser, or at the English/global version.
 
-Every page must include a hreflang pointing to itself:
+### Rule 2: Self-reference
 
-\`\`\`
-<!-- On the English page: -->
+Every page must include a hreflang pointing to *itself*. The English page lists \`en\` → its own URL. Miss this and Google frequently ignores the whole annotation set.
+
+\`\`\`html
+<!-- On the English page -->
 <link rel="alternate" hreflang="en" href="https://example.com/page">
 \`\`\`
 
-### Rule 3: Reciprocal Links
+### Rule 3: Reciprocity (return tags) — where most setups break
 
-If page A links to page B, page B must link back to A:
+If page A points to page B as an alternate, page B **must point back to A**. These are called return tags. Hreflang is confirmed only when both sides agree — it's a handshake, not a one-way announcement.
 
-\`\`\`
-<!-- On English page: -->
-<link rel="alternate" hreflang="es" href="https://example.com/es/page">
+This is the single most common failure. Google Search Console's old International Targeting report used to flag it directly as "no return tags," and while that specific report was retired, the underlying rule is unchanged.
 
-<!-- On Spanish page: -->
-<link rel="alternate" hreflang="en" href="https://example.com/page">
-\`\`\`
+To debug missing return tags:
 
-### Rule 4: Valid Language Codes
+1. **Fetch the target page as Googlebot sees it** — \`curl -A "Googlebot" https://example.com/es/page\` — and confirm the \`en\` return link is present in the *rendered* HTML, not injected later by client-side JS Google may not run.
+2. **Check the URL matches exactly.** \`http\` vs \`https\`, trailing slash, \`www\` vs apex, or a URL that 301-redirects all count as mismatches. The return tag must point at the exact canonical URL the other page self-references.
+3. **Confirm the target isn't \`noindex\`.** A blocked or redirecting alternate can't return the handshake.
 
-Use ISO 639-1 codes:
-- ✅ en, es, fr, de, tr, ja, zh
-- ✅ en-US, en-GB, pt-BR, zh-TW
-- ❌ english, eng, en_US
+### Rule 4: Valid language[-region] codes
+
+The format is **ISO 639-1 language, optionally a dash and an ISO 3166-1 Alpha-2 region**. Region is optional; if present it comes *after* the language.
+
+- Correct: \`en\`, \`es\`, \`fr\`, \`en-GB\`, \`pt-BR\`, \`zh-TW\`
+- Wrong: \`english\`, \`eng\`, \`en_US\` (underscore), \`us\` (region alone — invalid)
+- Classic trap: **\`en-UK\` is wrong.** The country code for the United Kingdom is \`GB\`, so it's \`en-GB\`. \`UK\` isn't a valid ISO 3166-1 region.
+
+Region alone (\`hreflang="us"\`) is never valid — you need a language. If you want "English for the US," it's \`en-US\`.
 
 ### Rule 5: Absolute URLs
 
-Always use full URLs, not relative:
-- ✅ https://example.com/page
-- ❌ /page
+Always full URLs. \`https://example.com/page\`, never \`/page\`.
 
-## Implementation Methods
+## hreflang is not canonical — you usually need both
 
-### Method 1: HTML Head (Recommended)
+This trips up a lot of people. **Hreflang does not consolidate ranking signals** the way a canonical tag does. Rel-canonical says "these are the same page, credit this one." Hreflang says "these are equivalent pages for different audiences, keep them all indexed."
+
+So on a multilingual site each language version should carry a **self-referencing canonical** *and* the hreflang set. Never canonicalize the Spanish page to the English one — that tells Google to drop the Spanish page from the index entirely, which defeats the point. Self-canonical + hreflang is the correct combination. If you're fuzzy on the canonical side, see [Canonical URLs explained](/blog/canonical-url-explained).
+
+\`\`\`html
+<!-- On the Spanish page -->
+<link rel="canonical" href="https://example.com/es/page">
+<link rel="alternate" hreflang="es" href="https://example.com/es/page">
+<link rel="alternate" hreflang="en" href="https://example.com/page">
+<link rel="alternate" hreflang="x-default" href="https://example.com/page">
 \`\`\`
+
+## The scale problem — pick the right delivery method
+
+Hreflang is quadratic. With N pages and M languages, every page needs M \`<link>\` tags, so a 500-page site in 6 languages is 3,000 alternate URLs to keep in sync. Inline HTML gets heavy fast and any drift breaks return tags.
+
+### Method 1: HTML head
+
+Fine for small sites. Simple, visible, easy to inspect.
+
+\`\`\`html
 <head>
   <link rel="alternate" hreflang="en" href="https://example.com/">
   <link rel="alternate" hreflang="tr" href="https://example.com/tr/">
@@ -2915,47 +3014,88 @@ Always use full URLs, not relative:
 </head>
 \`\`\`
 
-### Method 2: HTTP Header
+### Method 2: HTTP header (for non-HTML)
+
+Required for PDFs and other non-HTML files — you can't put a \`<link>\` in a PDF. Also handy when you can't edit \`<head>\`.
+
 \`\`\`
-Link: <https://example.com/>; rel="alternate"; hreflang="en",
-      <https://example.com/tr/>; rel="alternate"; hreflang="tr"
+Link: <https://example.com/en.pdf>; rel="alternate"; hreflang="en",
+      <https://example.com/tr.pdf>; rel="alternate"; hreflang="tr"
 \`\`\`
 
-### Method 3: Sitemap
-\`\`\`
+### Method 3: XML sitemap (best at scale)
+
+Put every alternate in the sitemap and you keep hreflang out of your page weight and in one auditable file. This is the method to prefer once you pass a few dozen pages.
+
+\`\`\`xml
 <url>
   <loc>https://example.com/</loc>
   <xhtml:link rel="alternate" hreflang="en" href="https://example.com/"/>
   <xhtml:link rel="alternate" hreflang="tr" href="https://example.com/tr/"/>
+  <xhtml:link rel="alternate" hreflang="x-default" href="https://example.com/"/>
 </url>
 \`\`\`
 
-## Common Mistakes
+Each \`<url>\` entry must still list *all* alternates including its own self-reference. Combine this with a clean [XML sitemap setup](/blog/sitemap-xml-guide).
 
-1. **Missing x-default** — Google doesn't know which is the fallback
-2. **Missing self-reference** — breaks the reciprocal chain
-3. **Invalid language codes** — "english" instead of "en"
-4. **Relative URLs** — must be absolute
-5. **One-way links** — both pages must reference each other
+## Worked example: 3 languages
 
-## Checking Your Hreflang
+English (\`/\`), Spanish (\`/es/\`), German (\`/de/\`). The **identical block** goes on all three pages (self-canonical changes per page):
 
-[SEO Snapshot](/) automatically checks:
-- x-default presence
-- Self-referencing hreflang
-- Valid ISO 639-1 language codes
-- Hreflang tag count and languages
+\`\`\`html
+<link rel="alternate" hreflang="en" href="https://example.com/">
+<link rel="alternate" hreflang="es" href="https://example.com/es/">
+<link rel="alternate" hreflang="de" href="https://example.com/de/">
+<link rel="alternate" hreflang="x-default" href="https://example.com/">
+\`\`\`
+
+That's the whole trick — every page carries the full set, so every return tag is present by construction.
+
+## Generating it in a CMS / Next.js
+
+Don't hand-write these. Drive them from a single **locale map** and render on every page:
+
+\`\`\`typescript
+const locales = {
+  en: 'https://example.com/',
+  es: 'https://example.com/es/',
+  de: 'https://example.com/de/',
+} as const;
+
+// Next.js App Router — app/[lang]/layout.tsx
+export function generateMetadata() {
+  return {
+    alternates: {
+      canonical: locales[currentLang],
+      languages: { ...locales, 'x-default': locales.en },
+    },
+  };
+}
+\`\`\`
+
+WordPress does this through Polylang or WPML once you link translations. Whatever the platform: one source of truth, generated output, no manual editing.
+
+## Debugging a broken setup
+
+- **Nothing indexed correctly?** Confirm self-reference and return tags first — 90% of issues.
+- **Codes rejected?** You almost certainly have \`en-UK\`, an underscore, or a bare region.
+- **Tags present but ignored?** Check they're server-rendered, that alternates return 200 (not 301/404/noindex), and that you didn't canonicalize across languages.
+
+Paste any URL into the [SEO Snapshot analyzer](/) to check x-default presence, self-reference, and valid ISO codes, and use the [hreflang tag generator](/tools/hreflang-generator) to build a correct set from your locale map. For the wider picture, the [technical SEO audit guide](/blog/technical-seo-audit-complete-guide) covers where hreflang fits among your other signals.
 
 ## FAQ
 
-**Q: Does hreflang affect rankings?**
-A: It doesn't boost rankings but ensures the right page shows to the right user, improving CTR and reducing bounce rate.
+**Does hreflang boost rankings?**
+No. It doesn't add ranking power or consolidate signals like canonical. It routes the right existing page to the right user, which improves CTR and cuts bounce.
 
-**Q: Can I use hreflang with a single-language site?**
-A: Generally not needed. But if you target specific regions (en-US vs en-GB), it helps.
+**Does Bing use hreflang?**
+No. Only Google and Yandex. Bing uses \`content-language\` and its own geo signals.
 
-**Q: What if I only have 2 languages?**
-A: You still need hreflang. Include both languages + x-default on every page.`,
+**Do I still need canonical tags?**
+Yes — a self-referencing canonical on each language version, alongside hreflang. Never canonical one language to another.
+
+**What if I only have two languages?**
+Still needed. Put both languages plus \`x-default\` on every page.`,
   },
   'fix-render-blocking-resources-nextjs': {
     title: 'How to Fix Render-Blocking Resources in Next.js',
@@ -3118,101 +3258,180 @@ Run your URL through [SEO Snapshot](/) — it counts render-blocking scripts, ch
   },
   'open-graph-image-size-2026': {
     title: 'Open Graph Image Size and Best Practices 2026',
-    content: `## Recommended OG Image Size
+    content: `## The One Number to Remember: 1200 x 630
 
-**1200 x 630 pixels** — this is the standard that works across all platforms.
+If you take nothing else from this page: make your OG image **1200 x 630 pixels**. That's a 1.91:1 aspect ratio, and it's the size Facebook, LinkedIn, Slack, Discord, and X (with the large card) all crop to cleanly. Ship that and your link previews will look right almost everywhere.
+
+The interesting part is *why* 1.91:1 is the safe default, and where individual platforms quietly do something different. Get that wrong and your carefully designed image shows up with the logo sliced off, or as a tiny square thumbnail next to a wall of text.
 
 ## Size Requirements by Platform
 
 | Platform | Recommended | Minimum | Aspect Ratio |
 |----------|------------|---------|-------------|
 | Facebook | 1200x630 | 600x315 | 1.91:1 |
-| Twitter | 1200x628 | 600x314 | ~1.91:1 |
+| X / Twitter | 1200x628 | 600x314 | ~1.91:1 |
 | LinkedIn | 1200x627 | 200x200 | 1.91:1 |
 | WhatsApp | 1200x630 | 300x200 | 1.91:1 |
 | Slack | 1200x630 | 250x250 | 1.91:1 |
 | Discord | 1200x630 | Varies | 1.91:1 |
 
-## The Essential OG Tags
+The recommended column barely moves — a couple of pixels of height difference between platforms that nobody will ever notice. The Facebook 600x315 minimum matters more than it looks: go under it and Facebook won't render the large card at all. It falls back to a small square thumbnail, which is a much weaker link. Design at 1200x630 and you clear every minimum with room to spare.
 
-\`\`\`
+## Why 1.91:1 Wins, and How Each Platform Crops
+
+1.91:1 isn't arbitrary. Facebook picked it years ago as the shape of the large link card, and because Facebook was where link previews mattered most, everyone else standardized around it to stay compatible. The scraper reads your \`og:image\`, and the platform decides how to fit it into whatever slot its UI has.
+
+- **X / Twitter** has two card types. \`summary_large_image\` gives you the big 1.91:1 banner — that's what you want, and it reads your \`og:image\`. Plain \`summary\` shows a small square thumbnail on the left with text on the right, and it center-crops your image to a square. If your key text sits at the edges, \`summary\` eats it. Declare \`<meta name="twitter:card" content="summary_large_image">\` explicitly so you get the banner.
+- **LinkedIn and Facebook** both render 1.91:1 large cards from \`og:image\`. This is the happy path — a 1200x630 image displays essentially untouched.
+- **WhatsApp** is the wildcard. For many links it shows a large preview, but for others (and depending on client version) it renders a **small square thumbnail** and center-crops your 1.91:1 image hard. Anything important near the left or right edge disappears. This is the single strongest argument for keeping your composition centered.
+
+Because you can't control which slot a given platform hands you, you design for the worst case: assume a center square crop and a mobile-sized render.
+
+## Safe Zones and Text Legibility
+
+Treat the outer edges of your 1200x630 canvas as expendable. Keep logos, headlines, and anything that must survive inside a **centered ~1000x525 safe zone**. If a platform square-crops to the middle, your message still lands.
+
+Then assume the whole thing gets shrunk to the width of a phone. Practical rules that hold up:
+
+- Headline text no smaller than ~60px on the 1200-wide canvas. Smaller than that turns to mush on mobile.
+- High contrast only — light text on a dark panel, or dark text on a solid light block. Text laid directly over a busy photo is unreadable at thumbnail size.
+- Two lines of copy, maybe three. This is a card, not a slide.
+
+The classic failure is exporting a full blog-post hero with a paragraph of overlaid text. It looks fine in your editor and vanishes in the feed. If you want a deeper checklist on preparing images for the web, [Image SEO: alt text, lazy loading, WebP](/blog/image-seo-optimization) covers compression and formats that apply here too.
+
+## File Weight and Format
+
+OG scrapers are not patient. Some platforms cap how large a file they'll fetch, and a slow or oversized image can time out and leave you with no preview at all. Keep the image comfortably **under ~1MB** — realistically you should be down near 100–300KB.
+
+Format choice is simple:
+
+- **PNG** for anything with text, flat color, logos, or sharp graphics. It stays crisp and compresses those regions well.
+- **JPG** for photographic backgrounds. A quality-80 JPG of a photo is a fraction of the PNG size with no visible loss.
+- **Not SVG.** Most platforms won't render it as an OG image. WebP support is inconsistent across scrapers too — PNG or JPG remains the reliable choice.
+
+Run the final export through a compressor (Squoosh, or \`sharp\` in a build step) before shipping.
+
+## The Tags That Actually Matter
+
+\`\`\`html
 <meta property="og:title" content="Your Page Title">
 <meta property="og:description" content="A compelling description under 200 chars">
 <meta property="og:image" content="https://yoursite.com/og-image.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Plain-language description of the image">
 <meta property="og:url" content="https://yoursite.com/page">
 <meta property="og:type" content="website">
-<meta property="og:site_name" content="Your Site Name">
 \`\`\`
 
-## Best Practices
+Two of these are quietly important:
+
+- **\`og:image:width\` and \`og:image:height\`.** Declare them. When a scraper hasn't fetched your image yet, it uses these dimensions to reserve the correct card layout immediately. Skip them and the first person to share your link can get a blank or collapsed preview until the image is fetched and measured.
+- **\`og:image:alt\`.** Describes the image for screen readers on platforms that expose it. Cheap to add, and it's the same discipline as the rest of your page — the same principle behind [fixing a missing meta description](/blog/how-to-fix-missing-meta-description).
+
+**The \`og:image\` URL must be absolute and HTTPS.** Not \`/og-image.png\`, not \`http://\`. Scrapers run on someone else's server with no idea what your domain is, and many refuse mixed or insecure content outright. This is the most common reason an image "just doesn't show."
+
+The full tag set — titles, types, article-specific properties, the Twitter card family — is in the [Open Graph meta tags complete guide](/blog/open-graph-meta-tags-guide). This page is only about the image.
+
+## Do / Don't
 
 ### Do:
-- Use 1200x630px PNG or JPG
-- Keep file size under 300KB (compress with Squoosh)
-- Include your brand name/logo
-- Use high contrast text (readable at small sizes)
-- Test with Facebook Sharing Debugger
+- Export 1200x630 PNG (graphics) or JPG (photos)
+- Keep the file under ~1MB, ideally ~100–300KB
+- Center your logo and headline in a safe zone
+- Use high-contrast text sized for mobile
+- Always declare width, height, and alt
+- Use an absolute HTTPS URL
 
 ### Don't:
-- Use text-heavy images (gets cut off on mobile)
-- Rely on OG image alone (always have og:title too)
-- Use SVG (not supported by most platforms)
-- Forget og:image:width and og:image:height
-- Use HTTP URLs (must be HTTPS)
+- Cram in paragraph-length text — it's gone on mobile
+- Rely on the image alone; keep \`og:title\` strong too
+- Ship SVG or count on WebP for OG
+- Push key content to the edges (WhatsApp/X square-crop the middle)
+- Serve the image over HTTP or a relative path
 
-## OG Image in Next.js
+## Dynamic OG Images in Next.js
 
-\`\`\`
-// app/layout.tsx
-export const metadata = {
-  openGraph: {
-    images: [{
-      url: '/og-image.png',
-      width: 1200,
-      height: 630,
-      alt: 'Your Site Description',
-    }],
-  },
-};
-\`\`\`
+Hand-designing a card per page doesn't scale. The clean answer is to render them on demand with \`next/og\` (the same engine as \`@vercel/og\`). In the App Router, drop an \`opengraph-image.tsx\` beside a route and Next wires up the meta tags for you:
 
-## Dynamic OG Images
+\`\`\`typescript
+// app/blog/[slug]/opengraph-image.tsx
+import { ImageResponse } from 'next/og';
 
-Generate OG images per page using @vercel/og:
+export const runtime = 'edge';
+export const alt = 'Article preview';
+export const size = { width: 1200, height: 630 };
+export const contentType = 'image/png';
 
-\`\`\`
-// app/api/og/route.tsx
-import { ImageResponse } from '@vercel/og';
+export default async function Image({ params }: { params: { slug: string } }) {
+  const title = params.slug.replace(/-/g, ' ');
 
-export async function GET(request) {
   return new ImageResponse(
-    <div style={{ fontSize: 48, background: '#000', color: '#fff', width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      Your Dynamic Title
-    </div>,
-    { width: 1200, height: 630 }
+    (
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          padding: 80,
+          background: '#0a0a0a',
+          color: '#fff',
+          fontSize: 64,
+          fontWeight: 700,
+        }}
+      >
+        <div style={{ display: 'flex', fontSize: 28, color: '#888' }}>
+          seosnapshot.dev
+        </div>
+        <div style={{ marginTop: 24, lineHeight: 1.1, textTransform: 'capitalize' }}>
+          {title}
+        </div>
+      </div>,
+    ),
+    { ...size },
   );
 }
 \`\`\`
 
-## Checking Your OG Tags
+A few things that trip people up with \`ImageResponse\`:
 
-[SEO Snapshot](/) checks:
-- All 6 OG tags present
-- og:image URL reachable (HEAD request)
-- og:image completeness score
+- Every element needs an explicit \`display\`. Satori (the layout engine underneath) supports a flexbox subset only, so a bare \`<div>\` with children but no \`display: flex\` throws.
+- There's no \`className\` / Tailwind by default and no external CSS — inline styles only.
+- Export \`size\` and \`contentType\`; Next uses them to emit the right \`og:image:width\` / \`og:image:height\` automatically.
+
+If you'd rather keep a plain route (works in any Next version), the \`app/api/og/route.tsx\` handler returning \`new ImageResponse(...)\` with \`{ width: 1200, height: 630 }\` does the same job — just remember to set the \`og:image\` in your metadata to that absolute route URL.
+
+## Why Your Updated Image Won't Show (Caching)
+
+You fixed the image, redeployed, pasted the link into Slack — and the old one still appears. That's not a bug. Every platform caches scraped previews aggressively, sometimes for days, keyed to the URL.
+
+To force a fresh scrape:
+
+- **Facebook / WhatsApp** (both use Facebook's scraper): run the URL through the [Facebook Sharing Debugger](https://developers.facebook.com/tools/debug/) and hit "Scrape Again."
+- **LinkedIn:** the [Post Inspector](https://www.linkedin.com/post-inspector/) does the same.
+- **X:** no public re-scrape tool anymore; appending a harmless query string (\`?v=2\`) is the usual workaround since it counts as a new URL.
+
+Cache-busting by changing the image filename or query string on deploy sidesteps the whole problem for future updates.
+
+## Check It Before You Ship
+
+Before announcing anything, run the URL through the [Open Graph preview tool](/tools/open-graph-preview) to see the actual rendered card, and use the [meta tag generator](/tools/meta-tag-generator) if you're assembling the tags by hand. For a full-page check, the [SEO Snapshot analyzer](/) verifies all the OG tags are present and — the part most tools skip — makes a live request to confirm your \`og:image\` is actually reachable at that absolute HTTPS URL.
 
 ## FAQ
 
-**Q: Does og:image affect SEO?**
-A: Not directly. But good OG images increase click-through from social media, which drives traffic.
+**Q: Does og:image affect SEO rankings?**
+A: Not directly — Google doesn't rank pages on their social card. But a strong preview lifts click-through from social and messaging apps, and that traffic is real. Treat it as conversion, not ranking.
 
-**Q: Can I use a different image for Twitter?**
-A: Yes. Add twitter:image separately. If not set, Twitter falls back to og:image.
+**Q: Can I use a different image for X / Twitter?**
+A: Yes. Set \`twitter:image\` separately. If it's absent, X falls back to \`og:image\`, so you only need the override when you genuinely want a different card there.
 
-**Q: What format should I use?**
-A: PNG for graphics/text, JPG for photos. Keep under 300KB.`,
+**Q: Why does my image show as a tiny square instead of a banner?**
+A: Usually one of three things — your image is under the platform's minimum size, you didn't set \`twitter:card\` to \`summary_large_image\`, or the platform (WhatsApp especially) chose its square thumbnail layout for that link. Confirm the source is 1200x630 and re-scrape.
+
+**Q: My image is correct but nothing renders at all. Why?**
+A: Almost always a relative or \`http://\` URL, or a file too large to fetch in time. Make the URL absolute HTTPS, get the file under ~1MB, and re-run it through the Sharing Debugger.`,
   },
   'seo-score-checker-free': {
     title: 'Free SEO Score Checker: Analyze Any Website in Seconds',
@@ -3316,168 +3535,205 @@ Try it now — [Analyze your site free](/).`,
     title: 'Content Depth in SEO: Why Word Count Alone Isn\'t Enough',
     content: `## The Word Count Myth
 
-Many SEO guides say "write 2000+ words to rank." This is misleading. Google doesn't rank pages by word count — it ranks by **content quality and relevance**.
+"Write 2,000+ words to rank" is one of the most stubborn myths in SEO. Google has no word-count threshold. It ranks pages by how well they satisfy the intent behind a query — and a tight 500-word page that answers the question directly will beat a 3,000-word page that buries the answer under padding.
 
-A 500-word page that perfectly answers a query will outrank a 3000-word page that rambles.
+The confusion comes from a correlation. Comprehensive pages often *happen* to be longer, so people assume length caused the ranking. It didn't — the depth did, and length was a side effect. Chase the depth and the right length takes care of itself.
 
-## What Is Content Depth?
+## What "Depth" Actually Means
 
-Content depth measures how thoroughly a page covers its topic. It's a combination of:
+Depth is not thickness. A page is deep when it fully satisfies the searcher's intent and covers the subtopics and entities a person expects to find — the questions they'd ask next, the related terms, the comparisons, the caveats. That's **topical coverage**. A thin page leaves you opening a second tab to finish the job; a deep page ends the search.
 
-1. **Topic breadth** — how many subtopics are covered
-2. **Structural quality** — headings, lists, tables, images
-3. **Readability** — sentence length, vocabulary level
-4. **Supporting evidence** — examples, data, citations
-5. **User engagement signals** — bounce rate, time on page
+Concretely, depth is a combination of:
 
-## How We Measure Content Depth
+1. **Intent match** — does the page do the specific job the query implies?
+2. **Topical coverage** — does it cover the subtopics and entities a searcher expects?
+3. **Structural quality** — headings, lists, tables, images that make it usable
+4. **Supporting evidence** — examples, original data, screenshots, first-hand experience
+5. **Freshness** — is the information still true today?
 
-[SEO Snapshot](/) calculates a **Content Depth Score** (0-100) based on 7 factors:
+None of those is "hit 1,500 words."
 
-| Factor | What We Check |
-|--------|--------------|
-| H2 headings | At least 2 for topic breadth |
-| H3 headings | At least 1 for subtopic depth |
-| Lists (ul/ol) | Present for scannable content |
-| Images | At least 1 for visual context |
-| Word count | 500+ for meaningful depth |
-| Paragraphs | 3+ for structured argument |
-| Tables/FAQ | Present for structured data |
+## Match Depth to Intent
 
-## Content Depth vs Word Count
+Depth is relative to the query. The single biggest mistake is applying "long-form" to a query that wants a one-line answer.
 
-| Metric | Good Content | Bad Content |
+| Query type | Example | What "deep" looks like |
+|-----------|---------|------------------------|
+| Quick answer | "what time is it in Tokyo" | One sentence, instantly |
+| Transactional | "buy running shoes size 10" | Fast product grid, specs, price — not an essay |
+| Navigational | "stripe login" | The link, immediately |
+| Guide / how-to | "how to fix render-blocking CSS" | Full walkthrough, edge cases, code |
+| Comparison | "next.js vs remix" | Side-by-side tables, trade-offs, use cases |
+
+Padding a transactional page with 1,500 words of history hurts it — you push the thing the user came for below the fold. Depth on a "best" or "how-to" query means breadth: covering the angles competitors miss. Read the SERP before you write. If the top results are 400-word answers, a 2,000-word wall is the wrong instinct.
+
+## Finding the Subtopics to Cover
+
+You can't cover what you haven't mapped. Four cheap sources tell you what a searcher expects:
+
+- **People Also Ask** — expand a few and they branch into more. Each is a real subtopic (often a good H2 or FAQ entry).
+- **Related searches** — the block at the bottom of the SERP shows adjacent queries and entities to touch on.
+- **Competing pages' headings** — pull up the top 3-5 results and read only their H2/H3s. The union of their subheadings is your coverage checklist. If four of five cover "cost" and you don't, that's a gap.
+- **Questions real users ask** — support tickets, Reddit threads, sales calls. These surface the edge cases no competitor addressed, which is where you win.
+
+Turn that map into an outline before writing a word. If a subtopic doesn't serve the intent, cut it — coverage isn't a license to ramble.
+
+## Depth vs Word Count, Side by Side
+
+| Metric | Good content | Bad content |
 |--------|-------------|-------------|
-| Word count | 800-1500 | 300 OR 5000 (padded) |
-| H2 headings | 4-6 (covering subtopics) | 0-1 (wall of text) |
-| Lists | Yes (key points summarized) | No (buried in paragraphs) |
-| Images | Relevant screenshots/diagrams | Stock photos or none |
-| FAQ section | Answers real questions | No user questions addressed |
-| Internal links | Links to related content | No internal linking |
+| Word count | Whatever the intent needs | 300 (thin) OR 5,000 (padded) |
+| H2 headings | 4-6 covering real subtopics | 0-1 (wall of text) |
+| Lists / tables | Summarize and compare | Everything buried in prose |
+| Images | Original screenshots, diagrams | Stock photos or none |
+| FAQ | Answers questions people ask | Invented filler questions |
+| Evidence | First-hand data, examples | Generic restated definitions |
 
-## How to Improve Content Depth
+## Diminishing Returns and the "AI Wall of Text"
 
-### 1. Cover Related Questions
-Use Google's "People Also Ask" for subtopic ideas:
-- Search your target keyword
-- Note the PAA questions
-- Add H2 sections answering each one
+Every extra paragraph past "the intent is satisfied" adds risk, not value. Padding dilutes relevance, pushes key info down, and signals to a reader that you're stretching.
 
-### 2. Add Structured Elements
-\`\`\`
-<h2>Main Topic</h2>
-<p>Introduction paragraph...</p>
+This is exactly what Google's Helpful Content system targets: content that exists to rank rather than to help. A common failure mode now is the mass-produced "AI wall of text" — long, fluent, structurally fine, and empty. It restates the query five ways with no first-hand insight and cites nothing you couldn't get from the first result. That pattern gets flagged as unhelpful, and site-wide it can drag down pages that *were* good. The fix isn't more words — it's more substance per word.
 
-<h3>Subtopic A</h3>
-<p>Detailed explanation...</p>
-<ul>
-  <li>Key point 1</li>
-  <li>Key point 2</li>
-</ul>
+## Structure Is a Depth Signal
 
-<h3>Subtopic B</h3>
-<table>
-  <tr><th>Comparison</th><th>Option A</th><th>Option B</th></tr>
-  ...
-</table>
-\`\`\`
+Two pages with identical facts aren't equally deep if one is scannable and one is a slab. Structure is how depth becomes usable:
 
-### 3. Add FAQ Section
-FAQ sections can trigger Google's FAQ rich snippet:
+- **Scannable H2/H3** that mirror the subtopics you mapped — a reader (and a crawler) should get the outline from the headings alone. See the [H1-H6 heading hierarchy guide](/blog/heading-hierarchy-seo) for getting the levels right.
+- **Tables and lists** for anything comparative or sequential.
+- **Original assets** — your own screenshots, a chart from your own data, a real code sample. This is also an **experience** signal: it proves first-hand knowledge, which is the added "E" in [E-E-A-T](/blog/eeat-seo-guide). Stock photos prove nothing.
+- **Real examples** over abstract definitions.
 
-\`\`\`
-<h2>Frequently Asked Questions</h2>
-<h3>Q: What is content depth?</h3>
-<p>A: Content depth measures how thoroughly...</p>
-\`\`\`
+## Add Depth Without Padding
+
+A practical loop that adds substance, not filler:
+
+1. **Map intent + subtopics** from PAA, related searches, and competitor headings.
+2. **Answer the core query in the first screen.** Don't make people scroll for it.
+3. **Add one thing competitors don't have** — original data, a screenshot, a gotcha you hit in production.
+4. **Convert prose to tables/lists** wherever you're comparing or listing.
+5. **Cut every sentence that doesn't add information.** If deleting it loses nothing, it was padding.
+6. **Link to the deeper resource** instead of re-explaining it inline.
+
+That last point matters for site architecture. Don't stretch one page to cover five distinct intents; split them across focused pages and interlink. And if you've created several thin pages competing for the same query, consolidate — that's [keyword cannibalization](/blog/keyword-cannibalization-fix), and one deep page usually beats three shallow ones.
+
+## Keep It Deep: Refresh Old Content
+
+Depth decays. A guide that was complete in 2023 can be shallow in 2026 as new subtopics, tools, and standards appear. Refreshing beats republishing from scratch:
+
+- Re-run the PAA and competitor-heading check — new questions signal new sections to add.
+- Update stale numbers, screenshots, and version-specific steps.
+- Prune advice that's now wrong; outdated content actively hurts trust.
+- Add the edge cases readers have emailed you about since publishing.
+
+## Measuring It
+
+You can approximate depth from structure. [SEO Snapshot's analyzer](/) computes a content-depth score from signals that correlate with thoroughness — H2/H3 counts, lists, images, word count, and whether an FAQ is present. It won't judge whether your data is original, but it flags the structural gaps fast: a wall of text with no subheadings, missing lists, no images. Run your URL, fix what it flags, then do the human part. If you're unsure what a passing result looks like, [what a good SEO score means](/blog/what-is-a-good-seo-score) sets expectations.
 
 ## FAQ
 
-**Q: Is longer content always better?**
-A: No. Match content length to search intent. "What time is it in Tokyo?" needs 1 sentence, not 2000 words.
+**Is longer content always better?**
+No. Match length to intent. "What time is it in Tokyo?" wants one sentence; a "complete guide" query wants breadth. Length past the point of satisfying intent adds risk, not ranking.
 
-**Q: Does Google measure content depth?**
-A: Not directly, but Google's Helpful Content system rewards comprehensive, well-structured content.
+**Does Google measure content depth directly?**
+Not as a labeled metric. But the Helpful Content system rewards content that fully satisfies intent and demotes thin, padded, or people-first-in-name-only pages — which amounts to the same thing.
 
-**Q: How do I know if my content is deep enough?**
-A: Use [SEO Snapshot](/) — our Content Depth Score tells you exactly what's missing.`,
+**How do I know if my content is deep enough?**
+Compare your headings to the union of PAA questions and competitor subheadings. If you're missing subtopics readers expect, you have a gap — regardless of word count. The analyzer catches the structural gaps; the subtopic check catches the substance ones.`,
   },
   'website-speed-optimization-guide': {
     title: 'Website Speed Optimization: 15 Proven Techniques',
     content: `## Why Speed Matters
 
-Google confirmed page speed as a ranking factor. Faster sites also convert better:
-- 1 second delay = 7% less conversions
-- 53% of mobile users leave if page takes 3+ seconds
-- Core Web Vitals are a ranking signal
+Google uses page experience as a ranking signal, and speed is the part users feel first. A one-second delay measurably cuts conversions, and mobile visitors bail when a page drags past three seconds. But "make it faster" is useless advice on its own. The fifteen techniques below work — the trick is knowing which three of them your site actually needs.
 
-## 15 Speed Optimization Techniques
+## Measure First, Then Optimize
 
-### Server-Side (1-5)
+Before you touch a config file, find your bottleneck. Guessing wastes hours on fixes that move nothing.
 
-**1. Enable Compression**
-\`\`\`
-# Nginx
+There are two kinds of data, and you want both:
+
+- **Field data** is what real visitors experienced. Google's Chrome User Experience Report (CrUX) feeds the Core Web Vitals report in Search Console. This is what actually affects rankings — it's the ground truth.
+- **Lab data** is a controlled single run: Lighthouse (in Chrome DevTools or PageSpeed Insights) and WebPageTest. Lab tools are for *diagnosis* because they hand you a waterfall and a filmstrip. They don't decide your ranking, but they show you why the field numbers are bad.
+
+Open the waterfall and ask one question: where is the time going? A slow **TTFB** (Time to First Byte) means the problem is your server or origin — no amount of image tweaking will help. A late **LCP** with a fast TTFB usually means your largest element (often a hero image) loads too late. A janky, unresponsive feel points at **JavaScript** — main-thread work blocking interaction. The [full breakdown of LCP, INP, and CLS](/blog/how-to-improve-core-web-vitals) explains what each metric measures and what "good" looks like.
+
+You can get a fast read on the mechanical stuff — TTFB, compression, cache headers, render-blocking resources, lazy-load usage, and page weight — by running your URL through [SEO Snapshot](/). It flags the low-hanging fruit before you dig into a waterfall.
+
+## The 15 Techniques, Grouped by What They Fix
+
+### Server-Side (1–5): moves TTFB, which caps your LCP
+
+Your LCP can never be faster than your TTFB — the browser can't paint anything until the first byte arrives. These five shrink that floor.
+
+**1. Enable compression.** Text assets (HTML, CSS, JS, SVG) compress dramatically. Prefer **Brotli** — it typically beats gzip by 15–20% on the same files and every modern browser supports it. Keep gzip as the fallback.
+
+\`\`\`nginx
+# Nginx — Brotli first, gzip fallback
+brotli on;
+brotli_types text/plain text/css application/json application/javascript image/svg+xml;
 gzip on;
 gzip_vary on;
 gzip_min_length 256;
 gzip_types text/plain text/css application/json application/javascript text/xml;
 \`\`\`
 
-**2. Set Cache-Control Headers**
-\`\`\`
-# Static assets — cache for 1 year
+**2. Set Cache-Control headers.** Fingerprinted static assets should be cached forever, so repeat visits skip the network entirely.
+
+\`\`\`nginx
 location ~* \\.(css|js|jpg|png|svg|woff2)$ {
     add_header Cache-Control "public, max-age=31536000, immutable";
 }
 \`\`\`
 
-**3. Use a CDN**
-Cloudflare (free) or AWS CloudFront. Serves content from edge servers closest to users.
+**3. Use a CDN.** Cloudflare (free tier works) or CloudFront serves bytes from an edge near the user, cutting round-trip latency. On WordPress this is often the single biggest TTFB win; on Vercel or Netlify it's already built in.
 
-**4. Upgrade to HTTP/2 or HTTP/3**
-HTTP/2 allows multiplexing (multiple files over one connection). Most modern servers support it.
+**4. Upgrade to HTTP/2 or HTTP/3.** Multiplexing lets many files share one connection. This also **kills the old "concatenate everything into one bundle" advice** — under HTTP/1.1 every request paid a connection tax, so bundling helped. Over HTTP/2+ that tax is gone, and smaller cache-friendly chunks are usually better. Don't fight your framework's code-splitting to force one megabundle.
 
-**5. Optimize Time to First Byte (TTFB)**
-- Use server-side caching (Redis, Varnish)
-- Optimize database queries
-- Use static site generation when possible
+**5. Optimize TTFB at the origin.** Cache rendered output (Redis, Varnish, or a full-page cache plugin), fix slow database queries, and prefer static generation. A Next.js page built with \`getStaticProps\` or the App Router's static rendering serves from cache in single-digit milliseconds instead of rendering per request.
 
-### Frontend (6-10)
+### Frontend (6–10): protects LCP and prevents CLS
 
-**6. Lazy Load Images**
-\`\`\`
+**6. Lazy-load images — but never the LCP one.** \`loading="lazy"\` defers offscreen images. The common mistake: lazy-loading the hero. That delays your LCP element and tanks the metric. Lazy-load everything *below* the fold; leave the hero eager.
+
+\`\`\`html
+<!-- below the fold: lazy -->
 <img src="photo.jpg" loading="lazy" alt="Description" width="800" height="600">
+<!-- LCP hero: eager, and hint the browser to fetch it early -->
+<img src="hero.jpg" fetchpriority="high" alt="Hero" width="1600" height="900">
 \`\`\`
 
-**7. Use Modern Image Formats**
-\`\`\`
+**7. Use modern image formats.** AVIF and WebP are far smaller than JPEG at the same quality. Since the LCP element is frequently an image, this is often your biggest LCP win. More detail in the [image SEO guide](/blog/image-seo-optimization).
+
+\`\`\`html
 <picture>
   <source srcset="photo.avif" type="image/avif">
   <source srcset="photo.webp" type="image/webp">
-  <img src="photo.jpg" alt="Description">
+  <img src="photo.jpg" alt="Description" width="800" height="600">
 </picture>
 \`\`\`
 
-**8. Defer Non-Critical JavaScript**
-\`\`\`
+**8. Defer non-critical JavaScript.** \`defer\` runs scripts after HTML parses; \`async\` runs them whenever they arrive. Getting JS off the critical path is what improves **INP and TBT** (Total Blocking Time) — the responsiveness metrics.
+
+\`\`\`html
 <script src="analytics.js" defer></script>
 <script src="chat-widget.js" async></script>
 \`\`\`
 
-**9. Inline Critical CSS**
-Extract above-the-fold CSS and inline it in the HTML head. Load remaining CSS asynchronously.
+**9. Inline critical CSS.** Extract above-the-fold CSS into the \`<head>\` and load the rest asynchronously so the first paint doesn't wait on a full stylesheet. This is the core of [fixing render-blocking resources](/blog/fix-render-blocking-resources).
 
-**10. Preconnect to Third-Party Domains**
-\`\`\`
-<link rel="preconnect" href="https://fonts.googleapis.com">
+**10. Preconnect to third-party origins.** Warm up the connection to domains you'll definitely hit.
+
+\`\`\`html
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
 <link rel="dns-prefetch" href="https://www.google-analytics.com">
 \`\`\`
 
-### Content (11-15)
+### Content & Layout (11–15): mostly CLS, plus cleanup
 
-**11. Optimize Font Loading**
-\`\`\`
+**11. Optimize font loading.** \`font-display: swap\` shows text immediately in a fallback while the web font loads, so content isn't invisible. Self-hosting the \`.woff2\` avoids an extra connection.
+
+\`\`\`css
 @font-face {
   font-family: 'Inter';
   src: url('/fonts/inter.woff2') format('woff2');
@@ -3485,40 +3741,37 @@ Extract above-the-fold CSS and inline it in the HTML head. Load remaining CSS as
 }
 \`\`\`
 
-**12. Remove Unused CSS/JS**
-Use Chrome DevTools Coverage tab to find unused code.
+**12. Remove unused CSS/JS.** The DevTools Coverage tab shows exactly how much of each file goes unexecuted on load — often 40%+ on template-heavy sites.
 
-**13. Minimize DOM Size**
-Keep under 1500 DOM elements. Deep nesting slows rendering.
+**13. Keep the DOM small.** Aim under ~1,500 elements; deep nesting slows style and layout.
 
-**14. Avoid Layout Shifts (CLS)**
-Always set width/height on images and embeds.
+**14. Prevent layout shift.** Always set \`width\` and \`height\` (or \`aspect-ratio\`) on images, iframes, and ad slots. Reserved space is what keeps **CLS** near zero — content stops jumping as things load.
 
-**15. Reduce Third-Party Scripts**
-Each third-party script adds 50-200ms. Audit and remove unnecessary ones.
+**15. Cut third-party scripts.** Each one adds 50–200ms plus a connection. Audit the tag manager; most sites carry scripts nobody uses anymore.
 
-## Measuring Speed
+## Prioritize: Biggest Wins First
 
-Use [SEO Snapshot](/) to check:
-- Response time (TTFB)
-- Compression status
-- Cache-Control headers
-- Render-blocking resources
-- Lazy loading usage
-- Page weight estimation
-- Request count
-- Third-party script detection
+Don't work top to bottom. Sequence by impact:
+
+1. **Server caching + compression** (Brotli, Cache-Control, a CDN). These hit every page at once and lower the TTFB floor under all your other work.
+2. **The LCP image** — correct format, correct size, eager-loaded, \`fetchpriority="high"\`. One element, huge metric movement.
+3. **JavaScript** — defer/async, then trim. This is the INP fix, and it's the slowest to do well, so do it after the cheap wins are banked.
+
+If Lighthouse still isn't where you want it after those three, the [path to a Lighthouse score of 100](/blog/how-to-improve-lighthouse-score) covers the remaining polish.
 
 ## FAQ
 
-**Q: What's a good page load time?**
-A: Under 3 seconds. Aim for under 2 seconds for competitive advantage.
+**Which optimization has the biggest impact?**
+Server-side caching and compression, because they change every page instantly and set the ceiling for everything else. After that, the LCP image.
 
-**Q: Does page speed directly affect rankings?**
-A: Yes. Core Web Vitals (LCP, INP, CLS) are confirmed ranking factors.
+**Field data or lab data — which should I trust?**
+Field data (CrUX / Search Console) decides your ranking; that's your scoreboard. Lab data (Lighthouse, WebPageTest) is your diagnostic — use it to find *why* the field numbers look the way they do.
 
-**Q: Which optimization has the biggest impact?**
-A: Compression + caching. They're server-side changes that affect every page instantly.`,
+**Is Brotli really better than gzip?**
+For text assets, yes — usually 15–20% smaller at comparable CPU cost, with universal browser support. Keep gzip configured as a fallback and you lose nothing.
+
+**Should I still bundle all my JavaScript into one file?**
+No. That was an HTTP/1.1 workaround. Over HTTP/2 and HTTP/3, several smaller, independently cacheable chunks generally beat one giant bundle.`,
   },
   'keyword-cannibalization-fix': {
     title: 'Keyword Cannibalization: How to Find and Fix It',
