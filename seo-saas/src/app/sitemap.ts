@@ -7,29 +7,33 @@ export const revalidate = 300;
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = 'https://seosnapshot.dev';
 
+  // Stable lastmod for core/static routes. A constant (not `new Date()`) so
+  // Google sees a real change signal only when we bump it, instead of "now"
+  // on every regeneration (which crawlers learn to ignore).
+  const SITE_UPDATED = new Date('2026-07-11');
+
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: base, lastModified: new Date(), changeFrequency: 'weekly', priority: 1.0 },
-    { url: `${base}/pricing`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${base}/compare`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/blog`, lastModified: new Date(), changeFrequency: 'daily', priority: 0.8 },
-    { url: `${base}/tools`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.8 },
-    { url: `${base}/tools/meta-tag-generator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/tools/robots-txt-generator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/tools/schema-generator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/tools/open-graph-preview`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/tools/serp-snippet-preview`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/tools/hreflang-generator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/tools/sitemap-generator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/tools/robots-meta-generator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/tools/redirect-generator`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
-    { url: `${base}/docs`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${base}/glossary`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${base}/badge`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${base}/vs/google-lighthouse`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.6 },
-    { url: `${base}/methodology`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
-    { url: `${base}/login`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.4 },
-    { url: `${base}/terms`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
-    { url: `${base}/privacy`, lastModified: new Date(), changeFrequency: 'yearly', priority: 0.2 },
+    { url: base, lastModified: SITE_UPDATED, changeFrequency: 'weekly', priority: 1.0 },
+    { url: `${base}/pricing`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/compare`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/blog`, lastModified: SITE_UPDATED, changeFrequency: 'daily', priority: 0.8 },
+    { url: `${base}/tools`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.8 },
+    { url: `${base}/tools/meta-tag-generator`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/tools/robots-txt-generator`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/tools/schema-generator`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/tools/open-graph-preview`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/tools/serp-snippet-preview`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/tools/hreflang-generator`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/tools/sitemap-generator`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/tools/robots-meta-generator`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/tools/redirect-generator`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/docs`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${base}/glossary`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${base}/badge`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${base}/vs/google-lighthouse`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.6 },
+    { url: `${base}/methodology`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${base}/terms`, lastModified: SITE_UPDATED, changeFrequency: 'yearly', priority: 0.2 },
+    { url: `${base}/privacy`, lastModified: SITE_UPDATED, changeFrequency: 'yearly', priority: 0.2 },
   ];
 
   // Blog posts (static library + DB-published)
@@ -38,7 +42,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const posts = await getBlogList();
     blogRoutes = posts.map((p) => ({
       url: `${base}/blog/${p.slug}`,
-      lastModified: p.date ? new Date(p.date) : new Date(),
+      // Prefer the real last-updated date so edits give Google a recrawl
+      // signal; fall back to the publish date, then to now.
+      lastModified: p.updated
+        ? new Date(p.updated)
+        : p.date
+          ? new Date(p.date)
+          : new Date(),
       changeFrequency: 'monthly' as const,
       priority: 0.7,
     }));
