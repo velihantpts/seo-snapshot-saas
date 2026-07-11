@@ -36,13 +36,13 @@ export const metadata: Metadata = {
     siteName: 'SEO Snapshot',
     title: 'SEO Snapshot — Free SEO Analyzer',
     description: '100 SEO checks with copy-paste code fixes. Free, no signup.',
-    images: [{ url: '/og-image.svg', width: 1200, height: 630, alt: 'SEO Snapshot - Free SEO Analyzer with 100 checks' }],
+    // Image supplied by the file-based `opengraph-image.tsx` (dynamic PNG).
   },
   twitter: {
     card: 'summary_large_image',
     title: 'SEO Snapshot — Free SEO Analyzer',
     description: '100 SEO checks with copy-paste code fixes. Free, no signup.',
-    images: ['/og-image.svg'],
+    // Image supplied by the file-based `twitter-image.tsx` (dynamic PNG).
   },
   manifest: '/manifest.json',
   robots: { index: true, follow: true },
