@@ -3,6 +3,7 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import { getBlogPost, getBlogList, renderMarkdown, extractFaq } from '@/lib/blog';
+import { relatedRefsForArticle } from '@/lib/related-refs';
 
 export const revalidate = 60;
 
@@ -35,6 +36,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
 
   const html = renderMarkdown(post.content);
   const related = (await getBlogList()).filter((p) => p.slug !== post.slug).slice(0, 3);
+  const refs = relatedRefsForArticle(post.slug);
   const url = `${SITE}/blog/${post.slug}`;
   const wordCount = post.content.trim().split(/\s+/).length;
   const readTime = Math.max(1, Math.round(wordCount / 200));
@@ -113,6 +115,39 @@ export default async function BlogPost({ params }: { params: { slug: string } })
           <p className="text-white/60 text-sm mb-3">Check your site&apos;s SEO score for free</p>
           <Link href="/" className="btn-primary text-sm">Analyze your site</Link>
         </div>
+
+        {(refs.checks.length > 0 || refs.terms.length > 0) && (
+          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+            {refs.checks.length > 0 && (
+              <div>
+                <h2 className="text-sm font-medium text-white/50 mb-3">Related SEO checks</h2>
+                <ul className="space-y-1.5">
+                  {refs.checks.map((c) => (
+                    <li key={c.slug}>
+                      <Link href={`/checks/${c.slug}`} className="text-sm text-accent-400 hover:text-accent-300 transition-colors">
+                        {c.title} →
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {refs.terms.length > 0 && (
+              <div>
+                <h2 className="text-sm font-medium text-white/50 mb-3">In the SEO glossary</h2>
+                <ul className="space-y-1.5">
+                  {refs.terms.map((t) => (
+                    <li key={t.slug}>
+                      <Link href={`/glossary/${t.slug}`} className="text-sm text-accent-400 hover:text-accent-300 transition-colors">
+                        {t.term} →
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+        )}
 
         {related.length > 0 && (
           <div className="mt-12">
