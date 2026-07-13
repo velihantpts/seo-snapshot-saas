@@ -47,7 +47,7 @@ export default function AnalyzeOpengraphImage() {
             SEO Report
           </div>
           <div style={{ display: 'flex', marginTop: 24, fontSize: 30, color: 'rgba(255,255,255,0.55)' }}>
-            123 checks · copy-paste fixes · security grade
+            100+ checks · copy-paste fixes · security grade
           </div>
         </div>
 

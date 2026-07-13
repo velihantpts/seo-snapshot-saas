@@ -52,7 +52,7 @@ export default function OpengraphImage() {
             Free SEO Analyzer
           </div>
           <div style={{ display: 'flex', marginTop: 28, fontSize: 30, color: 'rgba(255,255,255,0.55)', lineHeight: 1.3 }}>
-            123 checks · copy-paste fixes · no signup
+            100+ checks · copy-paste fixes · no signup
           </div>
         </div>
 

@@ -92,7 +92,7 @@ export default function GlossaryTermPage({ params }: { params: { slug: string } 
         )}
 
         <div className="mt-12 glass-card rounded-xl p-6 text-center">
-          <p className="text-white/60 text-sm mb-3">See how your own site scores on {t.term.toLowerCase()} and 120+ other checks</p>
+          <p className="text-white/60 text-sm mb-3">See how your own site scores on {t.term.toLowerCase()} and 100+ other checks</p>
           <Link href="/" className="btn-primary text-sm">Analyze any URL free</Link>
         </div>
       </div>

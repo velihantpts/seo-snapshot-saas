@@ -39,7 +39,7 @@ export default function ChecksIndexPage() {
         <h1 className="text-2xl font-medium tracking-tight mb-2">SEO Checks Reference</h1>
         <p className="text-white/60 text-sm mb-10 max-w-2xl">
           What each common SEO issue means, why it matters, and the exact code to fix it. These are a
-          sample of the 120+ checks the{' '}
+          sample of the 100+ checks the{' '}
           <Link href="/" className="text-accent-400 hover:text-accent-300">free analyzer</Link> runs on any URL.
         </p>
 

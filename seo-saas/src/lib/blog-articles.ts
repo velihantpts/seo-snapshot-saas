@@ -1916,7 +1916,7 @@ For shipping a technically clean site, yes. For competitive link building and da
 **What should I fix first?**
 Critical, page-blocking issues: missing title tags, no HTTPS, broken links, noindex left on by accident. Sort by impact and work down. A tool that gives you the fix code makes that list a lot shorter.
 
-Try [SEO Snapshot](/) — 123 checks, copy-paste fix code, a security grade, and no signup.`,
+Try [SEO Snapshot](/) — 100+ checks, copy-paste fix code, a security grade, and no signup.`,
   },
   'seo-checklist-for-developers': {
     title: 'SEO Checklist for Developers: 50 Essential Points',
@@ -2474,7 +2474,7 @@ Reduce JavaScript to cut TBT. It's 30% of the weight and the metric most sites f
 
 ## Go beyond Lighthouse
 
-Lighthouse finds problems but rarely hands you the fix. Run your URL through [SEO Snapshot](/) for 123 checks with copy-paste fix code for every issue — headers, structured data, metadata, and the technical gaps Lighthouse skips entirely.`,
+Lighthouse finds problems but rarely hands you the fix. Run your URL through [SEO Snapshot](/) for 100+ checks with copy-paste fix code for every issue — headers, structured data, metadata, and the technical gaps Lighthouse skips entirely.`,
   },
   'meta-description-length-2026': {
     title: 'Meta Description Length in 2026: Character & Pixel Width Guide',

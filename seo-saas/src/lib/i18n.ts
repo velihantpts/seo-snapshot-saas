@@ -642,13 +642,16 @@ const translations: Record<Locale, Record<string, string>> = {
   },
 };
 
-// Get stored locale or detect from browser
+// Default to English, honor an explicit stored choice. We deliberately do NOT
+// auto-switch to the browser language: the site's content (blog, tools, checks)
+// is written in English and targets English search queries, so auto-detecting
+// e.g. a Turkish browser produced a jarring mix of a translated shell around
+// English content. A fresh visitor now gets a fully consistent English UI; the
+// language switcher still lets anyone opt into another locale.
 export function getLocale(): Locale {
   if (typeof window === 'undefined') return 'en';
   const stored = localStorage.getItem('locale') as Locale;
   if (stored && translations[stored]) return stored;
-  const browser = navigator.language?.slice(0, 2) as Locale;
-  if (translations[browser]) return browser;
   return 'en';
 }
 

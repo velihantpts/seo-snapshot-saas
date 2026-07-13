@@ -88,7 +88,7 @@ export default function Home() {
 
 
       {/* Hero */}
-      <section className="relative z-10 pt-12 sm:pt-16 lg:pt-24 pb-16 sm:pb-20 px-4 sm:px-6">
+      <section className="relative z-10 pt-12 sm:pt-16 lg:pt-24 pb-8 sm:pb-10 px-4 sm:px-6">
         <div className="max-w-3xl mx-auto text-center">
           <div className="flex justify-center mb-8 opacity-0 animate-fade-in">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/[0.05] border border-white/[0.1] text-white/50 text-[11px]">
@@ -174,7 +174,7 @@ export default function Home() {
 
           {/* Why Different — inline with hero */}
           {!loading && (
-            <div className="mt-16 max-w-2xl mx-auto opacity-0 animate-fade-in-up-delay-3">
+            <div className="mt-12 max-w-2xl mx-auto opacity-0 animate-fade-in-up-delay-3">
               <div className="grid grid-cols-2 gap-3 text-left">
                 {/* Others */}
                 <div className="rounded-xl bg-white/[0.02] border border-white/[0.04] p-4">
@@ -204,7 +204,7 @@ export default function Home() {
                   <span className="text-emerald-400 font-bold text-xs">+15</span> {t('diff.impact')}
                 </div>
                 <div className="flex items-center gap-1.5 text-[10px] text-white/65">
-                  <span className="text-accent-400 font-bold text-xs">56</span> {t('diff.snippets')}
+                  <span className="text-accent-400 font-bold text-xs">100+</span> {t('diff.snippets')}
                 </div>
               </div>
             </div>
@@ -233,7 +233,7 @@ export default function Home() {
 
       {/* Demo preview */}
       <ScrollReveal>
-        <section className="relative z-10 py-16 px-4 sm:px-6">
+        <section className="relative z-10 py-12 px-4 sm:px-6">
           <div className="max-w-3xl mx-auto">
             <div className="text-center mb-8">
               <h2 className="heading-section mb-2">{t('demo.reportTitle')}</h2>
@@ -287,7 +287,7 @@ export default function Home() {
 
       {/* Free tools strip — surfaces the SEO-magnet tools + internal linking */}
       <ScrollReveal>
-        <section className="relative z-10 py-16 px-4 sm:px-6">
+        <section className="relative z-10 py-12 px-4 sm:px-6">
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="heading-section mb-2">{t('tools.homeTitle')}</h2>
             <p className="text-white/60 text-sm mb-8">{t('tools.homeDesc')}</p>
@@ -315,8 +315,8 @@ export default function Home() {
       </ScrollReveal>
 
       {/* Features with mouse-tracking glow */}
-      <section className="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
-        <div className="divider max-w-6xl mx-auto mb-20" />
+      <section className="relative z-10 py-16 sm:py-20 px-4 sm:px-6">
+        <div className="divider max-w-6xl mx-auto mb-14" />
         <ScrollReveal className="max-w-5xl mx-auto">
           <h2 className="heading-section text-center mb-4">{t('features.title')}</h2>
           <p className="text-white/60 text-center mb-14 sm:mb-16 max-w-md mx-auto text-sm leading-relaxed">
@@ -340,8 +340,8 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="relative z-10 py-20 sm:py-28 px-4 sm:px-6">
-        <div className="divider max-w-6xl mx-auto mb-20" />
+      <section className="relative z-10 py-16 sm:py-20 px-4 sm:px-6">
+        <div className="divider max-w-6xl mx-auto mb-14" />
         <ScrollReveal className="max-w-xl mx-auto text-center">
           <h2 className="heading-section mb-4">{t('cta.title')}</h2>
           <p className="text-white/60 mb-6 text-sm">{t('cta.desc')}</p>

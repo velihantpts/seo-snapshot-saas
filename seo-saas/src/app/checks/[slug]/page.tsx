@@ -107,7 +107,7 @@ export default function CheckPage({ params }: { params: { slug: string } }) {
         )}
 
         <div className="glass-card rounded-xl p-6 text-center">
-          <p className="text-white/60 text-sm mb-3">Check your site for this and 120+ other issues</p>
+          <p className="text-white/60 text-sm mb-3">Check your site for this and 100+ other issues</p>
           <Link href="/" className="btn-primary text-sm">Analyze any URL free</Link>
         </div>
       </div>
