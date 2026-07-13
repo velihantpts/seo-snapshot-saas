@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Tag, FileCode, Braces, Share2, Search, Languages, ListTree, EyeOff, CornerUpRight, ArrowRight, Hash, Link2, Ruler, Bot, BookOpen, MapPin, HelpCircle, ShoppingBag, ChevronRight, Newspaper, Calendar, ShieldCheck } from 'lucide-react';
+import { Tag, FileCode, Braces, Share2, Search, Languages, ListTree, EyeOff, CornerUpRight, ArrowRight, Hash, Link2, Ruler, Bot, BookOpen, MapPin, HelpCircle, ShoppingBag, ChevronRight, Newspaper, Calendar, ShieldCheck, Server } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Free SEO Tools — Generators & Preview Checkers',
@@ -10,6 +10,7 @@ export const metadata: Metadata = {
 
 const tools = [
   { href: '/tools/security-header-checker', icon: ShieldCheck, title: 'Security Header Checker', desc: 'Grade any URL A+ to F on HSTS, CSP & more, with copy-paste nginx fixes.' },
+  { href: '/tools/http-header-checker', icon: Server, title: 'HTTP Header Checker', desc: 'See status, redirect chain & every response header a crawler receives.' },
   { href: '/tools/keyword-density-checker', icon: Hash, title: 'Keyword Density Checker', desc: 'Word count, reading time & 1/2/3-word keyword density — catch keyword stuffing.' },
   { href: '/tools/utm-builder', icon: Link2, title: 'UTM Campaign URL Builder', desc: 'Tag links for GA4, Meta, Google Ads & email with presets and one-click copy.' },
   { href: '/tools/title-meta-length-checker', icon: Ruler, title: 'Title & Meta Length Checker', desc: 'Pixel-accurate title & description length with a live Google preview.' },

@@ -21,6 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${base}/blog`, lastModified: SITE_UPDATED, changeFrequency: 'daily', priority: 0.8 },
     { url: `${base}/tools`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.8 },
     { url: `${base}/tools/security-header-checker`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
+    { url: `${base}/tools/http-header-checker`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/tools/keyword-density-checker`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/tools/utm-builder`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
     { url: `${base}/tools/title-meta-length-checker`, lastModified: SITE_UPDATED, changeFrequency: 'monthly', priority: 0.7 },
