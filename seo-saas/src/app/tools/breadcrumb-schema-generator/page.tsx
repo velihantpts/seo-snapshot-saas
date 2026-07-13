@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowLeft } from 'lucide-react';
 import Client from './Client';
+import { ToolHeader } from '../_components/ToolHeader';
 import { ToolFaq, type FaqItem } from '../_components/ToolFaq';
 import { ToolFooter } from '../_components/ToolFooter';
 
@@ -25,10 +25,7 @@ export default function Page() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-12">
-        <Link href="/tools" className="flex items-center gap-2 text-white/60 hover:text-white/70 transition text-sm mb-6">
-          <ArrowLeft className="w-4 h-4" /> All tools
-        </Link>
-        <h1 className="text-2xl font-medium tracking-tight mb-2">Breadcrumb Schema Generator</h1>
+        <ToolHeader />
         <p className="text-white/60 text-sm mb-8 max-w-2xl">Add each level of your page hierarchy and get valid BreadcrumbList JSON-LD, numbered in order. Copy it into the page&apos;s head.</p>
         <Client />
 
