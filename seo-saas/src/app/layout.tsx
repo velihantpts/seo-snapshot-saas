@@ -16,10 +16,10 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mon
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://seosnapshot.dev'),
   title: {
-    default: 'SEO Snapshot — Free SEO Analyzer',
+    default: 'SEO Snapshot — Free SEO Report & Analyzer',
     template: '%s | SEO Snapshot',
   },
-  description: 'Free SEO analyzer with 100 checks. Get copy-paste code fixes for meta tags, security headers, structured data, and more.',
+  description: 'Get a free SEO report in seconds. 100 on-page checks with copy-paste code fixes for meta tags, security headers, structured data, and Core Web Vitals — no signup.',
   // NOTE: no site-wide `alternates.canonical` here. A default canonical is
   // inherited by every child route that doesn't set its own, which made
   // /pricing, /compare, /docs, /methodology, /terms, /privacy, /login all
@@ -34,14 +34,14 @@ export const metadata: Metadata = {
     locale: 'en_US',
     url: 'https://seosnapshot.dev',
     siteName: 'SEO Snapshot',
-    title: 'SEO Snapshot — Free SEO Analyzer',
-    description: '100 SEO checks with copy-paste code fixes. Free, no signup.',
+    title: 'SEO Snapshot — Free SEO Report & Analyzer',
+    description: 'Get a free SEO report with 100 checks and copy-paste code fixes. No signup.',
     // Image supplied by the file-based `opengraph-image.tsx` (dynamic PNG).
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SEO Snapshot — Free SEO Analyzer',
-    description: '100 SEO checks with copy-paste code fixes. Free, no signup.',
+    title: 'SEO Snapshot — Free SEO Report & Analyzer',
+    description: 'Get a free SEO report with 100 checks and copy-paste code fixes. No signup.',
     // Image supplied by the file-based `twitter-image.tsx` (dynamic PNG).
   },
   manifest: '/manifest.json',
@@ -64,7 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           "@type": "WebApplication",
           "name": "SEO Snapshot",
           "url": "https://seosnapshot.dev",
-          "description": "Free SEO analyzer with 100 checks. Get copy-paste code fixes for meta tags, security headers, and more.",
+          "description": "Free SEO report generator. Analyze any URL against 100 on-page checks and get copy-paste code fixes for meta tags, security headers, structured data, and Core Web Vitals.",
           "applicationCategory": "SEO Tool",
           "operatingSystem": "Web",
           "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },

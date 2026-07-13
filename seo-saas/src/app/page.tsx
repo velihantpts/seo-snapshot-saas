@@ -235,6 +235,10 @@ export default function Home() {
       <ScrollReveal>
         <section className="relative z-10 py-16 px-4 sm:px-6">
           <div className="max-w-3xl mx-auto">
+            <div className="text-center mb-8">
+              <h2 className="heading-section mb-2">{t('demo.reportTitle')}</h2>
+              <p className="text-white/60 text-sm max-w-xl mx-auto">{t('demo.reportDesc')}</p>
+            </div>
             <div className="glass-card rounded-2xl p-6 sm:p-8">
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-3 h-3 rounded-full bg-red-500/60" />
