@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { Copy, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Copy, CheckCircle, AlertTriangle, Sparkles } from 'lucide-react';
 
 const field = 'w-full px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30';
 
@@ -59,6 +59,11 @@ export default function OpenGraphPreviewClient() {
     <div className="grid lg:grid-cols-2 gap-6">
       {/* Inputs */}
       <div className="space-y-4">
+        {!title && !description && !image && (
+          <button onClick={() => { setUrl('https://seosnapshot.dev'); setTitle('Free SEO Report & Analyzer'); setDescription('Scan any URL against 100 on-page checks and get the exact code to fix every issue. Free, no signup.'); setImage('https://seosnapshot.dev/opengraph-image'); setSiteName('SEO Snapshot'); }} className="inline-flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
+            <Sparkles className="w-3.5 h-3.5" /> Try an example
+          </button>
+        )}
         <div>
           <label className="block text-xs text-white/60 mb-1.5">Page URL</label>
           <input value={url} onChange={e => setUrl(e.target.value)} placeholder="https://example.com/page" className={field} />

@@ -1,7 +1,7 @@
 'use client';
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { Copy, CheckCircle, Download, AlertTriangle } from 'lucide-react';
+import { Copy, CheckCircle, Download, AlertTriangle, Sparkles } from 'lucide-react';
 
 const field = 'w-full px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30';
 
@@ -73,6 +73,11 @@ export default function SitemapGeneratorClient() {
           <textarea value={raw} onChange={e => setRaw(e.target.value)} rows={12}
             placeholder={'https://example.com/\nhttps://example.com/about\nhttps://example.com/blog/post-1'}
             className={`${field} font-mono`} />
+          {!raw && (
+            <button onClick={() => setRaw('https://example.com/\nhttps://example.com/about\nhttps://example.com/pricing\nhttps://example.com/blog\nhttps://example.com/contact')} className="inline-flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition mt-2">
+              <Sparkles className="w-3.5 h-3.5" /> Try an example
+            </button>
+          )}
         </div>
         <div className="grid grid-cols-2 gap-3">
           <div>

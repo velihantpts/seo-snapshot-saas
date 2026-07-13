@@ -1,6 +1,7 @@
 'use client';
 import { useState, useMemo, useEffect } from 'react';
-import { Copy, CheckCircle, History, X as XIcon } from 'lucide-react';
+import { Copy, CheckCircle, History, X as XIcon, QrCode, Download } from 'lucide-react';
+import QRCode from 'qrcode';
 import { readShareParams } from '@/lib/share-state';
 import { ShareButton } from '../_components/ShareButton';
 
@@ -33,6 +34,8 @@ export default function UtmBuilderClient() {
   const [utm, setUtm] = useState<Utm>(EMPTY);
   const [copied, setCopied] = useState(false);
   const [history, setHistory] = useState<string[]>([]);
+  const [qr, setQr] = useState('');
+  const [showQr, setShowQr] = useState(false);
 
   // Prefill from a shared link, then load saved history.
   useEffect(() => {
@@ -70,6 +73,16 @@ export default function UtmBuilderClient() {
   }, [base, utm]);
 
   const invalidBase = base.trim().length > 0 && result === '';
+
+  // Generate a QR of the tagged URL on demand (client-side, no upload).
+  useEffect(() => {
+    if (!showQr || !result) { setQr(''); return; }
+    let cancelled = false;
+    QRCode.toDataURL(result, { margin: 1, width: 240, color: { dark: '#0b0f17', light: '#ffffff' } })
+      .then((d) => { if (!cancelled) setQr(d); })
+      .catch(() => { if (!cancelled) setQr(''); });
+    return () => { cancelled = true; };
+  }, [result, showQr]);
 
   const saveHistory = (url: string) => {
     setHistory((prev) => {
@@ -123,6 +136,7 @@ export default function UtmBuilderClient() {
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs text-white/50 uppercase tracking-wider">Your tagged URL</span>
           <div className="flex items-center gap-4">
+            <button onClick={() => setShowQr((v) => !v)} disabled={!result} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition disabled:opacity-40"><QrCode className="w-3.5 h-3.5" /> QR</button>
             <ShareButton params={shareParams} label="Share setup" />
             <button onClick={copy} disabled={!result} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition disabled:opacity-40">
               {copied ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
@@ -132,6 +146,16 @@ export default function UtmBuilderClient() {
         <div className="glass-card rounded-lg p-4 font-mono text-[13px] text-accent-200 break-all min-h-[64px] leading-relaxed">
           {result || <span className="text-white/30">Fill the destination URL and parameters above…</span>}
         </div>
+        {showQr && qr && (
+          <div className="mt-3 flex items-center gap-4 glass-card rounded-lg p-4">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={qr} alt="QR code linking to the tagged URL" width={112} height={112} className="rounded bg-white p-1 flex-shrink-0" />
+            <div>
+              <p className="text-xs text-white/60 mb-2 leading-relaxed">Scan to open the tagged link — handy for print, packaging, slides, or events. Generated on your device.</p>
+              <a href={qr} download="utm-qr.png" className="inline-flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300"><Download className="w-3.5 h-3.5" /> Download QR</a>
+            </div>
+          </div>
+        )}
         <p className="text-xs text-white/50 mt-3 leading-relaxed">
           Values are lowercased and spaces become underscores so your analytics doesn&apos;t split <span className="font-mono text-white/60">Summer Launch</span> and <span className="font-mono text-white/60">summer_launch</span> into two campaigns. Keep source/medium/campaign consistent across every link.
         </p>

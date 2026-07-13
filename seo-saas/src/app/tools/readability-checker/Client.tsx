@@ -1,5 +1,8 @@
 'use client';
 import { useState, useMemo } from 'react';
+import { Sparkles } from 'lucide-react';
+
+const SAMPLE = `Readability is not about writing for a lower intelligence. It is about removing friction. When a sentence runs on for forty words and leans on jargon, the reader has to work harder to follow it, and many will simply give up. Short sentences and plain words let the idea land without effort. This matters on the web, where people scan more than they read. A clear paragraph gets read to the end. A dense one gets skipped. So aim for shorter sentences, everyday words, and one idea per paragraph, and your writing will reach more people.`;
 
 const field = 'w-full px-3 py-3 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30 leading-relaxed resize-y';
 
@@ -46,7 +49,14 @@ export default function ReadabilityClient() {
 
   return (
     <div className="grid lg:grid-cols-2 gap-6">
-      <textarea value={text} onChange={(e) => setText(e.target.value)} rows={16} placeholder="Paste your article or copy here to score its readability…" className={field} />
+      <div className="space-y-2">
+        <textarea value={text} onChange={(e) => setText(e.target.value)} rows={16} placeholder="Paste your article or copy here to score its readability…" className={field} />
+        {!text && (
+          <button onClick={() => setText(SAMPLE)} className="inline-flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
+            <Sparkles className="w-3.5 h-3.5" /> Try an example
+          </button>
+        )}
+      </div>
 
       <div>
         {!r ? (

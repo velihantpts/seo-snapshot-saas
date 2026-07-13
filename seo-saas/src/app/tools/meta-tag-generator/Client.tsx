@@ -1,7 +1,7 @@
 'use client';
 import { useState } from 'react';
 import Link from 'next/link';
-import { Copy, CheckCircle } from 'lucide-react';
+import { Copy, CheckCircle, Sparkles } from 'lucide-react';
 
 export default function MetaTagGeneratorClient() {
   const [title, setTitle] = useState('');
@@ -45,9 +45,23 @@ export default function MetaTagGeneratorClient() {
 
   const field = 'w-full px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30';
 
+  const fillExample = () => {
+    setTitle('SEO Snapshot — Free SEO Report & Analyzer');
+    setDescription('Scan any URL against 100 on-page checks and get the exact code to fix every issue — meta tags, security headers, Core Web Vitals. Free, no signup.');
+    setUrl('https://seosnapshot.dev');
+    setImage('https://seosnapshot.dev/opengraph-image');
+    setSiteName('SEO Snapshot');
+    setTwitter('@seosnapshot');
+  };
+
   return (
     <div className="grid md:grid-cols-2 gap-6">
       <div className="space-y-4">
+        {!title && !description && (
+          <button onClick={fillExample} className="inline-flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
+            <Sparkles className="w-3.5 h-3.5" /> Try an example
+          </button>
+        )}
         <div>
           <label className="flex items-center justify-between text-xs text-white/60 mb-1.5">
             <span>Title tag</span><span className={titleColor}>{title.length}/60</span>
