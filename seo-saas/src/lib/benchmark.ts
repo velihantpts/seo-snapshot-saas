@@ -21,9 +21,15 @@ export async function getBenchmarkReport(): Promise<BenchmarkReport | null> {
   const cached = await getCache<BenchmarkReport>(CACHE_KEY);
   if (cached) return cached;
 
-  const rows = await prisma.benchmark.findMany({
-    select: { score: true, categories: true, ttfb: true, secGrade: true },
-  });
+  let rows: { score: number; categories: string | null; ttfb: number | null; secGrade: string | null }[];
+  try {
+    rows = await prisma.benchmark.findMany({
+      select: { score: true, categories: true, ttfb: true, secGrade: true },
+    });
+  } catch {
+    // DB unreachable (e.g. during the build). The page renders its fallback.
+    return null;
+  }
   const count = rows.length;
   if (count === 0) return null;
 

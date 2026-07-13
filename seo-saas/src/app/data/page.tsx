@@ -5,9 +5,11 @@ import { getBenchmarkReport } from '@/lib/benchmark';
 
 const SITE = 'https://seosnapshot.dev';
 
-// Reads the DB (via a 6h cache). Revalidate hourly so new benchmark rows show up
-// without a rebuild, but we never full-scan on every hit.
-export const revalidate = 3600;
+// Render on-demand, NOT at build time: this page reads the benchmark table and
+// the DB isn't reachable during the Docker build (dummy DATABASE_URL), which
+// would fail the static export. getBenchmarkReport() caches the aggregate for
+// 6h, so the per-request cost is just the render, not a full table scan.
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
   title: 'The State of SEO: What We Found Across Thousands of Real Sites',
