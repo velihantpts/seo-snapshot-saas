@@ -2,7 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowLeft } from 'lucide-react';
 import Client from './Client';
-import { ToolFaq, ToolCta, type FaqItem } from '../_components/ToolFaq';
+import { ToolFaq, type FaqItem } from '../_components/ToolFaq';
+import { ToolFooter } from '../_components/ToolFooter';
 
 export const metadata: Metadata = {
   title: 'Open Graph Preview & Generator — See How Your Link Looks',
@@ -46,7 +47,7 @@ export default function Page() {
         </section>
 
         <ToolFaq items={faqs} />
-        <ToolCta />
+        <ToolFooter />
       </div>
     </div>
   );
