@@ -89,6 +89,10 @@ export const CHECKS: CheckDef[] = [
       {
         "href": "/blog/canonical-url-nextjs",
         "label": "Canonical URLs in Next.js"
+      },
+      {
+        "href": "/blog/fix-duplicate-without-user-selected-canonical",
+        "label": "Fix \"Duplicate without user-selected canonical\""
       }
     ]
   },
@@ -171,6 +175,10 @@ export const CHECKS: CheckDef[] = [
     "fixCode": "<!-- Set the image's intrinsic pixel dimensions; CSS can still scale it responsively -->\n<img src=\"/hero.jpg\" width=\"1200\" height=\"630\" alt=\"Report dashboard\" style=\"max-width:100%;height:auto;\">",
     "related": [
       {
+        "href": "/blog/how-to-fix-cumulative-layout-shift-cls",
+        "label": "Fix Cumulative Layout Shift (CLS)"
+      },
+      {
         "href": "/blog/how-to-improve-core-web-vitals",
         "label": "Improve Core Web Vitals (CLS)"
       },
@@ -197,6 +205,10 @@ export const CHECKS: CheckDef[] = [
       {
         "href": "/blog/fix-render-blocking-resources-nextjs",
         "label": "Fix render-blocking resources in Next.js"
+      },
+      {
+        "href": "/blog/how-to-fix-largest-contentful-paint-lcp",
+        "label": "Fix Largest Contentful Paint (LCP)"
       }
     ]
   },
@@ -362,6 +374,14 @@ export const CHECKS: CheckDef[] = [
     "fixLang": "nginx",
     "fixCode": "# Cache full HTML responses at the edge/proxy to slash TTFB on repeat hits\nproxy_cache_path /var/cache/nginx levels=1:2 keys_zone=html_cache:10m max_size=500m inactive=60m;\n\nlocation / {\n    proxy_cache html_cache;\n    proxy_cache_valid 200 10m;\n    add_header X-Cache-Status $upstream_cache_status;\n    proxy_pass http://app_upstream;\n}",
     "related": [
+      {
+        "href": "/blog/what-is-ttfb-and-how-to-improve-it",
+        "label": "What is TTFB and how to improve it"
+      },
+      {
+        "href": "/blog/how-to-fix-largest-contentful-paint-lcp",
+        "label": "How TTFB affects LCP"
+      },
       {
         "href": "/blog/website-speed-optimization-guide",
         "label": "Website speed optimization guide"
