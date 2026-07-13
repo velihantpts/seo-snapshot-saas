@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Tag, FileCode, Braces, Share2, Search, Languages, ListTree, EyeOff, CornerUpRight, ArrowRight, Hash, Link2, Ruler, Bot, BookOpen, MapPin, HelpCircle, ShoppingBag, ChevronRight, Newspaper, Calendar, ShieldCheck, Server } from 'lucide-react';
+import { Tag, FileCode, Braces, Share2, Search, Languages, ListTree, EyeOff, CornerUpRight, ArrowRight, Hash, Link2, Ruler, Bot, BookOpen, MapPin, HelpCircle, ShoppingBag, ChevronRight, Newspaper, Calendar, ShieldCheck, Server, Scissors, Anchor, Image as ImageIcon } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Free SEO Tools — Generators & Preview Checkers',
@@ -16,7 +16,10 @@ const tools = [
   { href: '/tools/title-meta-length-checker', icon: Ruler, title: 'Title & Meta Length Checker', desc: 'Pixel-accurate title & description length with a live Google preview.' },
   { href: '/tools/robots-txt-tester', icon: Bot, title: 'robots.txt Tester', desc: 'Check if any URL is allowed or blocked, using Google’s matching rules.' },
   { href: '/tools/readability-checker', icon: BookOpen, title: 'Readability Checker', desc: 'Flesch Reading Ease & grade level with live sentence and word stats.' },
+  { href: '/tools/og-image-generator', icon: ImageIcon, title: 'Open Graph Image Generator', desc: 'Design & download a 1200×630 social share image in your browser.' },
   { href: '/tools/open-graph-preview', icon: Share2, title: 'Open Graph Preview', desc: 'See how your link looks on Facebook, X, LinkedIn & Discord, then get the tags.' },
+  { href: '/tools/slug-generator', icon: Scissors, title: 'URL Slug Generator', desc: 'Turn any title into a clean, hyphenated, SEO-friendly URL slug.' },
+  { href: '/tools/canonical-tag-generator', icon: Anchor, title: 'Canonical Tag Generator', desc: 'rel=canonical as HTML, Next.js metadata, or an HTTP header.' },
   { href: '/tools/serp-snippet-preview', icon: Search, title: 'SERP Snippet Preview', desc: 'Pixel-accurate Google preview — catch truncated titles & descriptions.' },
   { href: '/tools/meta-tag-generator', icon: Tag, title: 'Meta Tag Generator', desc: 'Title, description, Open Graph & Twitter Card tags with live length checks.' },
   { href: '/tools/schema-generator', icon: Braces, title: 'JSON-LD Schema Generator', desc: 'Structured data for Organization, LocalBusiness, Article, FAQ, Product, Event & more.' },
