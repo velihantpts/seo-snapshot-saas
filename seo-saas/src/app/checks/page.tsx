@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ListChecks } from 'lucide-react';
 import { CHECKS, CHECK_CATEGORIES } from '@/lib/checks-catalog';
 
 const SITE = 'https://seosnapshot.dev';
@@ -35,13 +36,19 @@ export default function ChecksIndexPage() {
     <div className="min-h-screen bg-surface relative">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
-      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
-        <h1 className="text-2xl font-medium tracking-tight mb-2">SEO Checks Reference</h1>
-        <p className="text-white/60 text-sm mb-10 max-w-2xl">
-          What each common SEO issue means, why it matters, and the exact code to fix it. These are a
-          sample of the 100+ checks the{' '}
-          <Link href="/" className="text-accent-400 hover:text-accent-300">free analyzer</Link> runs on any URL.
-        </p>
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 py-14 sm:py-20">
+        <div className="max-w-2xl mb-10">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-500/10 border border-accent-500/20 text-accent-300 text-[11px] font-medium mb-5">
+            <ListChecks className="w-3 h-3" /> {CHECKS.length} checks explained
+          </div>
+          <h1 className="text-3xl sm:text-[2.5rem] font-semibold tracking-tight leading-[1.06] text-balance">
+            Every SEO check, with the <span className="gradient-text">fix</span>
+          </h1>
+          <p className="text-white/55 text-[15px] mt-4 leading-relaxed">
+            What each common SEO issue means, why it matters, and the exact code to fix it — a sample of the 100+ checks the{' '}
+            <Link href="/" className="text-accent-400 hover:text-accent-300">free analyzer</Link> runs on any URL.
+          </p>
+        </div>
 
         <div className="space-y-10">
           {orderedCats.map((cat) => (
