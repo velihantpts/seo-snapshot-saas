@@ -39,6 +39,7 @@ module.exports = {
       fontFamily: {
         sans: ['var(--font-inter)', 'Inter', 'system-ui', '-apple-system', 'sans-serif'],
         mono: ['var(--font-mono)', 'JetBrains Mono', 'Menlo', 'monospace'],
+        display: ['var(--font-display)', 'var(--font-inter)', 'system-ui', 'sans-serif'],
       },
       animation: {
         'fade-in': 'fadeIn 0.5s ease-out forwards',

@@ -24,17 +24,25 @@ select:focus-visible,
 }
 
 /* ===== Typography premium ===== */
+/* Signature display face on every page headline (H1) + the marketing display
+   classes. Body/UI stay on Inter. Bricolage Grotesque gives the headings an
+   intentional, editorial character instead of the neutral system-sans look. */
+h1 {
+  font-family: var(--font-display), var(--font-inter), system-ui, sans-serif;
+}
 .heading-display {
+  font-family: var(--font-display), var(--font-inter), system-ui, sans-serif;
   font-size: clamp(2.5rem, 6vw, 4.5rem);
-  font-weight: 500;
-  letter-spacing: -0.04em;
-  line-height: 1.05;
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
   text-wrap: balance;
 }
 .heading-section {
+  font-family: var(--font-display), var(--font-inter), system-ui, sans-serif;
   font-size: clamp(1.75rem, 4vw, 2.5rem);
-  font-weight: 500;
-  letter-spacing: -0.03em;
+  font-weight: 600;
+  letter-spacing: -0.025em;
   text-wrap: balance;
 }
 .text-secondary { color: rgba(255, 255, 255, 0.55); }
@@ -310,7 +318,7 @@ select:focus-visible,
 
 /* ===== Blog article (rendered markdown) ===== */
 .blog-content { color: rgba(255,255,255,0.55); font-size: 0.9375rem; line-height: 1.75; }
-.blog-content h2 { color: rgba(255,255,255,0.9); font-size: 1.25rem; font-weight: 500; margin: 2rem 0 0.75rem; }
+.blog-content h2 { color: rgba(255,255,255,0.9); font-size: 1.25rem; font-weight: 500; margin: 2rem 0 0.75rem; scroll-margin-top: 5rem; }
 .blog-content h3 { color: rgba(255,255,255,0.8); font-size: 1.0625rem; font-weight: 500; margin: 1.5rem 0 0.5rem; }
 .blog-content h4 { color: rgba(255,255,255,0.75); font-size: 0.9375rem; font-weight: 600; margin: 1.25rem 0 0.5rem; }
 .blog-content p { margin: 0 0 1rem; }

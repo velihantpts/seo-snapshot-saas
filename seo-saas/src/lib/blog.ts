@@ -28,6 +28,23 @@ export function renderMarkdown(md: string): string {
   return marked.parse(md, { async: false }) as string;
 }
 
+// Render markdown and, in the same pass, give every H2 a stable id and collect
+// a table of contents. Used to add "On this page" jump links to long articles.
+export function renderMarkdownWithToc(md: string): { html: string; toc: { id: string; text: string }[] } {
+  const toc: { id: string; text: string }[] = [];
+  const used = new Set<string>();
+  const html = renderMarkdown(md).replace(/<h2>([\s\S]*?)<\/h2>/g, (_m, inner: string) => {
+    const text = inner.replace(/<[^>]+>/g, '').trim();
+    const base = text.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'section';
+    let id = base, n = 2;
+    while (used.has(id)) id = `${base}-${n++}`;
+    used.add(id);
+    toc.push({ id, text });
+    return `<h2 id="${id}">${inner}</h2>`;
+  });
+  return { html, toc };
+}
+
 function estimateReadTime(md: string): string {
   const words = md.trim().split(/\s+/).length;
   return `${Math.max(1, Math.round(words / 200))} min`;

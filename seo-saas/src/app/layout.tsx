@@ -1,6 +1,6 @@
 import './globals.css';
 import { Metadata, Viewport } from 'next';
-import { Inter, JetBrains_Mono } from 'next/font/google';
+import { Inter, JetBrains_Mono, Bricolage_Grotesque } from 'next/font/google';
 import AuthProvider from '@/components/AuthProvider';
 import { ToastProvider } from '@/components/Toast';
 import { Navbar } from '@/components/Navbar';
@@ -12,6 +12,9 @@ import { Footer } from '@/components/Footer';
 // (font-src 'self') is satisfied — no blocked Google Fonts CDN request.
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const jetbrainsMono = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono', display: 'swap' });
+// Signature display face — characterful grotesque for headings, self-hosted at
+// build time so the CSP (font-src 'self') is satisfied. Body stays Inter.
+const bricolage = Bricolage_Grotesque({ subsets: ['latin'], variable: '--font-display', display: 'swap' });
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.NEXTAUTH_URL || 'https://seosnapshot.dev'),
@@ -56,7 +59,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`scroll-smooth ${inter.variable} ${jetbrainsMono.variable}`}>
+    <html lang="en" className={`scroll-smooth ${inter.variable} ${jetbrainsMono.variable} ${bricolage.variable}`}>
       <head>
         <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify({

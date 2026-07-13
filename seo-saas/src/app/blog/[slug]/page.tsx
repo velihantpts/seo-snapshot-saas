@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
-import { getBlogPost, getBlogList, renderMarkdown, extractFaq } from '@/lib/blog';
+import { getBlogPost, getBlogList, renderMarkdownWithToc, extractFaq } from '@/lib/blog';
 import { relatedRefsForArticle } from '@/lib/related-refs';
 
 export const revalidate = 60;
@@ -34,7 +34,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
   const post = await getBlogPost(params.slug);
   if (!post) notFound();
 
-  const html = renderMarkdown(post.content);
+  const { html, toc } = renderMarkdownWithToc(post.content);
   const related = (await getBlogList()).filter((p) => p.slug !== post.slug).slice(0, 3);
   const refs = relatedRefsForArticle(post.slug);
   const url = `${SITE}/blog/${post.slug}`;
@@ -108,6 +108,20 @@ export default async function BlogPost({ params }: { params: { slug: string } })
           <span className="text-white/25" aria-hidden>·</span>
           <span>By SEO Snapshot</span>
         </div>
+
+        {toc.length >= 4 && (
+          <nav aria-label="On this page" className="glass-card rounded-xl p-5 mb-10">
+            <div className="text-[11px] uppercase tracking-wider text-white/45 mb-3">On this page</div>
+            <ol className="space-y-1.5">
+              {toc.map((h, i) => (
+                <li key={h.id} className="flex gap-2.5 text-sm">
+                  <span className="text-white/25 tabular-nums text-xs pt-0.5 w-4 flex-shrink-0">{String(i + 1).padStart(2, '0')}</span>
+                  <a href={`#${h.id}`} className="text-white/60 hover:text-accent-300 transition-colors leading-snug">{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
 
         <article className="blog-content" dangerouslySetInnerHTML={{ __html: html }} />
 
