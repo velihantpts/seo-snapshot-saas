@@ -1,6 +1,6 @@
 'use client';
 import { useState, useMemo } from 'react';
-import { Copy, CheckCircle, Plus, X } from 'lucide-react';
+import { Copy, CheckCircle, Plus, X, Download } from 'lucide-react';
 
 const field = 'w-full px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30';
 
@@ -57,6 +57,14 @@ export default function SchemaBuilder({ config }: { config: SchemaConfig }) {
 
   const output = `<script type="application/ld+json">\n${json}\n</script>`;
   const copy = () => { navigator.clipboard?.writeText(output); setCopied(true); setTimeout(() => setCopied(false), 2000); };
+  const download = () => {
+    const blob = new Blob([json], { type: 'application/ld+json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'schema.json';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
 
   return (
     <div className="grid lg:grid-cols-2 gap-6">
@@ -96,9 +104,12 @@ export default function SchemaBuilder({ config }: { config: SchemaConfig }) {
       <div>
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs text-white/50 uppercase tracking-wider">JSON-LD output</span>
-          <button onClick={copy} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
-            {copied ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
-          </button>
+          <div className="flex items-center gap-3">
+            <button onClick={download} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition"><Download className="w-3.5 h-3.5" /> .json</button>
+            <button onClick={copy} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
+              {copied ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
+            </button>
+          </div>
         </div>
         <pre className="glass-card rounded-lg p-4 text-[12px] text-accent-200/90 font-mono whitespace-pre-wrap break-words min-h-[340px] overflow-auto leading-relaxed">{output}</pre>
         <p className="text-xs text-white/50 mt-3 leading-relaxed">

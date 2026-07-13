@@ -14,7 +14,7 @@ export default function RobotsMetaGeneratorClient() {
   const [maxSnippet, setMaxSnippet] = useState(false);
   const [maxImagePreview, setMaxImagePreview] = useState(false);
   const [canonical, setCanonical] = useState('');
-  const [copied, setCopied] = useState(false);
+  const [copied, setCopied] = useState('');
 
   const directives: string[] = [];
   directives.push(index ? 'index' : 'noindex');
@@ -31,7 +31,7 @@ export default function RobotsMetaGeneratorClient() {
   const meta = lines.join('\n');
   const header = `X-Robots-Tag: ${content}`;
 
-  const copy = (text: string) => { navigator.clipboard?.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 2000); };
+  const copy = (text: string, key: string) => { navigator.clipboard?.writeText(text); setCopied(key); setTimeout(() => setCopied(''), 2000); };
 
   const Toggle = ({ on, set, label, hint }: { on: boolean; set: (v: boolean) => void; label: string; hint: string }) => (
     <label className="flex items-start gap-3 glass-card rounded-lg p-3 cursor-pointer">
@@ -71,8 +71,8 @@ export default function RobotsMetaGeneratorClient() {
         <div>
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-xs text-white/60">In your &lt;head&gt;</span>
-            <button onClick={() => copy(meta)} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
-              {copied ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
+            <button onClick={() => copy(meta, 'meta')} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
+              {copied === 'meta' ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
             </button>
           </div>
           <pre className="glass-card rounded-lg p-4 text-xs text-white/70 font-mono whitespace-pre-wrap break-words overflow-auto">{meta}</pre>
@@ -80,7 +80,9 @@ export default function RobotsMetaGeneratorClient() {
         <div>
           <div className="flex items-center justify-between mb-1.5">
             <span className="text-xs text-white/60">As an HTTP header (for non-HTML files)</span>
-            <button onClick={() => copy(header)} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition"><Copy className="w-3.5 h-3.5" /> Copy</button>
+            <button onClick={() => copy(header, 'header')} className="flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
+              {copied === 'header' ? <><CheckCircle className="w-3.5 h-3.5" /> Copied!</> : <><Copy className="w-3.5 h-3.5" /> Copy</>}
+            </button>
           </div>
           <pre className="glass-card rounded-lg p-4 text-xs text-white/70 font-mono whitespace-pre-wrap break-words overflow-auto">{header}</pre>
         </div>
