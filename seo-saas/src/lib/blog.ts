@@ -33,6 +33,39 @@ function estimateReadTime(md: string): string {
   return `${Math.max(1, Math.round(words / 200))} min`;
 }
 
+// Strip inline markdown so FAQ answers become clean plain text for JSON-LD.
+function stripInlineMd(s: string): string {
+  return s
+    .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // [text](url) -> text
+    .replace(/`([^`]+)`/g, '$1') // `code` -> code
+    .replace(/\*\*([^*]+)\*\*/g, '$1') // **bold** -> bold
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+// Extract Q/A pairs from an article's `## FAQ` section (format:
+// `**Q: question?**` on one line, `A: answer` on the next). Returns [] when
+// the article has no FAQ block. Used to emit FAQPage structured data so
+// articles become eligible for FAQ rich results in Google.
+export function extractFaq(md: string): { question: string; answer: string }[] {
+  const faqStart = md.search(/^##\s+FAQ\s*$/m);
+  if (faqStart === -1) return [];
+  let body = md.slice(faqStart);
+  // Cut off at the next H2 after the FAQ heading, if any.
+  const afterHeading = body.slice(3);
+  const nextH2 = afterHeading.search(/\n##\s+/);
+  if (nextH2 !== -1) body = afterHeading.slice(0, nextH2);
+  const faqs: { question: string; answer: string }[] = [];
+  const re = /\*\*Q:\s*(.+?)\*\*\s*\n+([\s\S]*?)(?=\n\*\*Q:|\n##\s|$)/g;
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(body)) !== null) {
+    const question = stripInlineMd(m[1]);
+    const answer = stripInlineMd(m[2].replace(/^\s*A:\s*/, ''));
+    if (question && answer) faqs.push({ question, answer });
+  }
+  return faqs;
+}
+
 // Metadata for the hand-written articles that live in blog-articles.ts.
 const STATIC_META: Omit<BlogListItem, 'source'>[] = [
   { slug: 'fix-crawled-currently-not-indexed', title: 'How to Fix "Crawled — Currently Not Indexed" in Google Search Console', excerpt: "Crawled - currently not indexed means Google fetched your page but decided it was not worth indexing. Here's how to diagnose the cause and fix it.", date: '2026-07-11', updated: '2026-07-11', readTime: '7 min', category: 'Fixes' },

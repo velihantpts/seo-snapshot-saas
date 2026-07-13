@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
-import { getBlogPost, getBlogList, renderMarkdown } from '@/lib/blog';
+import { getBlogPost, getBlogList, renderMarkdown, extractFaq } from '@/lib/blog';
 
 export const revalidate = 60;
 
@@ -63,6 +63,19 @@ export default async function BlogPost({ params }: { params: { slug: string } })
       { '@type': 'ListItem', position: 3, name: post.title, item: url },
     ],
   };
+  // FAQPage schema — makes the article eligible for FAQ rich results when it
+  // has a `## FAQ` section. Google wants Q&A that's visible on the page, which
+  // these are (rendered in the article body below).
+  const faqs = extractFaq(post.content);
+  const faqLd = faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.question,
+      acceptedAnswer: { '@type': 'Answer', text: f.answer },
+    })),
+  } : null;
   const prettyDate = post.date
     ? new Date(post.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
     : '';
@@ -71,6 +84,7 @@ export default async function BlogPost({ params }: { params: { slug: string } })
     <div className="min-h-screen bg-surface relative">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
+      {faqLd && <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />}
       <div className="fixed inset-0 bg-grid opacity-20 pointer-events-none" />
       <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12">
         {/* Breadcrumb (matches BreadcrumbList schema) */}
