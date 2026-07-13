@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Tag, FileCode, Braces, Share2, Search, Languages, ListTree, EyeOff, CornerUpRight, ArrowRight } from 'lucide-react';
+import { Tag, FileCode, Braces, Share2, Search, Languages, ListTree, EyeOff, CornerUpRight, ArrowRight, Hash, Link2, Ruler, Bot, BookOpen } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Free SEO Tools — Generators & Preview Checkers',
@@ -9,6 +9,11 @@ export const metadata: Metadata = {
 };
 
 const tools = [
+  { href: '/tools/keyword-density-checker', icon: Hash, title: 'Keyword Density Checker', desc: 'Word count, reading time & 1/2/3-word keyword density — catch keyword stuffing.' },
+  { href: '/tools/utm-builder', icon: Link2, title: 'UTM Campaign URL Builder', desc: 'Tag links for GA4, Meta, Google Ads & email with presets and one-click copy.' },
+  { href: '/tools/title-meta-length-checker', icon: Ruler, title: 'Title & Meta Length Checker', desc: 'Pixel-accurate title & description length with a live Google preview.' },
+  { href: '/tools/robots-txt-tester', icon: Bot, title: 'robots.txt Tester', desc: 'Check if any URL is allowed or blocked, using Google’s matching rules.' },
+  { href: '/tools/readability-checker', icon: BookOpen, title: 'Readability Checker', desc: 'Flesch Reading Ease & grade level with live sentence and word stats.' },
   { href: '/tools/open-graph-preview', icon: Share2, title: 'Open Graph Preview', desc: 'See how your link looks on Facebook, X, LinkedIn & Discord, then get the tags.' },
   { href: '/tools/serp-snippet-preview', icon: Search, title: 'SERP Snippet Preview', desc: 'Pixel-accurate Google preview — catch truncated titles & descriptions.' },
   { href: '/tools/meta-tag-generator', icon: Tag, title: 'Meta Tag Generator', desc: 'Title, description, Open Graph & Twitter Card tags with live length checks.' },
