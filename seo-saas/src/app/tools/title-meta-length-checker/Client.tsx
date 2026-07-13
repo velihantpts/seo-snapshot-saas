@@ -1,5 +1,7 @@
 'use client';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { readShareParams } from '@/lib/share-state';
+import { ShareButton } from '../_components/ShareButton';
 
 const field = 'w-full px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30';
 
@@ -26,8 +28,11 @@ export default function TitleMetaLengthClient() {
   useEffect(() => {
     const c = document.createElement('canvas');
     canvasRef.current = c.getContext('2d');
-    setT(measure(title, '400 20px Arial, sans-serif', TITLE_PX));
-    setD(measure(desc, '400 14px Arial, sans-serif', DESC_PX));
+    const p = readShareParams();
+    if (p.t) setTitle(p.t);
+    if (p.d) setDesc(p.d);
+    setT(measure(p.t || title, '400 20px Arial, sans-serif', TITLE_PX));
+    setD(measure(p.d || desc, '400 14px Arial, sans-serif', DESC_PX));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -68,7 +73,10 @@ export default function TitleMetaLengthClient() {
 
       {/* Live Google-style preview */}
       <div>
-        <div className="text-xs text-white/50 uppercase tracking-wider mb-2">Google preview</div>
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-xs text-white/50 uppercase tracking-wider">Google preview</span>
+          <ShareButton params={{ t: title, d: desc }} label="Share preview" />
+        </div>
         <div className="glass-card rounded-lg p-4">
           <div className="text-[13px] text-white/40 truncate">seosnapshot.dev</div>
           <div className="text-[18px] text-[#8ab4f8] leading-snug mt-0.5" style={{ display: '-webkit-box', WebkitLineClamp: 1, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>

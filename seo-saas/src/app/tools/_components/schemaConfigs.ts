@@ -3,6 +3,13 @@ import type { SchemaConfig } from './SchemaBuilder';
 const CTX = 'https://schema.org';
 
 export const localBusinessConfig: SchemaConfig = {
+  validate: (v) => {
+    const w: string[] = [];
+    if (!v.name) w.push('Add a business name.');
+    if (!v.streetAddress || !v.addressLocality) w.push('Add a street address and city for a valid PostalAddress.');
+    if (!v.telephone) w.push('A phone number strengthens the listing.');
+    return w;
+  },
   fields: [
     { key: 'businessType', label: 'Business type', type: 'select', options: ['LocalBusiness', 'Restaurant', 'Store', 'ProfessionalService', 'MedicalBusiness', 'LegalService', 'HealthAndBeautyBusiness', 'AutomotiveBusiness', 'FinancialService'] },
     { key: 'name', label: 'Business name', ph: 'Acme Coffee Roasters' },
@@ -39,6 +46,7 @@ export const localBusinessConfig: SchemaConfig = {
 };
 
 export const faqConfig: SchemaConfig = {
+  validate: (_v, items) => (items.filter((it) => it.question && it.answer).length === 0 ? ['Add at least one complete question and answer.'] : []),
   fields: [],
   list: {
     key: 'faqs', label: 'Questions & answers', addLabel: 'Add question',
@@ -63,6 +71,13 @@ export const faqConfig: SchemaConfig = {
 };
 
 export const productConfig: SchemaConfig = {
+  validate: (v) => {
+    const w: string[] = [];
+    if (!v.name) w.push('Add a product name (required).');
+    if (!v.price) w.push('Add a price and currency to qualify for price rich results.');
+    if (!v.image) w.push('An image is strongly recommended.');
+    return w;
+  },
   fields: [
     { key: 'name', label: 'Product name', ph: 'Wireless Headphones' },
     { key: 'image', label: 'Image URL', type: 'url', ph: 'https://example.com/product.jpg' },
@@ -97,6 +112,7 @@ export const productConfig: SchemaConfig = {
 };
 
 export const breadcrumbConfig: SchemaConfig = {
+  validate: (_v, items) => (items.filter((it) => it.name).length < 2 ? ['Add at least two levels (e.g. Home and the current page).'] : []),
   fields: [],
   list: {
     key: 'crumbs', label: 'Breadcrumb trail (top to bottom)', addLabel: 'Add level',
@@ -123,6 +139,13 @@ export const breadcrumbConfig: SchemaConfig = {
 };
 
 export const articleConfig: SchemaConfig = {
+  validate: (v) => {
+    const w: string[] = [];
+    if (!v.headline) w.push('Add a headline (required).');
+    if (!v.author) w.push('Add an author.');
+    if (!v.datePublished) w.push('Add a publish date.');
+    return w;
+  },
   fields: [
     { key: 'headline', label: 'Headline', ph: 'How to Fix Core Web Vitals' },
     { key: 'author', label: 'Author name', ph: 'Jane Doe' },
@@ -151,6 +174,13 @@ export const articleConfig: SchemaConfig = {
 };
 
 export const eventConfig: SchemaConfig = {
+  validate: (v) => {
+    const w: string[] = [];
+    if (!v.name) w.push('Add an event name (required).');
+    if (!v.startDate) w.push('Add a start date (required for rich results).');
+    if (!v.locationName) w.push('Add a location name (or “Online”).');
+    return w;
+  },
   fields: [
     { key: 'name', label: 'Event name', ph: 'Product Launch Webinar' },
     { key: 'startDate', label: 'Start', type: 'datetime-local' },

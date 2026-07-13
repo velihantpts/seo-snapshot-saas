@@ -1,6 +1,8 @@
 'use client';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
+import { readShareParams } from '@/lib/share-state';
+import { ShareButton } from '../_components/ShareButton';
 
 const field = 'w-full px-4 py-2.5 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30';
 
@@ -37,6 +39,14 @@ export default function SerpSnippetPreviewClient() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [device, setDevice] = useState<'desktop' | 'mobile'>('desktop');
+
+  useEffect(() => {
+    const p = readShareParams();
+    if (p.u) setUrl(p.u);
+    if (p.t) setTitle(p.t);
+    if (p.d) setDescription(p.d);
+    if (p.dev === 'mobile' || p.dev === 'desktop') setDevice(p.dev);
+  }, []);
 
   const limits = device === 'desktop'
     ? { titleFont: '20px Arial', titlePx: 600, descFont: '14px Arial', descPx: 920 }
@@ -84,7 +94,10 @@ export default function SerpSnippetPreviewClient() {
       </div>
 
       <div>
-        <p className="text-xs text-white/60 mb-2">Google preview ({device})</p>
+        <div className="flex items-center justify-between mb-2">
+          <p className="text-xs text-white/60">Google preview ({device})</p>
+          <ShareButton params={{ u: url, t: title, d: description, dev: device }} label="Share preview" />
+        </div>
         <div className={`bg-white rounded-lg p-4 ${device === 'mobile' ? 'max-w-sm' : ''}`}>
           <div className="flex items-center gap-2 mb-1">
             <div className="w-6 h-6 rounded-full bg-gray-200 flex items-center justify-center text-[10px] text-gray-500">S</div>

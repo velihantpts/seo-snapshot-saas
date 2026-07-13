@@ -1,5 +1,8 @@
 'use client';
 import { useState, useMemo } from 'react';
+import { Download, Sparkles } from 'lucide-react';
+
+const SAMPLE = `Core Web Vitals are a set of real-world performance metrics that Google uses as a ranking signal. The three Core Web Vitals are Largest Contentful Paint, which measures loading; Interaction to Next Paint, which measures responsiveness; and Cumulative Layout Shift, which measures visual stability. Improving your Core Web Vitals means faster loading, snappier interactions, and a stable layout. Most sites fail Core Web Vitals because of unoptimized images, render-blocking resources, and a slow server response. Fixing these improves both rankings and the experience for real users on real devices.`;
 
 const STOP = new Set('a an and are as at be but by for from has have he her his i in is it its of on or that the to was were will with you your our we they this these those not no can if do does about into over after before then than'.split(' '));
 
@@ -39,6 +42,18 @@ export default function KeywordDensityClient() {
     return { total, chars, sentences, readMin, rows };
   }, [text, gram]);
 
+  const exportCsv = () => {
+    if (!stats.rows.length) return;
+    const header = 'keyword,count,density_percent\n';
+    const body = stats.rows.map((r) => `"${r.phrase.replace(/"/g, '""')}",${r.count},${r.density.toFixed(2)}`).join('\n');
+    const blob = new Blob([header + body], { type: 'text/csv' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `keyword-density-${gram}gram.csv`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
   return (
     <div className="grid lg:grid-cols-2 gap-6">
       <div className="space-y-3">
@@ -49,6 +64,11 @@ export default function KeywordDensityClient() {
           rows={16}
           className="w-full px-3 py-3 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30 leading-relaxed resize-y"
         />
+        {!text && (
+          <button onClick={() => setText(SAMPLE)} className="inline-flex items-center gap-1.5 text-xs text-accent-400 hover:text-accent-300 transition">
+            <Sparkles className="w-3.5 h-3.5" /> Try an example
+          </button>
+        )}
         <div className="grid grid-cols-4 gap-2">
           {[
             { label: 'Words', value: stats.total.toLocaleString() },
@@ -77,7 +97,12 @@ export default function KeywordDensityClient() {
               </button>
             ))}
           </div>
-          <span className="text-[11px] text-white/40">Top {stats.rows.length} · {gram === 1 ? 'stop-words removed' : 'phrases'}</span>
+          <div className="flex items-center gap-3">
+            {stats.rows.length > 0 && (
+              <button onClick={exportCsv} className="inline-flex items-center gap-1.5 text-[11px] text-accent-400 hover:text-accent-300 transition"><Download className="w-3 h-3" /> CSV</button>
+            )}
+            <span className="text-[11px] text-white/40">Top {stats.rows.length} · {gram === 1 ? 'stop-words removed' : 'phrases'}</span>
+          </div>
         </div>
 
         <div className="glass-card rounded-lg overflow-hidden min-h-[300px]">

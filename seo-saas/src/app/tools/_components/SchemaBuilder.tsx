@@ -1,6 +1,6 @@
 'use client';
 import { useState, useMemo } from 'react';
-import { Copy, CheckCircle, Plus, X, Download } from 'lucide-react';
+import { Copy, CheckCircle, Plus, X, Download, AlertTriangle } from 'lucide-react';
 
 const field = 'w-full px-3 py-2 rounded-lg bg-white/[0.04] border border-white/[0.06] text-white text-sm placeholder:text-white/30 outline-none focus:border-accent-500/30';
 
@@ -15,6 +15,8 @@ export interface SchemaConfig {
   build: (v: Vals, items: Vals[]) => Record<string, unknown>;
   defaults?: Vals;
   defaultItems?: Vals[];
+  // Returns human-readable warnings for missing/weak fields (live validation).
+  validate?: (v: Vals, items: Vals[]) => string[];
 }
 
 // Drop empty strings/objects so the JSON-LD stays clean.
@@ -54,6 +56,8 @@ export default function SchemaBuilder({ config }: { config: SchemaConfig }) {
     const obj = prune(config.build(vals, items));
     return JSON.stringify(obj, null, 2);
   }, [vals, items, config]);
+
+  const warnings = useMemo(() => (config.validate ? config.validate(vals, items) : []), [vals, items, config]);
 
   const output = `<script type="application/ld+json">\n${json}\n</script>`;
   const copy = () => { navigator.clipboard?.writeText(output); setCopied(true); setTimeout(() => setCopied(false), 2000); };
@@ -111,7 +115,16 @@ export default function SchemaBuilder({ config }: { config: SchemaConfig }) {
             </button>
           </div>
         </div>
-        <pre className="glass-card rounded-lg p-4 text-[12px] text-accent-200/90 font-mono whitespace-pre-wrap break-words min-h-[340px] overflow-auto leading-relaxed">{output}</pre>
+        {warnings.length > 0 ? (
+          <div className="mb-3 rounded-lg bg-amber-500/[0.06] border border-amber-500/15 p-3 space-y-1.5">
+            {warnings.map((w) => (
+              <div key={w} className="flex items-start gap-2 text-xs text-amber-400/90"><AlertTriangle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" /><span>{w}</span></div>
+            ))}
+          </div>
+        ) : (
+          <div className="mb-3 flex items-center gap-2 text-xs text-emerald-400/90"><CheckCircle className="w-3.5 h-3.5" /> All recommended fields are set.</div>
+        )}
+        <pre className="glass-card rounded-lg p-4 text-[12px] text-accent-200/90 font-mono whitespace-pre-wrap break-words min-h-[300px] overflow-auto leading-relaxed">{output}</pre>
         <p className="text-xs text-white/50 mt-3 leading-relaxed">
           Paste this into your page&apos;s <span className="font-mono text-white/60">&lt;head&gt;</span>. Then validate it with Google&apos;s Rich Results Test before you ship — a schema with a missing required field won&apos;t earn a rich result.
         </p>
