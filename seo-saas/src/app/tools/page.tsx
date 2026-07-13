@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Tag, FileCode, Braces, Share2, Search, Languages, ListTree, EyeOff, CornerUpRight, ArrowRight, Hash, Link2, Ruler, Bot, BookOpen } from 'lucide-react';
+import { Tag, FileCode, Braces, Share2, Search, Languages, ListTree, EyeOff, CornerUpRight, ArrowRight, Hash, Link2, Ruler, Bot, BookOpen, MapPin, HelpCircle, ShoppingBag, ChevronRight, Newspaper, Calendar } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'Free SEO Tools — Generators & Preview Checkers',
@@ -18,6 +18,12 @@ const tools = [
   { href: '/tools/serp-snippet-preview', icon: Search, title: 'SERP Snippet Preview', desc: 'Pixel-accurate Google preview — catch truncated titles & descriptions.' },
   { href: '/tools/meta-tag-generator', icon: Tag, title: 'Meta Tag Generator', desc: 'Title, description, Open Graph & Twitter Card tags with live length checks.' },
   { href: '/tools/schema-generator', icon: Braces, title: 'JSON-LD Schema Generator', desc: 'Structured data for Organization, LocalBusiness, Article, FAQ, Product, Event & more.' },
+  { href: '/tools/localbusiness-schema-generator', icon: MapPin, title: 'LocalBusiness Schema Generator', desc: 'Name, address, hours & phone as LocalBusiness JSON-LD for local SEO.' },
+  { href: '/tools/faq-schema-generator', icon: HelpCircle, title: 'FAQ Schema Generator', desc: 'Turn questions & answers into valid FAQPage JSON-LD in seconds.' },
+  { href: '/tools/product-schema-generator', icon: ShoppingBag, title: 'Product Schema Generator', desc: 'Price, availability, brand & ratings as Product JSON-LD.' },
+  { href: '/tools/breadcrumb-schema-generator', icon: ChevronRight, title: 'Breadcrumb Schema Generator', desc: 'BreadcrumbList JSON-LD from your page hierarchy — cleaner SERP trails.' },
+  { href: '/tools/article-schema-generator', icon: Newspaper, title: 'Article Schema Generator', desc: 'Headline, author, dates & publisher as Article JSON-LD.' },
+  { href: '/tools/event-schema-generator', icon: Calendar, title: 'Event Schema Generator', desc: 'Dates, location & tickets as Event JSON-LD for event rich results.' },
   { href: '/tools/hreflang-generator', icon: Languages, title: 'Hreflang Generator', desc: 'Multi-language & multi-region tags with x-default, done right.' },
   { href: '/tools/sitemap-generator', icon: ListTree, title: 'XML Sitemap Generator', desc: 'Paste your URLs, get a valid sitemap.xml — copy or download.' },
   { href: '/tools/robots-txt-generator', icon: FileCode, title: 'robots.txt Generator', desc: 'Control crawling with disallow rules, sitemap, and crawl-delay.' },
