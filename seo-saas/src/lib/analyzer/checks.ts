@@ -266,9 +266,11 @@ export function runChecks(html: string, $: cheerio.CheerioAPI, response: Respons
   const hasXDefault = hreflangTags.some(h => h.lang === 'x-default');
   const hreflangIssues: string[] = [];
   if (hreflangTags.length > 0 && !hasXDefault) { hreflangIssues.push('Missing x-default'); issues.push({ severity: 'warning', problem: 'Missing x-default hreflang', fix: 'Add hreflang x-default as fallback.' }); }
-  // Hreflang lang code validation
-  const validLangCodes = /^(x-default|[a-z]{2}(-[A-Z]{2})?)$/;
-  hreflangTags.forEach(h => { if (!validLangCodes.test(h.lang)) issues.push({ severity: 'warning', problem: `Invalid hreflang language code: "${h.lang}"`, fix: `Use valid ISO 639-1 codes like "en", "tr", "de-DE". "${h.lang}" is not recognized.`, category: 'Technical' }); });
+  // Hreflang lang code validation (BCP-47: language + optional script + optional
+  // region). Must accept script subtags like "zh-Hans" and UN M49 numeric regions
+  // like "es-419" — both are valid and were previously flagged as errors.
+  const validLangCodes = /^(x-default|[a-z]{2,3}(-[a-z]{4})?(-([a-z]{2}|\d{3}))?)$/i;
+  hreflangTags.forEach(h => { if (!validLangCodes.test(h.lang)) issues.push({ severity: 'warning', problem: `Invalid hreflang language code: "${h.lang}"`, fix: `Use a valid BCP-47 code, e.g. "en", "de-DE", "zh-Hans", or "es-419". "${h.lang}" is not recognized.`, category: 'Technical' }); });
   // Self-referencing hreflang
   if (hreflangTags.length > 0 && !hreflangTags.some(h => { try { return new URL(h.url, targetUrl).toString() === targetUrl; } catch { return false; } })) {
     issues.push({ severity: 'warning', problem: 'Missing self-referencing hreflang tag', fix: 'Add a hreflang tag that points to this page itself.', category: 'Technical' });

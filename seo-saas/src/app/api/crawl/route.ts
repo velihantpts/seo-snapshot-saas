@@ -29,12 +29,22 @@ export async function POST(req: Request) {
   const parsedUrl = validation.url;
   const domain = parsedUrl.hostname;
 
-  // Daily crawl limit (5/day)
+  // Daily crawl limit (5/day). Allowlisted test users get a high cap via env
+  // (CRAWL_UNLIMITED_EMAILS=a@x.com,b@y.com) so QA/benchmark runs aren't blocked.
+  const DEFAULT_CRAWL_LIMIT = 5;
+  const HIGH_CRAWL_LIMIT = 1000;
+  const allowlist = (process.env.CRAWL_UNLIMITED_EMAILS || '')
+    .split(',')
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  const userEmail = (session.user.email || '').toLowerCase();
+  const dailyLimit = userEmail && allowlist.includes(userEmail) ? HIGH_CRAWL_LIMIT : DEFAULT_CRAWL_LIMIT;
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const todayCrawls = await prisma.crawlJob.count({ where: { userId, createdAt: { gte: today } } });
-  if (todayCrawls >= 5) {
-    return NextResponse.json({ error: 'Daily crawl limit reached (5/day). Try again tomorrow.' }, { status: 429 });
+  if (todayCrawls >= dailyLimit) {
+    return NextResponse.json({ error: `Daily crawl limit reached (${dailyLimit}/day). Try again tomorrow.` }, { status: 429 });
   }
 
   // Create the job, then run a link-following deep crawl in the background.
