@@ -61,7 +61,7 @@ export function Footer() {
         </div>
         <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-6 border-t border-white/[0.04] text-xs text-white/30">
           <span>© 2026 SEO Snapshot</span>
-          <a href="mailto:support@seosnapshot.dev" className="hover:text-white/50 transition-colors">support@seosnapshot.dev</a>
+          <a href="mailto:seosnapshot.help@gmail.com" className="hover:text-white/50 transition-colors">seosnapshot.help@gmail.com</a>
         </div>
       </div>
     </footer>

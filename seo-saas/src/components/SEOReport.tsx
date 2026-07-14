@@ -458,34 +458,71 @@ export function SEOReport({ result, showActions = true, isPublic = false, isPro 
           </div>
         )}
 
-        {/* AI Content Suggestions — generated from page data, no API needed */}
-        {d.topKeywords?.length > 0 && d.wordCount > 0 && (
-          <div className="glass-card rounded-xl p-5 mb-8 opacity-0 animate-fade-in-up-delay-3">
-            <h4 className="text-xs font-medium text-white/60 uppercase tracking-wider mb-3 flex items-center gap-2">
-              <Bot className="w-3.5 h-3.5 text-accent-400" /> Content Suggestions
-            </h4>
-            <div className="space-y-2 text-sm text-white/50">
-              {d.wordCount < 800 && (
-                <p>Your page has <span className="text-white/70 font-mono">{d.wordCount}</span> words. For competitive topics, aim for <span className="text-emerald-400">800-1500 words</span>. Consider adding sections about: {d.topKeywords.slice(0, 3).map((k: any) => `"${k.word}"`).join(', ')}.</p>
-              )}
-              {d.headings?.h2?.count < 3 && d.wordCount > 300 && (
-                <p>Only <span className="text-white/70 font-mono">{d.headings.h2?.count || 0}</span> H2 headings. Add more subheadings to improve scannability. Suggested: {d.topKeywords.slice(0, 3).map((k: any) => `"What is ${k.word}?"`).join(', ')}.</p>
-              )}
-              {!d.schemas?.length && (
-                <p>No structured data found. Adding <span className="text-accent-300">FAQ schema</span> with questions about {d.topKeywords[0]?.word || 'your topic'} can earn rich snippets in Google.</p>
-              )}
-              {d.images?.total > 0 && d.images.missingAlt > d.images.total * 0.3 && (
-                <p><span className="text-amber-400">{Math.round((d.images.missingAlt / d.images.total) * 100)}%</span> of images lack alt text. Use keyword-rich descriptions: <span className="text-white/60">"{d.topKeywords[0]?.word || 'topic'} - [describe the image]"</span>.</p>
-              )}
-              {d.links?.internal < 5 && (
-                <p>Only <span className="text-white/70 font-mono">{d.links.internal}</span> internal links. Add links to related pages to distribute PageRank and keep users engaged.</p>
-              )}
-              {d.contentQuality?.readabilityScore < 50 && (
-                <p>Readability score is <span className="text-amber-400">{d.contentQuality.readabilityScore}/100</span>. Simplify sentences, use shorter paragraphs, and add bullet lists.</p>
-              )}
+        {/* Recommendations — derived from the page's own data (rule-based, no API). */}
+        {(() => {
+          const recs: { icon: typeof Bot; title: string; body: JSX.Element; href?: string; label?: string }[] = [];
+          if (d.wordCount > 0 && d.wordCount < 800) recs.push({
+            icon: FileText, title: 'Add depth where it counts',
+            body: <>This page has <span className="text-white/70 font-mono">{d.wordCount}</span> words. On competitive queries, thin pages struggle. Expand the sections a reader actually needs, rather than padding for length.</>,
+            href: '/blog/content-depth-seo-guide', label: 'Content depth guide',
+          });
+          if ((d.headings?.h2?.count ?? 0) < 3 && d.wordCount > 300) recs.push({
+            icon: Hash, title: 'Break it up with subheadings',
+            body: <>Only <span className="text-white/70 font-mono">{d.headings?.h2?.count || 0}</span> H2 heading{(d.headings?.h2?.count || 0) === 1 ? '' : 's'}. Subheadings make the page scannable for readers and its structure clearer to search engines.</>,
+            href: '/blog/heading-hierarchy-seo', label: 'Heading hierarchy',
+          });
+          if (!d.schemas?.length) recs.push({
+            icon: Code, title: 'Add structured data',
+            body: <>No structured data found. Article and Breadcrumb JSON-LD help Google understand the page and can earn rich results. FAQ markup rarely shows a rich result since Google&apos;s 2023 change, so start with those.</>,
+            href: '/tools/schema-generator', label: 'Schema generator',
+          });
+          if (d.images?.total > 0 && d.images.missingAlt > d.images.total * 0.3) recs.push({
+            icon: Image, title: 'Describe your images',
+            body: <><span className="text-amber-400">{Math.round((d.images.missingAlt / d.images.total) * 100)}%</span> of images have no alt text. Describe what each one actually shows so screen readers and Google Images can read it. Keep it natural, not keyword-stuffed.</>,
+            href: '/blog/image-seo-optimization', label: 'Image SEO guide',
+          });
+          if ((d.links?.internal ?? 99) < 5) recs.push({
+            icon: Link2, title: 'Add internal links',
+            body: <>Only <span className="text-white/70 font-mono">{d.links?.internal ?? 0}</span> internal link{(d.links?.internal ?? 0) === 1 ? '' : 's'}. Link to related pages to pass ranking signals and keep readers moving through the site.</>,
+          });
+          if ((d.contentQuality?.readabilityScore ?? 100) < 50) recs.push({
+            icon: Zap, title: 'Make it easier to read',
+            body: <>Readability is <span className="text-amber-400">{d.contentQuality?.readabilityScore}/100</span>. Shorten sentences, split long paragraphs, and add lists.</>,
+            href: '/tools/readability-checker', label: 'Readability checker',
+          });
+          if (!recs.length) return null;
+          return (
+            <div className="glass-card rounded-2xl overflow-hidden mb-8 opacity-0 animate-fade-in-up-delay-3">
+              <div className="flex items-center gap-2.5 px-5 py-4 border-b border-white/[0.06] relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-accent-500/[0.06] to-transparent pointer-events-none" />
+                <div className="w-7 h-7 rounded-lg bg-accent-500/12 border border-accent-500/20 flex items-center justify-center relative"><Bot className="w-4 h-4 text-accent-300" /></div>
+                <h4 className="text-sm font-semibold text-white/90 relative">Recommendations</h4>
+                <span className="text-[10px] text-accent-200/80 bg-accent-500/10 border border-accent-500/15 rounded-full px-2 py-0.5 ml-auto relative tabular-nums">{recs.length}</span>
+              </div>
+              <div className="divide-y divide-white/[0.045]">
+                {recs.map((r, i) => {
+                  const Icon = r.icon;
+                  return (
+                    <div key={i} className="flex items-start gap-3.5 px-5 py-4 group hover:bg-white/[0.015] transition-colors">
+                      <div className="w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center flex-shrink-0 mt-0.5 group-hover:border-accent-500/20 transition-colors">
+                        <Icon className="w-4 h-4 text-accent-400/90" />
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-sm font-medium text-white/90">{r.title}</p>
+                        <p className="text-[13px] text-white/55 leading-relaxed mt-1">{r.body}</p>
+                        {r.href && (
+                          <Link href={r.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-xs text-accent-400 hover:text-accent-300 mt-2 transition-colors">
+                            {r.label} →
+                          </Link>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Quick Wins */}
         {quickWins.length > 0 && (

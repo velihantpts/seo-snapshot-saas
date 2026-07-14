@@ -8,7 +8,7 @@ const spec = {
     title: 'SEO Snapshot API',
     version: '1.0.0',
     description: 'Analyze any webpage\'s SEO with 110+ checks. Get actionable fix recommendations with copy-paste code snippets.',
-    contact: { email: 'support@seosnapshot.dev', url: 'https://seosnapshot.dev' },
+    contact: { email: 'seosnapshot.help@gmail.com', url: 'https://seosnapshot.dev' },
   },
   servers: [{ url: 'https://seosnapshot.dev', description: 'Production' }],
   paths: {

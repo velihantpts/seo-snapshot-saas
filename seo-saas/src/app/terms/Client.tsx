@@ -21,7 +21,7 @@ export default function Terms() {
           <h2 className="text-white/80 font-medium text-base mt-6">5. Legal</h2>
           <p>SEO Snapshot is operated by <strong>Velihan Digital</strong>. By using this service, you agree to these terms.</p>
           <h2 className="text-white/80 font-medium text-base mt-6">6. Contact</h2>
-          <p>Questions? Email <a href="mailto:support@seosnapshot.dev" className="text-accent-400">support@seosnapshot.dev</a></p>
+          <p>Questions? Email <a href="mailto:seosnapshot.help@gmail.com" className="text-accent-400">seosnapshot.help@gmail.com</a></p>
         </div>
       </div>
     </div>

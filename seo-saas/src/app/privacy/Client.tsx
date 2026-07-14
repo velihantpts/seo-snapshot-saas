@@ -19,7 +19,7 @@ export default function Privacy() {
           <h2 className="text-white/80 font-medium text-base mt-6">Cookies</h2>
           <p>We use essential cookies for authentication session management. No tracking or advertising cookies.</p>
           <h2 className="text-white/80 font-medium text-base mt-6">Data deletion</h2>
-          <p>You can delete your analyses from the dashboard. To delete your entire account, contact <a href="mailto:support@seosnapshot.dev" className="text-accent-400">support@seosnapshot.dev</a>.</p>
+          <p>You can delete your analyses from the dashboard. To delete your entire account, contact <a href="mailto:seosnapshot.help@gmail.com" className="text-accent-400">seosnapshot.help@gmail.com</a>.</p>
         </div>
       </div>
     </div>
