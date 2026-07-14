@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 export const metadata: Metadata = {
   title: 'The State of On-Page SEO: What 4,000+ Real Sites Get Wrong',
   description:
-    'We ran a full on-page SEO audit on thousands of real websites. The average score, the most-neglected areas, security grades, server speed, and exactly where sites lose points. Real data, updated automatically.',
+    'A full on-page SEO audit of thousands of real websites: the average score, most-neglected areas, security grades, and where sites lose points.',
   alternates: { canonical: `${SITE}/data` },
   openGraph: {
     title: 'The State of On-Page SEO — real data from thousands of audited sites',

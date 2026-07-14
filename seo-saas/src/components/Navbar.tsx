@@ -4,15 +4,14 @@ import { useSession, signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { UserMenu } from './UserMenu';
-import { Menu, X, Globe, ChevronDown } from 'lucide-react';
-import { useLocale, LOCALES, type Locale } from '@/lib/i18n';
+import { Menu, X } from 'lucide-react';
+import { useLocale } from '@/lib/i18n';
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [langOpen, setLangOpen] = useState(false);
   const { data: session } = useSession();
-  const { locale, t, setLocale } = useLocale();
+  const { t } = useLocale();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -21,9 +20,9 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close both menus whenever the route changes (Navbar persists across routes
-  // in the App Router, so this needs to react to pathname — not just mount).
-  useEffect(() => { setMobileOpen(false); setLangOpen(false); }, [pathname]);
+  // Close the mobile menu whenever the route changes (Navbar persists across
+  // routes in the App Router, so this needs to react to pathname, not just mount).
+  useEffect(() => { setMobileOpen(false); }, [pathname]);
 
   const navLinks = [
     { href: '/pricing', label: t('nav.pricing'), desktop: true },
@@ -63,28 +62,6 @@ export function Navbar() {
               );
             })}
 
-            {/* Language selector */}
-            <div className="relative">
-              <button onClick={() => setLangOpen(!langOpen)} className="flex items-center gap-1 text-[13px] text-white/50 hover:text-white/80 transition-colors duration-150 px-2 py-1.5 rounded-lg hover:bg-white/[0.04]" aria-label="Change language" aria-haspopup="true" aria-expanded={langOpen}>
-                <Globe className="w-3.5 h-3.5" />
-                <span className="uppercase tracking-wide">{locale}</span>
-                <ChevronDown className={`w-3 h-3 transition-transform duration-200 ${langOpen ? 'rotate-180' : ''}`} />
-              </button>
-              {langOpen && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setLangOpen(false)} />
-                  <div className="absolute right-0 top-full mt-2 z-50 bg-surface/95 backdrop-blur-xl border border-white/[0.08] rounded-xl shadow-2xl py-1.5 min-w-[140px]">
-                    {LOCALES.map(l => (
-                      <button key={l.code} onClick={() => { setLocale(l.code); setLangOpen(false); }}
-                        className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2.5 hover:bg-white/[0.06] transition ${locale === l.code ? 'text-accent-400' : 'text-white/60'}`}>
-                        <span>{l.flag}</span> {l.label}
-                      </button>
-                    ))}
-                  </div>
-                </>
-              )}
-            </div>
-
             {session ? (
               <UserMenu />
             ) : (
@@ -92,25 +69,8 @@ export function Navbar() {
             )}
           </div>
 
-          {/* Mobile: lang + hamburger */}
+          {/* Mobile: hamburger */}
           <div className="flex items-center gap-2 sm:hidden">
-            <button onClick={() => setLangOpen(!langOpen)} className="flex items-center gap-1 text-white/60 p-2" aria-label="Change language" aria-haspopup="true" aria-expanded={langOpen}>
-              <Globe className="w-4 h-4" />
-              <span className="text-xs uppercase tracking-wide">{locale}</span>
-            </button>
-            {langOpen && (
-              <>
-                <div className="fixed inset-0 z-40" onClick={() => setLangOpen(false)} />
-                <div className="absolute right-12 top-14 z-50 bg-surface/95 backdrop-blur-xl border border-white/[0.08] rounded-xl shadow-2xl py-1.5 min-w-[140px]">
-                  {LOCALES.map(l => (
-                    <button key={l.code} onClick={() => { setLocale(l.code); setLangOpen(false); }}
-                      className={`w-full text-left px-3 py-2 text-sm flex items-center gap-2.5 hover:bg-white/[0.06] transition ${locale === l.code ? 'text-accent-400' : 'text-white/60'}`}>
-                      <span>{l.flag}</span> {l.label}
-                    </button>
-                  ))}
-                </div>
-              </>
-            )}
             <button onClick={() => setMobileOpen(!mobileOpen)} className="text-white/60 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center" aria-label="Menu">
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>

@@ -22,7 +22,7 @@ export const metadata: Metadata = {
     default: 'SEO Snapshot — Free SEO Report & Analyzer',
     template: '%s | SEO Snapshot',
   },
-  description: 'Get a free SEO report in seconds. 100 on-page checks with copy-paste code fixes for meta tags, security headers, structured data, and Core Web Vitals — no signup.',
+  description: 'Free SEO report in seconds. 100 on-page checks with copy-paste code fixes for meta tags, security headers, and Core Web Vitals. No signup.',
   // NOTE: no site-wide `alternates.canonical` here. A default canonical is
   // inherited by every child route that doesn't set its own, which made
   // /pricing, /compare, /docs, /methodology, /terms, /privacy, /login all

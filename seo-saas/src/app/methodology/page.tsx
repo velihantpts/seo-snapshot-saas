@@ -3,7 +3,7 @@ import Client from './Client';
 
 export const metadata: Metadata = {
   title: 'Scoring Methodology',
-  description: 'Exactly how SEO Snapshot scores a page: the weighted formula across 10 categories, all individual meta, content, security, performance, and technical checks, and what we deliberately do not measure.',
+  description: "How SEO Snapshot scores a page: the weighted formula across 10 categories, every individual check, and what we deliberately don't measure.",
   alternates: { canonical: '/methodology' },
 };
 
