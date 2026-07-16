@@ -8,6 +8,7 @@ import path from 'node:path';
 import { GLOSSARY, glossaryBySlug } from '../src/lib/glossary';
 import { CHECKS, checkBySlug, CHECK_CATEGORIES } from '../src/lib/checks-catalog';
 import { TOOLS, toolBySlug, relatedTools } from '../src/lib/tools-catalog';
+import { ARTICLE_TOOL_MAP } from '../src/lib/article-tool-links';
 
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const nonEmpty = (v: unknown): v is string => typeof v === 'string' && v.trim().length > 0;
@@ -96,6 +97,12 @@ describe('TOOLS', () => {
       const page = path.join(__dirname, '..', 'src', 'app', 'tools', t.slug, 'page.tsx');
       expect(fs.existsSync(page)).toBe(true);
     });
+  });
+
+  test('every tool slug in ARTICLE_TOOL_MAP resolves to a real tool', () => {
+    for (const slugs of Object.values(ARTICLE_TOOL_MAP)) {
+      slugs.forEach((s) => expect(toolBySlug.has(s)).toBe(true));
+    }
   });
 
   test('relatedTools excludes self, respects the limit, and returns real tools', () => {

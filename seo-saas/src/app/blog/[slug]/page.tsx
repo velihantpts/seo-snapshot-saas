@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import { getBlogPost, getBlogList, renderMarkdownWithToc, extractFaq } from '@/lib/blog';
 import { relatedRefsForArticle } from '@/lib/related-refs';
+import { toolsForArticle } from '@/lib/article-tool-links';
 
 export const revalidate = 60;
 
@@ -35,8 +36,14 @@ export default async function BlogPost({ params }: { params: { slug: string } })
   if (!post) notFound();
 
   const { html, toc } = renderMarkdownWithToc(post.content);
-  const related = (await getBlogList()).filter((p) => p.slug !== post.slug).slice(0, 3);
+  // Topical "related": prefer same-category posts, then fill with the newest —
+  // gives readers (and crawlers) relevant in-cluster links instead of whatever
+  // happened to be first in the list.
+  const others = (await getBlogList()).filter((p) => p.slug !== post.slug);
+  const sameCat = others.filter((p) => p.category === post.category);
+  const related = [...sameCat, ...others.filter((p) => p.category !== post.category)].slice(0, 3);
   const refs = relatedRefsForArticle(post.slug);
+  const tools = toolsForArticle(post.slug);
   const url = `${SITE}/blog/${post.slug}`;
   const wordCount = post.content.trim().split(/\s+/).length;
   const readTime = Math.max(1, Math.round(wordCount / 200));
@@ -129,6 +136,32 @@ export default async function BlogPost({ params }: { params: { slug: string } })
           <p className="text-white/60 text-sm mb-3">Check your site&apos;s SEO score for free</p>
           <Link href="/" className="btn-primary text-sm">Analyze your site</Link>
         </div>
+
+        {tools.length > 0 && (
+          <div className="mt-12">
+            <h2 className="text-sm font-medium text-white/50 mb-4">Free tools for this</h2>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {tools.map((t) => {
+                const Icon = t.icon;
+                return (
+                  <Link
+                    key={t.slug}
+                    href={`/tools/${t.slug}`}
+                    className="group glass-card rounded-xl p-4 flex items-start gap-3 hover:border-accent-500/30 hover:bg-white/[0.04] transition-all duration-200"
+                  >
+                    <div className="w-9 h-9 rounded-lg bg-accent-500/10 border border-accent-500/15 flex items-center justify-center flex-shrink-0 group-hover:bg-accent-500/15 transition-colors">
+                      <Icon className="w-4 h-4 text-accent-400" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <h3 className="text-sm font-medium text-white/90 group-hover:text-accent-200 transition-colors">{t.title}</h3>
+                      <p className="text-xs text-white/50 mt-0.5 leading-relaxed">{t.short}</p>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
 
         {(refs.checks.length > 0 || refs.terms.length > 0) && (
           <div className="mt-12 grid gap-6 sm:grid-cols-2">

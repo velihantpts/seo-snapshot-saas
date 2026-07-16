@@ -1,0 +1,29 @@
+// Curated cross-links: article slug -> the free tools that directly act on that
+// topic. Gives high-intent article bodies keyword-anchored internal links down
+// to the matching /tools pages, concentrating authority inside each topic
+// cluster (a title-tags guide -> the title/SERP tools, etc.). Unknown or
+// mistyped tool slugs are dropped by the toolBySlug lookup, so a bad entry can
+// never render a dead link (see catalog-integrity.test.ts for the guard).
+import { toolBySlug, type ToolDef } from './tools-catalog';
+
+export const ARTICLE_TOOL_MAP: Record<string, string[]> = {
+  'how-to-write-seo-title-tags': ['title-meta-length-checker', 'serp-snippet-preview'],
+  'how-to-fix-missing-meta-description': ['meta-tag-generator', 'title-meta-length-checker'],
+  'open-graph-image-size-2026': ['og-image-generator', 'open-graph-preview'],
+  'open-graph-meta-tags-guide': ['open-graph-preview', 'meta-tag-generator', 'og-image-generator'],
+  'canonical-url-nextjs': ['canonical-tag-generator'],
+  'canonical-url-explained': ['canonical-tag-generator'],
+  'fix-duplicate-without-user-selected-canonical': ['canonical-tag-generator'],
+  'robots-txt-guide': ['robots-txt-generator', 'robots-txt-tester'],
+  'structured-data-json-ld-guide': ['schema-generator', 'faq-schema-generator'],
+  'sitemap-xml-guide': ['sitemap-generator'],
+  'add-sitemap-nextjs': ['sitemap-generator'],
+  'security-headers-for-seo': ['security-header-checker', 'http-header-checker'],
+  'image-seo-optimization': ['og-image-generator'],
+};
+
+export function toolsForArticle(slug: string): ToolDef[] {
+  return (ARTICLE_TOOL_MAP[slug] ?? [])
+    .map((s) => toolBySlug.get(s))
+    .filter((t): t is ToolDef => Boolean(t));
+}
