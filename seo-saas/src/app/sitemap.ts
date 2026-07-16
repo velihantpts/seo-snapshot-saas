@@ -2,7 +2,6 @@ import { MetadataRoute } from 'next';
 import { getBlogList } from '@/lib/blog';
 import { GLOSSARY } from '@/lib/glossary';
 import { CHECKS } from '@/lib/checks-catalog';
-import { prisma } from '@/lib/prisma';
 
 export const revalidate = 300;
 
@@ -76,24 +75,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // ignore — DB may be unavailable at build time
   }
 
-  // Public report pages (indexable programmatic content)
-  let reportRoutes: MetadataRoute.Sitemap = [];
-  try {
-    const analyses = await prisma.analysis.findMany({
-      where: { public: true },
-      select: { id: true, createdAt: true },
-      orderBy: { createdAt: 'desc' },
-      take: 5000,
-    });
-    reportRoutes = analyses.map((a) => ({
-      url: `${base}/report/${a.id}`,
-      lastModified: a.createdAt,
-      changeFrequency: 'monthly' as const,
-      priority: 0.5,
-    }));
-  } catch {
-    // ignore
-  }
+  // NOTE: public /report/[id] pages are intentionally excluded from the sitemap.
+  // They are thin, client-rendered, near-duplicate user-generated audits and are
+  // marked noindex (see src/app/report/[id]/layout.tsx). Submitting them would
+  // only waste crawl budget and risk index bloat.
 
   // Programmatic reference pages (glossary terms + SEO checks)
   const glossaryRoutes: MetadataRoute.Sitemap = GLOSSARY.map((t) => ({
@@ -109,5 +94,5 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     priority: 0.6,
   }));
 
-  return [...staticRoutes, ...blogRoutes, ...reportRoutes, ...glossaryRoutes, ...checkRoutes];
+  return [...staticRoutes, ...blogRoutes, ...glossaryRoutes, ...checkRoutes];
 }
