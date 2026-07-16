@@ -19,16 +19,16 @@ beforeEach(() => {
 
 describe('isPrivateIP', () => {
   test('flags private / reserved ranges', () => {
-    for (const ip of ['127.0.0.1', '10.0.0.1', '172.16.5.4', '172.31.255.255', '192.168.1.1', '169.254.169.254', '0.0.0.0', '::1', 'fc00::1', 'fe80::1']) {
+    // Includes the CGNAT (100.64.0.0/10) boundaries: 100.64.x and 100.127.x are in-range.
+    for (const ip of ['127.0.0.1', '10.0.0.1', '172.16.5.4', '172.31.255.255', '192.168.1.1', '169.254.169.254', '0.0.0.0', '100.64.0.1', '100.127.255.255', '::1', 'fc00::1', 'fe80::1']) {
       expect(isPrivateIP(ip)).toBe(true);
     }
   });
 
   test('allows genuine public IPs', () => {
-    // 172.32.x is just outside the class-B private block; 100.200.x is outside the
-    // 100.64.0.0/10 CGNAT range. (Note: the filter currently over-blocks 100.128–
-    // 100.129.x, which are technically public — a minor false-positive, not a hole.)
-    for (const ip of ['8.8.8.8', '1.1.1.1', '93.184.216.34', '172.32.0.1', '100.200.0.1']) {
+    // 172.32.x is just outside the class-B private block; 100.128.x and 100.63.x fall
+    // just outside the 100.64.0.0/10 CGNAT range (regression guard for the boundary fix).
+    for (const ip of ['8.8.8.8', '1.1.1.1', '93.184.216.34', '172.32.0.1', '100.63.0.1', '100.128.0.1']) {
       expect(isPrivateIP(ip)).toBe(false);
     }
   });

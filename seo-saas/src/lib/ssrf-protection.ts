@@ -8,7 +8,7 @@ const PRIVATE_IP_PATTERNS = [
   /^192\.168\./,               // class C private
   /^169\.254\./,               // link-local
   /^0\./,                      // current network
-  /^100\.(6[4-9]|[7-9]\d|1[0-2]\d)\./, // shared address space
+  /^100\.(6[4-9]|[7-9]\d|1[01]\d|12[0-7])\./, // shared address space (CGNAT 100.64.0.0/10 -> 2nd octet 64-127)
   /^198\.1[89]\./,             // benchmark testing
   /^::1$/,                     // IPv6 loopback
   /^fc00:/i,                   // IPv6 private
