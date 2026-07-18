@@ -1,4 +1,67 @@
 export const articles: Record<string, { title: string; content: string }> = {
+  'remove-page-from-google-410-vs-301-vs-noindex': {
+    title: 'How to Remove a Page From Google: 410 vs 301 vs noindex',
+    content: `## Pick the Method by What You Want to Happen
+
+Most "how to remove a page" guides list the status codes and stop. The real question isn't "what is a 410" — it's "what do I want to happen to this page?" There are only three honest answers, and each maps to exactly one method. Get the mapping wrong and you either lose ranking equity you could have kept, or leave a page stuck in the index for weeks.
+
+<figure>
+<img src="/blog/remove-page-decision-tree.svg" alt="Decision tree for removing a page: use a 301 redirect if the content now lives at another URL, a 410 (or 404) if the page is gone for good with no replacement, or a noindex tag to keep the page live but out of Google. Never use robots.txt to remove a page." loading="lazy" width="760" height="566" />
+<figcaption>Choose by outcome, not by the status code you happen to know.</figcaption>
+</figure>
+
+Walk it top to bottom and you land on the right method every time.
+
+## 1. The content moved — use a 301 redirect
+
+If the page's content now lives at another URL (you renamed it, merged it, restructured the site), send visitors and crawlers there with a **301 permanent redirect**. This is the only option that *keeps* the old page's ranking signal — Google consolidates the equity onto the destination. Deleting the page instead throws that equity away.
+
+Generate the rules for your stack with the [redirect generator](/tools/redirect-generator) (Apache and Nginx), or the [Vercel](/tools/vercel-redirects-generator) and [Netlify](/tools/netlify-redirects-generator) versions. Point straight to the final URL — no chains.
+
+## 2. The page is gone for good — return 410 (or 404)
+
+If nothing replaces the page and it should simply cease to exist, let it return **410 Gone**. A plain **404 Not Found** works too and Google treats them almost identically, but 410 is an explicit "this is permanently gone," and in practice Google tends to drop 410s from the index a little faster. Neither passes any ranking signal, which is correct here — there's nothing to preserve.
+
+Don't 301 a dead page to your homepage to "save" it. Google treats an irrelevant redirect as a **soft 404** and ignores it, so you get the worst of both worlds.
+
+## 3. Keep the page live but hidden — use noindex
+
+Sometimes the page should stay reachable for users (a thank-you page, a filtered view, an internal tool) but never appear in search. That's **noindex** — a \`<meta name="robots" content="noindex">\` tag or an \`X-Robots-Tag: noindex\` HTTP header. The page keeps returning 200 and stays crawlable; Google just drops it from results. Build the tag with the [meta robots noindex generator](/tools/robots-meta-generator).
+
+The critical detail: the page must stay **crawlable** for noindex to work, which leads to the one mistake that undoes all three methods.
+
+## The #1 Mistake: robots.txt
+
+To act on a 404, a 410, or a noindex, **Google has to crawl the page first.** Blocking it in \`robots.txt\` prevents that crawl — so Google never sees the removal signal, and the URL can sit in the index indefinitely (often as a bare link with no description). This is exactly what produces the "[Indexed, though blocked by robots.txt](/blog/fix-indexed-though-blocked-by-robots-txt)" status in Search Console.
+
+\`robots.txt\` means "don't crawl." It is not a removal tool. Confirm a path isn't accidentally blocked with the [robots.txt tester](/tools/robots-txt-tester) before you rely on a 404, 410, or noindex.
+
+## Quick Reference
+
+| Situation | Method | Passes ranking signal? |
+|---|---|---|
+| Content moved to a new URL | 301 redirect | Yes |
+| Page gone for good, no replacement | 410 (or 404) | No |
+| Keep page live, hide from search | noindex (stay crawlable) | No |
+| "I want it gone fast" | Search Console Removals tool (temporary) + one of the above | — |
+
+For anything urgent, the Removals tool in Search Console hides a URL for ~6 months while your permanent signal (410/noindex) takes effect.
+
+## FAQ
+
+**Q: Is 404 or 410 better for removing a page?**
+Both work and Google treats them nearly the same. 410 ("Gone") is an explicit permanent-removal signal and tends to drop out of the index slightly faster, so prefer it when you're sure the page is gone for good. A 404 is completely fine if that's what your platform returns.
+
+**Q: Should I 301 a deleted page to my homepage?**
+No. If the target isn't a relevant replacement, Google treats it as a soft 404 and ignores the redirect. Only 301 to a genuine replacement; otherwise return 410/404.
+
+**Q: Why is my removed page still in Google?**
+The usual cause is a \`robots.txt\` block. Google can't crawl the page, so it never sees the 404, 410, or noindex. Remove the block, let it be crawled, and the removal signal takes effect on the next crawl.
+
+**Q: Does noindex keep the page off Google forever?**
+Yes, as long as the tag stays and the page stays crawlable. Remove the noindex tag and the page becomes eligible for indexing again on the next crawl.
+`,
+  },
   'fix-text-content-does-not-match-server-rendered-html': {
     title: 'Fix "Text content does not match server-rendered HTML"',
     content: `## What the Error Means

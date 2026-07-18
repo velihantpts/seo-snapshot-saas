@@ -27,6 +27,7 @@ export const ARTICLE_TOOL_MAP: Record<string, string[]> = {
   'astro-sitemap-not-working': ['sitemap-generator', 'robots-txt-generator'],
   'nuxt-hreflang-i18n': ['hreflang-generator'],
   'framer-canonical-url': ['canonical-tag-generator'],
+  'remove-page-from-google-410-vs-301-vs-noindex': ['redirect-generator', 'robots-meta-generator', 'robots-txt-tester'],
 };
 
 export function toolsForArticle(slug: string): ToolDef[] {

@@ -327,6 +327,9 @@ h1 {
 .blog-content strong { color: rgba(255,255,255,0.85); font-weight: 600; }
 .blog-content ul, .blog-content ol { margin: 0 0 1rem; padding-left: 1.5rem; }
 .blog-content ul { list-style: disc; }
+.blog-content figure { margin: 1.75rem 0; }
+.blog-content img { max-width: 100%; height: auto; border-radius: 0.75rem; border: 1px solid rgba(255,255,255,0.08); display: block; }
+.blog-content figcaption { color: rgba(255,255,255,0.4); font-size: 0.8125rem; margin-top: 0.5rem; text-align: center; }
 .blog-content ol { list-style: decimal; }
 .blog-content li { margin: 0.25rem 0; }
 .blog-content code { background: rgba(255,255,255,0.06); color: #a5b4fc; padding: 0.1rem 0.35rem; border-radius: 0.3rem; font-size: 0.85em; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
