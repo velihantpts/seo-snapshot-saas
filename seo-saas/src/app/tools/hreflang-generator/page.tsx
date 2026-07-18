@@ -6,7 +6,7 @@ import { ToolFaq, type FaqItem } from '../_components/ToolFaq';
 import { ToolFooter } from '../_components/ToolFooter';
 
 export const metadata: Metadata = {
-  title: 'Free Hreflang Tag Generator — Multi-Language SEO',
+  title: 'Hreflang Generator — x-default & Multi-Language Tags',
   description: 'Generate valid hreflang link tags for multi-language and multi-region sites, with x-default. Copy-paste ready. Free, no signup.',
   alternates: { canonical: 'https://seosnapshot.dev/tools/hreflang-generator' },
 };
