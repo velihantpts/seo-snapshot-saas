@@ -1,4 +1,199 @@
 export const articles: Record<string, { title: string; content: string }> = {
+  'fix-text-content-does-not-match-server-rendered-html': {
+    title: 'Fix "Text content does not match server-rendered HTML"',
+    content: `## What the Error Means
+
+React (and frameworks built on it, like Next.js) render your page twice: once on the server to produce the initial HTML, and again in the browser to "hydrate" it into an interactive app. When the browser's first render produces different markup than the server sent, React throws \`Text content does not match server-rendered HTML\` (you may also see "Hydration failed because the initial UI does not match what was rendered on the server"). React then discards the server HTML for that subtree and re-renders it on the client.
+
+## Common Causes
+
+- **Time and locale.** \`new Date().toLocaleString()\`, "2 minutes ago" timestamps, or \`Date.now()\` produce one value on the server and another in the browser. This is the single most common cause.
+- **Random values.** \`Math.random()\`, generated IDs, or shuffles that run during render.
+- **Browser-only APIs in render.** Reading \`window\`, \`localStorage\`, or \`navigator\` during the initial render — they don't exist on the server, so the output differs.
+- **Invalid HTML nesting.** A \`<div>\` inside a \`<p>\`, or a \`<p>\` inside another \`<p>\`. The browser silently "fixes" the structure, which then no longer matches the server's.
+- **Browser extensions** that mutate the DOM before hydration.
+
+## The Fixes
+
+Defer client-only values until after mount:
+
+\`\`\`jsx
+const [mounted, setMounted] = useState(false);
+useEffect(() => setMounted(true), []);
+return <span>{mounted ? new Date().toLocaleTimeString() : null}</span>;
+\`\`\`
+
+Or suppress the warning for a single, genuinely unavoidable mismatch like a live timestamp:
+
+\`\`\`jsx
+<time suppressHydrationWarning>{new Date().toLocaleTimeString()}</time>
+\`\`\`
+
+And fix invalid nesting by auditing the HTML structure — this one is easy to miss because the page looks fine but still errors.
+
+## What It Means for SEO
+
+Here's the part almost nobody covers. Googlebot renders JavaScript, but it crawls the **server HTML first**, and that's what ships fastest and most reliably. A hydration mismatch usually does *not* hurt SEO, because the server HTML already contains your real content, and that's what Google indexes.
+
+It becomes an SEO problem when the mismatch is between real content and an empty or fallback state — for example, the server renders a loading skeleton and the client renders the content. Then the crawlable HTML is the skeleton, and Google can index an empty page. The rule: **make sure your actual content is in the server-rendered HTML**, and keep any hydration mismatches limited to cosmetic things like timestamps. Confirm what Google receives with the [SEO analyzer](/) or the URL Inspection tool's rendered-HTML view.
+
+## FAQ
+
+**Q: Does a hydration error hurt my Google ranking?**
+Usually not — Google indexes the server-rendered HTML, which contains your content. It only becomes an SEO problem when the server renders an empty or fallback state and the real content appears only after hydration.
+
+**Q: Is suppressHydrationWarning safe?**
+For a single, genuinely unavoidable mismatch like a live timestamp, yes. Don't use it to paper over structural bugs like invalid nesting or browser APIs in render — fix those instead.
+
+**Q: How do I see what Googlebot renders?**
+Use the URL Inspection tool in Search Console and view the rendered HTML, or run the page through a JavaScript-executing crawler. Confirm your main content is present in the initial server response.
+`,
+  },
+  'astro-sitemap-not-working': {
+    title: 'Astro Sitemap Not Working? Here Is the Fix',
+    content: `## The One Setting Everyone Misses
+
+If \`@astrojs/sitemap\` runs but produces no \`sitemap-index.xml\`, or an empty one, the cause is almost always the same: **the \`site\` option is missing from \`astro.config.mjs\`.** The integration needs your production URL to build absolute links, and without it, it silently generates nothing.
+
+\`\`\`js
+import { defineConfig } from 'astro/config';
+import sitemap from '@astrojs/sitemap';
+
+export default defineConfig({
+  site: 'https://example.com', // required — the sitemap is empty without it
+  integrations: [sitemap()],
+});
+\`\`\`
+
+Then build with \`astro build\` and check \`dist/sitemap-index.xml\` and \`dist/sitemap-0.xml\`. The sitemap is generated at build time, not on the dev server.
+
+## Why It's Empty or Missing
+
+- **No \`site\` option** — the number-one cause, above.
+- **You checked \`astro dev\`** — the sitemap only exists after \`astro build\`. It will not appear on the dev server.
+- **Pages excluded by \`filter\`** — a filter function returning \`false\` too broadly.
+- **Dynamic routes not pre-rendered** — in SSR mode, only pre-rendered pages land in the sitemap. On-demand routes won't appear unless you output them at build.
+
+## Excluding Pages
+
+Use the \`filter\` option to keep specific pages out:
+
+\`\`\`js
+sitemap({
+  filter: (page) => !page.includes('/thank-you'),
+})
+\`\`\`
+
+## Then Tell Google
+
+The sitemap lives at \`https://example.com/sitemap-index.xml\`. Reference it in \`robots.txt\` and submit it in Search Console. Validate the output first with the [XML sitemap generator](/tools/sitemap-generator) or the SEO analyzer.
+
+## FAQ
+
+**Q: Why is my Astro sitemap empty?**
+Almost always because \`site\` is missing from \`astro.config.mjs\`. The integration needs your production URL to build the sitemap; without it the file is empty or absent.
+
+**Q: I don't see a sitemap on the dev server.**
+That's expected. \`@astrojs/sitemap\` generates the file during \`astro build\`, not in \`astro dev\`. Build and check the \`dist\` folder.
+
+**Q: My dynamic pages aren't in the sitemap.**
+In SSR mode, only pre-rendered pages are included. Pre-render the routes you want indexed, or generate their URLs at build time.
+`,
+  },
+  'nuxt-hreflang-i18n': {
+    title: 'How to Add Hreflang Tags in Nuxt (i18n Done Right)',
+    content: `## The Short Version
+
+If you use \`@nuxtjs/i18n\`, hreflang tags can be generated for you — but only when the SEO output is switched on and configured correctly. Set a \`baseUrl\` and give each locale a \`language\`, and the module can output the \`<link rel="alternate" hreflang="...">\` tags (plus \`x-default\`) automatically.
+
+\`\`\`ts
+// nuxt.config.ts
+export default defineNuxtConfig({
+  modules: ['@nuxtjs/i18n'],
+  i18n: {
+    baseUrl: 'https://example.com', // required for absolute hreflang URLs
+    locales: [
+      { code: 'en', language: 'en-US' },
+      { code: 'fr', language: 'fr-FR' },
+    ],
+    defaultLocale: 'en',
+  },
+});
+\`\`\`
+
+Then emit the SEO tags from your layout using the module's head helper, which injects the hreflang alternates and the canonical for you:
+
+\`\`\`vue
+<script setup>
+const head = useLocaleHead({ addSeoAttributes: true })
+</script>
+\`\`\`
+
+## Common Problems
+
+- **Missing \`baseUrl\`** — without it the module can't build absolute URLs, so hreflang tags either don't render or use relative paths, which Google treats as invalid.
+- **\`language\` not set on locales** — the \`language\` (BCP-47, like \`fr-FR\`) is what fills the \`hreflang\` value. Use \`code\` for routing (\`/fr\`) and \`language\` for the tag.
+- **Canonical conflict** — if you also hand-write a canonical with \`useHead\`, you can end up with two. Let the i18n helper own the canonical, or set yours consistently per locale.
+- **No \`x-default\`** — the module derives it from \`defaultLocale\`, so make sure that's set.
+
+## Verify It
+
+View source on each localized page and confirm every language variant lists a return tag back to the others — hreflang must be reciprocal. Build the tags by hand for a quick sanity check with the [hreflang generator](/tools/hreflang-generator).
+
+## FAQ
+
+**Q: Does @nuxtjs/i18n add hreflang automatically?**
+Yes, when you set \`baseUrl\` and emit the SEO tags via \`useLocaleHead({ addSeoAttributes: true })\`. It outputs the alternate hreflang links and x-default for you.
+
+**Q: Why are my hreflang URLs relative or missing?**
+You haven't set \`baseUrl\` in the i18n config. It's required to build the absolute URLs hreflang needs.
+
+**Q: Do I set the language on each locale?**
+Yes. \`code\` handles routing, while \`language\` (for example \`fr-FR\`) is the BCP-47 value written into the hreflang attribute.
+`,
+  },
+  'framer-canonical-url': {
+    title: 'How to Set a Canonical URL in Framer',
+    content: `## Does Framer Handle Canonicals Automatically?
+
+By default, Framer gives each published page a self-referencing canonical tag pointing at its own URL. For most sites that's exactly right and you don't need to touch anything. You only need a *custom* canonical when two URLs serve the same or near-duplicate content and you want to consolidate them onto one. The classic cases are CMS collection items reachable from more than one path, or a campaign page that duplicates an existing one.
+
+## When You Need a Custom Canonical
+
+Point a canonical somewhere other than the page itself when:
+
+- A **CMS collection item** is accessible under multiple slugs or filtered paths.
+- You publish a **near-duplicate** page (a landing variant, a print version) that should defer to the original.
+- Content is **syndicated** and the original should keep the ranking signal.
+
+## How to Set It
+
+Framer exposes SEO settings per page. Open the page's settings and set the canonical URL to the absolute URL you want Google to treat as the original. For CMS content, set it at the collection or template level so every item outputs a correct canonical.
+
+When you need finer control than the built-in field allows, Framer lets you add custom code to the page \`<head>\`. Put a canonical link tag there:
+
+\`\`\`html
+<link rel="canonical" href="https://example.com/the-original-url" />
+\`\`\`
+
+Always use an **absolute** URL, with the protocol and domain, never a relative path — a relative canonical is a common mistake that Google may ignore. If you're unsure of the exact format, build one with the [canonical tag generator](/tools/canonical-tag-generator).
+
+## Verify It
+
+After publishing, view the page source and confirm exactly one \`<link rel="canonical">\` is present and points to the intended URL. Two canonical tags, or one pointing at the wrong URL, will confuse Google — run the page through the [SEO analyzer](/) to catch duplicates and mismatches.
+
+## FAQ
+
+**Q: Does Framer add a canonical tag by default?**
+Yes. Each published page gets a self-referencing canonical pointing at its own URL. You only override it to consolidate duplicate or near-duplicate pages onto a single URL.
+
+**Q: Can I set a canonical on a Framer CMS page?**
+Yes. Set it at the collection or template level so every item outputs a correct canonical, or use custom head code for per-item control.
+
+**Q: My canonical isn't working — why?**
+The two usual causes are a relative URL (use an absolute https URL) and two canonical tags on the same page, one from the built-in field and one from custom code. Keep exactly one, pointing at the intended URL.
+`,
+  },
   'fix-either-offers-review-or-aggregaterating': {
     title: 'Fix "Either offers, review, or aggregateRating should be specified"',
     content: `## What This Error Means

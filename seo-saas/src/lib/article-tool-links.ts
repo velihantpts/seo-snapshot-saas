@@ -24,6 +24,9 @@ export const ARTICLE_TOOL_MAP: Record<string, string[]> = {
   'fix-missing-field-image-structured-data': ['schema-generator', 'article-schema-generator'],
   'fix-indexed-though-blocked-by-robots-txt': ['robots-txt-tester', 'robots-meta-generator', 'robots-txt-generator'],
   '308-vs-301-redirect-seo': ['redirect-generator', 'vercel-redirects-generator', 'netlify-redirects-generator'],
+  'astro-sitemap-not-working': ['sitemap-generator', 'robots-txt-generator'],
+  'nuxt-hreflang-i18n': ['hreflang-generator'],
+  'framer-canonical-url': ['canonical-tag-generator'],
 };
 
 export function toolsForArticle(slug: string): ToolDef[] {
