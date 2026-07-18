@@ -1,6 +1,7 @@
 import { marked } from 'marked';
 import { articles } from './blog-articles';
 import { prisma } from './prisma';
+import { RETIRED_POST_SLUGS } from './retired-posts';
 
 export interface BlogListItem {
   slug: string;
@@ -133,16 +134,20 @@ export async function getBlogList(): Promise<BlogListItem[]> {
       where: { published: true },
       orderBy: { createdAt: 'desc' },
     });
-    dbItems = dbPosts.map((p) => ({
-      slug: p.slug,
-      title: p.title,
-      excerpt: p.excerpt || '',
-      date: p.createdAt.toISOString().slice(0, 10),
-      updated: (p.updatedAt ?? p.createdAt).toISOString().slice(0, 10),
-      readTime: estimateReadTime(p.content),
-      category: p.category || 'Article',
-      source: 'db' as const,
-    }));
+    dbItems = dbPosts
+      // Drop retired Turkish posts: they 301 to English equivalents (see
+      // retired-posts.ts) and must not appear in listings, related, or sitemap.
+      .filter((p) => !RETIRED_POST_SLUGS.has(p.slug))
+      .map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        excerpt: p.excerpt || '',
+        date: p.createdAt.toISOString().slice(0, 10),
+        updated: (p.updatedAt ?? p.createdAt).toISOString().slice(0, 10),
+        readTime: estimateReadTime(p.content),
+        category: p.category || 'Article',
+        source: 'db' as const,
+      }));
   } catch {
     // DB unavailable — fall back to static only
   }
@@ -152,6 +157,9 @@ export async function getBlogList(): Promise<BlogListItem[]> {
 }
 
 export async function getBlogPost(slug: string): Promise<BlogFull | null> {
+  // Retired Turkish posts 301 elsewhere (next.config.js); never render them,
+  // even if something reaches this path directly.
+  if (RETIRED_POST_SLUGS.has(slug)) return null;
   try {
     const db = await prisma.blogPost.findUnique({ where: { slug } });
     if (db && db.published) {

@@ -3,6 +3,24 @@ const nextConfig = {
   output: 'standalone',
   poweredByHeader: false,
   images: { remotePatterns: [{ protocol: 'https', hostname: '**' }] },
+  async redirects() {
+    // 301 orphaned Turkish blog posts -> their English equivalents.
+    // Keep in sync with src/lib/retired-posts.ts (which filters them from
+    // listings + sitemap and blocks their render).
+    const retired = [
+      ['canonical-url-nedir', 'canonical-url-explained'],
+      ['core-web-vitals-nedir', 'how-to-improve-core-web-vitals'],
+      ['meta-aciklama-nasil-yazilir', 'how-to-fix-missing-meta-description'],
+      ['robots-txt-nedir-nasil-olusturulur', 'robots-txt-guide'],
+      ['seo-skoru-nedir-nasil-yukseltilir', 'what-is-a-good-seo-score'],
+      ['sitemap-nedir-google-nasil-gonderilir', 'sitemap-xml-guide'],
+    ];
+    return retired.map(([from, to]) => ({
+      source: `/blog/${from}`,
+      destination: `/blog/${to}`,
+      permanent: true,
+    }));
+  },
   async headers() {
     return [{
       source: '/(.*)',
