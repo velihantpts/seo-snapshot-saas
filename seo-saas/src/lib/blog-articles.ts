@@ -1,4 +1,206 @@
 export const articles: Record<string, { title: string; content: string }> = {
+  'fix-either-offers-review-or-aggregaterating': {
+    title: 'Fix "Either offers, review, or aggregateRating should be specified"',
+    content: `## What This Error Means
+
+Google's Rich Results Test throws \`Either "offers", "review", or "aggregateRating" should be specified\` when your \`Product\` structured data describes a product but gives Google no commercial signal to attach to it. A product rich result can show a price, a star rating, or a review snippet, and Product schema requires at least one of those three fields so there's something to show. Without one, the markup is valid JSON but not eligible for a product rich result, so Google flags it.
+
+It's usually reported as a **warning**, not an error. Your page still gets indexed and can still rank. What you lose is eligibility for the enhanced listing (price, stars) in search, which is exactly the part that lifts click-through.
+
+## The Fix
+
+Add whichever of the three fields is true for your product. Don't invent ratings you don't have; fabricated review markup is a policy violation and can trigger a manual action.
+
+**If you sell it, add \`offers\`** (the most common fix):
+
+\`\`\`html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Product",
+  "name": "Wool Runner Shoe",
+  "image": "https://example.com/shoe.jpg",
+  "offers": {
+    "@type": "Offer",
+    "price": "98.00",
+    "priceCurrency": "USD",
+    "availability": "https://schema.org/InStock"
+  }
+}
+</script>
+\`\`\`
+
+**If you have real ratings, add \`aggregateRating\`:**
+
+\`\`\`html
+"aggregateRating": {
+  "@type": "AggregateRating",
+  "ratingValue": "4.6",
+  "reviewCount": "127"
+}
+\`\`\`
+
+**If you have individual reviews, add \`review\`** with an \`author\` and a \`reviewRating\`. You only need one of the three to clear the warning, but real e-commerce pages usually include \`offers\` plus \`aggregateRating\` together.
+
+## Common Causes
+
+- **You used \`Product\` for something that isn't for sale**, like a portfolio item, a software feature, or a recipe. If nothing is being sold or rated, the wrong \`@type\` is the real problem. Use \`SoftwareApplication\`, \`CreativeWork\`, or \`Recipe\` instead.
+- **The \`offers\` block is there but incomplete**, missing \`price\` or \`priceCurrency\`. Google needs both.
+- **You have reviews on the page but not in the markup.** Visible star ratings don't count unless they're also in structured data.
+
+Build a valid block fast with the [Product schema generator](/tools/product-schema-generator), or check what you have with the [JSON-LD schema generator](/tools/schema-generator).
+
+## FAQ
+
+**Q: Is this a warning or an error?**
+It's a warning in most cases. The page indexes and ranks normally; you just aren't eligible for the price or rating rich result until you add one of the three fields.
+
+**Q: Can I add aggregateRating if I don't have reviews yet?**
+No. Only mark up ratings that genuinely exist and are visible on the page. Inventing them violates Google's structured data policies and risks a manual action.
+
+**Q: Which field should I choose?**
+If the product is for sale, use \`offers\`. It's the most useful and the easiest to keep accurate. Add \`aggregateRating\` on top once you have real reviews.
+`,
+  },
+  'fix-missing-field-image-structured-data': {
+    title: 'Fix "Missing field image" in Structured Data',
+    content: `## What "Missing field image" Means
+
+When the Rich Results Test says \`Missing field "image"\`, your structured data is missing a field the schema type needs to be eligible for a rich result. \`image\` is the most common one because \`Article\`, \`Product\`, \`Recipe\`, and several other types all recommend or require it. The image is what makes the enhanced listing look like anything at all.
+
+Google splits these into two levels. **Required** fields must be present or the item is ineligible (reported as an error). **Recommended** fields improve the result but won't block it (reported as a warning). \`image\` sits in different buckets depending on the type: required for \`Recipe\` and \`Product\` rich results, recommended for \`Article\`.
+
+## The Fix
+
+Add the field with a real, crawlable image URL. Use an absolute URL, not a relative path, and make sure it isn't blocked by \`robots.txt\`.
+
+\`\`\`html
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Your Headline",
+  "image": "https://example.com/cover.jpg",
+  "author": { "@type": "Person", "name": "Jane Doe" },
+  "datePublished": "2026-07-18"
+}
+</script>
+\`\`\`
+
+Google prefers images at least 1200px wide, ideally in multiple aspect ratios (16:9, 4:3, 1:1) as an array:
+
+\`\`\`html
+"image": [
+  "https://example.com/cover-16x9.jpg",
+  "https://example.com/cover-4x3.jpg",
+  "https://example.com/cover-1x1.jpg"
+]
+\`\`\`
+
+## The "Missing field X" Family
+
+The same fix pattern applies to every \`Missing field\` message: add the named field with a real value.
+
+| Message | Type | Add |
+|---|---|---|
+| Missing field "image" | Article, Product, Recipe | \`image\` (absolute URL) |
+| Missing field "author" | Article | \`author\` with \`@type\` and \`name\` |
+| Missing field "datePublished" | Article | ISO 8601 date |
+| Missing field "aggregateRating" / "review" | Product | one commercial signal (see the [offers or review fix](/blog/fix-either-offers-review-or-aggregaterating)) |
+| Missing field "priceCurrency" | Offer | ISO 4217 currency code |
+
+Generate a valid block with the [JSON-LD schema generator](/tools/schema-generator) or the [Article schema generator](/tools/article-schema-generator), then re-test.
+
+## FAQ
+
+**Q: Is "Missing field image" an error or a warning?**
+It depends on the type. For \`Product\` and \`Recipe\` rich results it's an error (ineligible until fixed); for \`Article\` it's a warning (still eligible, but adding an image improves the result).
+
+**Q: Can I use a relative image URL?**
+No. Google needs an absolute, crawlable URL, and the image must not be blocked by \`robots.txt\`.
+
+**Q: Does the image have to be visible on the page?**
+It should represent the page's content and, ideally, appear on the page. Marking up an unrelated image risks being treated as misleading.
+`,
+  },
+  'fix-indexed-though-blocked-by-robots-txt': {
+    title: 'How to Fix "Indexed, though blocked by robots.txt"',
+    content: `## What This Status Means
+
+\`Indexed, though blocked by robots.txt\` in Search Console means Google indexed a URL it wasn't allowed to crawl. It sounds contradictory and it catches people off guard, but it follows directly from one rule most people get wrong: **robots.txt controls crawling, not indexing.**
+
+If enough other pages link to a URL, Google can decide it's worth indexing based on those links alone, even though your \`robots.txt\` told it not to fetch the page. The result is an indexed URL with no description (or a generic one), because Google never read the content.
+
+## First, Decide What You Want
+
+This status is only a *problem* if the wrong thing happened. Ask one question: **should this URL be in Google?**
+
+**If YES, it should be indexed:** the block is the mistake. Remove the \`Disallow\` rule so Google can crawl and properly index the page with a real title and description. Confirm which line is blocking it first with the [robots.txt tester](/tools/robots-txt-tester).
+
+**If NO, it should not be in Google:** this is the important case, and the fix is counterintuitive. To *remove* a page from search, Google has to *crawl* it to see a \`noindex\` signal. But your \`robots.txt\` block prevents that crawl, so the \`noindex\` is never seen. You have to:
+
+1. **Remove the \`robots.txt\` \`Disallow\`** for that path (yes, allow crawling).
+2. **Add a \`noindex\`** via a meta tag or \`X-Robots-Tag\` header. Build one with the [meta robots noindex generator](/tools/robots-meta-generator).
+3. Wait for Google to recrawl. The page drops out once it reads the \`noindex\`.
+
+For anything urgent, also submit a removal in Search Console's Removals tool while you wait.
+
+## The Rule to Remember
+
+\`robots.txt\` means "don't crawl." \`noindex\` means "don't index." They are not interchangeable, and blocking crawling actively *prevents* the noindex from working. If a page must stay private, use HTTP authentication instead. That keeps it out of the index and off the open web entirely.
+
+## FAQ
+
+**Q: Why is a page indexed if robots.txt blocks it?**
+Because robots.txt only stops crawling. Google can still index a URL from external links without fetching it, which is exactly what produces this status, usually with a missing description.
+
+**Q: How do I actually remove it from Google?**
+Allow crawling (remove the Disallow), then add a \`noindex\` meta tag or \`X-Robots-Tag\`. Google has to crawl the page to see the noindex, so the block must come off first.
+
+**Q: Will fixing this happen instantly?**
+No. Google recrawls on its own schedule, usually days to a few weeks. Use the URL Inspection tool to request a recrawl, and the Removals tool for anything urgent.
+`,
+  },
+  '308-vs-301-redirect-seo': {
+    title: '308 vs 301 Redirect: Which Should You Use for SEO?',
+    content: `## The Short Answer
+
+For SEO, a **301 and a 308 are equivalent**. Both are permanent redirects, both pass ranking signals (PageRank) to the destination, and both tell Google to swap the old URL for the new one in its index. If you only care about SEO, either is fine.
+
+The difference is technical: a **308 preserves the HTTP method and body**; a 301 may let clients change a POST into a GET. For normal page redirects, which are GET requests, this never matters. It only matters when you redirect an API call or a form submission and don't want a POST silently turned into a GET.
+
+| | 301 | 308 |
+|---|---|---|
+| Type | Permanent | Permanent |
+| SEO signal passed | Yes | Yes |
+| Method preserved | Not guaranteed (POST may become GET) | Yes (POST stays POST) |
+| Best for | Page/URL moves, migrations | Redirects that must keep POST/PUT |
+| Support | Universal, ancient | Universal in modern browsers |
+
+## Which to Use
+
+- **Moving a page, renaming a URL, HTTP to HTTPS, www to non-www:** use **301**. It's the long-established default, universally understood, and every SEO tool reports it cleanly.
+- **Redirecting an endpoint that receives POST/PUT, or a form action:** use **308** so the method and body survive the hop.
+- **On modern hosts like Vercel or Next.js:** \`permanent: true\` emits a 308 by default. That's fine for SEO. Don't "fix" it back to a 301 just because a tool labels it differently.
+
+The temporary counterparts follow the same split: **302** (may change method) versus **307** (preserves method). Use those only for genuinely short-lived redirects, since they don't consolidate ranking signal the way 301 and 308 do.
+
+## Generate the Rules
+
+Build permanent redirects for your stack with the [redirect generator](/tools/redirect-generator) (Apache and Nginx), or the [Vercel](/tools/vercel-redirects-generator) and [Netlify](/tools/netlify-redirects-generator) versions. Whatever you choose, avoid redirect chains and always point straight to the final URL.
+
+## FAQ
+
+**Q: Does a 308 pass SEO value like a 301?**
+Yes. Google treats 301 and 308 the same for ranking. Both are permanent redirects that consolidate signals onto the destination URL.
+
+**Q: Vercel or Next.js gives me a 308 instead of a 301. Is that a problem?**
+No. \`permanent: true\` produces a 308, which is SEO-equivalent to a 301. Leave it as-is.
+
+**Q: When does the method-preservation difference actually matter?**
+Only when you redirect a non-GET request, such as a POST form submission or an API call. For ordinary page redirects, which are GET requests, 301 and 308 behave identically.
+`,
+  },
   'how-to-fix-missing-meta-description': {
     title: 'How to Fix "Missing Meta Description"',
     content: `## Why This Gets Flagged So Often

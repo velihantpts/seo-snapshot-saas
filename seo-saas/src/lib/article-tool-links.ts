@@ -20,6 +20,10 @@ export const ARTICLE_TOOL_MAP: Record<string, string[]> = {
   'add-sitemap-nextjs': ['sitemap-generator'],
   'security-headers-for-seo': ['security-header-checker', 'http-header-checker'],
   'image-seo-optimization': ['og-image-generator'],
+  'fix-either-offers-review-or-aggregaterating': ['product-schema-generator', 'schema-generator'],
+  'fix-missing-field-image-structured-data': ['schema-generator', 'article-schema-generator'],
+  'fix-indexed-though-blocked-by-robots-txt': ['robots-txt-tester', 'robots-meta-generator', 'robots-txt-generator'],
+  '308-vs-301-redirect-seo': ['redirect-generator', 'vercel-redirects-generator', 'netlify-redirects-generator'],
 };
 
 export function toolsForArticle(slug: string): ToolDef[] {
