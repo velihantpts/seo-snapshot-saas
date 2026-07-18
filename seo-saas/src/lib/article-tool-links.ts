@@ -28,6 +28,10 @@ export const ARTICLE_TOOL_MAP: Record<string, string[]> = {
   'nuxt-hreflang-i18n': ['hreflang-generator'],
   'framer-canonical-url': ['canonical-tag-generator'],
   'remove-page-from-google-410-vs-301-vs-noindex': ['redirect-generator', 'robots-meta-generator', 'robots-txt-tester'],
+  'redirect-chains-what-they-are-and-how-to-fix': ['http-header-checker', 'redirect-generator'],
+  'schema-type-to-rich-result-map': ['schema-generator', 'product-schema-generator'],
+  'how-googlebot-crawls-renders-indexes': ['robots-txt-tester', 'robots-meta-generator'],
+  'how-rel-canonical-works': ['canonical-tag-generator'],
 };
 
 export function toolsForArticle(slug: string): ToolDef[] {

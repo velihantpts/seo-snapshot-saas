@@ -1,4 +1,169 @@
 export const articles: Record<string, { title: string; content: string }> = {
+  'redirect-chains-what-they-are-and-how-to-fix': {
+    title: 'Redirect Chains: What They Are and How to Fix Them',
+    content: `## What a Redirect Chain Is
+
+A redirect chain is when a URL redirects to another URL that redirects again before finally landing on the real page: \`/old-url\` → \`/temp-url\` → \`/final-url\`. Each step is a separate round-trip. Chains build up quietly over years — a page moves, then the new location moves again, and nobody updates the first rule.
+
+<figure>
+<img src="/blog/redirect-chain-diagram.svg" alt="A redirect chain sends /old-url to /temp-url to /final-url in three separate 301 hops, each adding latency and leaking ranking signal. The fix is a single direct 301 from /old-url straight to /final-url." loading="lazy" width="760" height="400" />
+<figcaption>Three hops become one when you point the original rule straight at the destination.</figcaption>
+</figure>
+
+## Why Chains Hurt
+
+- **Latency.** Every hop is a full request/response round-trip. On mobile, three hops can add hundreds of milliseconds before the page even starts loading — a real page-speed and user-experience cost.
+- **Leaked signal.** A single 301 passes essentially all ranking equity. Stack several and you risk small losses at each step, and Google may consolidate less cleanly.
+- **Crawl waste.** Googlebot spends crawl budget following hops instead of crawling real pages. On large sites this adds up.
+- **Bots that give up.** Some crawlers and clients stop after a few hops. If your chain is long, the destination may never be reached.
+
+## How to Find Them
+
+Check the redirect chain for any URL with the [HTTP header checker](/tools/http-header-checker) — it follows every hop and shows the full path with status codes, so you can see exactly where a chain forms.
+
+## How to Fix Them
+
+Point the **first** URL directly at the **final** destination, and remove the middle hops:
+
+- Update the original redirect rule so \`/old-url\` goes to \`/final-url\` in one step.
+- When a destination changes again, edit the existing rule rather than adding a new redirect on top of it.
+- Do the same for the common site-wide redirects (http→https, www→non-www): make sure they resolve in a single hop, not http→https→www in sequence.
+
+Generate clean, single-hop rules with the [redirect generator](/tools/redirect-generator) for Apache and Nginx, or the [Vercel](/tools/vercel-redirects-generator) and [Netlify](/tools/netlify-redirects-generator) versions.
+
+## FAQ
+
+**Q: How many redirects in a chain is too many?**
+Aim for one. Google can follow a few hops, but every extra hop costs latency and crawl budget and risks signal loss. Two is tolerable in a pinch; three or more should always be collapsed.
+
+**Q: Do redirect chains directly lower rankings?**
+Not as a direct penalty, but they slow the page, waste crawl budget, and can dilute the ranking signal that a clean single 301 would pass fully — all of which work against you.
+
+**Q: How do I see the full chain for a URL?**
+Use a checker that follows every hop and lists the status codes, like the HTTP header checker. Fix any URL that shows more than one redirect before a 200.
+`,
+  },
+  'schema-type-to-rich-result-map': {
+    title: 'Which Schema Type Unlocks Which Rich Result',
+    content: `## Schema Is How You Become Eligible
+
+Structured data (JSON-LD) doesn't guarantee a fancy search result — it makes you **eligible** for one. Each rich result is tied to a specific schema type, and if you don't add that type, you simply can't appear in that format. This map shows the pairings that actually matter.
+
+<figure>
+<img src="/blog/schema-to-rich-result-map.svg" alt="Map of which schema type unlocks which Google rich result: Product with offers or rating unlocks price and star ratings; FAQPage unlocks an FAQ accordion (restricted to limited sites since 2023); Review or AggregateRating unlocks a star review snippet; BreadcrumbList unlocks a breadcrumb trail; Recipe unlocks a recipe card; VideoObject unlocks a video thumbnail." loading="lazy" width="760" height="566" />
+<figcaption>Add the type on the left to become eligible for the result on the right.</figcaption>
+</figure>
+
+## The Pairings
+
+- **Product (+ offers or rating)** → price and ★ star rating in the result. Needs at least one of \`offers\`, \`review\`, or \`aggregateRating\` (see the [offers or review fix](/blog/fix-either-offers-review-or-aggregaterating)).
+- **FAQPage** → an FAQ accordion under your listing. **Important:** since 2023 Google restricts FAQ rich results to authoritative government and health sites, so most sites no longer get this even with valid markup.
+- **Review / AggregateRating** → a star review snippet. Only mark up ratings that are genuinely on the page; inventing them is a policy violation.
+- **BreadcrumbList** → a breadcrumb trail in place of the raw URL, which improves how your result reads.
+- **Recipe** → a recipe card with image, cook time, and rating. Requires \`image\` and other fields (see the [Missing field fix](/blog/fix-missing-field-image-structured-data)).
+- **VideoObject** → a video thumbnail and key moments.
+
+## Eligible Is Not Guaranteed
+
+Valid markup is necessary but not sufficient. Google decides per query whether to show the rich result, based on quality and relevance. So the workflow is: add the correct type, validate it, then treat the rich result as a possibility, not a promise.
+
+Build valid JSON-LD with the [schema generator](/tools/schema-generator) (all types) or a type-specific one like the [Product schema generator](/tools/product-schema-generator), then confirm eligibility in Google's Rich Results Test.
+
+## FAQ
+
+**Q: Does adding schema guarantee a rich result?**
+No. It makes you eligible. Google still decides per query whether to display it based on quality and relevance. Valid markup is the entry ticket, not a guarantee.
+
+**Q: Why doesn't my FAQ schema show an accordion anymore?**
+Google restricted FAQ rich results in 2023 to well-known authoritative (mostly government and health) sites. Your markup can be perfectly valid and still not display for most sites.
+
+**Q: Can I add multiple schema types on one page?**
+Yes. A product page can carry Product, BreadcrumbList, and Review markup together — each unlocks its own eligibility. Keep every type accurate to the visible content.
+`,
+  },
+  'how-googlebot-crawls-renders-indexes': {
+    title: 'Crawl, Render, Index: How Googlebot Actually Sees Your Page',
+    content: `## Three Stages, Three Failure Points
+
+Getting a page into Google is three separate stages, and a page can fail at any one of them. Knowing *which* stage failed tells you exactly which fix applies — most "why isn't my page indexed" confusion comes from mixing them up.
+
+<figure>
+<img src="/blog/crawl-render-index-flow.svg" alt="Googlebot processes a page in three stages: Crawl (fetch the raw HTML), Render (execute JavaScript to build the final DOM), then Index (store it for search). robots.txt blocks the Crawl stage, JavaScript-injected content only appears at the Render stage, and a noindex tag drops the page at the Index stage." loading="lazy" width="760" height="360" />
+<figcaption>Where a page fails decides the fix: unblock robots.txt, server-render content, or check the noindex tag.</figcaption>
+</figure>
+
+## 1. Crawl — fetch the raw HTML
+
+Googlebot requests the URL and downloads whatever the server returns. This is the **raw HTML**, before any JavaScript runs. If \`robots.txt\` blocks the path, this stage never happens — nothing downstream can run, which is why a robots.txt block is not a way to remove a page (Google can't see any signal on a page it never fetched). Check a path with the [robots.txt tester](/tools/robots-txt-tester).
+
+## 2. Render — run the JavaScript
+
+Google then renders the page: it executes JavaScript and builds the final DOM, the way a browser does. This is where client-side content appears. The catch: if your main content is injected by JavaScript, it is **absent from the crawled HTML** and only exists after render — which Google does, but on its own schedule and less reliably than server-rendered content. The safe rule is to make sure your important content is in the server response, not added later by JS. (This is also why a [hydration mismatch](/blog/fix-text-content-does-not-match-server-rendered-html) can matter for SEO.)
+
+## 3. Index — store it for search
+
+Finally Google decides whether to store the page as eligible to appear in results. A \`noindex\` tag drops the page **here** — it is crawled and rendered, but deliberately kept out of the index. That's why noindex requires the page to stay crawlable: Google has to reach stage 3 to see the tag. Build one with the [meta robots noindex generator](/tools/robots-meta-generator).
+
+## Diagnosing Your Page
+
+- Page not fetched at all → check for a \`robots.txt\` block.
+- Fetched but content missing → your content depends on JavaScript; server-render it.
+- Fetched, rendered, still not in search → look for a \`noindex\`, a canonical pointing elsewhere, or a quality/authority issue.
+
+## FAQ
+
+**Q: Does Google run my JavaScript?**
+Yes, Googlebot renders JavaScript. But it crawls the raw HTML first and renders later on its own schedule, so content that only exists after JS runs is indexed less reliably. Put important content in the server response.
+
+**Q: Why is my page crawled but not indexed?**
+It passed crawl and render but Google chose not to store it — common causes are a \`noindex\` tag, a canonical pointing to another URL, thin content, or (on a new site) low authority.
+
+**Q: Does robots.txt stop indexing?**
+No. It stops crawling, which happens at stage 1. A blocked URL can still be indexed from external links (without content), and the block prevents Google from ever seeing a noindex. Use noindex, not robots.txt, to keep a page out of search.
+`,
+  },
+  'how-rel-canonical-works': {
+    title: 'How rel=canonical Actually Works (and How It Backfires)',
+    content: `## What a Canonical Tag Does
+
+When the same content is reachable at several URLs — with tracking parameters, on http and https, with and without a trailing slash — you want Google to treat one of them as the real one and give it all the ranking signal. That's the job of \`rel=canonical\`: it names the preferred URL, and Google consolidates the duplicates onto it.
+
+<figure>
+<img src="/blog/canonical-consolidation.svg" alt="Several duplicate URLs — one with a tracking parameter, one on http, one with a trailing slash — all use rel=canonical to point at a single preferred https URL, so Google consolidates the ranking signal onto it. Pointing the canonical at the wrong URL makes Google index the wrong page or ignore the tag." loading="lazy" width="760" height="470" />
+<figcaption>All the variants defer to one preferred URL, which collects the ranking signal.</figcaption>
+</figure>
+
+## The Right Way
+
+- **Self-reference by default.** Every page should carry a canonical pointing at its own clean URL. This is the single most common fix for duplicate-content confusion.
+- **Use absolute URLs.** \`https://example.com/page\`, not \`/page\`. A relative canonical is a frequent mistake Google may ignore.
+- **Stay consistent.** The canonical should match what you list in your sitemap and link to internally. Contradicting signals make Google pick for you.
+- **One per page.** Two canonical tags (often one from a plugin and one from custom code) cancel each other out.
+
+Build a correct tag — as HTML, Next.js metadata, or an HTTP header — with the [canonical tag generator](/tools/canonical-tag-generator).
+
+## How It Backfires
+
+The canonical is a hint about *which URL*, so a wrong one does real damage:
+
+- **Canonical to the wrong page** → Google indexes *that* page instead of the one you meant. A template bug that points every product at the category page can quietly deindex the whole catalog.
+- **Everything canonicalized to the homepage** → a classic mistake that tells Google every page is "really" the homepage, dropping your actual content from the index.
+- **Canonical plus noindex on the same page** → conflicting signals; Google tends to ignore the canonical, and results get unpredictable.
+
+If pages are disappearing from the index, viewing the source and checking the canonical is one of the first things to rule out. The [SEO analyzer](/) flags wrong or missing canonicals automatically.
+
+## FAQ
+
+**Q: Should every page have a canonical tag?**
+Yes — a self-referencing one pointing at its own clean URL. It prevents duplicate-content issues from parameters, protocols, and slashes, and costs nothing.
+
+**Q: Is a canonical a redirect?**
+No. A canonical is a hint that consolidates ranking signal while both URLs stay reachable. A 301 actually moves users and bots to the new URL. Use a redirect when the old URL should go away; use a canonical when duplicates should coexist but only one should rank.
+
+**Q: My pages are dropping out of Google — could the canonical be the cause?**
+Very possibly. Check whether the canonical points at a different URL (or the homepage) than the page itself. A wrong canonical is a common, silent cause of deindexed pages.
+`,
+  },
   'remove-page-from-google-410-vs-301-vs-noindex': {
     title: 'How to Remove a Page From Google: 410 vs 301 vs noindex',
     content: `## Pick the Method by What You Want to Happen

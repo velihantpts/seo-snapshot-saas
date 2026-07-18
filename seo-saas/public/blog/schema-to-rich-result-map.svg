@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 566" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Which schema type unlocks which Google rich result: Product with offers or rating unlocks price and star ratings; FAQPage unlocks an FAQ accordion (now restricted to limited sites); Review or AggregateRating unlocks a star review snippet; BreadcrumbList unlocks a breadcrumb trail; Recipe unlocks a recipe card; VideoObject unlocks a video thumbnail.">
+  <defs>
+    <marker id="c" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="566" fill="#0b1120"/>
+  <text x="40" y="32" fill="#f1f5f9" font-size="16" font-weight="600">Which schema type unlocks which rich result</text>
+  <text x="60" y="58" fill="#94a3b8" font-size="12" font-weight="600">SCHEMA TYPE (JSON-LD)</text>
+  <text x="500" y="58" fill="#94a3b8" font-size="12" font-weight="600">SERP RICH RESULT</text>
+
+  <!-- rows -->
+  <!-- 1 -->
+  <rect x="40" y="72" width="270" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="58" y="103" fill="#e2e8f0" font-size="13.5">Product + offers / rating</text>
+  <rect x="470" y="72" width="250" height="52" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="488" y="103" fill="#c7d2fe" font-size="13.5">Price &amp; ★ star rating</text>
+  <line x1="310" y1="98" x2="466" y2="98" stroke="#818cf8" stroke-width="1.5" marker-end="url(#c)"/>
+  <!-- 2 -->
+  <rect x="40" y="140" width="270" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="58" y="171" fill="#e2e8f0" font-size="13.5">FAQPage</text>
+  <rect x="470" y="140" width="250" height="52" rx="10" fill="rgba(245,158,11,0.10)" stroke="#f59e0b"/>
+  <text x="488" y="166" fill="#fcd34d" font-size="13.5">FAQ accordion</text>
+  <text x="488" y="183" fill="#fde68a" font-size="11">restricted to limited sites since 2023</text>
+  <line x1="310" y1="166" x2="466" y2="166" stroke="#818cf8" stroke-width="1.5" marker-end="url(#c)"/>
+  <!-- 3 -->
+  <rect x="40" y="208" width="270" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="58" y="239" fill="#e2e8f0" font-size="13.5">Review / AggregateRating</text>
+  <rect x="470" y="208" width="250" height="52" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="488" y="239" fill="#c7d2fe" font-size="13.5">Star review snippet</text>
+  <line x1="310" y1="234" x2="466" y2="234" stroke="#818cf8" stroke-width="1.5" marker-end="url(#c)"/>
+  <!-- 4 -->
+  <rect x="40" y="276" width="270" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="58" y="307" fill="#e2e8f0" font-size="13.5">BreadcrumbList</text>
+  <rect x="470" y="276" width="250" height="52" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="488" y="307" fill="#c7d2fe" font-size="13.5">Breadcrumb trail</text>
+  <line x1="310" y1="302" x2="466" y2="302" stroke="#818cf8" stroke-width="1.5" marker-end="url(#c)"/>
+  <!-- 5 -->
+  <rect x="40" y="344" width="270" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="58" y="375" fill="#e2e8f0" font-size="13.5">Recipe</text>
+  <rect x="470" y="344" width="250" height="52" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="488" y="375" fill="#c7d2fe" font-size="13.5">Recipe card (image, time)</text>
+  <line x1="310" y1="370" x2="466" y2="370" stroke="#818cf8" stroke-width="1.5" marker-end="url(#c)"/>
+  <!-- 6 -->
+  <rect x="40" y="412" width="270" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="58" y="443" fill="#e2e8f0" font-size="13.5">VideoObject</text>
+  <rect x="470" y="412" width="250" height="52" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="488" y="443" fill="#c7d2fe" font-size="13.5">Video thumbnail</text>
+  <line x1="310" y1="438" x2="466" y2="438" stroke="#818cf8" stroke-width="1.5" marker-end="url(#c)"/>
+
+  <text x="40" y="506" fill="#cbd5e1" font-size="12.5">Valid markup makes you *eligible* — Google still decides whether to show the rich result.</text>
+  <text x="40" y="526" fill="#94a3b8" font-size="12">Test any page in Google's Rich Results Test before you rely on it.</text>
+</svg>
