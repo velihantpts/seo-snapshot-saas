@@ -70,6 +70,56 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ ok: true, slug: post.slug, url: `${SITE}/blog/${post.slug}` });
 }
 
+// PUT — update an existing post in place (identified by slug or id), preserving
+// createdAt and the URL. Only the fields present in the body are changed, so a
+// content-only edit leaves the title/category untouched.
+export async function PUT(req: NextRequest) {
+  if (!(await requireAdmin(req))) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
+  const body = await req.json();
+  const slug = body.slug ? String(body.slug) : '';
+  const id = body.id ? String(body.id) : '';
+  if (!slug && !id) {
+    return NextResponse.json({ error: 'slug or id required to identify the post' }, { status: 400 });
+  }
+
+  const existing = await prisma.blogPost.findUnique({ where: slug ? { slug } : { id } });
+  if (!existing) {
+    return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+  }
+
+  // Build a partial update from only the fields that were provided.
+  const data: Record<string, unknown> = {};
+  if (body.title !== undefined) {
+    const title = String(body.title).trim();
+    if (!title) return NextResponse.json({ error: 'Title cannot be empty' }, { status: 400 });
+    data.title = title;
+  }
+  if (body.content !== undefined) {
+    const content = String(body.content).trim();
+    if (!content) return NextResponse.json({ error: 'Content cannot be empty' }, { status: 400 });
+    data.content = content;
+  }
+  if (body.excerpt !== undefined) data.excerpt = String(body.excerpt).trim() || null;
+  if (body.category !== undefined) data.category = String(body.category).trim() || 'Article';
+  if (body.published !== undefined) data.published = body.published !== false;
+
+  if (Object.keys(data).length === 0) {
+    return NextResponse.json({ error: 'No fields to update' }, { status: 400 });
+  }
+
+  const post = await prisma.blogPost.update({ where: { id: existing.id }, data });
+
+  // Nudge Bing/Yandex to recrawl the changed URL; Google picks it up via sitemap.
+  if (post.published) {
+    await pingIndexNow([`${SITE}/blog/${post.slug}`, `${SITE}/blog`, `${SITE}/sitemap.xml`]);
+  }
+
+  return NextResponse.json({ ok: true, slug: post.slug, url: `${SITE}/blog/${post.slug}` });
+}
+
 // DELETE — remove a post by ?slug= or ?id=
 export async function DELETE(req: NextRequest) {
   if (!(await requireAdmin(req))) {
