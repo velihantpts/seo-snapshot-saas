@@ -39,7 +39,7 @@ export default function Page() {
         <section className="mt-14 max-w-2xl space-y-4 text-sm text-white/50 leading-relaxed">
           <h2 className="text-lg font-medium tracking-tight text-white/90">Characters lie, pixels don&apos;t</h2>
           <p>Every "60 character title" rule of thumb is an approximation of the real constraint: pixel width. Google lays out your title in a specific font and size and cuts it where it runs out of room. That is why two titles of identical length can behave differently — one fits, the other ends in an ellipsis.</p>
-          <p>The practical takeaway is simple: front-load. Put the phrase you want people to see, and the words you want to rank for, at the start. Whatever gets truncated at the end should be the least important part. For a full pixel-accurate SERP mockup including the URL, try the <Link href="/tools/serp-snippet-preview" className="text-accent-400 hover:text-accent-300">SERP snippet preview</Link>.</p>
+          <p>The practical takeaway is simple: front-load. Put the phrase you want people to see, and the words you want to rank for, at the start. Whatever gets truncated at the end should be the least important part. New to writing titles? Start with <Link href="/blog/how-to-write-seo-title-tags" className="text-accent-400 hover:text-accent-300">how to write title tags for SEO</Link> for the full formula, or get a pixel-accurate SERP mockup including the URL from the <Link href="/tools/serp-snippet-preview" className="text-accent-400 hover:text-accent-300">SERP snippet preview</Link>.</p>
         </section>
 
         <ToolFaq items={faqs} />

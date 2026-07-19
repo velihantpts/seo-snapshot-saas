@@ -410,8 +410,8 @@ export const GLOSSARY: GlossaryTerm[] = [
       "keyword-cannibalization"
     ],
     "link": {
-      "href": "/tools/meta-tag-generator",
-      "label": "Meta tag generator"
+      "href": "/blog/how-to-write-seo-title-tags",
+      "label": "How to write title tags for SEO"
     }
   },
   {

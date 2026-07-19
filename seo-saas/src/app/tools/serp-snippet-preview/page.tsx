@@ -40,7 +40,7 @@ export default function Page() {
         <section className="mt-14 max-w-2xl space-y-4 text-sm text-white/50 leading-relaxed">
           <h2 className="text-lg font-medium tracking-tight text-white/90">Write titles that survive truncation</h2>
           <p>Your Google listing is a tiny ad. The title tag is the blue clickable link and the meta description is the copy beneath it — together they decide your click-through rate, which is one of the few things fully in your control.</p>
-          <p>Google cuts both off by <strong>pixel width</strong>, so the safest move is to front-load your keyword and most compelling words. This tool measures the real rendered width with a canvas, so what you see here closely matches the live SERP.</p>
+          <p>Google cuts both off by <strong>pixel width</strong>, so the safest move is to front-load your keyword and most compelling words. This tool measures the real rendered width with a canvas, so what you see here closely matches the live SERP. For the full method behind a strong headline, read <Link href="/blog/how-to-write-seo-title-tags" className="text-accent-400 hover:text-accent-300">how to write title tags for SEO</Link>.</p>
         </section>
 
         <ToolFaq items={faqs} />

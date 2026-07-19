@@ -43,6 +43,10 @@ export const CHECKS: CheckDef[] = [
     "fixCode": "<!-- Add inside <head>, keep the primary keyword near the front -->\n<title>Free SEO Analyzer with Copy-Paste Fix Code | SEO Snapshot</title>",
     "related": [
       {
+        "href": "/blog/how-to-write-seo-title-tags",
+        "label": "How to write title tags for SEO"
+      },
+      {
         "href": "/tools/meta-tag-generator",
         "label": "Meta tag generator"
       },
