@@ -954,6 +954,11 @@ Core Web Vitals are Google's attempt to put numbers on "does this page feel good
 
 One correction if you're working from older guides: **FID (First Input Delay) was retired in March 2024 and replaced by INP.** FID only measured the delay before the browser *started* processing your first interaction. INP measures the full interaction — input delay, processing time, and the paint that follows — across *every* interaction on the page, reporting a value near the worst one. It's much harder to game, and plenty of sites that passed FID comfortably fail INP.
 
+<figure>
+<img src="/blog/cwv-thresholds.svg" alt="The three Core Web Vitals and their good, needs-improvement, and poor bands: LCP good at 2.5s or under, INP good at 200ms or under, CLS good at 0.1 or under. Google grades the 75th percentile of real-user visits, so a page passes only when at least 75% of visits land in the green band." loading="lazy" width="760" height="430" />
+<figcaption>Each metric has three bands — you pass only when 75% of real visits hit green.</figcaption>
+</figure>
+
 ## The Thresholds (and the 75th-percentile Trap)
 
 Here's where each metric sits:
@@ -2274,6 +2279,11 @@ Headings aren't decoration. \`<h1>\`–\`<h6>\` build a machine-readable outline
 For SEO, headings are a strong on-page relevance and structure signal. They tell Google what each section is about and how sections relate. That structure powers featured snippets and the "jump to" links Google sometimes shows under a result — both pulled straight from clear heading text. A page that reads as one undifferentiated wall gives the crawler nothing to latch onto.
 
 One myth worth killing early: multiple \`<h1>\` tags will *not* tank your rankings. Google's John Mueller has said several times that the crawler handles multiple H1s fine, and HTML5's sectioning rules technically allow them. So this isn't a penalty situation. But "won't break you" and "best practice" differ. One clear H1 that names the page topic is still the cleaner signal, and it matters more for accessibility than for rankings.
+
+<figure>
+<img src="/blog/heading-hierarchy-tree.svg" alt="A correct heading outline nests one H1, then H2 sections, then H3 subsections with no skipped levels. A broken outline jumps from H1 straight to H3, adds a second H1 for a subsection, and orphans an H4 — confusing the outline that screen readers and search engines build." loading="lazy" width="760" height="440" />
+<figcaption>Pick the tag by its place in the outline, not by the font size you want.</figcaption>
+</figure>
 
 ## The accessibility angle (this is the real reason)
 
@@ -3687,6 +3697,11 @@ Hreflang tags tell a search engine which language and regional version of a page
 
 One thing most guides skip: hreflang is a limited-support signal. **Google and Yandex use it. Bing does not** — Bing relies on the older \`content-language\` header plus its own geo signals (ccTLD, server location, links). Treat hreflang as a hint to Google, not a universal directive. Google can and does override it when its own signals disagree.
 
+<figure>
+<img src="/blog/hreflang-return-tags.svg" alt="The hreflang return-tag rule: the English, Spanish, and German versions of a page each link to every other version and to themselves, with reciprocal links and a shared x-default fallback. If any page fails to link back, Google ignores the whole cluster." loading="lazy" width="760" height="440" />
+<figcaption>Every version links to every version — and the links must be mutual, or the cluster is dropped.</figcaption>
+</figure>
+
 ## When you need hreflang
 
 You need it if:
@@ -4032,6 +4047,11 @@ Run your URL through [SEO Snapshot](/) — it counts render-blocking scripts, ch
 If you take nothing else from this page: make your OG image **1200 x 630 pixels**. That's a 1.91:1 aspect ratio, and it's the size Facebook, LinkedIn, Slack, Discord, and X (with the large card) all crop to cleanly. Ship that and your link previews will look right almost everywhere.
 
 The interesting part is *why* 1.91:1 is the safe default, and where individual platforms quietly do something different. Get that wrong and your carefully designed image shows up with the logo sliced off, or as a tiny square thumbnail next to a wall of text.
+
+<figure>
+<img src="/blog/og-image-dimensions.svg" alt="The Open Graph image spec: a 1200 by 630 pixel canvas at 1.91:1, cropped cleanly by Facebook, LinkedIn, Slack, Discord, and X's large card. Keep logos and text inside a centred safe zone with about 60px padding. Below the 600 by 315 minimum, platforms fall back to a small square thumbnail." loading="lazy" width="760" height="470" />
+<figcaption>1200 × 630 with a padded safe zone survives every platform's crop.</figcaption>
+</figure>
 
 ## Size Requirements by Platform
 
@@ -4558,6 +4578,11 @@ Keyword cannibalization happens when two or more pages on your site compete for 
 That definition matters, because the term is badly overdiagnosed. Multiple URLs from your domain appearing for one query is not automatically cannibalization. Google routinely ranks two or three pages from the same site when they serve different needs — a product page and a review, a category and a how-to guide. That's healthy coverage.
 
 Cannibalization is only a problem when pages target the **same intent** and dilute each other. If you can't articulate why a searcher would want page A instead of page B, you probably have a real overlap. If you can, you likely don't.
+
+<figure>
+<img src="/blog/keyword-cannibalization.svg" alt="Two pages targeting the same intent split the ranking signal, so Google flip-flops between them and neither ranks well; clicks and authority divide across both URLs. Consolidating into one page with a 301 redirect merges the signal so the single page ranks higher." loading="lazy" width="760" height="440" />
+<figcaption>Same intent on two URLs splits the signal; merging with a 301 combines it.</figcaption>
+</figure>
 
 ## The Symptoms That Confirm It's Real
 
