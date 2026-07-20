@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="What makes a page deep in SEO: five signals — intent match, topical coverage, structural quality, supporting evidence, and freshness — all feed into whether the page fully satisfies the query's intent. Word count is not one of them. Comprehensive pages happen to be longer because depth causes the ranking and length is a side effect, and depth is always relative to the intent behind the query.">
+  <defs>
+    <marker id="cd-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="430" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">What makes a page "deep" — and what doesn't</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Five signals decide depth. None of them is "word count."</text>
+
+  <!-- five signal cards -->
+  <!-- card 1 -->
+  <rect x="40" y="78" width="124" height="148" rx="10" fill="#1e293b" stroke="#334155"/>
+  <circle cx="102" cy="106" r="13" fill="rgba(129,140,248,0.18)" stroke="#818cf8"/>
+  <text x="102" y="111" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">1</text>
+  <text x="102" y="140" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">Intent match</text>
+  <text x="102" y="164" fill="#94a3b8" font-size="10.5" text-anchor="middle">Does the job the</text>
+  <text x="102" y="178" fill="#94a3b8" font-size="10.5" text-anchor="middle">query implies</text>
+
+  <!-- card 2 -->
+  <rect x="178" y="78" width="124" height="148" rx="10" fill="#1e293b" stroke="#334155"/>
+  <circle cx="240" cy="106" r="13" fill="rgba(129,140,248,0.18)" stroke="#818cf8"/>
+  <text x="240" y="111" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">2</text>
+  <text x="240" y="140" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">Topical coverage</text>
+  <text x="240" y="164" fill="#94a3b8" font-size="10.5" text-anchor="middle">Subtopics &amp; entities</text>
+  <text x="240" y="178" fill="#94a3b8" font-size="10.5" text-anchor="middle">searchers expect</text>
+
+  <!-- card 3 -->
+  <rect x="316" y="78" width="124" height="148" rx="10" fill="#1e293b" stroke="#334155"/>
+  <circle cx="378" cy="106" r="13" fill="rgba(129,140,248,0.18)" stroke="#818cf8"/>
+  <text x="378" y="111" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">3</text>
+  <text x="378" y="140" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">Structure</text>
+  <text x="378" y="164" fill="#94a3b8" font-size="10.5" text-anchor="middle">Headings, lists,</text>
+  <text x="378" y="178" fill="#94a3b8" font-size="10.5" text-anchor="middle">tables, images</text>
+
+  <!-- card 4 -->
+  <rect x="454" y="78" width="124" height="148" rx="10" fill="#1e293b" stroke="#334155"/>
+  <circle cx="516" cy="106" r="13" fill="rgba(129,140,248,0.18)" stroke="#818cf8"/>
+  <text x="516" y="111" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">4</text>
+  <text x="516" y="140" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">Evidence</text>
+  <text x="516" y="164" fill="#94a3b8" font-size="10.5" text-anchor="middle">Examples, data,</text>
+  <text x="516" y="178" fill="#94a3b8" font-size="10.5" text-anchor="middle">first-hand experience</text>
+
+  <!-- card 5 -->
+  <rect x="592" y="78" width="124" height="148" rx="10" fill="#1e293b" stroke="#334155"/>
+  <circle cx="654" cy="106" r="13" fill="rgba(129,140,248,0.18)" stroke="#818cf8"/>
+  <text x="654" y="111" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">5</text>
+  <text x="654" y="140" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">Freshness</text>
+  <text x="654" y="164" fill="#94a3b8" font-size="10.5" text-anchor="middle">Is it still</text>
+  <text x="654" y="178" fill="#94a3b8" font-size="10.5" text-anchor="middle">true today?</text>
+
+  <!-- converge bus -->
+  <line x1="102" y1="226" x2="102" y2="240" stroke="#818cf8" stroke-width="1.5"/>
+  <line x1="240" y1="226" x2="240" y2="240" stroke="#818cf8" stroke-width="1.5"/>
+  <line x1="378" y1="226" x2="378" y2="240" stroke="#818cf8" stroke-width="1.5"/>
+  <line x1="516" y1="226" x2="516" y2="240" stroke="#818cf8" stroke-width="1.5"/>
+  <line x1="654" y1="226" x2="654" y2="240" stroke="#818cf8" stroke-width="1.5"/>
+  <line x1="102" y1="240" x2="654" y2="240" stroke="#818cf8" stroke-width="1.5"/>
+  <line x1="378" y1="240" x2="378" y2="252" stroke="#818cf8" stroke-width="1.5" marker-end="url(#cd-arrow)"/>
+
+  <!-- outcome box -->
+  <rect x="222" y="254" width="316" height="52" rx="12" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+  <text x="380" y="277" fill="#bbf7d0" font-size="13" font-weight="700" text-anchor="middle">All five, sized to the query = the page ends the search</text>
+  <text x="380" y="296" fill="#86efac" font-size="11.5" text-anchor="middle">Get the depth right and the length takes care of itself</text>
+
+  <!-- footer myth-buster -->
+  <rect x="40" y="322" width="680" height="88" rx="12" fill="rgba(129,140,248,0.08)" stroke="#334155"/>
+  <text x="60" y="348" fill="#fca5a5" font-size="13" font-weight="700">Myth: "write 2,000+ words to rank." Google has no word-count threshold.</text>
+  <text x="60" y="370" fill="#cbd5e1" font-size="12.5">Comprehensive pages just happen to be longer — depth caused the ranking, length was the side effect.</text>
+  <text x="60" y="392" fill="#cbd5e1" font-size="12.5">Depth is relative to intent: "stripe login" is deep in one line; "next.js vs remix" needs side-by-side trade-offs.</text>
+</svg>

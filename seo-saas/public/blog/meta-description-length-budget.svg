@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 430" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Meta descriptions are truncated by pixel width, not character count. The search snippet has a budget of about 680 pixels on mobile (roughly 120 characters) and about 920 pixels on desktop (roughly 155 to 160 characters); text beyond the budget is cut with an ellipsis. A date prefix like Jan 14 2026 renders inside the same budget and steals 15 to 20 characters from the front. Because glyphs vary in width, twelve wide W characters overflow while twelve narrow i characters have room to spare, so write to the mobile cut first and front-load the key detail.">
+  <defs>
+    <marker id="mdl" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="430" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Meta description: the pixel budget, not the character count</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Google truncates by pixel width, and mobile is the tighter cut — so write for it first.</text>
+
+  <!-- legend -->
+  <rect x="378" y="46" width="12" height="12" rx="2" fill="#22c55e"/><text x="396" y="56" fill="#94a3b8" font-size="11">Mobile-visible</text>
+  <rect x="486" y="46" width="12" height="12" rx="2" fill="#f59e0b"/><text x="504" y="56" fill="#94a3b8" font-size="11">Desktop-only</text>
+  <rect x="592" y="46" width="12" height="12" rx="2" fill="#ef4444"/><text x="610" y="56" fill="#94a3b8" font-size="11">Truncated</text>
+
+  <!-- date prefix note + pointer -->
+  <line x1="212" y1="94" x2="164" y2="106" stroke="#818cf8" stroke-width="1.5" marker-end="url(#mdl)"/>
+  <text x="220" y="92" fill="#a5b4fc" font-size="11.5">Date prefix ('Jan 14, 2026 — ') renders inside the budget, stealing ~15–20 chars.</text>
+
+  <!-- the budget ruler (0..1050px mapped to x 150..700) -->
+  <rect x="150" y="108" width="356" height="40" rx="6" fill="#22c55e" fill-opacity="0.85"/>
+  <rect x="506" y="108" width="126" height="40" fill="#f59e0b" fill-opacity="0.85"/>
+  <rect x="632" y="108" width="68" height="40" rx="6" fill="#ef4444" fill-opacity="0.85"/>
+
+  <text x="328" y="133" fill="#052e16" font-size="12" font-weight="700" text-anchor="middle">shown on mobile &amp; desktop</text>
+  <text x="569" y="132" fill="#451a03" font-size="11" font-weight="600" text-anchor="middle">desktop</text>
+  <text x="569" y="144" fill="#451a03" font-size="11" font-weight="600" text-anchor="middle">adds this</text>
+  <text x="666" y="133" fill="#450a0a" font-size="12" font-weight="700" text-anchor="middle">cut …</text>
+
+  <!-- cut markers -->
+  <line x1="506" y1="100" x2="506" y2="160" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="632" y1="100" x2="632" y2="160" stroke="#fca5a5" stroke-width="1.5" stroke-dasharray="3 3"/>
+
+  <!-- boundary labels -->
+  <text x="150" y="172" fill="#94a3b8" font-size="11">0</text>
+  <text x="506" y="172" fill="#86efac" font-size="12" font-weight="700" text-anchor="middle">~680px</text>
+  <text x="506" y="186" fill="#94a3b8" font-size="11" text-anchor="middle">≈120 chars (mobile cut)</text>
+  <text x="632" y="172" fill="#fca5a5" font-size="12" font-weight="700" text-anchor="middle">~920px</text>
+  <text x="632" y="186" fill="#94a3b8" font-size="11" text-anchor="middle">≈155–160 (desktop cut)</text>
+
+  <!-- why pixels comparison -->
+  <rect x="40" y="204" width="680" height="82" rx="12" fill="rgba(129,140,248,0.08)" stroke="#334155"/>
+  <text x="60" y="228" fill="#c7d2fe" font-size="13" font-weight="700">Same character count, different width — that's why a fixed character rule fails:</text>
+
+  <text x="60" y="256" fill="#cbd5e1" font-size="11.5">12 × W</text>
+  <rect x="130" y="244" width="300" height="17" rx="3" fill="#ef4444" fill-opacity="0.55"/>
+  <text x="135" y="257" fill="#fecaca" font-size="12" font-family="ui-monospace, monospace">WWWWWWWWWWWW</text>
+
+  <text x="60" y="278" fill="#cbd5e1" font-size="11.5">12 × i</text>
+  <rect x="130" y="266" width="86" height="17" rx="3" fill="#22c55e" fill-opacity="0.55"/>
+  <text x="135" y="279" fill="#bbf7d0" font-size="12" font-family="ui-monospace, monospace">iiiiiiiiiiii</text>
+
+  <text x="452" y="268" fill="#94a3b8" font-size="11">both 12 chars — one overflows, one has room</text>
+
+  <!-- takeaway footer -->
+  <rect x="40" y="300" width="680" height="106" rx="12" fill="rgba(34,197,94,0.08)" stroke="#22c55e"/>
+  <text x="60" y="328" fill="#bbf7d0" font-size="13" font-weight="700">Write to the mobile cut first: land the essential message in the first ~120 characters.</text>
+  <text x="60" y="350" fill="#cbd5e1" font-size="12.5">Front-load the key detail and CTA — truncation drops whole trailing words, not single characters.</text>
+  <text x="60" y="371" fill="#cbd5e1" font-size="12.5">Then preview the real render on desktop and mobile — don't trust a raw character counter.</text>
+  <text x="60" y="392" fill="#94a3b8" font-size="12">Google rewrites the description on most results, so keep it clear and query-relevant.</text>
+</svg>

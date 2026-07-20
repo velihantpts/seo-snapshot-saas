@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 540" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="How Google decides the search snippet for your page. Starting from a result for your page and a query, Google checks whether a meta description tag is present. If it is missing, Google auto-generates a snippet from body text that matches the query, which can grab a nav label, Skip to content, or stray legal text. If a tag is present, Google checks whether it beats body passages on query-intent match: if yes, your description is shown, often lightly trimmed; if no, Google rewrites it with a better-matching passage most of the time. The takeaway is that a meta description does not control the snippet, it gives Google a strong default.">
+  <defs>
+    <marker id="mds" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="540" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">How Google decides your search snippet</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Your meta description is the starting point, not the final word.</text>
+
+  <!-- Start box -->
+  <rect x="280" y="76" width="200" height="38" rx="9" fill="#1e293b" stroke="#334155"/>
+  <text x="380" y="100" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">Result for your page + a query</text>
+
+  <!-- Start -> Decision 1 -->
+  <line x1="380" y1="114" x2="380" y2="144" stroke="#818cf8" stroke-width="1.5" marker-end="url(#mds)"/>
+
+  <!-- Decision 1 -->
+  <rect x="250" y="146" width="260" height="52" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="380" y="170" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">Meta description present?</text>
+  <text x="380" y="188" fill="#a5b4fc" font-size="11" text-anchor="middle" font-family="ui-monospace, monospace">&lt;meta name=&quot;description&quot;&gt;</text>
+
+  <!-- D1 -> Card A (No) -->
+  <line x1="330" y1="198" x2="150" y2="332" stroke="#818cf8" stroke-width="1.5" marker-end="url(#mds)"/>
+  <text x="222" y="256" fill="#fcd34d" font-size="12" font-weight="700">No</text>
+
+  <!-- D1 -> Decision 2 (Yes) -->
+  <line x1="470" y1="198" x2="565" y2="248" stroke="#818cf8" stroke-width="1.5" marker-end="url(#mds)"/>
+  <text x="522" y="224" fill="#4ade80" font-size="12" font-weight="700">Yes</text>
+
+  <!-- Decision 2 -->
+  <rect x="440" y="250" width="250" height="52" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="565" y="274" fill="#c7d2fe" font-size="12.5" font-weight="700" text-anchor="middle">Beats body passages on</text>
+  <text x="565" y="292" fill="#c7d2fe" font-size="12.5" font-weight="700" text-anchor="middle">query-intent match?</text>
+
+  <!-- D2 -> Card B (Yes) -->
+  <line x1="505" y1="302" x2="405" y2="332" stroke="#818cf8" stroke-width="1.5" marker-end="url(#mds)"/>
+  <text x="428" y="326" fill="#4ade80" font-size="12" font-weight="700">Yes</text>
+
+  <!-- D2 -> Card C (No) -->
+  <line x1="628" y1="302" x2="620" y2="332" stroke="#818cf8" stroke-width="1.5" marker-end="url(#mds)"/>
+  <text x="636" y="324" fill="#fcd34d" font-size="12" font-weight="700">No</text>
+
+  <!-- Card A: auto-generated (amber) -->
+  <rect x="40" y="336" width="210" height="118" rx="10" fill="rgba(245,158,11,0.10)" stroke="#f59e0b"/>
+  <text x="56" y="360" fill="#fcd34d" font-size="13" font-weight="700">Auto-generated snippet</text>
+  <text x="56" y="382" fill="#e2e8f0" font-size="11">Google pulls body text that</text>
+  <text x="56" y="398" fill="#e2e8f0" font-size="11">matches the query.</text>
+  <text x="56" y="418" fill="#cbd5e1" font-size="11">May grab a nav label,</text>
+  <text x="56" y="434" fill="#cbd5e1" font-size="11">&quot;Skip to content,&quot; or stray</text>
+  <text x="56" y="450" fill="#cbd5e1" font-size="11">legal text on thin pages.</text>
+
+  <!-- Card B: your description (green) -->
+  <rect x="300" y="336" width="200" height="118" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e"/>
+  <text x="316" y="360" fill="#4ade80" font-size="13" font-weight="700">Your description shown</text>
+  <text x="316" y="382" fill="#e2e8f0" font-size="11">Google uses your tag,</text>
+  <text x="316" y="398" fill="#e2e8f0" font-size="11">often lightly trimmed to</text>
+  <text x="316" y="414" fill="#e2e8f0" font-size="11">fit the pixel width.</text>
+  <text x="316" y="436" fill="#bbf7d0" font-size="11">The outcome you want.</text>
+
+  <!-- Card C: rewritten (amber) -->
+  <rect x="520" y="336" width="200" height="118" rx="10" fill="rgba(245,158,11,0.10)" stroke="#f59e0b"/>
+  <text x="536" y="360" fill="#fcd34d" font-size="13" font-weight="700">Rewritten by Google</text>
+  <text x="536" y="382" fill="#e2e8f0" font-size="11">It substitutes a passage</text>
+  <text x="536" y="398" fill="#e2e8f0" font-size="11">it judges more relevant,</text>
+  <text x="536" y="414" fill="#e2e8f0" font-size="11">most of the time.</text>
+  <text x="536" y="436" fill="#cbd5e1" font-size="11">Your tag is the default</text>
+  <text x="536" y="452" fill="#cbd5e1" font-size="11">it starts from.</text>
+
+  <!-- Footer takeaway -->
+  <rect x="40" y="472" width="680" height="52" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="497" fill="#c7d2fe" font-size="13" font-weight="700">A meta description doesn&apos;t control the snippet, it gives Google a strong default.</text>
+  <text x="60" y="516" fill="#cbd5e1" font-size="12.5">Front-load the value, match search intent, and keep the essentials in the first ~120 characters.</text>
+</svg>

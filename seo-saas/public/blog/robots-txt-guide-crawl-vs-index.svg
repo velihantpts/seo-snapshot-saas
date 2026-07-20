@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 495" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="To keep a page out of Google's results, blocking it with Disallow in robots.txt fails: Googlebot never fetches the page, but if another site links to the URL, Google indexes it unread and it still shows in results as 'No information is available'. The correct path is to allow crawling and add a noindex tag, so Googlebot fetches the page, reads the noindex directive, and drops the URL from the index. Disallow controls crawling, not indexing.">
+  <defs>
+    <marker id="rtx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="495" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">robots.txt controls crawling, not indexing</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Disallow stops the fetch — it does not remove a URL from Google.</text>
+
+  <!-- goal pill -->
+  <rect x="228" y="74" width="304" height="36" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="380" y="97" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">Goal: keep this page out of search results</text>
+
+  <!-- branch arrows -->
+  <line x1="332" y1="110" x2="200" y2="148" stroke="#818cf8" stroke-width="1.5" marker-end="url(#rtx)"/>
+  <line x1="428" y1="110" x2="560" y2="148" stroke="#818cf8" stroke-width="1.5" marker-end="url(#rtx)"/>
+
+  <!-- column headers -->
+  <text x="200" y="140" fill="#fca5a5" font-size="12.5" font-weight="700" text-anchor="middle">If you only Disallow</text>
+  <text x="560" y="140" fill="#86efac" font-size="12.5" font-weight="700" text-anchor="middle">Allow crawl + noindex</text>
+
+  <!-- LEFT column: wrong path -->
+  <rect x="40" y="152" width="320" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="200" y="176" fill="#e2e8f0" font-size="12.5" text-anchor="middle" font-family="ui-monospace, monospace">Disallow: /page/</text>
+  <text x="200" y="194" fill="#94a3b8" font-size="11" text-anchor="middle">blocks the fetch in robots.txt</text>
+
+  <line x1="200" y1="204" x2="200" y2="222" stroke="#818cf8" stroke-width="1.5" marker-end="url(#rtx)"/>
+  <rect x="40" y="224" width="320" height="46" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="200" y="252" fill="#e2e8f0" font-size="12.5" text-anchor="middle">Googlebot never requests the page</text>
+
+  <line x1="200" y1="270" x2="200" y2="288" stroke="#818cf8" stroke-width="1.5" marker-end="url(#rtx)"/>
+  <rect x="40" y="290" width="320" height="54" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="200" y="313" fill="#e2e8f0" font-size="12.5" text-anchor="middle">Another site links to the URL</text>
+  <text x="200" y="331" fill="#94a3b8" font-size="11" text-anchor="middle">→ Google indexes it unread</text>
+
+  <line x1="200" y1="344" x2="200" y2="362" stroke="#ef4444" stroke-width="1.5" marker-end="url(#rtx)"/>
+  <rect x="40" y="364" width="320" height="58" rx="12" fill="rgba(239,68,68,0.10)" stroke="#ef4444"/>
+  <text x="200" y="388" fill="#fca5a5" font-size="13" font-weight="700" text-anchor="middle">Still in results ✗</text>
+  <text x="200" y="408" fill="#fecaca" font-size="11.5" text-anchor="middle">listed as "No information is available"</text>
+
+  <!-- RIGHT column: right path -->
+  <rect x="400" y="152" width="320" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="560" y="176" fill="#e2e8f0" font-size="12.5" text-anchor="middle" font-family="ui-monospace, monospace">Allow: /  +  meta noindex</text>
+  <text x="560" y="194" fill="#94a3b8" font-size="11" text-anchor="middle">crawlable, with a noindex tag</text>
+
+  <line x1="560" y1="204" x2="560" y2="222" stroke="#818cf8" stroke-width="1.5" marker-end="url(#rtx)"/>
+  <rect x="400" y="224" width="320" height="46" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="560" y="252" fill="#e2e8f0" font-size="12.5" text-anchor="middle">Googlebot fetches and reads it</text>
+
+  <line x1="560" y1="270" x2="560" y2="288" stroke="#818cf8" stroke-width="1.5" marker-end="url(#rtx)"/>
+  <rect x="400" y="290" width="320" height="54" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="560" y="313" fill="#e2e8f0" font-size="12.5" text-anchor="middle">It sees the noindex directive</text>
+  <text x="560" y="331" fill="#94a3b8" font-size="11" text-anchor="middle">→ drops the URL from the index</text>
+
+  <line x1="560" y1="344" x2="560" y2="362" stroke="#22c55e" stroke-width="1.5" marker-end="url(#rtx)"/>
+  <rect x="400" y="364" width="320" height="58" rx="12" fill="rgba(34,197,94,0.10)" stroke="#22c55e"/>
+  <text x="560" y="388" fill="#4ade80" font-size="13" font-weight="700" text-anchor="middle">Removed from results ✓</text>
+  <text x="560" y="408" fill="#bbf7d0" font-size="11.5" text-anchor="middle">gone within a few crawls</text>
+
+  <!-- footer trap note -->
+  <rect x="40" y="438" width="680" height="42" rx="12" fill="rgba(245,158,11,0.10)" stroke="#f59e0b"/>
+  <text x="60" y="463" fill="#fcd34d" font-size="11.5" font-weight="700">The trap: Disallow + noindex together fails — a blocked page is never crawled, so Google never sees the noindex.</text>
+  <text x="60" y="476" fill="#fcd34d" font-size="11">Allow first so the noindex is read, then Disallow once the URL has dropped out.</text>
+</svg>

@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 482" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Why accessibility and SEO overlap: a screen reader and Googlebot are both non-visual consumers of the same HTML. For each feature the two get parallel value. Alt text: a screen reader announces the image, Googlebot ranks it in Google Images. Heading outline: a reader jumps between sections, Google builds structure and snippets. Semantic landmarks like nav and main: a reader jumps between page regions, Google separates content from boilerplate chrome. The lang attribute: correct pronunciation for the reader, an explicit language hint for Google. Descriptive link text: readable out of context for a reader, anchor-text relevance for Google. Structured, labelled HTML serves both at once.">
+  <rect x="0" y="0" width="760" height="482" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Same HTML, two non-visual readers</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Neither a screen reader nor Googlebot sees your layout — both parse the semantics. Each feature pays twice.</text>
+
+  <!-- table shell -->
+  <rect x="40" y="80" width="680" height="296" rx="10" fill="#1e293b" stroke="#334155"/>
+  <!-- column dividers -->
+  <line x1="230" y1="80" x2="230" y2="376" stroke="#334155"/>
+  <line x1="475" y1="80" x2="475" y2="376" stroke="#334155"/>
+  <!-- header separator -->
+  <line x1="40" y1="116" x2="720" y2="116" stroke="#334155"/>
+  <!-- row separators -->
+  <line x1="40" y1="168" x2="720" y2="168" stroke="#334155"/>
+  <line x1="40" y1="220" x2="720" y2="220" stroke="#334155"/>
+  <line x1="40" y1="272" x2="720" y2="272" stroke="#334155"/>
+  <line x1="40" y1="324" x2="720" y2="324" stroke="#334155"/>
+
+  <!-- header -->
+  <text x="52" y="103" fill="#94a3b8" font-size="12" font-weight="600">HTML feature</text>
+  <rect x="245" y="93" width="11" height="11" rx="2" fill="#22c55e"/>
+  <text x="264" y="103" fill="#bbf7d0" font-size="12.5" font-weight="700">Screen reader</text>
+  <rect x="490" y="93" width="11" height="11" rx="2" fill="#818cf8"/>
+  <text x="509" y="103" fill="#c7d2fe" font-size="12.5" font-weight="700">Googlebot</text>
+
+  <!-- row 1: alt -->
+  <text x="52" y="147" fill="#e2e8f0" font-size="12.5"><tspan font-family="ui-monospace, monospace" fill="#a5b4fc">alt</tspan> text</text>
+  <text x="245" y="147" fill="#cbd5e1" font-size="12">Announces the image aloud</text>
+  <text x="490" y="147" fill="#cbd5e1" font-size="12">Ranks it in Google Images</text>
+
+  <!-- row 2: headings -->
+  <text x="52" y="199" fill="#e2e8f0" font-size="12.5">Heading outline</text>
+  <text x="52" y="215" fill="#64748b" font-size="10.5">H1–H6</text>
+  <text x="245" y="199" fill="#cbd5e1" font-size="12">Jumps between sections</text>
+  <text x="490" y="199" fill="#cbd5e1" font-size="12">Builds structure &amp; snippets</text>
+
+  <!-- row 3: landmarks -->
+  <text x="52" y="251" fill="#e2e8f0" font-size="12.5">Landmarks</text>
+  <text x="52" y="267" fill="#64748b" font-size="10.5" font-family="ui-monospace, monospace">&lt;nav&gt; &lt;main&gt;</text>
+  <text x="245" y="251" fill="#cbd5e1" font-size="12">Jumps between page regions</text>
+  <text x="490" y="251" fill="#cbd5e1" font-size="12">Separates content from chrome</text>
+
+  <!-- row 4: lang -->
+  <text x="52" y="303" fill="#e2e8f0" font-size="12.5"><tspan font-family="ui-monospace, monospace" fill="#a5b4fc">lang</tspan> attribute</text>
+  <text x="245" y="303" fill="#cbd5e1" font-size="12">Correct pronunciation engine</text>
+  <text x="490" y="303" fill="#cbd5e1" font-size="12">Explicit language hint</text>
+
+  <!-- row 5: link text -->
+  <text x="52" y="355" fill="#e2e8f0" font-size="12.5">Descriptive links</text>
+  <text x="245" y="355" fill="#cbd5e1" font-size="12">Reads links out of context</text>
+  <text x="490" y="355" fill="#cbd5e1" font-size="12">Anchor-text relevance</text>
+
+  <!-- footer -->
+  <rect x="40" y="392" width="680" height="70" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="419" fill="#c7d2fe" font-size="13" font-weight="700">One property underneath: structured, labelled, machine-readable content.</text>
+  <text x="60" y="440" fill="#cbd5e1" font-size="12.5">Form labels, contrast and focus rings are accessibility-first — they still cut bounce, which Google does read.</text>
+  <text x="60" y="456" fill="#94a3b8" font-size="11.5">Accessibility is not a confirmed ranking factor; the shared HTML is why the checklists line up.</text>
+</svg>

@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Three axes separate free SEO audit tools. Scope: single-page tools like Lighthouse, SEO Snapshot, and Seobility paste one URL for instant spot checks, while site crawlers like Semrush and SiteChecker follow internal links across a whole site. Data: lab tools like Lighthouse run one simulated throttled load, while field tools like Search Console and the Chrome UX Report show what real visitors experienced. Output: most tools only flag a problem and stop, while SEO Snapshot tells you what to write and where with copy-paste fix code. No single tool wins every axis.">
+  <rect x="0" y="0" width="760" height="470" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Three axes that separate &quot;SEO audit&quot; tools</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Two tools can both say &quot;audit&quot; and do opposite things. Place a tool on each axis before you trust it.</text>
+
+  <!-- ROW 1: SCOPE -->
+  <rect x="40" y="84" width="290" height="82" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="56" y="110" fill="#e2e8f0" font-size="13.5" font-weight="700">Single page</text>
+  <text x="56" y="130" fill="#94a3b8" font-size="11">Paste one URL — instant spot checks.</text>
+  <text x="56" y="152" fill="#a5b4fc" font-size="11">Lighthouse · SEO Snapshot · Seobility</text>
+
+  <rect x="340" y="104" width="80" height="42" rx="8" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="380" y="130" fill="#c7d2fe" font-size="11" font-weight="700" text-anchor="middle">SCOPE</text>
+
+  <rect x="430" y="84" width="290" height="82" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="446" y="110" fill="#e2e8f0" font-size="13.5" font-weight="700">Site crawl</text>
+  <text x="446" y="130" fill="#94a3b8" font-size="11">Follows links across the whole site.</text>
+  <text x="446" y="152" fill="#a5b4fc" font-size="11">Semrush · SiteChecker · Ubersuggest</text>
+
+  <!-- ROW 2: DATA -->
+  <rect x="40" y="182" width="290" height="82" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="56" y="208" fill="#e2e8f0" font-size="13.5" font-weight="700">Lab performance</text>
+  <text x="56" y="228" fill="#94a3b8" font-size="11">One simulated, throttled load. Repeatable.</text>
+  <text x="56" y="250" fill="#a5b4fc" font-size="11">Lighthouse</text>
+
+  <rect x="340" y="202" width="80" height="42" rx="8" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="380" y="228" fill="#c7d2fe" font-size="11" font-weight="700" text-anchor="middle">DATA</text>
+
+  <rect x="430" y="182" width="290" height="82" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="446" y="208" fill="#e2e8f0" font-size="13.5" font-weight="700">Field data</text>
+  <text x="446" y="228" fill="#94a3b8" font-size="11">What real visitors actually hit.</text>
+  <text x="446" y="250" fill="#a5b4fc" font-size="11">Search Console · Chrome UX Report</text>
+
+  <!-- ROW 3: OUTPUT -->
+  <rect x="40" y="280" width="290" height="82" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="56" y="306" fill="#e2e8f0" font-size="13.5" font-weight="700">Just warnings</text>
+  <text x="56" y="326" fill="#94a3b8" font-size="11">Flags the problem, then stops.</text>
+  <text x="56" y="348" fill="#a5b4fc" font-size="11">Most tools</text>
+
+  <rect x="340" y="300" width="80" height="42" rx="8" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="380" y="326" fill="#c7d2fe" font-size="11" font-weight="700" text-anchor="middle">OUTPUT</text>
+
+  <rect x="430" y="280" width="290" height="82" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e"/>
+  <text x="446" y="306" fill="#4ade80" font-size="13.5" font-weight="700">Fix guidance</text>
+  <text x="446" y="326" fill="#bbf7d0" font-size="11">Says what to write and where.</text>
+  <text x="446" y="348" fill="#bbf7d0" font-size="11">SEO Snapshot — copy-paste fix code</text>
+
+  <!-- footer -->
+  <rect x="40" y="378" width="680" height="70" rx="12" fill="rgba(129,140,248,0.08)" stroke="#334155"/>
+  <text x="60" y="406" fill="#c7d2fe" font-size="13" font-weight="700">No single tool wins every axis.</text>
+  <text x="60" y="430" fill="#cbd5e1" font-size="12.5">A sensible free stack: a single-page checker for fast fixes, Lighthouse for performance, and Search Console for field data.</text>
+</svg>

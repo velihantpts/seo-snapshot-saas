@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 445" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="How canonical metadata is inherited down the Next.js App Router tree. On the wrong side, a hard-coded canonical set in app/layout.tsx pointing at the homepage is inherited by app/pricing, app/blog/[slug], and app/docs, so every page tells Google its canonical is the homepage and the pages are dropped from the index. On the right side, the root layout sets only metadataBase with no canonical, and each page sets its own self-referencing canonical such as /pricing, /blog/[slug], and /docs, so every route stays indexable.">
+  <defs>
+    <marker id="cinh" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ef4444"/></marker>
+    <marker id="cself" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#22c55e"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="445" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Canonical inheritance in the App Router</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Metadata merges down the tree — a canonical set in the layout is inherited by every route below it.</text>
+
+  <!-- WRONG panel header -->
+  <rect x="55" y="72" width="323" height="22" rx="6" fill="rgba(239,68,68,0.12)" stroke="#ef4444"/>
+  <text x="216" y="87" fill="#fca5a5" font-size="11.5" font-weight="700" text-anchor="middle">DON'T — hard-code a canonical in the layout</text>
+
+  <!-- WRONG root layout -->
+  <rect x="55" y="98" width="323" height="48" rx="10" fill="#1e293b" stroke="#ef4444"/>
+  <text x="68" y="118" fill="#94a3b8" font-size="11" font-family="ui-monospace, monospace">app/layout.tsx</text>
+  <text x="68" y="136" fill="#fca5a5" font-size="11.5" font-family="ui-monospace, monospace">alternates.canonical: 'https://ex.com'</text>
+
+  <!-- WRONG trunk + branches -->
+  <line x1="100" y1="146" x2="100" y2="314" stroke="#ef4444" stroke-width="1.5"/>
+  <line x1="100" y1="198" x2="128" y2="198" stroke="#ef4444" stroke-width="1.5" marker-end="url(#cinh)"/>
+  <line x1="100" y1="256" x2="128" y2="256" stroke="#ef4444" stroke-width="1.5" marker-end="url(#cinh)"/>
+  <line x1="100" y1="314" x2="128" y2="314" stroke="#ef4444" stroke-width="1.5" marker-end="url(#cinh)"/>
+
+  <!-- WRONG children -->
+  <rect x="130" y="176" width="248" height="44" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="143" y="196" fill="#cbd5e1" font-size="10.5" font-family="ui-monospace, monospace">app/pricing/page.tsx</text>
+  <text x="143" y="212" fill="#fca5a5" font-size="10.5" font-family="ui-monospace, monospace">inherited &#8594; https://ex.com/</text>
+
+  <rect x="130" y="234" width="248" height="44" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="143" y="254" fill="#cbd5e1" font-size="10.5" font-family="ui-monospace, monospace">app/blog/[slug]/page.tsx</text>
+  <text x="143" y="270" fill="#fca5a5" font-size="10.5" font-family="ui-monospace, monospace">inherited &#8594; https://ex.com/</text>
+
+  <rect x="130" y="292" width="248" height="44" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="143" y="312" fill="#cbd5e1" font-size="10.5" font-family="ui-monospace, monospace">app/docs/page.tsx</text>
+  <text x="143" y="328" fill="#fca5a5" font-size="10.5" font-family="ui-monospace, monospace">inherited &#8594; https://ex.com/</text>
+
+  <!-- WRONG footer -->
+  <rect x="55" y="352" width="323" height="72" rx="10" fill="rgba(239,68,68,0.10)" stroke="#ef4444"/>
+  <text x="70" y="376" fill="#fca5a5" font-size="12" font-weight="700">Every page's canonical is the homepage.</text>
+  <text x="70" y="396" fill="#fecaca" font-size="11">Search Console: "Duplicate, Google chose</text>
+  <text x="70" y="411" fill="#fecaca" font-size="11">different canonical" — the pages fall out of the index.</text>
+
+  <!-- RIGHT panel header -->
+  <rect x="400" y="72" width="320" height="22" rx="6" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+  <text x="560" y="87" fill="#bbf7d0" font-size="11.5" font-weight="700" text-anchor="middle">DO — metadataBase only, self-canonical per page</text>
+
+  <!-- RIGHT root layout -->
+  <rect x="400" y="98" width="320" height="48" rx="10" fill="#1e293b" stroke="#22c55e"/>
+  <text x="413" y="118" fill="#94a3b8" font-size="11" font-family="ui-monospace, monospace">app/layout.tsx</text>
+  <text x="413" y="136" fill="#bbf7d0" font-size="11.5" font-family="ui-monospace, monospace">metadataBase set — no canonical</text>
+
+  <!-- RIGHT trunk + branches -->
+  <line x1="445" y1="146" x2="445" y2="314" stroke="#22c55e" stroke-width="1.5"/>
+  <line x1="445" y1="198" x2="473" y2="198" stroke="#22c55e" stroke-width="1.5" marker-end="url(#cself)"/>
+  <line x1="445" y1="256" x2="473" y2="256" stroke="#22c55e" stroke-width="1.5" marker-end="url(#cself)"/>
+  <line x1="445" y1="314" x2="473" y2="314" stroke="#22c55e" stroke-width="1.5" marker-end="url(#cself)"/>
+
+  <!-- RIGHT children -->
+  <rect x="475" y="176" width="245" height="44" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="488" y="196" fill="#cbd5e1" font-size="10.5" font-family="ui-monospace, monospace">app/pricing/page.tsx</text>
+  <text x="488" y="212" fill="#bbf7d0" font-size="10.5" font-family="ui-monospace, monospace">canonical: '/pricing'</text>
+
+  <rect x="475" y="234" width="245" height="44" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="488" y="254" fill="#cbd5e1" font-size="10.5" font-family="ui-monospace, monospace">app/blog/[slug]/page.tsx</text>
+  <text x="488" y="270" fill="#bbf7d0" font-size="10.5" font-family="ui-monospace, monospace">canonical: '/blog/${slug}'</text>
+
+  <rect x="475" y="292" width="245" height="44" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="488" y="312" fill="#cbd5e1" font-size="10.5" font-family="ui-monospace, monospace">app/docs/page.tsx</text>
+  <text x="488" y="328" fill="#bbf7d0" font-size="10.5" font-family="ui-monospace, monospace">canonical: '/docs'</text>
+
+  <!-- RIGHT footer -->
+  <rect x="400" y="352" width="320" height="72" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e"/>
+  <text x="415" y="376" fill="#bbf7d0" font-size="12" font-weight="700">Each page canonicalizes to itself.</text>
+  <text x="415" y="396" fill="#dcfce7" font-size="11">metadataBase and title.template still inherit —</text>
+  <text x="415" y="411" fill="#dcfce7" font-size="11">only canonical must be per-route. All routes indexable.</text>
+</svg>

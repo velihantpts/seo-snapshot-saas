@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 448" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Whether a missing image field is an error or a warning depends on the schema type. For Product and Recipe rich results the image field is required, so a missing image is an error that makes the item ineligible until fixed. For Article the image field is only recommended, so a missing image is a warning and the item stays eligible while the image still improves the result. The fix is the same in every case: add the field with a real, absolute, crawlable image URL that is at least 1200 pixels wide and not blocked by robots.txt.">
+  <rect x="0" y="0" width="760" height="448" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Missing field "image": error or warning?</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Same field, different severity — it depends on whether the schema type requires or recommends it.</text>
+
+  <!-- column headers -->
+  <text x="50" y="98" fill="#94a3b8" font-size="11.5" font-weight="600">Schema type</text>
+  <text x="275" y="98" fill="#94a3b8" font-size="11.5" font-weight="600" text-anchor="middle">image field is</text>
+  <text x="425" y="98" fill="#94a3b8" font-size="11.5" font-weight="600" text-anchor="middle">If missing</text>
+  <text x="615" y="98" fill="#94a3b8" font-size="11.5" font-weight="600" text-anchor="middle">Rich result</text>
+  <line x1="40" y1="108" x2="720" y2="108" stroke="#334155" stroke-width="1"/>
+
+  <!-- Row 1: Product -->
+  <rect x="40" y="116" width="680" height="48" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="54" y="145" fill="#e2e8f0" font-size="13.5" font-weight="700" font-family="ui-monospace, monospace">Product</text>
+  <rect x="210" y="127" width="130" height="26" rx="13" fill="rgba(239,68,68,0.14)" stroke="#ef4444"/>
+  <text x="275" y="144" fill="#fca5a5" font-size="12" font-weight="700" text-anchor="middle">Required</text>
+  <rect x="370" y="127" width="110" height="26" rx="13" fill="rgba(239,68,68,0.14)" stroke="#ef4444"/>
+  <text x="425" y="144" fill="#fca5a5" font-size="12" font-weight="700" text-anchor="middle">Error</text>
+  <text x="615" y="144" fill="#fca5a5" font-size="12" text-anchor="middle">Ineligible until fixed</text>
+
+  <!-- Row 2: Recipe -->
+  <rect x="40" y="172" width="680" height="48" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="54" y="201" fill="#e2e8f0" font-size="13.5" font-weight="700" font-family="ui-monospace, monospace">Recipe</text>
+  <rect x="210" y="183" width="130" height="26" rx="13" fill="rgba(239,68,68,0.14)" stroke="#ef4444"/>
+  <text x="275" y="200" fill="#fca5a5" font-size="12" font-weight="700" text-anchor="middle">Required</text>
+  <rect x="370" y="183" width="110" height="26" rx="13" fill="rgba(239,68,68,0.14)" stroke="#ef4444"/>
+  <text x="425" y="200" fill="#fca5a5" font-size="12" font-weight="700" text-anchor="middle">Error</text>
+  <text x="615" y="200" fill="#fca5a5" font-size="12" text-anchor="middle">Ineligible until fixed</text>
+
+  <!-- Row 3: Article -->
+  <rect x="40" y="228" width="680" height="48" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="54" y="257" fill="#e2e8f0" font-size="13.5" font-weight="700" font-family="ui-monospace, monospace">Article</text>
+  <rect x="210" y="239" width="130" height="26" rx="13" fill="rgba(245,158,11,0.14)" stroke="#f59e0b"/>
+  <text x="275" y="256" fill="#fcd34d" font-size="12" font-weight="700" text-anchor="middle">Recommended</text>
+  <rect x="370" y="239" width="110" height="26" rx="13" fill="rgba(245,158,11,0.14)" stroke="#f59e0b"/>
+  <text x="425" y="256" fill="#fcd34d" font-size="12" font-weight="700" text-anchor="middle">Warning</text>
+  <text x="615" y="256" fill="#4ade80" font-size="12" text-anchor="middle">Still eligible (image improves it)</text>
+
+  <!-- footer: the fix -->
+  <rect x="40" y="300" width="680" height="126" rx="12" fill="rgba(129,140,248,0.09)" stroke="#818cf8"/>
+  <text x="60" y="328" fill="#c7d2fe" font-size="13" font-weight="700">The fix is the same either way: add the field with a real value.</text>
+  <text x="60" y="352" fill="#cbd5e1" font-size="12.5">For image, that value must be:</text>
+  <text x="60" y="376" fill="#cbd5e1" font-size="12.5">• An absolute URL (https://example.com/cover.jpg), never a relative path   • Crawlable — not blocked by robots.txt</text>
+  <text x="60" y="398" fill="#cbd5e1" font-size="12.5">• At least 1200px wide, ideally supplied as an array of 16:9, 4:3 and 1:1 crops</text>
+  <text x="60" y="418" fill="#94a3b8" font-size="11.5">A warning won't block the rich result, but Article listings with a valid image look far stronger than those without.</text>
+</svg>

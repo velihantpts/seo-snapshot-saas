@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="How a secure HTTPS page treats a resource requested over insecure HTTP. Active content — scripts, iframes, CSS, and fetch or XHR calls — is blocked outright, so it never loads and the page can break. Passive content — images, video, and audio — is auto-upgraded to HTTPS by modern browsers, but the padlock is lost and the resource is blocked if no HTTPS version exists. The fix is to serve every resource over HTTPS, add the Content-Security-Policy upgrade-insecure-requests header, and 301-redirect all HTTP traffic to HTTPS.">
+  <defs>
+    <marker id="mc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#f87171"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="470" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Mixed content: what an HTTPS page does with an http:// resource</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">One insecure request is enough to break the page or strip the padlock. The browser reacts by resource type.</text>
+
+  <!-- central secure page -->
+  <rect x="290" y="74" width="180" height="52" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="380" y="98" fill="#e2e8f0" font-size="13" font-weight="700" text-anchor="middle">Secure HTTPS page</text>
+  <text x="380" y="116" fill="#94a3b8" font-size="11" text-anchor="middle" font-family="ui-monospace, monospace">https://…  🔒</text>
+
+  <text x="380" y="146" fill="#fca5a5" font-size="11.5" text-anchor="middle">requests a resource over http://</text>
+
+  <!-- branch arrows -->
+  <line x1="352" y1="126" x2="230" y2="166" stroke="#f87171" stroke-width="1.5" marker-end="url(#mc)"/>
+  <line x1="408" y1="126" x2="530" y2="166" stroke="#f87171" stroke-width="1.5" marker-end="url(#mc)"/>
+
+  <!-- LEFT: active content -->
+  <rect x="60" y="168" width="300" height="42" rx="10" fill="rgba(239,68,68,0.12)" stroke="#ef4444"/>
+  <text x="76" y="190" fill="#fca5a5" font-size="13.5" font-weight="700">Active content</text>
+  <text x="76" y="205" fill="#fecaca" font-size="11" font-family="ui-monospace, monospace">scripts · iframes · CSS · fetch / XHR</text>
+
+  <rect x="60" y="220" width="300" height="76" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="76" y="248" fill="#fca5a5" font-size="13" font-weight="700">Browser BLOCKS the request</text>
+  <text x="76" y="270" fill="#cbd5e1" font-size="12">Resource never loads — layout, features,</text>
+  <text x="76" y="287" fill="#cbd5e1" font-size="12">or the whole page can break.</text>
+
+  <!-- RIGHT: passive content -->
+  <rect x="400" y="168" width="300" height="42" rx="10" fill="rgba(245,158,11,0.12)" stroke="#f59e0b"/>
+  <text x="416" y="190" fill="#fcd34d" font-size="13.5" font-weight="700">Passive content</text>
+  <text x="416" y="205" fill="#fde68a" font-size="11" font-family="ui-monospace, monospace">images · video · audio</text>
+
+  <rect x="400" y="220" width="300" height="76" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="416" y="248" fill="#fcd34d" font-size="13" font-weight="700">Auto-upgraded to HTTPS</text>
+  <text x="416" y="270" fill="#cbd5e1" font-size="12">Padlock is lost; blocked instead if no</text>
+  <text x="416" y="287" fill="#cbd5e1" font-size="12">HTTPS version of the file exists.</text>
+
+  <!-- footer: the fix -->
+  <rect x="40" y="312" width="680" height="138" rx="12" fill="rgba(34,197,94,0.10)" stroke="#22c55e"/>
+  <text x="60" y="340" fill="#bbf7d0" font-size="13" font-weight="700">The fix: never let a secure page request an insecure URL.</text>
+  <text x="60" y="368" fill="#cbd5e1" font-size="12.5">• Rewrite every http:// asset to https:// — or use a root-relative /path so it inherits the page's scheme.</text>
+  <text x="60" y="392" fill="#cbd5e1" font-size="12.5">• Add the response header  Content-Security-Policy: upgrade-insecure-requests  to auto-upgrade any stragglers.</text>
+  <text x="60" y="416" fill="#cbd5e1" font-size="12.5">• 301-redirect all HTTP → HTTPS site-wide, then fix hardcoded links saved in the database (e.g. WP search-replace).</text>
+  <text x="60" y="438" fill="#94a3b8" font-size="11.5">Protocol-relative //example.com URLs still work but are legacy — prefer explicit https://.</text>
+</svg>

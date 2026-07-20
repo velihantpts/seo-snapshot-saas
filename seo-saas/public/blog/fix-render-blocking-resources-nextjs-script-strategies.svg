@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 484" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="The four next/script loading strategies mapped to the page-load lifecycle. beforeInteractive loads before hydration inside the initial HTML and blocks first paint — reserve it for consent managers, bot detection, and polyfills. afterInteractive is the default and loads right after the page hydrates — use it for analytics like GA4 and GTM. lazyOnload loads during browser idle time after everything else — use it for chat widgets, social embeds, and non-critical pixels. worker (experimental) runs off the main thread via Partytown for heavy analytics. Default to afterInteractive; beforeInteractive puts a script back in the critical path.">
+  <defs>
+    <marker id="rbnq" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#64748b"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="484" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">next/script: when each strategy loads</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Pick the strategy by where in the page lifecycle the script can safely run. Default to afterInteractive.</text>
+
+  <!-- strategy markers above the bar -->
+  <circle cx="150" cy="106" r="5" fill="#ef4444"/>
+  <text x="150" y="88" fill="#fca5a5" font-size="11" font-weight="700" text-anchor="middle" font-family="ui-monospace, monospace">beforeInteractive</text>
+  <circle cx="470" cy="106" r="5" fill="#22c55e"/>
+  <text x="470" y="88" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle" font-family="ui-monospace, monospace">afterInteractive</text>
+  <circle cx="635" cy="106" r="5" fill="#818cf8"/>
+  <text x="635" y="88" fill="#c7d2fe" font-size="11" font-weight="700" text-anchor="middle" font-family="ui-monospace, monospace">lazyOnload</text>
+
+  <!-- timeline bar with 3 phases -->
+  <rect x="70" y="106" width="190" height="34" fill="#334155"/>
+  <text x="165" y="128" fill="#e2e8f0" font-size="11.5" text-anchor="middle">Initial HTML</text>
+  <rect x="260" y="106" width="170" height="34" fill="#3f4a5f"/>
+  <text x="345" y="128" fill="#e2e8f0" font-size="11.5" text-anchor="middle">Hydration</text>
+  <rect x="430" y="106" width="275" height="34" fill="#1e293b" stroke="#334155"/>
+  <text x="567" y="128" fill="#cbd5e1" font-size="11.5" text-anchor="middle">Interactive &#8594; browser idle</text>
+
+  <!-- phase divider ticks + labels -->
+  <line x1="260" y1="100" x2="260" y2="158" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="260" y="172" fill="#86efac" font-size="10.5" text-anchor="middle">first paint</text>
+  <line x1="430" y1="100" x2="430" y2="158" stroke="#a5b4fc" stroke-width="1.5"/>
+  <text x="430" y="172" fill="#a5b4fc" font-size="10.5" text-anchor="middle">interactive</text>
+
+  <!-- time axis arrow -->
+  <line x1="70" y1="150" x2="705" y2="150" stroke="#64748b" stroke-width="1.2" marker-end="url(#rbnq)"/>
+
+  <!-- rows -->
+  <!-- row 1: beforeInteractive -->
+  <rect x="40" y="192" width="680" height="46" rx="10" fill="#1e293b" stroke="#334155"/>
+  <rect x="40" y="192" width="6" height="46" rx="3" fill="#ef4444"/>
+  <text x="60" y="213" fill="#fca5a5" font-size="12.5" font-weight="700" font-family="ui-monospace, monospace">beforeInteractive</text>
+  <text x="60" y="230" fill="#94a3b8" font-size="11">Before hydration, injected into initial HTML — blocks first paint</text>
+  <line x1="430" y1="200" x2="430" y2="230" stroke="#334155"/>
+  <text x="444" y="213" fill="#cbd5e1" font-size="12">Consent managers, bot detection, polyfills.</text>
+  <text x="444" y="230" fill="#94a3b8" font-size="11">Rarely needed.</text>
+
+  <!-- row 2: afterInteractive -->
+  <rect x="40" y="246" width="680" height="46" rx="10" fill="#1e293b" stroke="#334155"/>
+  <rect x="40" y="246" width="6" height="46" rx="3" fill="#22c55e"/>
+  <text x="60" y="267" fill="#4ade80" font-size="12.5" font-weight="700" font-family="ui-monospace, monospace">afterInteractive</text>
+  <rect x="196" y="256" width="52" height="16" rx="8" fill="rgba(34,197,94,0.15)" stroke="#22c55e"/>
+  <text x="222" y="268" fill="#bbf7d0" font-size="10" text-anchor="middle" font-weight="700">default</text>
+  <text x="60" y="284" fill="#94a3b8" font-size="11">Right after the page hydrates — off the critical path</text>
+  <line x1="430" y1="254" x2="430" y2="284" stroke="#334155"/>
+  <text x="444" y="267" fill="#cbd5e1" font-size="12">Analytics, GA4, tag managers (GTM).</text>
+  <text x="444" y="284" fill="#94a3b8" font-size="11">The right home for most third-party JS.</text>
+
+  <!-- row 3: lazyOnload -->
+  <rect x="40" y="300" width="680" height="46" rx="10" fill="#1e293b" stroke="#334155"/>
+  <rect x="40" y="300" width="6" height="46" rx="3" fill="#818cf8"/>
+  <text x="60" y="321" fill="#c7d2fe" font-size="12.5" font-weight="700" font-family="ui-monospace, monospace">lazyOnload</text>
+  <text x="60" y="338" fill="#94a3b8" font-size="11">During browser idle, after everything else has loaded</text>
+  <line x1="430" y1="308" x2="430" y2="338" stroke="#334155"/>
+  <text x="444" y="321" fill="#cbd5e1" font-size="12">Chat widgets, social embeds, non-critical pixels.</text>
+  <text x="444" y="338" fill="#94a3b8" font-size="11">Anything the first screen never needs.</text>
+
+  <!-- row 4: worker -->
+  <rect x="40" y="354" width="680" height="46" rx="10" fill="#1e293b" stroke="#334155"/>
+  <rect x="40" y="354" width="6" height="46" rx="3" fill="#f59e0b"/>
+  <text x="60" y="375" fill="#fcd34d" font-size="12.5" font-weight="700" font-family="ui-monospace, monospace">worker</text>
+  <rect x="118" y="364" width="82" height="16" rx="8" fill="rgba(245,158,11,0.15)" stroke="#f59e0b"/>
+  <text x="159" y="376" fill="#fcd34d" font-size="10" text-anchor="middle" font-weight="700">experimental</text>
+  <text x="60" y="392" fill="#94a3b8" font-size="11">Off the main thread via Partytown — no UI-thread cost</text>
+  <line x1="430" y1="362" x2="430" y2="392" stroke="#334155"/>
+  <text x="444" y="375" fill="#cbd5e1" font-size="12">Heavy analytics you want fully off the UI thread.</text>
+  <text x="444" y="392" fill="#94a3b8" font-size="11">Opt-in; test before shipping.</text>
+
+  <!-- footer takeaway -->
+  <rect x="40" y="414" width="680" height="54" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="440" fill="#c7d2fe" font-size="13" font-weight="700">Default to afterInteractive.</text>
+  <text x="228" y="440" fill="#cbd5e1" font-size="12.5">beforeInteractive drags a script back into the critical path — use it only when</text>
+  <text x="60" y="459" fill="#cbd5e1" font-size="12.5">something truly must run before first paint. Analytics never does.</text>
+</svg>

@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Anatomy of a JSON-LD structured data block for an Article. Inside one script tag of type application slash ld plus json sits a JSON object. Two keys are mandatory in every block: @context points at the schema.org dictionary, and @type names what the page is, which decides the rich result you are eligible for. The headline is a required property, so omitting it costs eligibility, while image is a recommended property that unlocks a bigger thumbnail but is optional. Valid markup only makes you eligible; Google decides per query whether to actually show the rich result, and it can take days to weeks after a re-crawl. Always test each block in Google's Rich Results Test before shipping.">
+  <rect x="0" y="0" width="760" height="470" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Anatomy of a JSON-LD block</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">One &lt;script&gt; block. Two mandatory keys, then properties Google can turn into a rich result.</text>
+
+  <!-- code panel -->
+  <rect x="40" y="80" width="380" height="242" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="54" y="112" font-size="12.5" font-family="ui-monospace, monospace" fill="#64748b">&lt;script type="application/ld+json"&gt;</text>
+  <text x="54" y="134" font-size="12.5" font-family="ui-monospace, monospace" fill="#cbd5e1">{</text>
+  <text x="54" y="156" font-size="12.5" font-family="ui-monospace, monospace"><tspan fill="#a5b4fc">  "@context"</tspan><tspan fill="#cbd5e1">: "https://schema.org",</tspan></text>
+  <text x="54" y="178" font-size="12.5" font-family="ui-monospace, monospace"><tspan fill="#a5b4fc">  "@type"</tspan><tspan fill="#cbd5e1">: "Article",</tspan></text>
+  <text x="54" y="200" font-size="12.5" font-family="ui-monospace, monospace"><tspan fill="#4ade80">  "headline"</tspan><tspan fill="#cbd5e1">: "JSON-LD Guide",</tspan></text>
+  <text x="54" y="222" font-size="12.5" font-family="ui-monospace, monospace" fill="#cbd5e1">  "author": { "@type": "Person" },</text>
+  <text x="54" y="244" font-size="12.5" font-family="ui-monospace, monospace" fill="#cbd5e1">  "datePublished": "2026-03-20",</text>
+  <text x="54" y="266" font-size="12.5" font-family="ui-monospace, monospace"><tspan fill="#fcd34d">  "image"</tspan><tspan fill="#cbd5e1">: "https://.../img.jpg"</tspan></text>
+  <text x="54" y="288" font-size="12.5" font-family="ui-monospace, monospace" fill="#cbd5e1">}</text>
+  <text x="54" y="310" font-size="12.5" font-family="ui-monospace, monospace" fill="#64748b">&lt;/script&gt;</text>
+
+  <!-- connectors + annotations -->
+  <!-- @context -->
+  <circle cx="422" cy="152" r="3" fill="#818cf8"/>
+  <line x1="422" y1="152" x2="452" y2="152" stroke="#818cf8" stroke-width="1.5"/>
+  <text x="458" y="149" fill="#c7d2fe" font-size="11.5" font-weight="700">MANDATORY</text>
+  <text x="458" y="164" fill="#cbd5e1" font-size="11.5">the schema.org dictionary — a shared vocabulary</text>
+
+  <!-- @type -->
+  <circle cx="422" cy="174" r="3" fill="#818cf8"/>
+  <line x1="422" y1="174" x2="452" y2="174" stroke="#818cf8" stroke-width="1.5"/>
+  <text x="458" y="192" fill="#cbd5e1" font-size="11.5"><tspan fill="#c7d2fe" font-weight="700">MANDATORY </tspan>what the page IS → picks the rich result</text>
+
+  <!-- headline required -->
+  <circle cx="422" cy="200" r="3" fill="#4ade80"/>
+  <line x1="422" y1="200" x2="452" y2="222" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="458" y="221" fill="#4ade80" font-size="11.5" font-weight="700">REQUIRED property</text>
+  <text x="458" y="236" fill="#bbf7d0" font-size="11.5">miss it and you lose eligibility (a hard error)</text>
+
+  <!-- image recommended -->
+  <circle cx="422" cy="266" r="3" fill="#fcd34d"/>
+  <line x1="422" y1="266" x2="452" y2="266" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="458" y="263" fill="#fcd34d" font-size="11.5" font-weight="700">RECOMMENDED property</text>
+  <text x="458" y="278" fill="#fde68a" font-size="11.5">unlocks a bigger thumbnail — optional (a warning)</text>
+
+  <!-- footer -->
+  <rect x="40" y="344" width="680" height="106" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="372" fill="#c7d2fe" font-size="13" font-weight="700">Valid markup makes you eligible — it is not a switch you flip.</text>
+  <text x="60" y="394" fill="#cbd5e1" font-size="12.5">Google decides per query whether to render the rich result, and it can take days to weeks after the page is re-crawled.</text>
+  <text x="60" y="416" fill="#cbd5e1" font-size="12.5">Test every block in Google's Rich Results Test before shipping, and keep each &lt;script&gt; block valid on its own.</text>
+  <text x="60" y="438" fill="#94a3b8" font-size="12.5">Rich results don't guarantee rankings — they take more space and pull more clicks. That's the payoff.</text>
+</svg>

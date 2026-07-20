@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 515" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="How SEO Snapshot's score is weighted across seven on-page and technical categories that sum to 100 percent: Meta Tags 25 percent, Technical 20 percent, Performance 15 percent, Security 15 percent, Content 10 percent, Social 10 percent, and Accessibility 5 percent. Below the bars, a note explains the score cannot see backlinks, search intent, content quality, or E-E-A-T, which are the biggest ranking factors and sit outside the number.">
+  <rect x="0" y="0" width="760" height="515" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">What makes up an SEO score</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">100 checks across 7 weighted categories — the weights track how much each area can be found, understood, and trusted.</text>
+
+  <!-- Meta Tags 25% : bar 195 -> 595 -->
+  <text x="40" y="93" fill="#e2e8f0" font-size="12.5" font-weight="600">Meta Tags</text>
+  <text x="40" y="106" fill="#94a3b8" font-size="9.5">title, desc, canonical</text>
+  <rect x="195" y="82" width="400" height="26" rx="5" fill="#818cf8" fill-opacity="1"/>
+  <text x="605" y="99" fill="#c7d2fe" font-size="12.5" font-weight="700">25%</text>
+
+  <!-- Technical 20% : 320 -->
+  <text x="40" y="139" fill="#e2e8f0" font-size="12.5" font-weight="600">Technical</text>
+  <text x="40" y="152" fill="#94a3b8" font-size="9.5">robots, sitemap, indexing</text>
+  <rect x="195" y="128" width="320" height="26" rx="5" fill="#818cf8" fill-opacity="0.9"/>
+  <text x="525" y="145" fill="#c7d2fe" font-size="12.5" font-weight="700">20%</text>
+
+  <!-- Performance 15% : 240 -->
+  <text x="40" y="185" fill="#e2e8f0" font-size="12.5" font-weight="600">Performance</text>
+  <text x="40" y="198" fill="#94a3b8" font-size="9.5">speed, CWV, blocking JS</text>
+  <rect x="195" y="174" width="240" height="26" rx="5" fill="#818cf8" fill-opacity="0.78"/>
+  <text x="445" y="191" fill="#c7d2fe" font-size="12.5" font-weight="700">15%</text>
+
+  <!-- Security 15% : 240 -->
+  <text x="40" y="231" fill="#e2e8f0" font-size="12.5" font-weight="600">Security</text>
+  <text x="40" y="244" fill="#94a3b8" font-size="9.5">HTTPS, headers, mixed</text>
+  <rect x="195" y="220" width="240" height="26" rx="5" fill="#818cf8" fill-opacity="0.78"/>
+  <text x="445" y="237" fill="#c7d2fe" font-size="12.5" font-weight="700">15%</text>
+
+  <!-- Content 10% : 160 -->
+  <text x="40" y="277" fill="#e2e8f0" font-size="12.5" font-weight="600">Content</text>
+  <text x="40" y="290" fill="#94a3b8" font-size="9.5">words, keywords, reading</text>
+  <rect x="195" y="266" width="160" height="26" rx="5" fill="#818cf8" fill-opacity="0.62"/>
+  <text x="365" y="283" fill="#c7d2fe" font-size="12.5" font-weight="700">10%</text>
+
+  <!-- Social 10% : 160 -->
+  <text x="40" y="323" fill="#e2e8f0" font-size="12.5" font-weight="600">Social</text>
+  <text x="40" y="336" fill="#94a3b8" font-size="9.5">OG, Twitter, JSON-LD</text>
+  <rect x="195" y="312" width="160" height="26" rx="5" fill="#818cf8" fill-opacity="0.62"/>
+  <text x="365" y="329" fill="#c7d2fe" font-size="12.5" font-weight="700">10%</text>
+
+  <!-- Accessibility 5% : 80 -->
+  <text x="40" y="369" fill="#e2e8f0" font-size="12.5" font-weight="600">Accessibility</text>
+  <text x="40" y="382" fill="#94a3b8" font-size="9.5">alt text, labels, headings</text>
+  <rect x="195" y="358" width="80" height="26" rx="5" fill="#818cf8" fill-opacity="0.5"/>
+  <text x="285" y="375" fill="#c7d2fe" font-size="12.5" font-weight="700">5%</text>
+
+  <!-- footer: what the score can't see -->
+  <rect x="40" y="404" width="680" height="92" rx="12" fill="rgba(239,68,68,0.10)" stroke="#ef4444"/>
+  <text x="60" y="432" fill="#fca5a5" font-size="13" font-weight="700">Everything above is on-page. The score can't see the biggest ranking factors.</text>
+  <text x="60" y="456" fill="#fecaca" font-size="12.5">Backlinks &amp; authority, search intent, real content quality, and E-E-A-T all sit outside the number —</text>
+  <text x="60" y="476" fill="#fecaca" font-size="12.5">so a page can score 95 and still get no traffic. Chase the score to clear blockers, then chase traffic.</text>
+</svg>

@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 505" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Which hydration mismatches hurt SEO. Google indexes the server-rendered HTML. On the left, a cosmetic mismatch: the server ships real article content with a timestamp and the client re-renders with a slightly different timestamp, so Google still indexes real content and SEO is safe. On the right, a harmful mismatch: the server ships a loading skeleton with no real content and the client fills in the content only after hydration, so Google indexes an empty page and SEO suffers. The rule: keep your real content in the server-rendered HTML and limit mismatches to cosmetic things like timestamps.">
+  <defs>
+    <marker id="hy" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="505" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Which hydration mismatches actually hurt SEO</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Google indexes the server-rendered HTML. What's inside it decides everything.</text>
+
+  <!-- ===================== LEFT PANEL (safe) ===================== -->
+  <rect x="40" y="72" width="330" height="30" rx="10" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+  <text x="205" y="91" fill="#bbf7d0" font-size="12.5" font-weight="700" text-anchor="middle">Cosmetic mismatch — SEO safe</text>
+
+  <!-- indexed pill -->
+  <rect x="246" y="110" width="112" height="20" rx="10" fill="rgba(34,197,94,0.15)" stroke="#22c55e"/>
+  <text x="302" y="124" fill="#bbf7d0" font-size="9.5" text-anchor="middle">● Google indexes this</text>
+
+  <!-- server box -->
+  <rect x="54" y="120" width="302" height="104" rx="8" fill="#1e293b" stroke="#22c55e"/>
+  <text x="68" y="140" fill="#64748b" font-size="9.5" font-weight="700" letter-spacing="0.5">SERVER HTML</text>
+  <text x="68" y="162" fill="#e2e8f0" font-size="11" font-family="ui-monospace, monospace">&lt;h1&gt;Trail Shoe Review&lt;/h1&gt;</text>
+  <text x="68" y="180" fill="#cbd5e1" font-size="11" font-family="ui-monospace, monospace">&lt;p&gt;Full review copy…&lt;/p&gt;</text>
+  <rect x="64" y="190" width="180" height="22" rx="4" fill="rgba(245,158,11,0.15)"/>
+  <text x="72" y="205" fill="#fcd34d" font-size="11" font-family="ui-monospace, monospace">&lt;time&gt;12:00:00&lt;/time&gt;</text>
+
+  <!-- arrow -->
+  <line x1="205" y1="230" x2="205" y2="250" stroke="#818cf8" stroke-width="1.5" marker-end="url(#hy)"/>
+  <text x="215" y="245" fill="#94a3b8" font-size="10">timestamp changes</text>
+
+  <!-- client box -->
+  <rect x="54" y="256" width="302" height="104" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="68" y="276" fill="#64748b" font-size="9.5" font-weight="700" letter-spacing="0.5">CLIENT (after mount)</text>
+  <text x="68" y="298" fill="#e2e8f0" font-size="11" font-family="ui-monospace, monospace">&lt;h1&gt;Trail Shoe Review&lt;/h1&gt;</text>
+  <text x="68" y="316" fill="#cbd5e1" font-size="11" font-family="ui-monospace, monospace">&lt;p&gt;Full review copy…&lt;/p&gt;</text>
+  <rect x="64" y="326" width="180" height="22" rx="4" fill="rgba(245,158,11,0.15)"/>
+  <text x="72" y="341" fill="#fcd34d" font-size="11" font-family="ui-monospace, monospace">&lt;time&gt;12:00:01&lt;/time&gt;</text>
+
+  <!-- verdict -->
+  <rect x="40" y="370" width="330" height="42" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e"/>
+  <text x="56" y="388" fill="#bbf7d0" font-size="11.5" font-weight="700">Google indexed: real content ✓</text>
+  <text x="56" y="404" fill="#cbd5e1" font-size="11">Only the timestamp differed — nothing indexable lost.</text>
+
+  <!-- ===================== RIGHT PANEL (risk) ===================== -->
+  <rect x="390" y="72" width="330" height="30" rx="10" fill="rgba(239,68,68,0.10)" stroke="#ef4444"/>
+  <text x="555" y="91" fill="#fecaca" font-size="12.5" font-weight="700" text-anchor="middle">Skeleton mismatch — SEO risk</text>
+
+  <!-- indexed pill -->
+  <rect x="596" y="110" width="112" height="20" rx="10" fill="rgba(239,68,68,0.15)" stroke="#ef4444"/>
+  <text x="652" y="124" fill="#fecaca" font-size="9.5" text-anchor="middle">● Google indexes this</text>
+
+  <!-- server box (skeleton) -->
+  <rect x="404" y="120" width="302" height="104" rx="8" fill="#1e293b" stroke="#ef4444"/>
+  <text x="418" y="140" fill="#64748b" font-size="9.5" font-weight="700" letter-spacing="0.5">SERVER HTML</text>
+  <rect x="418" y="150" width="240" height="12" rx="6" fill="#334155"/>
+  <rect x="418" y="170" width="200" height="12" rx="6" fill="#334155"/>
+  <rect x="418" y="190" width="160" height="12" rx="6" fill="#334155"/>
+  <text x="418" y="216" fill="#64748b" font-size="10" font-style="italic">loading skeleton — no real content</text>
+
+  <!-- arrow -->
+  <line x1="555" y1="230" x2="555" y2="250" stroke="#818cf8" stroke-width="1.5" marker-end="url(#hy)"/>
+  <text x="565" y="245" fill="#94a3b8" font-size="10">content appears</text>
+
+  <!-- client box (real) -->
+  <rect x="404" y="256" width="302" height="104" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="418" y="276" fill="#64748b" font-size="9.5" font-weight="700" letter-spacing="0.5">CLIENT (after mount)</text>
+  <text x="418" y="298" fill="#e2e8f0" font-size="11" font-family="ui-monospace, monospace">&lt;h1&gt;Trail Shoe Review&lt;/h1&gt;</text>
+  <text x="418" y="316" fill="#cbd5e1" font-size="11" font-family="ui-monospace, monospace">&lt;p&gt;Full review copy…&lt;/p&gt;</text>
+  <text x="418" y="340" fill="#4ade80" font-size="10">real content — but too late to index</text>
+
+  <!-- verdict -->
+  <rect x="390" y="370" width="330" height="42" rx="10" fill="rgba(239,68,68,0.10)" stroke="#ef4444"/>
+  <text x="406" y="388" fill="#fecaca" font-size="11.5" font-weight="700">Google indexed: empty page ✗</text>
+  <text x="406" y="404" fill="#fecaca" font-size="11">The crawlable HTML held only the skeleton.</text>
+
+  <!-- ===================== FOOTER ===================== -->
+  <rect x="40" y="424" width="680" height="64" rx="12" fill="rgba(129,140,248,0.08)" stroke="#818cf8"/>
+  <text x="60" y="450" fill="#c7d2fe" font-size="13" font-weight="700">The rule: make sure your real content is in the server-rendered HTML.</text>
+  <text x="60" y="472" fill="#cbd5e1" font-size="12.5">Cosmetic mismatches are fine; a skeleton-vs-content mismatch lets Google index an empty page.</text>
+</svg>

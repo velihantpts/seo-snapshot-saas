@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 476" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="A timeline comparing three script-loading modes and when each lets the page paint. A plain blocking script pauses HTML parsing while it downloads and executes, pushing first paint the latest. An async script downloads in parallel, but its execution can still interrupt parsing, so paint timing is unpredictable. A defer script downloads in parallel and runs only after parsing finishes, so first paint happens earliest and is never blocked by the script.">
+  <rect x="0" y="0" width="760" height="476" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">How each script-loading mode moves first paint</text>
+  <text x="40" y="54" fill="#94a3b8" font-size="12.5">Same script, three attributes — watch when the parser stalls and when the page can paint.</text>
+
+  <!-- legend -->
+  <rect x="40" y="66" width="12" height="12" rx="2" fill="#818cf8"/><text x="58" y="76" fill="#94a3b8" font-size="11">HTML parsing</text>
+  <rect x="150" y="66" width="12" height="12" rx="2" fill="#334155"/><text x="168" y="76" fill="#94a3b8" font-size="11">download (parallel)</text>
+  <rect x="300" y="66" width="12" height="12" rx="2" fill="#f59e0b"/><text x="318" y="76" fill="#94a3b8" font-size="11">script executes</text>
+  <rect x="435" y="66" width="12" height="12" rx="2" fill="none" stroke="#ef4444" stroke-width="1.5"/><text x="453" y="76" fill="#94a3b8" font-size="11">parser blocked</text>
+  <line x1="565" y1="64" x2="565" y2="78" stroke="#22c55e" stroke-width="2"/><text x="574" y="76" fill="#94a3b8" font-size="11">first paint</text>
+
+  <text x="700" y="98" fill="#64748b" font-size="11" text-anchor="end">time →</text>
+
+  <!-- ROW 1: blocking -->
+  <text x="40" y="112" fill="#e2e8f0" font-size="12.5" font-weight="700" font-family="ui-monospace, monospace">&lt;script src&gt;</text>
+  <text x="40" y="128" fill="#94a3b8" font-size="11">no attribute · blocks</text>
+  <text x="535" y="90" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">paint (latest)</text>
+  <rect x="205" y="104" width="70" height="24" fill="#818cf8"/>
+  <text x="240" y="120" fill="#0b1120" font-size="11" text-anchor="middle">parse</text>
+  <rect x="275" y="104" width="95" height="24" fill="#334155" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="322" y="120" fill="#e2e8f0" font-size="10.5" text-anchor="middle">download</text>
+  <rect x="370" y="104" width="70" height="24" fill="#f59e0b" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="405" y="120" fill="#451a03" font-size="10.5" font-weight="700" text-anchor="middle">run</text>
+  <rect x="440" y="104" width="80" height="24" fill="#818cf8"/>
+  <text x="480" y="120" fill="#0b1120" font-size="11" text-anchor="middle">parse</text>
+  <line x1="535" y1="94" x2="535" y2="146" stroke="#22c55e" stroke-width="2"/>
+  <circle cx="535" cy="116" r="4" fill="#22c55e"/>
+  <line x1="275" y1="138" x2="440" y2="138" stroke="#ef4444" stroke-width="1.2"/>
+  <line x1="275" y1="134" x2="275" y2="142" stroke="#ef4444" stroke-width="1.2"/>
+  <line x1="440" y1="134" x2="440" y2="142" stroke="#ef4444" stroke-width="1.2"/>
+  <text x="357" y="151" fill="#fca5a5" font-size="10.5" text-anchor="middle">parser paused the whole time</text>
+
+  <!-- ROW 2: async -->
+  <text x="40" y="190" fill="#e2e8f0" font-size="12.5" font-weight="700" font-family="ui-monospace, monospace">async</text>
+  <text x="40" y="206" fill="#94a3b8" font-size="11">parallel · runs ASAP</text>
+  <text x="448" y="168" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">paint (unpredictable)</text>
+  <rect x="205" y="182" width="155" height="24" fill="#818cf8"/>
+  <text x="282" y="198" fill="#0b1120" font-size="11" text-anchor="middle">parse</text>
+  <rect x="360" y="182" width="70" height="24" fill="#f59e0b" stroke="#ef4444" stroke-width="1.5"/>
+  <text x="395" y="198" fill="#451a03" font-size="10.5" font-weight="700" text-anchor="middle">run</text>
+  <rect x="430" y="182" width="90" height="24" fill="#818cf8"/>
+  <text x="475" y="198" fill="#0b1120" font-size="11" text-anchor="middle">parse</text>
+  <rect x="225" y="212" width="120" height="9" rx="2" fill="#334155"/>
+  <text x="285" y="232" fill="#94a3b8" font-size="10.5" text-anchor="middle">downloads in parallel</text>
+  <line x1="448" y1="172" x2="448" y2="224" stroke="#22c55e" stroke-width="2"/>
+  <circle cx="448" cy="194" r="4" fill="#22c55e"/>
+  <text x="500" y="199" fill="#fca5a5" font-size="10.5">execution still cuts in</text>
+
+  <!-- ROW 3: defer -->
+  <text x="40" y="268" fill="#e2e8f0" font-size="12.5" font-weight="700" font-family="ui-monospace, monospace">defer</text>
+  <text x="40" y="284" fill="#94a3b8" font-size="11">parallel · runs after parse</text>
+  <text x="430" y="246" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">paint (earliest)</text>
+  <rect x="205" y="260" width="315" height="24" fill="#818cf8"/>
+  <text x="362" y="276" fill="#0b1120" font-size="11" text-anchor="middle">parse (never interrupted)</text>
+  <rect x="520" y="260" width="70" height="24" fill="#f59e0b"/>
+  <text x="555" y="276" fill="#451a03" font-size="10.5" font-weight="700" text-anchor="middle">run</text>
+  <rect x="225" y="290" width="150" height="9" rx="2" fill="#334155"/>
+  <text x="300" y="310" fill="#94a3b8" font-size="10.5" text-anchor="middle">downloads in parallel</text>
+  <line x1="430" y1="250" x2="430" y2="302" stroke="#22c55e" stroke-width="2"/>
+  <circle cx="430" cy="272" r="4" fill="#22c55e"/>
+  <text x="596" y="276" fill="#86efac" font-size="10.5">runs after paint</text>
+
+  <!-- footer -->
+  <rect x="40" y="330" width="680" height="120" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="358" fill="#c7d2fe" font-size="13" font-weight="700">Reach for defer by default.</text>
+  <text x="60" y="380" fill="#cbd5e1" font-size="12.5">defer keeps parsing uninterrupted and runs your script after the DOM is built — earliest paint, execution order preserved.</text>
+  <text x="60" y="400" fill="#cbd5e1" font-size="12.5">async downloads in parallel too, but executes the moment it lands, so it can interrupt paint and runs out of order — use it only for</text>
+  <text x="60" y="416" fill="#cbd5e1" font-size="12.5">independent tags like analytics. type="module" is deferred implicitly, so it behaves like the bottom row.</text>
+  <text x="60" y="438" fill="#cbd5e1" font-size="12.5">CSS has no defer: inline the critical above-the-fold styles, then load the rest with media="print" onload="this.media='all'".</text>
+</svg>

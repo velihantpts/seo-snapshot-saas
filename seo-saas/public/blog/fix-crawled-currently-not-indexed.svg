@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 540" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="A diagnostic decision tree for 'Crawled — currently not indexed'. Google fetched the page and chose not to index it. Step one is to view the crawled HTML in URL Inspection and ask whether your body text is in the raw fetched HTML. If NO, it is a client-side-rendering trap: the app ships an empty div shell plus a JS bundle, so fix it by getting content into the initial HTML with a Server Component, getServerSideProps, or static generation, then verify with curl. If YES, the content is present and it is a quality or priority judgment: thin or templated content needs real depth plus internal links; near-duplicates need a 301 or canonical to the winner; orphan pages need internal links from indexed pages; and a new or low-authority domain is often fine and just needs four to eight weeks. After any real fix, use Request Indexing once, then wait.">
+  <defs>
+    <marker id="cni-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="540" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Diagnosing "Crawled — currently not indexed"</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">One check splits a rendering bug from a quality judgment. Start here before you rewrite anything.</text>
+
+  <!-- start -->
+  <rect x="270" y="72" width="220" height="46" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="380" y="93" fill="#e2e8f0" font-size="13" font-weight="700" text-anchor="middle">Crawled — currently not indexed</text>
+  <text x="380" y="110" fill="#94a3b8" font-size="11" text-anchor="middle">Google read the page, then said no</text>
+
+  <line x1="380" y1="118" x2="380" y2="140" stroke="#818cf8" stroke-width="1.5" marker-end="url(#cni-arrow)"/>
+
+  <!-- decision -->
+  <rect x="190" y="140" width="380" height="52" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="380" y="162" fill="#c7d2fe" font-size="12.5" font-weight="700" text-anchor="middle">Step 1 · URL Inspection → View crawled page → HTML</text>
+  <text x="380" y="181" fill="#cbd5e1" font-size="12" text-anchor="middle">Is your article body text in the raw fetched HTML?</text>
+
+  <!-- branch arrows -->
+  <line x1="300" y1="192" x2="205" y2="214" stroke="#818cf8" stroke-width="1.5" marker-end="url(#cni-arrow)"/>
+  <line x1="460" y1="192" x2="555" y2="214" stroke="#818cf8" stroke-width="1.5" marker-end="url(#cni-arrow)"/>
+  <text x="238" y="209" fill="#fca5a5" font-size="12" font-weight="700">NO</text>
+  <text x="512" y="209" fill="#86efac" font-size="12" font-weight="700">YES</text>
+
+  <!-- left column: rendering problem -->
+  <rect x="40" y="216" width="330" height="248" rx="12" fill="rgba(148,163,184,0.05)" stroke="#334155"/>
+  <text x="56" y="238" fill="#fca5a5" font-size="12.5" font-weight="700">NO · content missing from HTML</text>
+
+  <rect x="56" y="250" width="298" height="74" rx="8" fill="rgba(239,68,68,0.10)" stroke="#ef4444"/>
+  <text x="70" y="272" fill="#fca5a5" font-size="12.5" font-weight="700">CSR trap</text>
+  <text x="70" y="290" fill="#fecaca" font-size="11.5" font-family="ui-monospace, monospace">App ships &lt;div id="root"&gt;&lt;/div&gt; + JS bundle.</text>
+  <text x="70" y="308" fill="#fecaca" font-size="11.5">Google judged the empty shell — no content.</text>
+
+  <line x1="205" y1="324" x2="205" y2="344" stroke="#818cf8" stroke-width="1.5" marker-end="url(#cni-arrow)"/>
+
+  <rect x="56" y="344" width="298" height="66" rx="8" fill="rgba(34,197,94,0.10)" stroke="#22c55e"/>
+  <text x="70" y="366" fill="#4ade80" font-size="12.5" font-weight="700">Fix — put content in the initial HTML</text>
+  <text x="70" y="385" fill="#bbf7d0" font-size="11.5">Server Component / getServerSideProps / SSG</text>
+  <text x="70" y="401" fill="#bbf7d0" font-size="11.5">Data comes from the server, not a client useEffect.</text>
+
+  <text x="56" y="438" fill="#94a3b8" font-size="11" font-family="ui-monospace, monospace">verify: curl -sL URL | grep "headline"</text>
+  <text x="56" y="454" fill="#94a3b8" font-size="11">A match means the body is server-sent. No match = CSR.</text>
+
+  <!-- right column: quality / priority judgment -->
+  <rect x="390" y="216" width="330" height="248" rx="12" fill="rgba(148,163,184,0.05)" stroke="#334155"/>
+  <text x="406" y="238" fill="#86efac" font-size="12.5" font-weight="700">YES · content present → quality / priority call</text>
+
+  <!-- row 1 -->
+  <rect x="406" y="248" width="298" height="48" rx="6" fill="#1e293b" stroke="#334155"/>
+  <rect x="406" y="248" width="4" height="48" fill="#f59e0b"/>
+  <text x="418" y="268" fill="#e2e8f0" font-size="12" font-weight="700">Thin / templated content</text>
+  <text x="418" y="286" fill="#4ade80" font-size="11.5">→ add real depth + internal links from indexed pages</text>
+
+  <!-- row 2 -->
+  <rect x="406" y="300" width="298" height="48" rx="6" fill="#1e293b" stroke="#334155"/>
+  <rect x="406" y="300" width="4" height="48" fill="#f59e0b"/>
+  <text x="418" y="320" fill="#e2e8f0" font-size="12" font-weight="700">Near-duplicates / URL variants</text>
+  <text x="418" y="338" fill="#4ade80" font-size="11.5">→ 301 or rel=canonical to the one winner (not both)</text>
+
+  <!-- row 3 -->
+  <rect x="406" y="352" width="298" height="48" rx="6" fill="#1e293b" stroke="#334155"/>
+  <rect x="406" y="352" width="4" height="48" fill="#f59e0b"/>
+  <text x="418" y="372" fill="#e2e8f0" font-size="12" font-weight="700">Orphan page (no internal links)</text>
+  <text x="418" y="390" fill="#4ade80" font-size="11.5">→ link it from relevant, already-indexed pages</text>
+
+  <!-- row 4 -->
+  <rect x="406" y="404" width="298" height="48" rx="6" fill="#1e293b" stroke="#334155"/>
+  <rect x="406" y="404" width="4" height="48" fill="#22c55e"/>
+  <text x="418" y="424" fill="#e2e8f0" font-size="12" font-weight="700">New / low-authority domain</text>
+  <text x="418" y="442" fill="#4ade80" font-size="11.5">→ page may be fine; revisit in 4–8 weeks</text>
+
+  <!-- footer -->
+  <rect x="40" y="480" width="680" height="46" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="503" fill="#c7d2fe" font-size="12.5" font-weight="700">After a real fix: URL Inspection → Request Indexing once, then wait.</text>
+  <text x="60" y="520" fill="#cbd5e1" font-size="11.5">Repeated requests on an unchanged page do nothing — re-crawl and re-evaluation take days to several weeks.</text>
+</svg>

@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Decision tree for the Indexed, though blocked by robots.txt status. Start by asking whether the URL should be in Google. If yes, the block is the mistake: remove the Disallow rule so Google can crawl and index it with a real title and description. If no, the fix is counterintuitive: first remove the Disallow to allow crawling, then add a noindex meta tag or X-Robots-Tag header, then wait for recrawl so the page drops out; use the Removals tool if urgent. The rule: robots.txt means do not crawl, noindex means do not index, and blocking the crawl prevents Google from ever seeing the noindex.">
+  <defs>
+    <marker id="rb1" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="520" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">"Indexed, though blocked by robots.txt": which fix?</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">robots.txt controls crawling, not indexing — so the right fix depends on one question.</text>
+
+  <!-- start box -->
+  <rect x="230" y="74" width="300" height="46" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="380" y="94" fill="#e2e8f0" font-size="12.5" font-weight="700" text-anchor="middle" font-family="ui-monospace, monospace">Indexed, though blocked by robots.txt</text>
+  <text x="380" y="111" fill="#94a3b8" font-size="11" text-anchor="middle">an indexed URL Google was never allowed to fetch</text>
+
+  <line x1="380" y1="120" x2="380" y2="140" stroke="#818cf8" stroke-width="1.5" marker-end="url(#rb1)"/>
+
+  <!-- question -->
+  <rect x="250" y="142" width="260" height="42" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="380" y="168" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">Should this URL be in Google?</text>
+
+  <!-- branch arrows -->
+  <line x1="320" y1="184" x2="200" y2="216" stroke="#818cf8" stroke-width="1.5" marker-end="url(#rb1)"/>
+  <line x1="440" y1="184" x2="560" y2="216" stroke="#818cf8" stroke-width="1.5" marker-end="url(#rb1)"/>
+  <text x="238" y="204" fill="#4ade80" font-size="12" font-weight="700" text-anchor="middle">YES</text>
+  <text x="522" y="204" fill="#fcd34d" font-size="12" font-weight="700" text-anchor="middle">NO</text>
+
+  <!-- LEFT panel: keep it -->
+  <rect x="45" y="220" width="310" height="180" rx="12" fill="rgba(34,197,94,0.07)" stroke="#22c55e"/>
+  <text x="64" y="248" fill="#4ade80" font-size="13.5" font-weight="700">It belongs in Google</text>
+  <text x="64" y="268" fill="#cbd5e1" font-size="12">The block is the mistake — just lift it.</text>
+
+  <circle cx="74" cy="294" r="9" fill="#22c55e"/><text x="74" y="298" fill="#052e16" font-size="11" font-weight="700" text-anchor="middle">1</text>
+  <text x="92" y="291" fill="#e2e8f0" font-size="12">Remove the <tspan font-family="ui-monospace, monospace" fill="#bbf7d0">Disallow</tspan> rule for</text>
+  <text x="92" y="307" fill="#e2e8f0" font-size="12">that path in robots.txt.</text>
+
+  <text x="64" y="338" fill="#94a3b8" font-size="11.5">Then Google crawls and indexes it</text>
+  <text x="64" y="355" fill="#94a3b8" font-size="11.5">properly, with a real title and</text>
+  <text x="64" y="372" fill="#94a3b8" font-size="11.5">description instead of a bare URL.</text>
+
+  <!-- RIGHT panel: remove it -->
+  <rect x="405" y="220" width="310" height="180" rx="12" fill="rgba(245,158,11,0.07)" stroke="#f59e0b"/>
+  <text x="424" y="248" fill="#fcd34d" font-size="13.5" font-weight="700">It should not be in Google</text>
+  <text x="424" y="268" fill="#cbd5e1" font-size="12">Counterintuitive: allow the crawl first.</text>
+
+  <circle cx="434" cy="290" r="9" fill="#f59e0b"/><text x="434" y="294" fill="#451a03" font-size="11" font-weight="700" text-anchor="middle">1</text>
+  <text x="452" y="294" fill="#e2e8f0" font-size="12">Remove the <tspan font-family="ui-monospace, monospace" fill="#fcd34d">Disallow</tspan> (allow crawl)</text>
+
+  <circle cx="434" cy="318" r="9" fill="#f59e0b"/><text x="434" y="322" fill="#451a03" font-size="11" font-weight="700" text-anchor="middle">2</text>
+  <text x="452" y="322" fill="#e2e8f0" font-size="12">Add <tspan font-family="ui-monospace, monospace" fill="#fcd34d">noindex</tspan> — meta tag or header</text>
+
+  <circle cx="434" cy="346" r="9" fill="#f59e0b"/><text x="434" y="350" fill="#451a03" font-size="11" font-weight="700" text-anchor="middle">3</text>
+  <text x="452" y="350" fill="#e2e8f0" font-size="12">Wait for recrawl — the URL drops out</text>
+
+  <text x="424" y="382" fill="#94a3b8" font-size="11.5">Urgent? Also submit Search Console's Removals tool.</text>
+
+  <!-- footer rule -->
+  <rect x="40" y="418" width="680" height="82" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="446" fill="#c7d2fe" font-size="13" font-weight="700">The rule: <tspan font-family="ui-monospace, monospace">robots.txt</tspan> = "don't crawl."   <tspan font-family="ui-monospace, monospace">noindex</tspan> = "don't index."</text>
+  <text x="60" y="468" fill="#cbd5e1" font-size="12.5">Blocking the crawl actively prevents Google from ever seeing your <tspan font-family="ui-monospace, monospace" fill="#e2e8f0">noindex</tspan>, which is why the</text>
+  <text x="60" y="486" fill="#cbd5e1" font-size="12.5">block must come off first. For a page that must stay private, use HTTP authentication instead.</text>
+</svg>

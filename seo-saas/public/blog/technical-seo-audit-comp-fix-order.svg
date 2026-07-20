@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 462" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="How to prioritize what a technical SEO audit finds, in fix-order top to bottom. Tier one: indexability and crawl blockers such as robots.txt, noindex, and canonicals — binary issues where the page either ranks or it doesn't, so nothing else matters until they are fixed. Tier two: Core Web Vitals and HTTPS, direct ranking factors that affect every page at once, so the payoff is high. Tier three: structured data and international hreflang, which refine how you appear and compound on top of pages that are already indexed and fast. Work top-down: a perfect schema on a noindex page is wasted effort.">
+  <defs>
+    <marker id="tsa" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="462" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Fix an audit in this order, not the order you found it</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">An audit surfaces dozens of issues at once. Work top-down — later tiers only pay off on pages that already clear the earlier ones.</text>
+
+  <!-- fix-order arrow -->
+  <line x1="80" y1="104" x2="80" y2="378" stroke="#818cf8" stroke-width="2" marker-end="url(#tsa)"/>
+  <text x="60" y="240" fill="#818cf8" font-size="11" font-weight="600" text-anchor="middle" transform="rotate(-90 60 240)">fix order</text>
+
+  <!-- Tier 1 -->
+  <rect x="110" y="90" width="610" height="88" rx="10" fill="#1e293b" stroke="#ef4444"/>
+  <circle cx="152" cy="134" r="17" fill="rgba(239,68,68,0.15)" stroke="#ef4444"/>
+  <text x="152" y="140" fill="#fca5a5" font-size="15" font-weight="700" text-anchor="middle">1</text>
+  <text x="188" y="122" fill="#e2e8f0" font-size="14" font-weight="700">Indexability &amp; crawl blockers</text>
+  <text x="188" y="144" fill="#cbd5e1" font-size="12">robots.txt, stray noindex, wrong canonical. Binary — the page ranks or it doesn't,</text>
+  <text x="188" y="163" fill="#cbd5e1" font-size="12">so nothing else matters until these are fixed. (Steps 1–2)</text>
+  <rect x="600" y="102" width="104" height="26" rx="8" fill="rgba(148,163,184,0.10)" stroke="#475569"/>
+  <text x="652" y="119" fill="#94a3b8" font-size="11" text-anchor="middle">first</text>
+
+  <!-- Tier 2 -->
+  <rect x="110" y="192" width="610" height="88" rx="10" fill="#1e293b" stroke="#f59e0b"/>
+  <circle cx="152" cy="236" r="17" fill="rgba(245,158,11,0.15)" stroke="#f59e0b"/>
+  <text x="152" y="242" fill="#fcd34d" font-size="15" font-weight="700" text-anchor="middle">2</text>
+  <text x="188" y="224" fill="#e2e8f0" font-size="14" font-weight="700">Core Web Vitals &amp; HTTPS</text>
+  <text x="188" y="246" fill="#cbd5e1" font-size="12">Direct ranking factors that affect every page at once, so the payoff is high.</text>
+  <text x="188" y="265" fill="#cbd5e1" font-size="12">Reproduce CrUX field data, then chase the mixed-content and header wins. (Steps 4, 6)</text>
+  <rect x="600" y="204" width="104" height="26" rx="8" fill="rgba(148,163,184,0.10)" stroke="#475569"/>
+  <text x="652" y="221" fill="#94a3b8" font-size="11" text-anchor="middle">next</text>
+
+  <!-- Tier 3 -->
+  <rect x="110" y="294" width="610" height="88" rx="10" fill="#1e293b" stroke="#22c55e"/>
+  <circle cx="152" cy="338" r="17" fill="rgba(34,197,94,0.15)" stroke="#22c55e"/>
+  <text x="152" y="344" fill="#bbf7d0" font-size="15" font-weight="700" text-anchor="middle">3</text>
+  <text x="188" y="326" fill="#e2e8f0" font-size="14" font-weight="700">Structured data &amp; international</text>
+  <text x="188" y="348" fill="#cbd5e1" font-size="12">Schema &amp; hreflang refine how you appear and who sees which version.</text>
+  <text x="188" y="367" fill="#cbd5e1" font-size="12">They compound on top of indexed, fast pages — not instead of them. (Steps 7, 10)</text>
+  <rect x="600" y="306" width="104" height="26" rx="8" fill="rgba(148,163,184,0.10)" stroke="#475569"/>
+  <text x="652" y="323" fill="#94a3b8" font-size="11" text-anchor="middle">last</text>
+
+  <!-- footer -->
+  <rect x="40" y="398" width="680" height="48" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="428" fill="#c7d2fe" font-size="13" font-weight="700">Work top-down. A perfect schema on a noindex page is wasted effort.</text>
+</svg>

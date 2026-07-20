@@ -1,0 +1,56 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="How Time to First Byte was distributed across 4,392 of the web's top sites. 22.7 percent responded in under 200 milliseconds, 29.4 percent between 200 and 500 milliseconds, 26.4 percent between 500 milliseconds and 1 second, and 21.5 percent took over 1 second. The median TTFB was 474 milliseconds, the 75th percentile 898 milliseconds, the 90th percentile 1,570 milliseconds, and the 95th percentile 2,108 milliseconds. Over half the sample was slower than 500 milliseconds and one in twenty took more than two seconds to start responding.">
+  <rect x="0" y="0" width="760" height="470" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">How fast the web's top sites really respond</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Time to First Byte across 4,392 domains that answered cleanly. Bar widths are proportional to share.</text>
+
+  <!-- range labels above bar -->
+  <text x="117" y="100" fill="#94a3b8" font-size="11.5" text-anchor="middle">&lt; 200ms</text>
+  <text x="294" y="100" fill="#94a3b8" font-size="11.5" text-anchor="middle">200–500ms</text>
+  <text x="484" y="100" fill="#94a3b8" font-size="11.5" text-anchor="middle">500ms–1s</text>
+  <text x="647" y="100" fill="#94a3b8" font-size="11.5" text-anchor="middle">&gt; 1s</text>
+
+  <!-- stacked distribution bar -->
+  <rect x="40" y="110" width="154" height="54" rx="6" fill="#22c55e" fill-opacity="0.9"/>
+  <rect x="194" y="110" width="200" height="54" fill="#4ade80" fill-opacity="0.55"/>
+  <rect x="394" y="110" width="180" height="54" fill="#f59e0b" fill-opacity="0.9"/>
+  <rect x="574" y="110" width="146" height="54" rx="6" fill="#ef4444" fill-opacity="0.9"/>
+
+  <text x="117" y="139" fill="#052e16" font-size="16" font-weight="700" text-anchor="middle">22.7%</text>
+  <text x="117" y="156" fill="#052e16" font-size="11" text-anchor="middle">genuinely fast</text>
+  <text x="294" y="139" fill="#052e16" font-size="16" font-weight="700" text-anchor="middle">29.4%</text>
+  <text x="294" y="156" fill="#052e16" font-size="11" text-anchor="middle">fine</text>
+  <text x="484" y="139" fill="#451a03" font-size="16" font-weight="700" text-anchor="middle">26.4%</text>
+  <text x="484" y="156" fill="#451a03" font-size="11" text-anchor="middle">noticeable</text>
+  <text x="647" y="139" fill="#450a0a" font-size="16" font-weight="700" text-anchor="middle">21.5%</text>
+  <text x="647" y="156" fill="#450a0a" font-size="11" text-anchor="middle">slow</text>
+
+  <!-- split marker: over half is 500ms+ -->
+  <line x1="394" y1="110" x2="394" y2="188" stroke="#f8fafc" stroke-width="1.5" stroke-dasharray="4 3"/>
+  <text x="394" y="204" fill="#e2e8f0" font-size="11.5" text-anchor="middle">47.9% of top sites are already slower than 500ms →</text>
+
+  <!-- percentile tiles -->
+  <text x="40" y="248" fill="#cbd5e1" font-size="13" font-weight="600">Where the response times land</text>
+
+  <rect x="40" y="262" width="155" height="72" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="117" y="286" fill="#94a3b8" font-size="11.5" text-anchor="middle">Median (p50)</text>
+  <text x="117" y="316" fill="#a5b4fc" font-size="20" font-weight="700" text-anchor="middle">474 ms</text>
+
+  <rect x="215" y="262" width="155" height="72" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="292" y="286" fill="#94a3b8" font-size="11.5" text-anchor="middle">75th percentile</text>
+  <text x="292" y="316" fill="#fcd34d" font-size="20" font-weight="700" text-anchor="middle">898 ms</text>
+
+  <rect x="390" y="262" width="155" height="72" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="467" y="286" fill="#94a3b8" font-size="11.5" text-anchor="middle">90th percentile</text>
+  <text x="467" y="316" fill="#fca5a5" font-size="20" font-weight="700" text-anchor="middle">1,570 ms</text>
+
+  <rect x="565" y="262" width="155" height="72" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="642" y="286" fill="#94a3b8" font-size="11.5" text-anchor="middle">95th percentile</text>
+  <text x="642" y="316" fill="#fca5a5" font-size="20" font-weight="700" text-anchor="middle">2,108 ms</text>
+
+  <!-- footer -->
+  <rect x="40" y="352" width="680" height="98" rx="12" fill="rgba(129,140,248,0.08)" stroke="#334155"/>
+  <text x="60" y="380" fill="#c7d2fe" font-size="13" font-weight="700">The median site is fine — the long tail is the story.</text>
+  <text x="60" y="404" fill="#cbd5e1" font-size="12.5">Half of these top domains clear 474ms, but 1 in 5 needs over a second and 1 in 20 takes 2+ seconds just to start</text>
+  <text x="60" y="422" fill="#cbd5e1" font-size="12.5">responding. A healthy TTFB target is under 800ms — the p75 site (898ms) already misses it, hurting Core Web Vitals</text>
+  <text x="60" y="440" fill="#cbd5e1" font-size="12.5">(LCP), crawl budget, and every rendering step that can only begin once the first byte arrives.</text>
+</svg>

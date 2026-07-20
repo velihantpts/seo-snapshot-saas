@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 520" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="A map of the 15 speed techniques grouped by the metric each one moves. Server-side techniques 1 to 5 (Brotli and gzip, Cache-Control, CDN, HTTP/2 and 3, origin caching) lower TTFB, which sets the ceiling for LCP. Frontend techniques 6 to 10 (lazy-loading, AVIF and WebP, deferring JavaScript, critical CSS, preconnect) move LCP, INP, and CLS. Content and layout techniques 11 to 15 (font-display swap, removing unused code, small DOM, reserved space, cutting third-party scripts) mostly fix CLS. Fix in impact order, not 1 to 15: first server caching and compression, then the LCP image, then JavaScript.">
+  <defs>
+    <marker id="spd" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="520" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Match the fix to the metric it moves</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">The 15 techniques fall into three groups, each aimed at a different part of the score.</text>
+
+  <!-- Band 1: Server-side -->
+  <rect x="40" y="80" width="380" height="92" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="58" y="110" fill="#e2e8f0" font-size="13" font-weight="700">Server-side &#183; Techniques 1&#8211;5</text>
+  <text x="58" y="132" fill="#94a3b8" font-size="11.5">Brotli + gzip &#183; Cache-Control &#183; CDN</text>
+  <text x="58" y="152" fill="#94a3b8" font-size="11.5">HTTP/2&#183;3 &#183; cache the origin render</text>
+  <line x1="420" y1="126" x2="466" y2="126" stroke="#818cf8" stroke-width="1.5" marker-end="url(#spd)"/>
+  <rect x="478" y="110" width="96" height="32" rx="8" fill="rgba(129,140,248,0.15)" stroke="#818cf8"/>
+  <text x="526" y="130" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">TTFB</text>
+  <text x="586" y="130" fill="#a5b4fc" font-size="11.5">&#8594; sets your LCP floor</text>
+
+  <!-- Band 2: Frontend -->
+  <rect x="40" y="190" width="380" height="92" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="58" y="220" fill="#e2e8f0" font-size="13" font-weight="700">Frontend &#183; Techniques 6&#8211;10</text>
+  <text x="58" y="242" fill="#94a3b8" font-size="11.5">Lazy-load (never the hero) &#183; AVIF/WebP</text>
+  <text x="58" y="262" fill="#94a3b8" font-size="11.5">defer/async JS &#183; critical CSS &#183; preconnect</text>
+  <line x1="420" y1="236" x2="466" y2="236" stroke="#818cf8" stroke-width="1.5" marker-end="url(#spd)"/>
+  <rect x="478" y="220" width="72" height="32" rx="8" fill="rgba(129,140,248,0.15)" stroke="#818cf8"/>
+  <text x="514" y="240" fill="#c7d2fe" font-size="12.5" font-weight="700" text-anchor="middle">LCP</text>
+  <rect x="558" y="220" width="72" height="32" rx="8" fill="rgba(129,140,248,0.15)" stroke="#818cf8"/>
+  <text x="594" y="240" fill="#c7d2fe" font-size="12.5" font-weight="700" text-anchor="middle">INP</text>
+  <rect x="638" y="220" width="72" height="32" rx="8" fill="rgba(129,140,248,0.15)" stroke="#818cf8"/>
+  <text x="674" y="240" fill="#c7d2fe" font-size="12.5" font-weight="700" text-anchor="middle">CLS</text>
+
+  <!-- Band 3: Content & Layout -->
+  <rect x="40" y="300" width="380" height="92" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="58" y="330" fill="#e2e8f0" font-size="13" font-weight="700">Content &amp; Layout &#183; Techniques 11&#8211;15</text>
+  <text x="58" y="352" fill="#94a3b8" font-size="11.5">font-display: swap &#183; remove unused CSS/JS</text>
+  <text x="58" y="372" fill="#94a3b8" font-size="11.5">small DOM &#183; reserve space &#183; cut 3rd-party JS</text>
+  <line x1="420" y1="346" x2="466" y2="346" stroke="#818cf8" stroke-width="1.5" marker-end="url(#spd)"/>
+  <rect x="478" y="330" width="96" height="32" rx="8" fill="rgba(129,140,248,0.15)" stroke="#818cf8"/>
+  <text x="526" y="350" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">CLS</text>
+  <text x="586" y="350" fill="#a5b4fc" font-size="11.5">+ trims page weight</text>
+
+  <!-- Footer: priority order -->
+  <rect x="40" y="410" width="680" height="96" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="436" fill="#c7d2fe" font-size="13" font-weight="700">Fix in impact order, not 1 &#8594; 15:</text>
+  <text x="60" y="460" fill="#cbd5e1" font-size="12.5">1 &#183; Server caching + compression &#8212; hits every page and lowers the TTFB floor under everything else</text>
+  <text x="60" y="480" fill="#cbd5e1" font-size="12.5">2 &#183; The LCP image &#8212; right format, sized, eager, fetchpriority="high"; one element, huge movement</text>
+  <text x="60" y="500" fill="#cbd5e1" font-size="12.5">3 &#183; JavaScript &#8212; defer/async, then trim; this is the INP fix and the slowest to do well, so bank the cheap wins first</text>
+</svg>

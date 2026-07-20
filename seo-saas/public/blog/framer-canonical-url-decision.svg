@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 480" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="A decision flow for canonical URLs in Framer. Framer auto-adds a self-referencing canonical to every published page. Ask: do two or more URLs serve the same or near-duplicate content? If no, leave the default because the self-canonical is already correct. If yes, add a custom canonical pointing at the original URL you want Google to rank, and for CMS content set it at the template level. A correct tag uses an absolute https URL and appears exactly once per page.">
+  <defs>
+    <marker id="fc" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="480" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Canonical URLs in Framer: when to override the default</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">The built-in canonical is right for most pages — only override it to consolidate duplicates.</text>
+
+  <!-- top: default state -->
+  <rect x="230" y="76" width="300" height="46" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="380" y="98" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">Framer auto-adds a self-referencing</text>
+  <text x="380" y="115" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">canonical to every published page</text>
+  <line x1="380" y1="122" x2="380" y2="146" stroke="#818cf8" stroke-width="1.5" marker-end="url(#fc)"/>
+
+  <!-- decision -->
+  <rect x="205" y="148" width="350" height="52" rx="10" fill="rgba(129,140,248,0.12)" stroke="#818cf8"/>
+  <text x="380" y="172" fill="#c7d2fe" font-size="12.5" font-weight="700" text-anchor="middle">Do two or more URLs serve the same or</text>
+  <text x="380" y="190" fill="#c7d2fe" font-size="12.5" font-weight="700" text-anchor="middle">near-duplicate content?</text>
+
+  <!-- branch arrows -->
+  <line x1="300" y1="200" x2="205" y2="244" stroke="#818cf8" stroke-width="1.5" marker-end="url(#fc)"/>
+  <line x1="460" y1="200" x2="555" y2="244" stroke="#818cf8" stroke-width="1.5" marker-end="url(#fc)"/>
+  <text x="236" y="224" fill="#4ade80" font-size="12" font-weight="700" text-anchor="middle">No</text>
+  <text x="524" y="224" fill="#a5b4fc" font-size="12" font-weight="700" text-anchor="middle">Yes</text>
+
+  <!-- No box -->
+  <rect x="55" y="246" width="300" height="70" rx="10" fill="rgba(34,197,94,0.10)" stroke="#22c55e"/>
+  <text x="205" y="276" fill="#bbf7d0" font-size="13" font-weight="700" text-anchor="middle">Leave the default</text>
+  <text x="205" y="298" fill="#cbd5e1" font-size="12" text-anchor="middle">The self-canonical is already correct —</text>
+  <text x="205" y="313" fill="#cbd5e1" font-size="12" text-anchor="middle">nothing to change.</text>
+
+  <!-- Yes box -->
+  <rect x="405" y="246" width="300" height="70" rx="10" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="555" y="270" fill="#c7d2fe" font-size="13" font-weight="700" text-anchor="middle">Add a custom canonical</text>
+  <text x="555" y="290" fill="#cbd5e1" font-size="12" text-anchor="middle">Point it at the original URL you want to keep.</text>
+  <text x="555" y="307" fill="#94a3b8" font-size="11.5" text-anchor="middle">CMS collection? Set it at the template level.</text>
+
+  <!-- footer: the correct tag -->
+  <rect x="40" y="348" width="680" height="116" rx="12" fill="rgba(129,140,248,0.08)" stroke="#334155"/>
+  <text x="60" y="374" fill="#c7d2fe" font-size="13" font-weight="700">One correct canonical tag — confirm it in the published page source:</text>
+  <rect x="60" y="384" width="640" height="30" rx="6" fill="#0b1120" stroke="#334155"/>
+  <text x="72" y="404" fill="#a5b4fc" font-size="12" font-family="ui-monospace, monospace">&lt;link rel="canonical" href="https://example.com/the-original-url" /&gt;</text>
+  <text x="60" y="434" fill="#cbd5e1" font-size="12.5">• Absolute URL only: include https:// and the domain — a relative path is a common mistake Google may ignore.</text>
+  <text x="60" y="454" fill="#cbd5e1" font-size="12.5">• Exactly one tag per page: a second one (built-in field + custom head code) confuses Google.</text>
+</svg>

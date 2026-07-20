@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="How Nuxt i18n config becomes hreflang tags. In nuxt.config.ts, baseUrl sets the absolute domain, each locale has a code used for routing and a language in BCP-47 form used for the hreflang value, and defaultLocale sources the x-default. Calling useLocaleHead with addSeoAttributes true renders one link rel alternate tag per locale plus x-default. The key rule: code routes the URL path while language fills the hreflang attribute, and without baseUrl the URLs are relative or missing.">
+  <defs>
+    <marker id="nx" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="470" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">How Nuxt i18n config becomes hreflang tags</text>
+
+  <!-- legend -->
+  <rect x="430" y="24" width="12" height="12" rx="2" fill="#4ade80"/><text x="448" y="34" fill="#94a3b8" font-size="11">language</text>
+  <rect x="522" y="24" width="12" height="12" rx="2" fill="#a5b4fc"/><text x="540" y="34" fill="#94a3b8" font-size="11">code</text>
+  <rect x="588" y="24" width="12" height="12" rx="2" fill="#fcd34d"/><text x="606" y="34" fill="#94a3b8" font-size="11">baseUrl / x-default</text>
+
+  <!-- config box -->
+  <rect x="40" y="70" width="680" height="112" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="56" y="92" fill="#a5b4fc" font-size="12" font-weight="600">nuxt.config.ts  ·  i18n: { … }</text>
+  <text x="56" y="120" font-family="ui-monospace, monospace" font-size="11" fill="#e2e8f0">baseUrl: '<tspan fill="#fcd34d">https://example.com</tspan>'</text>
+  <text x="56" y="144" font-family="ui-monospace, monospace" font-size="11" fill="#e2e8f0">locales: [ { code: '<tspan fill="#a5b4fc">en</tspan>', language: '<tspan fill="#4ade80">en-US</tspan>' }, { code: '<tspan fill="#a5b4fc">fr</tspan>', language: '<tspan fill="#4ade80">fr-FR</tspan>' } ]</text>
+  <text x="56" y="168" font-family="ui-monospace, monospace" font-size="11" fill="#e2e8f0">defaultLocale: '<tspan fill="#a5b4fc">en</tspan>'  <tspan fill="#94a3b8">// → source of x-default</tspan></text>
+
+  <!-- flow arrow -->
+  <line x1="380" y1="184" x2="380" y2="212" stroke="#818cf8" stroke-width="1.5" marker-end="url(#nx)"/>
+  <text x="380" y="230" fill="#a5b4fc" font-size="12" text-anchor="middle">useLocaleHead({ addSeoAttributes: true }) renders ↓</text>
+
+  <!-- output box -->
+  <rect x="40" y="242" width="680" height="116" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="56" y="264" fill="#a5b4fc" font-size="12" font-weight="600">Rendered into &lt;head&gt; (reciprocal across every locale)</text>
+  <text x="56" y="292" font-family="ui-monospace, monospace" font-size="11" fill="#e2e8f0">&lt;link rel="alternate" hreflang="<tspan fill="#4ade80">en-US</tspan>" href="https://example.com<tspan fill="#a5b4fc">/</tspan>" /&gt;</text>
+  <text x="56" y="316" font-family="ui-monospace, monospace" font-size="11" fill="#e2e8f0">&lt;link rel="alternate" hreflang="<tspan fill="#4ade80">fr-FR</tspan>" href="https://example.com<tspan fill="#a5b4fc">/fr</tspan>" /&gt;</text>
+  <text x="56" y="340" font-family="ui-monospace, monospace" font-size="11" fill="#e2e8f0">&lt;link rel="alternate" hreflang="<tspan fill="#fcd34d">x-default</tspan>" href="https://example.com<tspan fill="#a5b4fc">/</tspan>" /&gt;</text>
+
+  <!-- footer insight -->
+  <rect x="40" y="372" width="680" height="86" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="398" fill="#c7d2fe" font-size="13" font-weight="700">code routes the URL — language fills the hreflang value. They are not the same field.</text>
+  <text x="60" y="420" fill="#cbd5e1" font-size="12.5">code: 'fr' builds the /fr path; language: 'fr-FR' (BCP-47) is written into hreflang. No baseUrl → relative or missing URLs.</text>
+  <text x="60" y="440" fill="#cbd5e1" font-size="12.5">x-default is derived from defaultLocale. Let the helper own the canonical so you don't emit two.</text>
+</svg>

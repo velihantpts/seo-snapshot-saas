@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 540" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="A top-to-bottom diagnostic path for an empty or missing Astro sitemap. Check one: is the site option set in astro.config.mjs? If missing, that is the number-one cause — set site to your production URL. Check two: did you only look at astro dev? The sitemap is written during astro build, so open the dist folder. Check three: is the filter excluding too many pages? Loosen it. Check four: in SSR mode, are dynamic routes pre-rendered? On-demand routes are skipped unless output at build. Passing all four yields dist/sitemap-index.xml plus sitemap-0.xml, which you then add to robots.txt and submit in Search Console.">
+  <defs>
+    <marker id="asm" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="540" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Why your Astro sitemap is empty — a diagnostic path</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Walk the checks top to bottom. Pass a check, drop down. Fails a check? Apply the fix on the right.</text>
+
+  <!-- start node -->
+  <rect x="110" y="74" width="260" height="40" rx="10" fill="rgba(129,140,248,0.14)" stroke="#818cf8"/>
+  <text x="240" y="99" fill="#c7d2fe" font-size="12.5" font-weight="700" text-anchor="middle">Sitemap missing or empty after build?</text>
+  <line x1="240" y1="114" x2="240" y2="130" stroke="#818cf8" stroke-width="1.5" marker-end="url(#asm)"/>
+
+  <!-- check 1 -->
+  <rect x="50" y="132" width="380" height="58" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="70" y="156" fill="#e2e8f0" font-size="13" font-weight="600">1  Is the site option set in astro.config.mjs?</text>
+  <text x="70" y="176" fill="#94a3b8" font-size="11">The integration needs your production URL to build absolute links.</text>
+  <rect x="470" y="132" width="250" height="58" rx="10" fill="rgba(239,68,68,0.12)" stroke="#ef4444"/>
+  <text x="485" y="154" fill="#fca5a5" font-size="10" font-weight="700">IF MISSING — the #1 cause</text>
+  <text x="485" y="176" fill="#fecaca" font-size="11" font-family="ui-monospace, monospace">site: 'https://example.com'</text>
+  <line x1="432" y1="161" x2="466" y2="161" stroke="#818cf8" stroke-width="1.5" marker-end="url(#asm)"/>
+  <line x1="240" y1="190" x2="240" y2="210" stroke="#818cf8" stroke-width="1.5" marker-end="url(#asm)"/>
+
+  <!-- check 2 -->
+  <rect x="50" y="214" width="380" height="58" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="70" y="238" fill="#e2e8f0" font-size="13" font-weight="600">2  Did you only look at astro dev?</text>
+  <text x="70" y="258" fill="#94a3b8" font-size="11">The file is written during the build, never on the dev server.</text>
+  <rect x="470" y="214" width="250" height="58" rx="10" fill="rgba(245,158,11,0.12)" stroke="#f59e0b"/>
+  <text x="485" y="236" fill="#fcd34d" font-size="10" font-weight="700">IF ONLY DEV</text>
+  <text x="485" y="258" fill="#fcd34d" font-size="11" font-family="ui-monospace, monospace">astro build → open dist/</text>
+  <line x1="432" y1="243" x2="466" y2="243" stroke="#818cf8" stroke-width="1.5" marker-end="url(#asm)"/>
+  <line x1="240" y1="272" x2="240" y2="292" stroke="#818cf8" stroke-width="1.5" marker-end="url(#asm)"/>
+
+  <!-- check 3 -->
+  <rect x="50" y="296" width="380" height="58" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="70" y="320" fill="#e2e8f0" font-size="13" font-weight="600">3  Is the filter excluding too much?</text>
+  <text x="70" y="340" fill="#94a3b8" font-size="11">A filter returning false too broadly quietly drops pages.</text>
+  <rect x="470" y="296" width="250" height="58" rx="10" fill="rgba(245,158,11,0.12)" stroke="#f59e0b"/>
+  <text x="485" y="318" fill="#fcd34d" font-size="10" font-weight="700">IF TOO BROAD</text>
+  <text x="485" y="340" fill="#fcd34d" font-size="11">Narrow the filter function</text>
+  <line x1="432" y1="325" x2="466" y2="325" stroke="#818cf8" stroke-width="1.5" marker-end="url(#asm)"/>
+  <line x1="240" y1="354" x2="240" y2="374" stroke="#818cf8" stroke-width="1.5" marker-end="url(#asm)"/>
+
+  <!-- check 4 -->
+  <rect x="50" y="378" width="380" height="58" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="70" y="402" fill="#e2e8f0" font-size="13" font-weight="600">4  SSR mode: are dynamic routes pre-rendered?</text>
+  <text x="70" y="422" fill="#94a3b8" font-size="11">On-demand routes are skipped unless output at build time.</text>
+  <rect x="470" y="378" width="250" height="58" rx="10" fill="rgba(245,158,11,0.12)" stroke="#f59e0b"/>
+  <text x="485" y="400" fill="#fcd34d" font-size="10" font-weight="700">IF ON-DEMAND</text>
+  <text x="485" y="422" fill="#fcd34d" font-size="11">Pre-render the routes you want indexed</text>
+  <line x1="432" y1="407" x2="466" y2="407" stroke="#818cf8" stroke-width="1.5" marker-end="url(#asm)"/>
+  <line x1="240" y1="436" x2="240" y2="458" stroke="#22c55e" stroke-width="1.5" marker-end="url(#asm)"/>
+
+  <!-- final node -->
+  <rect x="80" y="460" width="320" height="52" rx="10" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+  <text x="240" y="483" fill="#bbf7d0" font-size="12" font-weight="700" text-anchor="middle">dist/sitemap-index.xml</text>
+  <text x="240" y="502" fill="#bbf7d0" font-size="12" font-weight="700" text-anchor="middle" font-family="ui-monospace, monospace">+ sitemap-0.xml generated</text>
+  <rect x="440" y="460" width="280" height="52" rx="10" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="460" y="483" fill="#c7d2fe" font-size="11.5" font-weight="700">Then tell Google</text>
+  <text x="460" y="502" fill="#cbd5e1" font-size="11">Add it to robots.txt and submit in Search Console.</text>
+</svg>

@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 480" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Why a security header can be present yet still lose points: the grader reads the value, not just whether the header exists. HSTS with max-age=300 grades low while max-age=31536000 with includeSubDomains grades high. A CSP with script-src self plus unsafe-inline still lets injected scripts run, while script-src self alone blocks them. X-Frame-Options ALLOW-FROM is deprecated and ignored, while DENY works. Present is not the same as correct.">
+  <rect x="0" y="0" width="760" height="480" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Present vs correct: why the header exists but still loses points</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Same header, same name. The grader scores the value it carries — not just that it showed up.</text>
+
+  <!-- column legends -->
+  <rect x="40" y="72" width="330" height="24" rx="6" fill="rgba(239,68,68,0.12)" stroke="#ef4444"/>
+  <text x="205" y="89" fill="#fca5a5" font-size="12" font-weight="700" text-anchor="middle">Present but weak &#8594; grades low</text>
+  <rect x="390" y="72" width="330" height="24" rx="6" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+  <text x="555" y="89" fill="#86efac" font-size="12" font-weight="700" text-anchor="middle">Correct value &#8594; grades high</text>
+
+  <!-- Row 1: HSTS -->
+  <text x="40" y="122" fill="#e2e8f0" font-size="13" font-weight="600">HSTS &#183; <tspan font-family="ui-monospace, monospace" fill="#cbd5e1">Strict-Transport-Security</tspan></text>
+  <rect x="40" y="130" width="330" height="52" rx="8" fill="rgba(239,68,68,0.08)" stroke="#ef4444"/>
+  <text x="54" y="152" fill="#fecaca" font-size="11.5" font-family="ui-monospace, monospace">max-age=300</text>
+  <text x="54" y="170" fill="#94a3b8" font-size="10.5">5-minute window &#8594; visitor unprotected again</text>
+  <rect x="390" y="130" width="330" height="52" rx="8" fill="rgba(34,197,94,0.08)" stroke="#22c55e"/>
+  <text x="404" y="152" fill="#bbf7d0" font-size="11.5" font-family="ui-monospace, monospace">max-age=31536000; includeSubDomains</text>
+  <text x="404" y="170" fill="#94a3b8" font-size="10.5">one year; add preload once every subdomain is HTTPS</text>
+
+  <!-- Row 2: CSP -->
+  <text x="40" y="212" fill="#e2e8f0" font-size="13" font-weight="600">CSP &#183; <tspan font-family="ui-monospace, monospace" fill="#cbd5e1">Content-Security-Policy</tspan></text>
+  <rect x="40" y="220" width="330" height="52" rx="8" fill="rgba(239,68,68,0.08)" stroke="#ef4444"/>
+  <text x="54" y="242" fill="#fecaca" font-size="11.5" font-family="ui-monospace, monospace">script-src 'self' 'unsafe-inline'</text>
+  <text x="54" y="260" fill="#94a3b8" font-size="10.5">an injected &lt;script&gt; still runs &#8212; XSS barely blocked</text>
+  <rect x="390" y="220" width="330" height="52" rx="8" fill="rgba(34,197,94,0.08)" stroke="#22c55e"/>
+  <text x="404" y="242" fill="#bbf7d0" font-size="11.5" font-family="ui-monospace, monospace">script-src 'self'</text>
+  <text x="404" y="260" fill="#94a3b8" font-size="10.5">no unsafe-inline, no wildcard &#8212; use a nonce/hash</text>
+
+  <!-- Row 3: X-Frame-Options -->
+  <text x="40" y="302" fill="#e2e8f0" font-size="13" font-weight="600"><tspan font-family="ui-monospace, monospace" fill="#cbd5e1">X-Frame-Options</tspan> &#183; clickjacking</text>
+  <rect x="40" y="310" width="330" height="52" rx="8" fill="rgba(239,68,68,0.08)" stroke="#ef4444"/>
+  <text x="54" y="332" fill="#fecaca" font-size="11.5" font-family="ui-monospace, monospace">ALLOW-FROM https://&#8230;</text>
+  <text x="54" y="350" fill="#94a3b8" font-size="10.5">deprecated &#8212; modern browsers ignore it entirely</text>
+  <rect x="390" y="310" width="330" height="52" rx="8" fill="rgba(34,197,94,0.08)" stroke="#22c55e"/>
+  <text x="404" y="332" fill="#bbf7d0" font-size="11.5" font-family="ui-monospace, monospace">DENY</text>
+  <text x="404" y="350" fill="#94a3b8" font-size="10.5">or SAMEORIGIN; per-origin &#8594; CSP frame-ancestors</text>
+
+  <!-- footer -->
+  <rect x="40" y="382" width="680" height="76" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="410" fill="#c7d2fe" font-size="13" font-weight="700">A presence-only scanner reads the left column as a pass. A real audit reads the value.</text>
+  <text x="60" y="432" fill="#cbd5e1" font-size="12.5">You can ship all seven headers and still land a B when the values are toothless. HSTS and CSP carry the most</text>
+  <text x="60" y="450" fill="#cbd5e1" font-size="12.5">weight, so a weak value there costs the most points &#8212; fix the value, not just the header name.</text>
+</svg>

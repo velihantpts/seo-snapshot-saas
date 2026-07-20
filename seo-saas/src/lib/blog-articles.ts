@@ -233,6 +233,11 @@ Yes, as long as the tag stays and the page stays crawlable. Remove the noindex t
 
 React (and frameworks built on it, like Next.js) render your page twice: once on the server to produce the initial HTML, and again in the browser to "hydrate" it into an interactive app. When the browser's first render produces different markup than the server sent, React throws \`Text content does not match server-rendered HTML\` (you may also see "Hydration failed because the initial UI does not match what was rendered on the server"). React then discards the server HTML for that subtree and re-renders it on the client.
 
+<figure>
+<img src="/blog/fix-text-content-does-no-hydration.svg" alt="A side-by-side comparison of two React hydration mismatches: on the left a cosmetic mismatch where the server ships real content with a 12:00:00 timestamp and the client re-renders 12:00:01, so Google still indexes real content and SEO is safe; on the right a harmful mismatch where the server ships a loading skeleton with no real content and the client fills the content in only after hydration, so Google indexes an empty page and SEO suffers." loading="lazy" width="760" height="505" />
+<figcaption>Google indexes the server HTML: a cosmetic mismatch is safe, but a skeleton-vs-content mismatch gets an empty page indexed.</figcaption>
+</figure>
+
 ## Common Causes
 
 - **Time and locale.** \`new Date().toLocaleString()\`, "2 minutes ago" timestamps, or \`Date.now()\` produce one value on the server and another in the browser. This is the single most common cause.
@@ -295,6 +300,11 @@ export default defineConfig({
 
 Then build with \`astro build\` and check \`dist/sitemap-index.xml\` and \`dist/sitemap-0.xml\`. The sitemap is generated at build time, not on the dev server.
 
+<figure>
+<img src="/blog/astro-sitemap-not-working-diagnostic.svg" alt="A top-to-bottom diagnostic path for an empty or missing Astro sitemap: check whether the site option is set (the number-one cause), whether you only looked at astro dev instead of the build output, whether the filter excludes too many pages, and whether SSR dynamic routes are pre-rendered — passing all four produces dist/sitemap-index.xml and sitemap-0.xml, which you then add to robots.txt and submit in Search Console." loading="lazy" width="760" height="540" />
+<figcaption>Work the checks top to bottom; the first one fixes most empty-sitemap cases.</figcaption>
+</figure>
+
 ## Why It's Empty or Missing
 
 - **No \`site\` option** — the number-one cause, above.
@@ -333,6 +343,11 @@ In SSR mode, only pre-rendered pages are included. Pre-render the routes you wan
     content: `## The Short Version
 
 If you use \`@nuxtjs/i18n\`, hreflang tags can be generated for you — but only when the SEO output is switched on and configured correctly. Set a \`baseUrl\` and give each locale a \`language\`, and the module can output the \`<link rel="alternate" hreflang="...">\` tags (plus \`x-default\`) automatically.
+
+<figure>
+<img src="/blog/nuxt-hreflang-i18n-config-map.svg" alt="A mapping diagram showing how a Nuxt i18n config becomes hreflang tags: baseUrl sets the absolute domain, each locale's code drives the URL path while its language (BCP-47) fills the hreflang value, and defaultLocale sources x-default; calling useLocaleHead with addSeoAttributes renders one link rel=alternate tag per locale plus x-default." loading="lazy" width="760" height="470" />
+<figcaption>How each i18n config field maps to the rendered hreflang tags — code routes the URL, language fills the hreflang value.</figcaption>
+</figure>
 
 \`\`\`ts
 // nuxt.config.ts
@@ -386,6 +401,11 @@ Yes. \`code\` handles routing, while \`language\` (for example \`fr-FR\`) is the
 
 By default, Framer gives each published page a self-referencing canonical tag pointing at its own URL. For most sites that's exactly right and you don't need to touch anything. You only need a *custom* canonical when two URLs serve the same or near-duplicate content and you want to consolidate them onto one. The classic cases are CMS collection items reachable from more than one path, or a campaign page that duplicates an existing one.
 
+<figure>
+<img src="/blog/framer-canonical-url-decision.svg" alt="A decision flow showing that Framer auto-adds a self-referencing canonical to every page; if no two URLs serve duplicate content you leave the default, but if they do you add a custom canonical pointing at the original URL (set at the template level for CMS), always using a single absolute-URL canonical tag." loading="lazy" width="760" height="480" />
+<figcaption>When to keep Framer's default canonical versus setting a custom one.</figcaption>
+</figure>
+
 ## When You Need a Custom Canonical
 
 Point a canonical somewhere other than the page itself when:
@@ -427,6 +447,11 @@ The two usual causes are a relative URL (use an absolute https URL) and two cano
     content: `## What This Error Means
 
 Google's Rich Results Test throws \`Either "offers", "review", or "aggregateRating" should be specified\` when your \`Product\` structured data describes a product but gives Google no commercial signal to attach to it. A product rich result can show a price, a star rating, or a review snippet, and Product schema requires at least one of those three fields so there's something to show. Without one, the markup is valid JSON but not eligible for a product rich result, so Google flags it.
+
+<figure>
+<img src="/blog/fix-either-offers-review-decision.svg" alt="A decision tree for the Product schema warning: if you sell it and a price exists, add an offers block (price, priceCurrency, availability); if real ratings or reviews are visible on the page, add aggregateRating (ratingValue, reviewCount) or a review (author, reviewRating); if nothing is sold or rated, the Product type is wrong so use SoftwareApplication, CreativeWork, or Recipe. You only need one true field and must never invent ratings." loading="lazy" width="760" height="480" />
+<figcaption>Pick the one field that is genuinely true for your product — you only need one to clear the warning.</figcaption>
+</figure>
 
 It's usually reported as a **warning**, not an error. Your page still gets indexed and can still rank. What you lose is eligibility for the enhanced listing (price, stars) in search, which is exactly the part that lifts click-through.
 
@@ -493,6 +518,11 @@ When the Rich Results Test says \`Missing field "image"\`, your structured data 
 
 Google splits these into two levels. **Required** fields must be present or the item is ineligible (reported as an error). **Recommended** fields improve the result but won't block it (reported as a warning). \`image\` sits in different buckets depending on the type: required for \`Recipe\` and \`Product\` rich results, recommended for \`Article\`.
 
+<figure>
+<img src="/blog/fix-missing-field-image-severity.svg" alt="A matrix showing that a missing image field is an error and makes the item ineligible for Product and Recipe rich results (where image is required), but only a warning that leaves Article still eligible (where image is recommended), with the shared fix being an absolute, crawlable image URL at least 1200 pixels wide." loading="lazy" width="760" height="448" />
+<figcaption>Whether "Missing field image" is an error or a warning depends on the schema type — but the fix is the same.</figcaption>
+</figure>
+
 ## The Fix
 
 Add the field with a real, crawlable image URL. Use an absolute URL, not a relative path, and make sure it isn't blocked by \`robots.txt\`.
@@ -554,6 +584,11 @@ It should represent the page's content and, ideally, appear on the page. Marking
 
 If enough other pages link to a URL, Google can decide it's worth indexing based on those links alone, even though your \`robots.txt\` told it not to fetch the page. The result is an indexed URL with no description (or a generic one), because Google never read the content.
 
+<figure>
+<img src="/blog/fix-indexed-though-blocked-decision.svg" alt="A decision tree for the 'Indexed, though blocked by robots.txt' status: start by asking whether the URL should be in Google; if yes, remove the Disallow rule so Google can crawl and index it properly; if no, first remove the Disallow to allow crawling, then add a noindex meta tag or X-Robots-Tag header, then wait for recrawl so the page drops out, using the Removals tool if urgent." loading="lazy" width="760" height="520" />
+<figcaption>Which fix you need depends entirely on whether the URL should be in Google.</figcaption>
+</figure>
+
 ## First, Decide What You Want
 
 This status is only a *problem* if the wrong thing happened. Ask one question: **should this URL be in Google?**
@@ -591,6 +626,11 @@ No. Google recrawls on its own schedule, usually days to a few weeks. Use the UR
 For SEO, a **301 and a 308 are equivalent**. Both are permanent redirects, both pass ranking signals (PageRank) to the destination, and both tell Google to swap the old URL for the new one in its index. If you only care about SEO, either is fine.
 
 The difference is technical: a **308 preserves the HTTP method and body**; a 301 may let clients change a POST into a GET. For normal page redirects, which are GET requests, this never matters. It only matters when you redirect an API call or a form submission and don't want a POST silently turned into a GET.
+
+<figure>
+<img src="/blog/308-vs-301-redirect-seo.svg" alt="A 2x2 matrix of HTTP redirect codes: the rows separate permanent codes (301 and 308), which pass PageRank to the new URL, from temporary codes (302 and 307), which transfer no ranking signal; the columns separate codes that may change a POST into a GET (301, 302) from codes that preserve the method and body (308, 307), showing that 301 and 308 are SEO-equivalent and 308 is only needed when a non-GET request must survive." loading="lazy" width="760" height="486" />
+<figcaption>The two axes that decide which redirect code to use: SEO permanence (rows) and HTTP method preservation (columns).</figcaption>
+</figure>
 
 | | 301 | 308 |
 |---|---|---|
@@ -639,6 +679,11 @@ When there's no \`<meta name="description">\`, Google doesn't leave the snippet 
 The problem is when it isn't fine. On a page with a boilerplate intro, a cookie notice near the top, or thin body copy, Google can grab something awkward: a nav label, a half-sentence, "Skip to content," or stray legal text. On listing pages with little prose, the auto-snippet is often the weakest link in your search presence.
 
 The honest complication: **Google rewrites descriptions even when you provide one.** Studies of live SERPs consistently find it replaces the author-written meta description more often than not — north of 60% of the time — substituting text it judges more relevant to the query. So writing one isn't about *controlling* the snippet. It's about *influencing* it and giving Google a strong default when your tag matches intent. Treat it as your best offer, not a guarantee.
+
+<figure>
+<img src="/blog/how-to-fix-missing-meta-snippet-flow.svg" alt="A decision flow showing how Google builds a search snippet: if no meta description is present it auto-generates one from body text matching the query (risking nav labels or stray text); if a tag is present, Google shows it when it beats body passages on query match, otherwise rewrites it with a better-matching passage most of the time." loading="lazy" width="760" height="540" />
+<figcaption>Your meta description is Google's starting point for the snippet, not the final word.</figcaption>
+</figure>
 
 ## How to Fix It
 
@@ -749,6 +794,11 @@ Treat these bands as a health check, not a leaderboard. A brand-new page with cl
 
 SEO Snapshot checks 100 factors across 7 categories. The weights aren't arbitrary — they roughly track how much each area moves the needle on whether a page can be found, understood, and trusted.
 
+<figure>
+<img src="/blog/what-is-a-good-seo-score-weights.svg" alt="A horizontal bar chart showing how an SEO score is weighted across seven categories that sum to 100 percent — Meta Tags 25%, Technical 20%, Performance 15%, Security 15%, Content 10%, Social 10%, and Accessibility 5% — with a note that backlinks, search intent, content quality, and E-E-A-T fall outside the score even though they are the biggest ranking factors." loading="lazy" width="760" height="515" />
+<figcaption>The seven weighted buckets behind the score — and the ranking factors it can never see.</figcaption>
+</figure>
+
 1. **Meta Tags (25%)** — Title, description, canonical, viewport. This is the heaviest bucket because these tags are how you tell search engines and users what the page is. A missing or duplicate title, a truncated description, or a wrong canonical directly changes what shows in search results and which URL gets indexed.
 2. **Technical (20%)** — HTTPS, \`robots.txt\`, sitemap, redirects, status codes. This measures whether the page can be crawled and indexed at all. A \`noindex\` you forgot to remove, or a \`robots.txt\` that blocks your own CSS, is more damaging than any missing tag — which is why it's weighted second.
 3. **Performance (15%)** — Page speed, render-blocking resources, and the lab-side signals that feed Core Web Vitals. Slow pages get crawled less and convert worse; Google uses page experience as a tiebreaker.
@@ -809,7 +859,12 @@ Aim for 85+ on technical and on-page from launch — that's fully in your contro
 
 Structured data is a standardized way to describe your page's content so a machine can read it without guessing. A human sees a headline, an author byline, and a date. A search engine sees a blob of HTML. Structured data hands the machine a labeled map: this is the \`headline\`, this is the \`author\`, this is the \`datePublished\`. The vocabulary everyone uses is [schema.org](https://schema.org), a shared dictionary maintained by Google, Microsoft, and others.
 
-Why bother? Because Google can turn that labeled data into **rich results** — the enhanced listings that stand out in search. Instead of a plain blue link, you might get star ratings under a product, expandable FAQ questions, or a recipe card with cook time and calories. Rich results don't guarantee higher rankings, but they take up more space and pull more clicks. That's the whole payoff.
+Why bother? Because Google can turn that labeled data into **rich results** — the enhanced listings that stand out in search. Instead of a plain blue link, you might get star ratings under a product, expandable FAQ questions, or a recipe card with cook time and calories. Rich results don't guarantee higher rankings, but they take up more space and pull more clicks.
+
+<figure>
+<img src="/blog/structured-data-json-ld-anatomy.svg" alt="An annotated JSON-LD Article block showing that @context and @type are mandatory in every block, that a required property like headline is needed for eligibility while a recommended property like image only enhances the result, and that valid markup makes a page eligible but Google still decides per query whether to show the rich result." loading="lazy" width="760" height="470" />
+<figcaption>Every JSON-LD block: two mandatory keys, then required and recommended properties Google may turn into a rich result.</figcaption>
+</figure> That's the whole payoff.
 
 ## What Rich Results Actually Look Like
 
@@ -1075,6 +1130,11 @@ So why does a technical-SEO article cover them? Because SEO is downstream of tru
 
 To see where you stand right now, the [SEO Snapshot analyzer](/) grades your headers A+ to F and lists which ones are missing — treat this article as a checklist against your own result.
 
+<figure>
+<img src="/blog/security-headers-for-seo-matrix.svg" alt="A reference matrix of the six security headers that matter, each row pairing the header name with the threat it stops and a recommended value: Strict-Transport-Security stops SSL-strip downgrade, Content-Security-Policy stops XSS injection, frame-ancestors stops clickjacking, X-Content-Type-Options stops MIME sniffing, Referrer-Policy stops referrer leakage, and Permissions-Policy stops feature abuse, with a note that none is a Google ranking factor since HTTPS is the only confirmed signal." loading="lazy" width="760" height="490" />
+<figcaption>Six headers, the threat each stops, and the value to set — none is a ranking factor, all protect the trust rankings rest on.</figcaption>
+</figure>
+
 ## The Headers That Actually Matter
 
 ### Strict-Transport-Security (HSTS)
@@ -1253,6 +1313,11 @@ Open Graph (OG) tags tell social platforms and chat apps how to build the previe
 
 Open Graph is a protocol Facebook published in 2010, but it long outgrew Facebook. Today it's the de facto standard that LinkedIn, Slack, Discord, WhatsApp, Telegram, and Pinterest all read — so getting six tags right pays off across a dozen surfaces at once.
 
+<figure>
+<img src="/blog/open-graph-meta-tags-gui-anatomy.svg" alt="A diagram mapping six Open Graph meta tags in the page head to the parts of a rendered social share card: og:image becomes the picture, og:site_name the small brand line, og:title the bold headline, og:description the blurb, and og:url the domain, with a note that og:image must be an absolute HTTPS 1200-by-630 image and og:url should equal the canonical URL." loading="lazy" width="760" height="460" />
+<figcaption>How each og: tag maps to a part of the unfurled share card.</figcaption>
+</figure>
+
 ## Required vs Optional Tags
 
 The official spec lists four **required** properties: \`og:title\`, \`og:type\`, \`og:image\`, and \`og:url\`. In practice you want two more that platforms lean on heavily — \`og:description\` and \`og:site_name\` — so treat this block as the real baseline:
@@ -1385,6 +1450,11 @@ CSS blocks rendering because the browser refuses to paint content it might have 
 Synchronous JavaScript blocks for a different reason: it can call \`document.write()\` or mutate the DOM, so the parser stops dead at each \`<script>\` tag, fetches the file, executes it, and only then resumes parsing. Worse, if a stylesheet is still loading when the parser reaches a script, the browser also waits for that CSS first (scripts might read computed styles). One slow \`.js\` file in the head can stall everything behind it.
 
 That's the whole problem in one sentence: **resources in the head delay the first paint, and delaying the first paint delays LCP and hurts your [Core Web Vitals](/blog/how-to-improve-core-web-vitals).**
+
+<figure>
+<img src="/blog/fix-render-blocking-reso-script-timeline.svg" alt="A timeline comparing three script-loading modes and when each lets the page paint: a plain blocking script pauses HTML parsing while it downloads and executes so first paint is latest, an async script downloads in parallel but its execution can still interrupt parsing so paint timing is unpredictable, and a defer script downloads in parallel and runs only after parsing finishes so first paint is earliest and never blocked." loading="lazy" width="760" height="476" />
+<figcaption>Blocking vs async vs defer: how each attribute shifts when the browser can paint.</figcaption>
+</figure>
 
 ## Reading the Lighthouse Audit
 
@@ -1537,6 +1607,11 @@ A few mechanics that trip people up:
 ## Crawling vs indexing — the mistake that costs traffic
 
 This is the single most common robots.txt error, so read it twice: **\`Disallow\` does not remove a page from Google.** It stops Google from *fetching* the page. But if other sites link to that URL, Google can still index it — showing the URL with a snippet like "No information is available for this page" because it was never allowed to read the content.
+
+<figure>
+<img src="/blog/robots-txt-guide-crawl-vs-index.svg" alt="A two-path diagram for removing a page from Google: the left path uses only Disallow in robots.txt, so Googlebot never fetches the page but an external link causes Google to index the URL unread, leaving it in results as 'No information is available'; the right path allows crawling plus a noindex tag, so Googlebot fetches the page, reads the noindex directive, and drops the URL from the index. A footer warns that Disallow and noindex together fail because a blocked page is never crawled." loading="lazy" width="760" height="495" />
+<figcaption>Disallow blocks the crawl but can't deindex — allow crawling plus noindex is what actually removes a URL.</figcaption>
+</figure>
 
 So if your goal is "keep this out of search results," robots.txt is the wrong tool. You need a \`noindex\` signal, which the crawler has to actually *read* the page to see:
 
@@ -1853,6 +1928,11 @@ The part most guides get wrong: \`rel="canonical"\` is a **hint, not a directive
 
 That distinction explains almost every canonical problem people run into.
 
+<figure>
+<img src="/blog/canonical-url-explained-signals.svg" alt="A diagram showing six ranking signals — your rel=canonical tag (a hint), internal links, the XML sitemap, 301 redirects, HTTPS over HTTP, and shorter cleaner URLs — converging into a decision box where Google clusters the duplicate URLs and picks one canonical for the group; when signals agree your pick wins, and when they conflict Google overrides your tag, which is the meaning of the Search Console status 'Duplicate, Google chose a different canonical.'" loading="lazy" width="760" height="470" />
+<figcaption>Your canonical tag is one of several signals Google weighs — when they disagree, the tag can lose.</figcaption>
+</figure>
+
 ## The Signals Google Weighs to Pick a Canonical
 
 When duplicates exist, Google clusters them and chooses one canonical for the group. The signals it uses include:
@@ -1988,6 +2068,11 @@ Run your URL through [SEO Snapshot](/) to check that a canonical exists, that it
 Let's be honest up front: Google has never said accessibility is a ranking signal. You won't find "WCAG compliance" in any ranking documentation, and a perfectly accessible page can still rank badly if the content is thin.
 
 So why does every serious technical SEO checklist include accessibility? Because the two disciplines read the same source. A screen reader and Googlebot are both non-visual consumers of your page. Neither sees your carefully art-directed layout — they parse the DOM, the semantics, the text alternatives, the heading outline. When you write HTML that a blind user can navigate, you've also written HTML that a crawler can parse and represent cleanly in search results. The overlap isn't a coincidence; it's the same underlying property: **structured, labelled, machine-readable content.**
+
+<figure>
+<img src="/blog/website-accessibility-se-overlap.svg" alt="A three-column matrix showing how five HTML features each serve two non-visual consumers: alt text is announced by a screen reader and ranks in Google Images; the heading outline lets a reader jump between sections and lets Google build structure and snippets; landmarks like nav and main let a reader jump between regions and let Google separate content from chrome; the lang attribute sets pronunciation for the reader and gives Google a language hint; and descriptive link text reads out of context for a reader while passing anchor-text relevance to Google." loading="lazy" width="760" height="482" />
+<figcaption>The same HTML feature pays twice — once for a screen reader, once for Googlebot.</figcaption>
+</figure>
 
 There's a third reason that has nothing to do with rankings and everything to do with your budget: legal risk. In the US, ADA lawsuits over inaccessible websites run into the thousands per year, and WCAG 2.1 AA is the de facto standard courts reference. The EU's European Accessibility Act carries similar obligations. Fixing these 15 things is cheap. A demand letter is not.
 
@@ -2134,6 +2219,11 @@ WCAG 2.1 Level AA. It's the standard courts and regulators reference, and it map
 An XML sitemap is a list of URLs you want Google to know about. That's it. It doesn't force indexing, it doesn't boost rankings, and it won't rescue thin pages. What it does well is help crawlers *discover* URLs that internal linking might miss — deep pages, fresh posts, pages orphaned by a bad nav. On a small, well-linked site the impact is marginal. On a large site, or one where new content outpaces Google's recrawl, it's how discovery keeps up.
 
 The most common mistake: treating the sitemap as a dump of every URL that returns HTML. A sitemap is a set of *recommendations*, and Google reads one full of junk as a signal your site quality is low.
+
+<figure>
+<img src="/blog/sitemap-xml-guide-eligibility.svg" alt="A left-to-right flow showing all site URLs passing through three gates — Canonical?, Status 200?, and Indexable? — before entering sitemap.xml; each gate drops out disqualified URLs (non-canonical tracking-parameter duplicates, 301/302 redirects and 404s, and noindex or robots.txt-disallowed pages), and only URLs that pass all three belong in the sitemap." loading="lazy" width="760" height="460" />
+<figcaption>Every sitemap URL must clear all three gates — canonical, status 200, and indexable — or it doesn't belong.</figcaption>
+</figure>
 
 ## What belongs in a sitemap (and what doesn't)
 
@@ -2447,6 +2537,11 @@ Two tools can both call themselves "SEO audit" and do opposite things. Three axe
 - **Lab performance vs field data.** Lighthouse runs a *lab* test — one simulated load on a throttled connection. Search Console and the Chrome UX Report show *field* data — what real visitors actually experienced. Lab is repeatable; field is real. You want both.
 - **Fix guidance vs just warnings.** This is the big one. Most tools tell you "meta description missing" and stop. A few tell you *what to write and where*. If you're going to act on the report yourself, that difference is the whole game.
 
+<figure>
+<img src="/blog/free-seo-audit-tool-2026-axes.svg" alt="A comparison diagram of the three axes that separate free SEO audit tools: scope (single-page tools like Lighthouse and SEO Snapshot versus site crawlers like Semrush and SiteChecker), data type (lab tools like Lighthouse versus field-data tools like Search Console and the Chrome UX Report), and output (tools that only flag warnings versus SEO Snapshot, which gives copy-paste fix code), noting that no single tool wins every axis." loading="lazy" width="760" height="470" />
+<figcaption>The three axes that separate SEO audit tools, with example tools placed on each.</figcaption>
+</figure>
+
 ## Top 10 Free SEO Audit Tools in 2026
 
 ### 1. SEO Snapshot (seosnapshot.dev)
@@ -2560,6 +2655,11 @@ Try [SEO Snapshot](/) — 100+ checks, copy-paste fix code, a security grade, an
 Marketers pick keywords and write copy. But the things that actually decide whether a page can rank live in the code: the HTML the server sends, the response headers, the build output, how fast the largest element paints. A marketer can't fix a missing \`<title>\`, a 404 canonical, or a render-blocking bundle. You can.
 
 This is a pre-deploy checklist — 50 things to verify before a site ships, grouped into six areas. Each group starts with why it matters and how to check it fast, then the concrete items. Run it against your **staging URL**, not production, so you catch problems before Google does.
+
+<figure>
+<img src="/blog/seo-checklist-for-developers.svg" alt="A visual index of the 50-point developer SEO checklist showing its six groups with check counts (Meta Tags 10, Content Structure 8, Performance 10, Security 8, Technical SEO 8, Accessibility 6) and how each is verified, above a CI pipeline where a staging preview deploy feeds Lighthouse CI, a curl -sI header check, and SEO Snapshot." loading="lazy" width="760" height="500" />
+<figcaption>The 50 checks across six groups, and where each is caught in CI.</figcaption>
+</figure>
 
 ## Meta Tags (10 checks)
 
@@ -2675,6 +2775,11 @@ E-E-A-T stands for **Experience, Expertise, Authoritativeness, and Trustworthine
 So "E-E-A-T is a ranking factor" is wrong literally and right practically. There's no \`eeat_score\` in the ranking pipeline, but Google tunes its systems to *approximate* what raters reward, so the signals that make a rater trust a page tend to be the same ones that correlate with ranking well. Google added the second "E" (Experience) in December 2022 to reward first-hand knowledge — someone who has actually done the thing, not just read about it.
 
 One detail people miss: in Google's own diagram, the four letters aren't equal. **Trust sits in the center.** Experience, Expertise, and Authoritativeness are the roads that feed into Trust. A page can be written by a credentialed expert and still be untrustworthy (think a doctor writing paid, undisclosed promotion). Trust is the thing that actually matters; the other three are how you earn it.
+
+<figure>
+<img src="/blog/eeat-seo-guide.svg" alt="A diagram showing Experience, Expertise, and Authoritativeness as three boxes with arrows all converging into a central Trust node, illustrating that Trust is the goal the other three pillars build toward, with concrete signals listed for each." loading="lazy" width="760" height="500" />
+<figcaption>The three pillars are roads; Trust is the destination they feed into.</figcaption>
+</figure>
 
 ## Why it matters more than it used to
 
@@ -2836,6 +2941,11 @@ server {
 
 Requests to \`/api/\` ship \`Cache-Control\` and nothing else. Your security headers vanish for exactly the routes that often need them most.
 
+<figure>
+<img src="/blog/nginx-security-headers-guide-inheritance.svg" alt="A side-by-side comparison of two nginx configs: on the left, a location /api/ block that adds its own Cache-Control header causes nginx to drop the inherited X-Frame-Options and X-Content-Type-Options, so the response ships Cache-Control only; on the right, re-including the shared security-headers.conf snippet inside the same block re-emits the full set so every security header plus Cache-Control survives." loading="lazy" width="760" height="520" />
+<figcaption>Why an inner add_header silently drops your inherited security headers — and how re-including the snippet fixes it.</figcaption>
+</figure>
+
 The clean fix: put all security headers in one file and \`include\` it in every block that needs headers. Create \`snippets/security-headers.conf\`:
 
 \`\`\`nginx
@@ -2974,6 +3084,11 @@ The Performance number isn't a vibe. In Lighthouse 10+ it's a weighted average o
 - **Speed Index — 10%**
 
 TBT is the heavyweight, and it's the lab proxy for **INP** (Interaction to Next Paint), the responsiveness metric Google added to Core Web Vitals in 2024. TBT measures how long the main thread was blocked by long tasks between FCP and interactive. High TBT almost always means one thing: too much JavaScript. If your score is stuck in the 60s–80s, look at TBT before anything else — it's usually where the points are hiding.
+
+<figure>
+<img src="/blog/how-to-improve-lighthouse-score-weights.svg" alt="A weighted bar chart of the five lab metrics in the Lighthouse 10+ Performance score: Total Blocking Time at 30 percent (the biggest lever, usually caused by too much JavaScript), Largest Contentful Paint at 25 percent, Cumulative Layout Shift at 25 percent, First Contentful Paint at 10 percent, and Speed Index at 10 percent, with TBT, LCP, and CLS each mapping to a real-user field metric and TBT serving as the lab proxy for INP." loading="lazy" width="760" height="480" />
+<figcaption>The Lighthouse Performance score is a weighted average — TBT, LCP, and CLS make up 80% of it.</figcaption>
+</figure>
 
 ## Performance: cut JavaScript first
 
@@ -3122,6 +3237,11 @@ Keep meta descriptions to roughly **120–160 characters**, but treat that as a 
 
 Mobile is the tighter budget, and most searches happen there, so write for the mobile cut first.
 
+<figure>
+<img src="/blog/meta-description-length-budget.svg" alt="A pixel-budget ruler for search snippets showing that mobile truncates at about 680 pixels (roughly 120 characters) and desktop at about 920 pixels (roughly 155 to 160 characters), with a date prefix stealing width from the front, and a comparison proving twelve wide W characters overflow while twelve narrow i characters fit despite the identical count." loading="lazy" width="760" height="430" />
+<figcaption>The snippet budget in pixels: mobile cuts near 680px (~120 chars), desktop near 920px (~155–160), and equal-length text can still truncate differently.</figcaption>
+</figure>
+
 ## Why pixels, not characters
 
 Two descriptions with the exact same character count can render at very different widths, because glyphs aren't equal width in Google's font. Wide glyphs like \`W\`, \`M\`, and \`m\` eat far more horizontal space than narrow ones like \`i\`, \`l\`, \`t\`, and \`.\`.
@@ -3242,6 +3362,11 @@ Below is how the grade is computed, what separates a header that's *present* fro
 The score is a weighted sum. HSTS and CSP carry the most weight because they close the highest-impact holes (protocol downgrade and cross-site scripting). The lighter headers each contribute a point or two, and the bonus checks nudge you into A+ territory or drag you out of it.
 
 An **A+ is not just "all seven headers exist."** It requires each header to be configured to a strong *value*. You can ship all seven and still land a B if your CSP is toothless or your HSTS max-age is a token 60 seconds. The grader inspects values, not just presence.
+
+<figure>
+<img src="/blog/website-security-check-present-vs-correct.svg" alt="A two-column comparison showing three security headers whose weak values score low while their correct values score high: HSTS max-age=300 versus max-age=31536000 with includeSubDomains, a CSP with script-src self plus unsafe-inline versus script-src self alone, and X-Frame-Options ALLOW-FROM (deprecated and ignored) versus DENY, illustrating that a presence-only scanner passes the left column while a real audit reads the value." loading="lazy" width="760" height="480" />
+<figcaption>Present is not correct: the same header grades low or high depending on the value it carries.</figcaption>
+</figure>
 
 ## The 7 Headers, and What Each One Actually Closes
 
@@ -3453,6 +3578,11 @@ An audit surfaces dozens of issues at once. Fix them in this order:
 
 Work top-down. A perfect schema on a \`noindex\` page is wasted effort.
 
+<figure>
+<img src="/blog/technical-seo-audit-comp-fix-order.svg" alt="A three-tier priority stack showing the order to fix technical SEO audit findings: tier one is indexability and crawl blockers (binary issues where the page ranks or it doesn't), tier two is Core Web Vitals and HTTPS (direct ranking factors affecting every page), and tier three is structured data and international hreflang (refinements that compound on already-indexed, fast pages), with a fix-order arrow pointing top to bottom." loading="lazy" width="760" height="462" />
+<figcaption>Fix audit findings in tiers, top-down: indexability first, speed and HTTPS next, schema and hreflang last.</figcaption>
+</figure>
+
 ## Automated Audit
 
 Running all ten steps by hand takes an afternoon. [SEO Snapshot](/) runs the same checks in seconds — robots.txt, sitemap conflicts, noindex, Core Web Vitals, security headers, structured data, hreflang — with copy-paste fix code for each issue. Use it for the first pass, then dig into the deep-dive guides for anything it flags.
@@ -3492,7 +3622,12 @@ What reliably still produces rich results:
 - **Product** — price, availability, ratings
 - **Recipe**, **Event**, **Review/AggregateRating**, **Video**, **JobPosting** — all still supported
 
-If you only add one new thing, add BreadcrumbList. It's low effort and shows up on nearly every result.
+If you only add one new thing, add BreadcrumbList.
+
+<figure>
+<img src="/blog/how-to-add-structured-data-rich-results.svg" alt="A matrix of common schema.org types showing which still earn rich results in 2024-2025 and the fields Google requires for each: BreadcrumbList, Article, and Product still earn rich results with specific required fields, Recipe/Event/Video/JobPosting also qualify with type-specific sets, while FAQPage and HowTo are restricted to government and health authority sites since August 2023 even though their markup stays valid." loading="lazy" width="760" height="470" />
+<figcaption>Valid markup is not a rich result — Google renders only some types, and only when the required fields are present.</figcaption>
+</figure> It's low effort and shows up on nearly every result.
 
 ## Required vs recommended properties
 
@@ -3904,6 +4039,11 @@ So a stock \`create-next-app\` project scores well out of the box. Problems cree
 
 Third-party scripts are the usual real culprit — analytics, tag managers, chat widgets, A/B testing snippets. Dropping a raw \`<script src="…">\` into your layout forces the browser to fetch and execute it before painting. The \`next/script\` component lets you declare *when* a script should load with the \`strategy\` prop.
 
+<figure>
+<img src="/blog/fix-render-blocking-resources-nextjs-script-strategies.svg" alt="A timeline of the page-load lifecycle (initial HTML and first paint, hydration, then interactive and browser idle) with the four next/script strategies placed where each runs: beforeInteractive loads inside the initial HTML and blocks first paint (use only for consent managers, bot detection, and polyfills), afterInteractive is the default and loads right after hydration (use for analytics, GA4, and tag managers), lazyOnload loads during browser idle after everything else (use for chat widgets, social embeds, and non-critical pixels), and the experimental worker strategy runs off the main thread via Partytown for heavy analytics." loading="lazy" width="760" height="484" />
+<figcaption>Each next/script strategy fires at a different point in the page lifecycle — default to afterInteractive.</figcaption>
+</figure>
+
 | Strategy | When it loads | Use it for |
 |----------|---------------|-----------|
 | \`beforeInteractive\` | Before any hydration, injected into initial HTML | Consent managers, bot detection, polyfills that MUST run first. Rarely needed. |
@@ -4234,6 +4374,11 @@ The score is a shorthand — useful for tracking progress and spotting regressio
 
 The checks group into 7 categories. The weights aren't arbitrary — they roughly track how much each area moves the needle on whether a page can rank at all versus how much it just polishes an already-indexable page.
 
+<figure>
+<img src="/blog/seo-score-checker-free-weights.svg" alt="A horizontal bar chart of the free SEO checker's scoring weights across seven categories that sum to 100 percent: Meta Tags 25%, Content Quality 18%, Technical SEO 17%, Performance 15%, Security 10%, Social and Schema 8%, and Accessibility 7%, each labeled with its highest-impact check and color-coded as ranking-critical, performance and security, or polish." loading="lazy" width="760" height="480" />
+<figcaption>The 123 checks, grouped into seven weighted categories that sum to 100%.</figcaption>
+</figure>
+
 ### Meta Tags — 25% of score
 
 The heaviest category, because title and description are the two things Google reads first and the two things a user sees in the search result. A missing or duplicated title tag caps your ceiling before any other factor matters.
@@ -4332,6 +4477,11 @@ Ready to see yours? [Run your URL through the analyzer](/) — it's free.`,
 "Write 2,000+ words to rank" is one of the most stubborn myths in SEO. Google has no word-count threshold. It ranks pages by how well they satisfy the intent behind a query — and a tight 500-word page that answers the question directly will beat a 3,000-word page that buries the answer under padding.
 
 The confusion comes from a correlation. Comprehensive pages often *happen* to be longer, so people assume length caused the ranking. It didn't — the depth did, and length was a side effect. Chase the depth and the right length takes care of itself.
+
+<figure>
+<img src="/blog/content-depth-anatomy.svg" alt="A diagram showing the five signals that make an SEO page deep — intent match, topical coverage, structural quality, supporting evidence, and freshness — converging into a single outcome: when all five are sized to the query, the page fully satisfies the searcher's intent, while word count is called out as a side effect of depth rather than a cause." loading="lazy" width="760" height="430" />
+<figcaption>Depth is five signals matched to intent — word count is a side effect, not a cause.</figcaption>
+</figure>
 
 ## What "Depth" Actually Means
 
@@ -4442,6 +4592,11 @@ Compare your headings to the union of PAA questions and competitor subheadings. 
     content: `## Why Speed Matters
 
 Google uses page experience as a ranking signal, and speed is the part users feel first. A one-second delay measurably cuts conversions, and mobile visitors bail when a page drags past three seconds. But "make it faster" is useless advice on its own. The fifteen techniques below work — the trick is knowing which three of them your site actually needs.
+
+<figure>
+<img src="/blog/website-speed-optimizati-fix-to-metric.svg" alt="A map of the 15 speed techniques grouped by the metric each one moves: server-side techniques 1 to 5 (Brotli/gzip, Cache-Control, CDN, HTTP/2 and 3, origin caching) lower TTFB, which sets the ceiling for LCP; frontend techniques 6 to 10 (lazy-loading, AVIF/WebP, deferring JavaScript, critical CSS, preconnect) move LCP, INP, and CLS; content and layout techniques 11 to 15 (font-display swap, removing unused code, small DOM, reserved space, cutting third-party scripts) mostly fix CLS. Fix in impact order: server caching and compression first, then the LCP image, then JavaScript." loading="lazy" width="760" height="520" />
+<figcaption>Each technique group targets a different metric — and the smart sequence is caching, then the LCP image, then JS.</figcaption>
+</figure>
 
 ## Measure First, Then Optimize
 
@@ -4722,6 +4877,11 @@ If you're on "Crawled," the raw fetch worked. Your robots.txt is fine, the serve
 
 Treat it as feedback, not a bug report.
 
+<figure>
+<img src="/blog/fix-crawled-currently-not-indexed.svg" alt="A decision tree for diagnosing 'Crawled — currently not indexed': in URL Inspection, check whether your body text is in the raw crawled HTML; if not, it is a client-side-rendering trap fixed by rendering content server-side; if it is present, it is a quality or priority call — thin content needs depth and internal links, near-duplicates need a 301 or canonical, orphan pages need internal links, and a young domain often just needs four to eight weeks — and after any fix you Request Indexing once and wait." loading="lazy" width="760" height="540" />
+<figcaption>Start by reading the crawled HTML: a rendering bug and a quality judgment need opposite fixes.</figcaption>
+</figure>
+
 ### The real causes, roughly in order of how often they're the culprit
 
 **Thin or templated content.** The page technically has words, but they're boilerplate — a product page that's 90% shared template and 40 words of unique text, a tag archive that just lists three posts, a location page spun from a template with the city name swapped in. Google sees the pattern and passes. This is the single most common cause, and [content depth in SEO](/blog/content-depth-seo-guide) is usually the fix.
@@ -4799,6 +4959,11 @@ Here's the precise meaning: Google knows your URL exists. It found the address �
 
 That queue distinction is the whole point, and it's why this status is often confused with a different one.
 
+<figure>
+<img src="/blog/fix-discovered-currently-not-indexed.svg" alt="A pipeline diagram showing a URL move from discovered, to the crawl queue, to crawled and read, to indexed; the amber 'Discovered — currently not indexed' state maps to the crawl queue (never fetched, a crawl-priority problem), while the red 'Crawled — currently not indexed' state maps to the fetch step (read then rejected, a content problem)." loading="lazy" width="760" height="478" />
+<figcaption>The two "not indexed" states occupy different stages of Google's crawl-to-index pipeline — and need different fixes.</figcaption>
+</figure>
+
 ## Not the same as "Crawled — currently not indexed"
 
 These two live next to each other in the report and mean opposite things:
@@ -4874,6 +5039,11 @@ No. It's a scheduling state, not a manual action or a quality strike. Google sim
 There's no config flag to flip. Next.js won't generate a \`sitemap.xml\` for you, and no plugin runs by default. But the App Router gives you a clean, first-party way to build one: a single file at \`app/sitemap.ts\` that exports a function returning your URLs. Next handles the XML formatting, the \`Content-Type\` header, and the route. You just describe the pages.
 
 This guide is the App Router way first (Next 13.3+, current through 14 and 15), then the Pages Router fallback if you're on an older setup.
+
+<figure>
+<img src="/blog/add-sitemap-nextjs-pipeline.svg" alt="A left-to-right pipeline showing how a Next.js App Router sitemap is built and discovered: static and dynamic pages feed app/sitemap.ts, which returns an array of url and lastModified objects; Next.js renders that as /sitemap.xml with a urlset wrapper; search engines find it via a Sitemap directive in robots.ts and a Search Console submission. A callout notes that past 50,000 URLs or 50 MB, generateSitemaps splits output into numbered files under an index, and that each URL needs a real per-page lastModified date rather than new Date() on every entry." loading="lazy" width="760" height="380" />
+<figcaption>From your pages to a discovered /sitemap.xml — plus the 50k split and the lastModified rule.</figcaption>
+</figure>
 
 ## The Minimal \`app/sitemap.ts\`
 
@@ -5069,6 +5239,11 @@ If you're on a non-Next stack, or you just want a one-off file without touching 
     content: `## The Metadata API, not a hand-written tag
 
 In the App Router you don't hand-write \`<link rel="canonical">\` in the \`<head>\`. You describe it through the Metadata API, and Next.js renders the tag for you. That's cleaner, but it hides a trap that has deindexed a lot of pages — including some of ours — because canonicals set in a layout are inherited by every route below it. Get the mechanics right and you'll never think about it again. Get them wrong once in \`layout.tsx\` and Google quietly points your whole site at the homepage.
+
+<figure>
+<img src="/blog/canonical-url-nextjs-inheritance.svg" alt="A side-by-side Next.js App Router tree showing that a hard-coded canonical in app/layout.tsx is inherited by every child route (pricing, blog/[slug], docs) so they all point at the homepage and drop from Google's index, versus a root layout that sets only metadataBase while each page declares its own self-referencing canonical and stays indexable." loading="lazy" width="760" height="445" />
+<figcaption>Canonical metadata is inherited down the tree: set it per route, never once in the root layout.</figcaption>
+</figure>
 
 If you're fuzzy on what a canonical actually does and when you need one, read [canonical URLs explained](/blog/canonical-url-explained) first — this post is the Next.js implementation, not the concept.
 

@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 470" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Which schema types still earn rich results in 2024 to 2025 and the fields Google requires for each. BreadcrumbList, Article, and Product still earn rich results and need specific required fields — BreadcrumbList needs each ListItem with position, name, and item; Article needs headline, image, datePublished, and author; Product needs name plus one of offers, review, or aggregateRating. Recipe, Event, Video, and JobPosting also still earn rich results with type-specific required sets. FAQPage and HowTo are restricted since August 2023 to government and health authority sites, though the markup is still valid. A missing required field fails silently with no error and no rich result.">
+  <rect x="0" y="0" width="760" height="470" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Which schema types still earn rich results (2024–2025)</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Valid markup ≠ a rich result. Google renders only some types — and only when the required fields are present.</text>
+
+  <!-- column headers -->
+  <text x="56" y="86" fill="#818cf8" font-size="11" font-weight="700">SCHEMA TYPE</text>
+  <text x="210" y="86" fill="#818cf8" font-size="11" font-weight="700">RICH RESULT?</text>
+  <text x="352" y="86" fill="#818cf8" font-size="11" font-weight="700">REQUIRED FOR ELIGIBILITY</text>
+
+  <!-- Row 1: BreadcrumbList -->
+  <rect x="40" y="96" width="680" height="46" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="56" y="124" fill="#e2e8f0" font-size="12.5" font-weight="600">BreadcrumbList</text>
+  <rect x="204" y="107" width="118" height="24" rx="8" fill="rgba(34,197,94,0.14)" stroke="#22c55e"/>
+  <text x="263" y="123" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">Earns it</text>
+  <text x="352" y="116" fill="#cbd5e1" font-size="11" font-family="ui-monospace, monospace">each ListItem: position + name + item</text>
+  <text x="352" y="132" fill="#94a3b8" font-size="10.5">last (current-page) item omits its item URL</text>
+
+  <!-- Row 2: Article -->
+  <rect x="40" y="150" width="680" height="46" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="56" y="178" fill="#e2e8f0" font-size="12.5" font-weight="600">Article</text>
+  <rect x="204" y="161" width="118" height="24" rx="8" fill="rgba(34,197,94,0.14)" stroke="#22c55e"/>
+  <text x="263" y="177" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">Earns it</text>
+  <text x="352" y="170" fill="#cbd5e1" font-size="11" font-family="ui-monospace, monospace">headline, image, datePublished, author</text>
+  <text x="352" y="186" fill="#94a3b8" font-size="10.5">drop image and you usually lose the enhanced result</text>
+
+  <!-- Row 3: Product -->
+  <rect x="40" y="204" width="680" height="46" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="56" y="232" fill="#e2e8f0" font-size="12.5" font-weight="600">Product</text>
+  <rect x="204" y="215" width="118" height="24" rx="8" fill="rgba(34,197,94,0.14)" stroke="#22c55e"/>
+  <text x="263" y="231" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">Earns it</text>
+  <text x="352" y="224" fill="#cbd5e1" font-size="11" font-family="ui-monospace, monospace">name + one of: offers / review / aggregateRating</text>
+  <text x="352" y="240" fill="#94a3b8" font-size="10.5">name-only Product is ineligible</text>
+
+  <!-- Row 4: Recipe / Event / Video / JobPosting -->
+  <rect x="40" y="258" width="680" height="46" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="56" y="280" fill="#e2e8f0" font-size="11.5" font-weight="600">Recipe · Event</text>
+  <text x="56" y="296" fill="#e2e8f0" font-size="11.5" font-weight="600">Video · JobPosting</text>
+  <rect x="204" y="269" width="118" height="24" rx="8" fill="rgba(34,197,94,0.14)" stroke="#22c55e"/>
+  <text x="263" y="285" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">Earns it</text>
+  <text x="352" y="278" fill="#cbd5e1" font-size="11">Type-specific required set — each has its own list.</text>
+  <text x="352" y="294" fill="#94a3b8" font-size="10.5">Check the Rich Results Test for the exact fields.</text>
+
+  <!-- Row 5: FAQPage / HowTo -->
+  <rect x="40" y="312" width="680" height="46" rx="8" fill="#1e293b" stroke="#334155"/>
+  <text x="56" y="340" fill="#e2e8f0" font-size="11.5" font-weight="600">FAQPage · HowTo</text>
+  <rect x="204" y="323" width="118" height="24" rx="8" fill="rgba(245,158,11,0.14)" stroke="#f59e0b"/>
+  <text x="263" y="339" fill="#fcd34d" font-size="10.5" font-weight="700" text-anchor="middle">Gov / health only</text>
+  <text x="352" y="332" fill="#cbd5e1" font-size="11">Markup is still valid, but the rich result shows only</text>
+  <text x="352" y="348" fill="#94a3b8" font-size="10.5">for recognized authority sites (reset in August 2023).</text>
+
+  <!-- footer callout -->
+  <rect x="40" y="374" width="680" height="76" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="400" fill="#c7d2fe" font-size="13" font-weight="700">A missing required field fails silently — no error, just no rich result.</text>
+  <text x="60" y="422" fill="#cbd5e1" font-size="12.5">Only mark up content that is visible on the page. Build the JSON from an object with JSON.stringify</text>
+  <text x="60" y="440" fill="#cbd5e1" font-size="12.5">(no trailing commas), then confirm every block in Google's Rich Results Test before you ship.</text>
+</svg>

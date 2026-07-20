@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 460" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Crawl budget is Google's crawl capacity limit (how fast Googlebot can fetch without overloading your server) plus crawl demand (how much Google wants your URLs based on popularity and staleness). That finite budget is spent left to right: faceted or filter URLs, duplicate URLs, redirect chains, and soft 404 or thin pages all burn crawl budget before Googlebot ever reaches your valuable pages. The fix is subtraction. Crawl budget only matters at large scale; under a few thousand URLs Google usually crawls everything fine.">
+  <rect x="0" y="0" width="760" height="460" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">What crawl budget is — and where it leaks</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Googlebot fetches a finite number of URLs per timeframe. Junk URLs spend it before your real pages get crawled.</text>
+
+  <!-- formula: capacity + demand -->
+  <rect x="60" y="76" width="290" height="72" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="205" y="102" fill="#e2e8f0" font-size="13" font-weight="700" text-anchor="middle">Crawl capacity limit</text>
+  <text x="205" y="122" fill="#94a3b8" font-size="11" text-anchor="middle">How fast Googlebot can fetch</text>
+  <text x="205" y="138" fill="#94a3b8" font-size="11" text-anchor="middle">without overloading your server</text>
+
+  <text x="365" y="120" fill="#818cf8" font-size="24" font-weight="700" text-anchor="middle">+</text>
+
+  <rect x="380" y="76" width="290" height="72" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="525" y="102" fill="#e2e8f0" font-size="13" font-weight="700" text-anchor="middle">Crawl demand</text>
+  <text x="525" y="122" fill="#94a3b8" font-size="11" text-anchor="middle">How much Google wants your URLs</text>
+  <text x="525" y="138" fill="#94a3b8" font-size="11" text-anchor="middle">(popularity + how stale they are)</text>
+
+  <text x="60" y="176" fill="#c7d2fe" font-size="12.5" font-weight="700">= Crawl budget</text>
+  <text x="158" y="176" fill="#cbd5e1" font-size="12.5">— a finite number of URLs Googlebot will fetch on your site per timeframe.</text>
+
+  <!-- the budget bar, spent left to right -->
+  <rect x="60" y="200" width="120" height="46" fill="#f59e0b" fill-opacity="0.85" stroke="#0b1120"/>
+  <rect x="180" y="200" width="100" height="46" fill="#ef4444" fill-opacity="0.85" stroke="#0b1120"/>
+  <rect x="280" y="200" width="100" height="46" fill="#f59e0b" fill-opacity="0.85" stroke="#0b1120"/>
+  <rect x="380" y="200" width="110" height="46" fill="#ef4444" fill-opacity="0.85" stroke="#0b1120"/>
+  <rect x="490" y="200" width="210" height="46" fill="#22c55e" fill-opacity="0.85" stroke="#0b1120"/>
+
+  <text x="120" y="221" fill="#451a03" font-size="10.5" font-weight="700" text-anchor="middle">Faceted /</text>
+  <text x="120" y="235" fill="#451a03" font-size="10.5" font-weight="700" text-anchor="middle">filter URLs</text>
+  <text x="230" y="221" fill="#450a0a" font-size="10.5" font-weight="700" text-anchor="middle">Duplicate</text>
+  <text x="230" y="235" fill="#450a0a" font-size="10.5" font-weight="700" text-anchor="middle">URLs</text>
+  <text x="330" y="221" fill="#451a03" font-size="10.5" font-weight="700" text-anchor="middle">Redirect</text>
+  <text x="330" y="235" fill="#451a03" font-size="10.5" font-weight="700" text-anchor="middle">chains</text>
+  <text x="435" y="221" fill="#450a0a" font-size="10.5" font-weight="700" text-anchor="middle">Soft 404s &amp;</text>
+  <text x="435" y="235" fill="#450a0a" font-size="10.5" font-weight="700" text-anchor="middle">thin pages</text>
+  <text x="595" y="221" fill="#052e16" font-size="11.5" font-weight="700" text-anchor="middle">Valuable pages</text>
+  <text x="595" y="235" fill="#052e16" font-size="11.5" font-weight="700" text-anchor="middle">crawled &amp; indexed</text>
+
+  <!-- brackets under the bar -->
+  <line x1="60" y1="256" x2="490" y2="256" stroke="#fca5a5" stroke-width="1.5"/>
+  <line x1="60" y1="251" x2="60" y2="261" stroke="#fca5a5" stroke-width="1.5"/>
+  <line x1="490" y1="251" x2="490" y2="261" stroke="#fca5a5" stroke-width="1.5"/>
+  <text x="275" y="276" fill="#fca5a5" font-size="12" font-weight="700" text-anchor="middle">Budget burned before your content is reached</text>
+
+  <line x1="490" y1="256" x2="700" y2="256" stroke="#86efac" stroke-width="1.5"/>
+  <line x1="700" y1="251" x2="700" y2="261" stroke="#86efac" stroke-width="1.5"/>
+  <text x="595" y="276" fill="#86efac" font-size="12" font-weight="700" text-anchor="middle">What you actually want crawled</text>
+
+  <!-- footer takeaway -->
+  <rect x="40" y="298" width="680" height="140" rx="12" fill="rgba(129,140,248,0.08)" stroke="#334155"/>
+  <text x="60" y="326" fill="#c7d2fe" font-size="13" font-weight="700">Crawl budget only matters at scale.</text>
+  <text x="60" y="348" fill="#cbd5e1" font-size="12.5">Under a few thousand URLs, Google usually crawls everything fine — don't over-optimize a small site.</text>
+  <text x="60" y="378" fill="#c7d2fe" font-size="13" font-weight="700">The fix is subtraction:</text>
+  <text x="60" y="400" fill="#cbd5e1" font-size="12.5">• Block facet &amp; filter URLs in robots.txt   • Canonicalize duplicates   • Collapse redirect chains to one hop</text>
+  <text x="60" y="422" fill="#cbd5e1" font-size="12.5">• Fix or remove soft 404s and thin pages   • Keep XML sitemaps clean so demand points at pages worth indexing</text>
+</svg>

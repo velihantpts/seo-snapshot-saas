@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 486" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="A 2x2 matrix of redirect status codes on two axes. The vertical axis is permanence: permanent codes (301 and 308) consolidate PageRank onto the destination, while temporary codes (302 and 307) do not transfer ranking signal. The horizontal axis is HTTP method: 301 and 302 may change a POST into a GET, while 308 and 307 preserve the method and body. For SEO, 301 and 308 are equivalent; choose 308 only when a non-GET request must survive the redirect.">
+  <rect x="0" y="0" width="760" height="486" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">301 vs 308 vs 302 vs 307: two axes pick the code</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Rows decide the SEO signal. Columns decide whether the HTTP method survives.</text>
+
+  <!-- column headers -->
+  <text x="330" y="95" fill="#cbd5e1" font-size="12" font-weight="600" text-anchor="middle">Method may change (POST&#8594;GET)</text>
+  <text x="585" y="95" fill="#cbd5e1" font-size="12" font-weight="600" text-anchor="middle">Method preserved (POST stays POST)</text>
+
+  <!-- row label: Permanent -->
+  <text x="40" y="178" fill="#4ade80" font-size="13" font-weight="700">Permanent</text>
+  <text x="40" y="196" fill="#86efac" font-size="11">passes PageRank</text>
+  <text x="40" y="214" fill="#94a3b8" font-size="11">to the new URL</text>
+
+  <!-- row label: Temporary -->
+  <text x="40" y="318" fill="#fcd34d" font-size="13" font-weight="700">Temporary</text>
+  <text x="40" y="336" fill="#94a3b8" font-size="11">no signal transfer;</text>
+  <text x="40" y="354" fill="#94a3b8" font-size="11">signal stays on old URL</text>
+
+  <!-- 301 cell (permanent, may change) -->
+  <rect x="210" y="110" width="240" height="118" rx="10" fill="#1e293b" stroke="#22c55e"/>
+  <text x="230" y="150" fill="#4ade80" font-size="24" font-weight="700">301</text>
+  <text x="230" y="174" fill="#bbf7d0" font-size="12" font-weight="600">Permanent &#183; SEO-safe</text>
+  <text x="230" y="196" fill="#cbd5e1" font-size="11.5">The default for URL moves:</text>
+  <text x="230" y="212" fill="#94a3b8" font-size="11.5">HTTPS, www&#8594;non-www, renames</text>
+
+  <!-- 308 cell (permanent, preserves) -->
+  <rect x="460" y="110" width="250" height="118" rx="10" fill="#1e293b" stroke="#22c55e"/>
+  <text x="480" y="150" fill="#4ade80" font-size="24" font-weight="700">308</text>
+  <text x="480" y="174" fill="#bbf7d0" font-size="12" font-weight="600">Permanent &#183; SEO-safe</text>
+  <text x="480" y="196" fill="#cbd5e1" font-size="11.5">Same SEO value as 301, but</text>
+  <text x="480" y="212" fill="#94a3b8" font-size="11.5">keeps POST/PUT + body intact</text>
+
+  <!-- 302 cell (temporary, may change) -->
+  <rect x="210" y="240" width="240" height="118" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="230" y="280" fill="#fcd34d" font-size="24" font-weight="700">302</text>
+  <text x="230" y="304" fill="#fde68a" font-size="12" font-weight="600">Temporary &#183; no signal</text>
+  <text x="230" y="326" fill="#cbd5e1" font-size="11.5">Short-lived detours only;</text>
+  <text x="230" y="342" fill="#94a3b8" font-size="11.5">may flip POST into GET</text>
+
+  <!-- 307 cell (temporary, preserves) -->
+  <rect x="460" y="240" width="250" height="118" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="480" y="280" fill="#fcd34d" font-size="24" font-weight="700">307</text>
+  <text x="480" y="304" fill="#fde68a" font-size="12" font-weight="600">Temporary &#183; no signal</text>
+  <text x="480" y="326" fill="#cbd5e1" font-size="11.5">Short-lived, but keeps the</text>
+  <text x="480" y="342" fill="#94a3b8" font-size="11.5">method and body unchanged</text>
+
+  <!-- footer -->
+  <rect x="40" y="384" width="680" height="82" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="412" fill="#c7d2fe" font-size="13" font-weight="700">For SEO, 301 and 308 are identical &#8212; both are permanent and both pass ranking signal.</text>
+  <text x="60" y="434" fill="#cbd5e1" font-size="12.5">Reach for 308 only when a non-GET request (a form POST or API call) must survive the hop. Vercel and Next.js</text>
+  <text x="60" y="452" fill="#cbd5e1" font-size="12.5">emit 308 for permanent redirects by default &#8212; that is fine, don't "fix" it back to a 301.</text>
+</svg>

@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 478" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Where the two not-indexed states sit in Google's pipeline. A URL is discovered from a sitemap or link, enters the crawl queue, then Googlebot fetches and reads it, and finally it is indexed. Discovered — currently not indexed means the URL is still in the crawl queue and has never been fetched, which is a crawl-priority problem fixed with authority, crawl budget, faster TTFB, and internal links. Crawled — currently not indexed means Google fetched and read the page and then chose not to index it, which is a content problem of thin, duplicate, or low-value pages and needs a different fix.">
+  <defs>
+    <marker id="dciArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#818cf8"/></marker>
+    <marker id="dciAmber" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#f59e0b"/></marker>
+    <marker id="dciRed" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z" fill="#ef4444"/></marker>
+  </defs>
+  <rect x="0" y="0" width="760" height="478" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">Where the two "not indexed" states sit in the pipeline</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Discovered = never fetched (a queue problem). Crawled = fetched, then rejected (a content problem).</text>
+
+  <!-- pipeline boxes -->
+  <rect x="40" y="90" width="145" height="56" rx="10" fill="#1e293b" stroke="#334155"/>
+  <text x="112" y="116" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">URL discovered</text>
+  <text x="112" y="133" fill="#94a3b8" font-size="10.5" text-anchor="middle">sitemap or a link</text>
+
+  <rect x="215" y="90" width="145" height="56" rx="10" fill="#1e293b" stroke="#f59e0b"/>
+  <text x="287" y="116" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">Crawl queue</text>
+  <text x="287" y="133" fill="#fcd34d" font-size="10.5" text-anchor="middle">waiting to be fetched</text>
+
+  <rect x="390" y="90" width="145" height="56" rx="10" fill="#1e293b" stroke="#ef4444"/>
+  <text x="462" y="116" fill="#e2e8f0" font-size="12.5" font-weight="600" text-anchor="middle">Crawled &amp; read</text>
+  <text x="462" y="133" fill="#fca5a5" font-size="10.5" text-anchor="middle">HTML downloaded</text>
+
+  <rect x="565" y="90" width="145" height="56" rx="10" fill="rgba(34,197,94,0.12)" stroke="#22c55e"/>
+  <text x="637" y="116" fill="#bbf7d0" font-size="12.5" font-weight="700" text-anchor="middle">Indexed</text>
+  <text x="637" y="133" fill="#86efac" font-size="10.5" text-anchor="middle">eligible to rank</text>
+
+  <!-- pipeline arrows -->
+  <line x1="186" y1="118" x2="212" y2="118" stroke="#818cf8" stroke-width="1.5" marker-end="url(#dciArrow)"/>
+  <line x1="361" y1="118" x2="387" y2="118" stroke="#818cf8" stroke-width="1.5" marker-end="url(#dciArrow)"/>
+  <line x1="536" y1="118" x2="562" y2="118" stroke="#818cf8" stroke-width="1.5" marker-end="url(#dciArrow)"/>
+
+  <!-- connectors to state cards -->
+  <line x1="287" y1="147" x2="200" y2="205" stroke="#f59e0b" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#dciAmber)"/>
+  <line x1="462" y1="147" x2="560" y2="205" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#dciRed)"/>
+
+  <!-- Discovered card (amber) -->
+  <rect x="40" y="210" width="330" height="162" rx="12" fill="rgba(245,158,11,0.10)" stroke="#f59e0b"/>
+  <text x="58" y="236" fill="#fcd34d" font-size="13" font-weight="700">DISCOVERED — currently not indexed</text>
+  <text x="58" y="256" fill="#fde68a" font-size="11" font-family="ui-monospace, monospace">in the crawl queue · not yet fetched</text>
+  <text x="58" y="286" fill="#e2e8f0" font-size="11.5">Google knows the URL but has not</text>
+  <text x="58" y="302" fill="#e2e8f0" font-size="11.5">downloaded it. Nothing has been read.</text>
+  <text x="58" y="330" fill="#cbd5e1" font-size="11">A queue problem: low-authority domain,</text>
+  <text x="58" y="346" fill="#cbd5e1" font-size="11">crawl budget, slow TTFB, orphan pages.</text>
+  <text x="58" y="364" fill="#a5b4fc" font-size="11">Fix: internal links, trim URLs, speed, authority.</text>
+
+  <!-- Crawled card (red) -->
+  <rect x="390" y="210" width="330" height="162" rx="12" fill="rgba(239,68,68,0.10)" stroke="#ef4444"/>
+  <text x="408" y="236" fill="#fca5a5" font-size="13" font-weight="700">CRAWLED — currently not indexed</text>
+  <text x="408" y="256" fill="#fecaca" font-size="11" font-family="ui-monospace, monospace">fetched &amp; read · then set aside</text>
+  <text x="408" y="286" fill="#e2e8f0" font-size="11.5">Google downloaded the HTML and</text>
+  <text x="408" y="302" fill="#e2e8f0" font-size="11.5">then chose not to index it.</text>
+  <text x="408" y="330" fill="#cbd5e1" font-size="11">A content problem: thin, duplicate, or</text>
+  <text x="408" y="346" fill="#cbd5e1" font-size="11">low-value pages — a quality judgment.</text>
+  <text x="408" y="364" fill="#a5b4fc" font-size="11">Fix: improve or consolidate content (other guide).</text>
+
+  <!-- footer -->
+  <rect x="40" y="392" width="680" height="66" rx="12" fill="rgba(129,140,248,0.10)" stroke="#818cf8"/>
+  <text x="60" y="420" fill="#c7d2fe" font-size="13" font-weight="700">Confirm which bucket you're in before you change anything.</text>
+  <text x="60" y="442" fill="#cbd5e1" font-size="12.5">The Pages report in Search Console names it exactly. Only "Discovered" is a crawl-queue problem — don't rewrite content to fix it.</text>
+</svg>
