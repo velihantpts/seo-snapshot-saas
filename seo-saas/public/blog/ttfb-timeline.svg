@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 760 420" font-family="ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, sans-serif" role="img" aria-label="Time to First Byte is everything from the request up to the first byte of the response: DNS lookup, TCP connect, TLS handshake, and server processing. Content download and rendering happen after TTFB and are not counted. Server processing is the largest and most controllable slice — cut it with caching, a CDN, faster queries, or edge rendering. Aim for under 800 milliseconds.">
+  <rect x="0" y="0" width="760" height="420" fill="#0b1120"/>
+  <text x="40" y="34" fill="#f1f5f9" font-size="16" font-weight="600">What Time to First Byte actually measures</text>
+  <text x="40" y="56" fill="#94a3b8" font-size="12.5">Request sent → first byte received. Everything after is a different problem.</text>
+
+  <!-- timeline segments -->
+  <!-- DNS -->
+  <rect x="60" y="120" width="60" height="40" fill="#334155"/>
+  <text x="90" y="145" fill="#e2e8f0" font-size="10.5" text-anchor="middle">DNS</text>
+  <!-- TCP -->
+  <rect x="120" y="120" width="70" height="40" fill="#3f4a5f"/>
+  <text x="155" y="145" fill="#e2e8f0" font-size="10.5" text-anchor="middle">TCP</text>
+  <!-- TLS -->
+  <rect x="190" y="120" width="70" height="40" fill="#334155"/>
+  <text x="225" y="145" fill="#e2e8f0" font-size="10.5" text-anchor="middle">TLS</text>
+  <!-- Server processing (the lever) -->
+  <rect x="260" y="120" width="200" height="40" fill="#818cf8"/>
+  <text x="360" y="140" fill="#0b1120" font-size="12" font-weight="700" text-anchor="middle">Server processing</text>
+  <text x="360" y="154" fill="#1e1b4b" font-size="10" text-anchor="middle">backend think-time</text>
+  <!-- first byte marker -->
+  <line x1="460" y1="104" x2="460" y2="176" stroke="#4ade80" stroke-width="2"/>
+  <circle cx="460" cy="140" r="5" fill="#4ade80"/>
+  <text x="460" y="98" fill="#4ade80" font-size="11" font-weight="700" text-anchor="middle">first byte</text>
+  <!-- after TTFB (grayed) -->
+  <rect x="460" y="120" width="140" height="40" fill="#1e293b" stroke="#334155"/>
+  <text x="530" y="145" fill="#64748b" font-size="10.5" text-anchor="middle">Download</text>
+  <rect x="600" y="120" width="100" height="40" fill="#1e293b" stroke="#334155"/>
+  <text x="650" y="145" fill="#64748b" font-size="10.5" text-anchor="middle">Render</text>
+
+  <!-- TTFB bracket -->
+  <line x1="60" y1="190" x2="460" y2="190" stroke="#4ade80" stroke-width="1.5"/>
+  <line x1="60" y1="185" x2="60" y2="195" stroke="#4ade80" stroke-width="1.5"/>
+  <line x1="460" y1="185" x2="460" y2="195" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="260" y="210" fill="#86efac" font-size="12.5" font-weight="700" text-anchor="middle">TTFB</text>
+  <!-- after label -->
+  <text x="580" y="210" fill="#64748b" font-size="11.5" text-anchor="middle">not counted in TTFB</text>
+
+  <!-- the lever callout -->
+  <text x="360" y="250" fill="#a5b4fc" font-size="11.5" text-anchor="middle">▲ the big, tunable slice you actually control</text>
+
+  <!-- footer -->
+  <rect x="40" y="280" width="680" height="118" rx="12" fill="rgba(129,140,248,0.08)" stroke="#334155"/>
+  <text x="60" y="308" fill="#c7d2fe" font-size="13" font-weight="700">Aim for under 800ms. The network round-trips (DNS/TCP/TLS) are mostly fixed —</text>
+  <text x="60" y="330" fill="#c7d2fe" font-size="13" font-weight="700">the server-processing slice is where the wins are:</text>
+  <text x="60" y="356" fill="#cbd5e1" font-size="12.5">• Cache the response (full-page or edge) so the backend does no work   • Put a CDN in front to shorten the physical distance</text>
+  <text x="60" y="378" fill="#cbd5e1" font-size="12.5">• Speed up slow DB queries and N+1 calls   • Move render-on-request pages to static or edge rendering</text>
+</svg>
