@@ -20,10 +20,20 @@ function slugify(input: string): string {
     .slice(0, 80);
 }
 
-// GET — list all posts (admin management view)
+// GET — list all posts, or a single post WITH its full content when ?slug= (or
+// ?id=) is given. The full form backs in-place content edits (fetch markdown,
+// modify, PUT it back) without losing the source to an HTML round-trip.
 export async function GET(req: NextRequest) {
   if (!(await requireAdmin(req))) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const { searchParams } = new URL(req.url);
+  const slug = searchParams.get('slug');
+  const id = searchParams.get('id');
+  if (slug || id) {
+    const post = await prisma.blogPost.findUnique({ where: slug ? { slug } : { id: id! } });
+    if (!post) return NextResponse.json({ error: 'Post not found' }, { status: 404 });
+    return NextResponse.json({ post });
   }
   const posts = await prisma.blogPost.findMany({
     orderBy: { createdAt: 'desc' },
