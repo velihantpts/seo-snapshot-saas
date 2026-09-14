@@ -1,0 +1,41 @@
+name: CI Gate
+
+# Gercek kapi: tsc gecmeden Coolify deploy yok. App seo-saas/ alt-dizininde.
+# GithubApp auto-deploy panelden kapatildi; tek deploy tetigi bu Action.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: seo-saas
+
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: seo-saas/package-lock.json
+      - name: Install (npm ci)
+        run: npm ci
+      - name: Tip kontrol — SERT KAPI
+        run: npm run typecheck
+      - name: Coolify deploy (sadece yesilde)
+        if: success()
+        env:
+          COOLIFY_TOKEN: ${{ secrets.COOLIFY_TOKEN }}
+          APP_UUID: omuuluqbxfjhj3ck7znqvtgq
+        run: |
+          echo "Tip kontrol gecti — Coolify deploy tetikleniyor..."
+          curl -fsS -X GET "http://204.168.173.85:8000/api/v1/deploy?uuid=${APP_UUID}" \
+            -H "Authorization: Bearer ${COOLIFY_TOKEN}"
+          echo; echo "Deploy tetiklendi."
